@@ -19,6 +19,7 @@
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+<script src="/config.js"></script>
 <script src="/nav.js" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Do I need my own gloves to start?", "acceptedAnswer": {"@type": "Answer", "text": "No. Gloves are provided for your first class. Most members get their own once they know they are sticking with it."}}, {"@type": "Question", "name": "What size gloves should I get?", "acceptedAnswer": {"@type": "Answer", "text": "For fitness boxing, 12oz&ndash;16oz suits most adults. Ask a coach and we will size you in person."}}, {"@type": "Question", "name": "Do I need hand wraps too?", "acceptedAnswer": {"@type": "Answer", "text": "Yes &mdash; wraps protect your hands and wrists inside the glove. The 7-Day Starter Pack includes both gloves and wraps to keep."}}, {"@type": "Question", "name": "Can I buy gear at the gym?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Ask any coach at the front desk for current gear and pricing."}}]}</script>
 </head>
@@ -58,6 +59,15 @@
   <ul class="exp-list"><li>Punch-branded boxing gloves</li><li>Hand wraps &amp; protective gear</li><li>Heavy bags &amp; free-standing bags</li><li>WaterRower &amp; air bikes</li><li>Olympic barbells &amp; bumper plates</li><li>Dumbbells, kettlebells &amp; cables</li></ul>
   <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-red" target="_blank" rel="noopener">Get Gloves With the 7-Day Pack &rarr;</a>
  </div>
+</div>
+
+<div class="s" id="equipment">
+ <div class="si" style="text-align:center;margin-bottom:6px">
+  <span class="lbl">On the Floor</span>
+  <h2 class="h2">Everything You'll <span>Train With.</span></h2>
+  <p class="sub" style="margin:0 auto">Included with every membership.</p>
+ </div>
+ <div class="si"><div id="equip-root"><p class="trial-note" style="margin-top:26px">Loading equipment…</p></div></div>
 </div>
 
 <div class="s off">
@@ -113,4 +123,33 @@
   <div class="final-note">South Hills Pittsburgh &middot; Local residents w/ID &middot; All levels welcome</div>
 </div>
 
-</div></body></html>
+</div>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const CFG = window.PUNCH_CONFIG || {};
+const root = document.getElementById("equip-root");
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) { root.innerHTML=""; }
+else {
+  const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  sb.from("products").select("*").eq("active",true).eq("kind","equipment")
+    .order("sort",{ascending:true}).then(({data,error})=>{
+      if(error || !data || !data.length){ root.innerHTML=""; return; }
+      const groups=[], idx={};
+      for(const p of data){ const c=p.category||"Equipment";
+        if(idx[c]===undefined){ idx[c]=groups.length; groups.push({c,items:[]}); }
+        groups[idx[c]].items.push(p); }
+      root.innerHTML = groups.map(g=>`
+        <div class="shop-cat-h">${esc(g.c)}</div>
+        <div class="shop-grid">${g.items.map(p=>`
+          <div class="shop-card">
+            <div class="shop-media">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:`<span class="shop-ph">Punch</span>`}</div>
+            <div class="shop-body">
+              <div class="shop-name">${esc(p.name)}</div>
+              <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:6px">${esc(p.description||"")}</p>
+            </div>
+          </div>`).join("")}</div>`).join("");
+    });
+}
+</script>
+</body></html>

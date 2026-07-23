@@ -2,5 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin.html
+Disallow: /trial
+Disallow: /24-hour-special
 
 Sitemap: https://punchpgh.com/sitemap.xml

@@ -82,7 +82,7 @@ if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
 }
 
 async function load(sb){
-  const { data, error } = await sb.from("products").select("*").eq("active", true)
+  const { data, error } = await sb.from("products").select("*").eq("active", true).eq("kind", "apparel")
     .order("sort",{ascending:true}).order("created_at",{ascending:false});
   if (error){ status("Couldn't load the store right now."); return; }
   if (!data.length){ status("New gear dropping soon — check back."); return; }

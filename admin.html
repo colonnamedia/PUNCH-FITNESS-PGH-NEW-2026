@@ -29,9 +29,11 @@
   <aside class="side">
     <div class="side-mark">PUN<span>CH</span></div>
     <nav class="nav">
-      <a class="active"><span class="i">▦</span> Products</a>
-      <a id="navAdd"><span class="i">＋</span> Add Product</a>
-      <a href="/punch-apparel.html" target="_blank"><span class="i">↗</span> View Store</a>
+      <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
+      <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
+      <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
+      <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
+      <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
     </nav>
     <div class="side-foot">
       <div class="side-user" id="whoami"></div>
@@ -40,20 +42,35 @@
   </aside>
 
   <main class="main">
-    <div class="top">
-      <div>
-        <h1 class="mono-h">Products</h1>
-        <div class="sub">Add, edit, and remove items from the Punch store.</div>
+    <!-- ============ APPAREL ============ -->
+    <section class="sect on" id="sect-apparel">
+      <div class="top">
+        <div><h1 class="mono-h">Apparel</h1><div class="sub">Products shown on the store page.</div></div>
+        <button class="btn btn-red" data-add="apparel">&#65291; Add Item</button>
       </div>
-      <button class="btn btn-red" id="addBtn">＋ Add Product</button>
-    </div>
+      <div class="stats" id="stats-apparel"></div>
+      <div class="panel"><div class="panel-h"><h2>All Apparel</h2></div><div id="list-apparel"></div></div>
+    </section>
 
-    <div class="stats" id="stats"></div>
+    <!-- ============ EQUIPMENT ============ -->
+    <section class="sect" id="sect-equipment">
+      <div class="top">
+        <div><h1 class="mono-h">Equipment</h1><div class="sub">Gear shown on the equipment page.</div></div>
+        <button class="btn btn-red" data-add="equipment">&#65291; Add Item</button>
+      </div>
+      <div class="stats" id="stats-equipment"></div>
+      <div class="panel"><div class="panel-h"><h2>All Equipment</h2></div><div id="list-equipment"></div></div>
+    </section>
 
-    <div class="panel">
-      <div class="panel-h"><h2>All Products</h2></div>
-      <div id="list"></div>
-    </div>
+    <!-- ============ BLOG ============ -->
+    <section class="sect" id="sect-blog">
+      <div class="top">
+        <div><h1 class="mono-h">Blog</h1><div class="sub">Posts appear on /blog-events. New posts also arrive automatically each week.</div></div>
+        <button class="btn btn-red" id="addPost">&#65291; New Post</button>
+      </div>
+      <div class="stats" id="stats-blog"></div>
+      <div class="panel"><div class="panel-h"><h2>All Posts</h2></div><div id="list-blog"></div></div>
+    </section>
   </main>
 </div>
 
@@ -61,7 +78,7 @@
 <div class="overlay hide" id="modal">
   <div class="modal">
     <div class="modal-h">
-      <h3 id="modalTitle">Add Product</h3>
+      <h3 id="modalTitle">Add Item</h3>
       <button class="x" id="modalClose">×</button>
     </div>
 
@@ -107,6 +124,52 @@
   </div>
 </div>
 
+
+<!-- ============================== BLOG MODAL ============================== -->
+<div class="overlay hide" id="bmodal">
+  <div class="modal wide">
+    <div class="modal-h"><h3 id="bTitle">New Post</h3><button class="x" id="bClose">&times;</button></div>
+
+    <label>Header Image</label>
+    <div class="drop" id="bdrop">
+      <div class="drop-ic">&#128247;</div>
+      <div class="drop-t">Click or drag an image</div>
+      <div class="drop-s">Wide images look best (16:9)</div>
+      <input type="file" id="bfile" accept="image/*" class="hide" />
+    </div>
+
+    <label for="bName">Title</label>
+    <input id="bName" placeholder="Why Boxing Is a Great Full-Body Workout" />
+
+    <div class="grid2">
+      <div>
+        <label for="bTopic">Topic</label>
+        <input id="bTopic" list="topics" placeholder="Boxing for Fitness" />
+        <datalist id="topics">
+          <option>Boxing for Fitness</option><option>Nutrition</option>
+          <option>Parkinson&#39;s Boxing Benefits</option><option>Gym News</option>
+        </datalist>
+      </div>
+      <div>
+        <label for="bSlug">URL Slug</label>
+        <input id="bSlug" placeholder="auto-generated from title" />
+      </div>
+    </div>
+
+    <label for="bExcerpt">Excerpt</label>
+    <input id="bExcerpt" placeholder="One sentence shown on the blog card." />
+
+    <label for="bBody">Post (markdown)</label>
+    <textarea id="bBody" class="long" placeholder="## A subheading&#10;&#10;Your paragraph here.&#10;&#10;- a bullet&#10;- another bullet"></textarea>
+    <p class="hint">Use ## for subheadings, **bold**, and - for bullets.</p>
+
+    <div class="row-check"><input type="checkbox" id="bPub" checked /><label for="bPub">Published (visible on the site)</label></div>
+
+    <button class="btn btn-red btn-block" id="bSave">Save Post</button>
+    <div class="err" id="bErr"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -114,142 +177,219 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CFG = window.PUNCH_CONFIG || {};
 const $ = (id) => document.getElementById(id);
-const toast = (msg, bad=false) => { const t=$("toast"); t.textContent=msg; t.className="toast show"+(bad?" bad":""); setTimeout(()=>t.className="toast",2600); };
+const esc = (v) => String(v==null?"":v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = (p) => "$" + Number(p||0).toFixed(2);
+const when = (d) => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+const slugify = (t) => String(t).toLowerCase().trim().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,80);
+const toast = (m,bad=false)=>{const t=$("toast");t.textContent=m;t.className="toast show"+(bad?" bad":"");setTimeout(()=>t.className="toast",2600);};
 
-let sb, editingId=null, pickedFile=null, existingImg=null;
+let sb, TAB="apparel";
+let pEdit=null, pFile=null, pImg=null;     // product modal state
+let bEdit=null, bFile=null, bImg=null;     // blog modal state
 
 if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
-  $("loginErr").textContent = "Set your Supabase keys in config.js first (see SUPABASE-SETUP.md).";
+  $("loginErr").textContent = "Supabase keys missing in config.js.";
 } else {
   sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-  init();
+  sb.auth.getSession().then(({data:{session}}) => { if (session) enterApp(session); });
+  sb.auth.onAuthStateChange((_e,ss)=>{ if (ss) enterApp(ss); });
 }
 
-async function init(){
-  const { data:{ session } } = await sb.auth.getSession();
-  if (session) enterApp(session); 
-  sb.auth.onAuthStateChange((_e, s) => { if (s) enterApp(s); });
-}
-
-/* ---------- AUTH ---------- */
+/* ---------------- AUTH ---------------- */
 $("loginBtn").addEventListener("click", login);
-$("password").addEventListener("keydown", e => { if(e.key==="Enter") login(); });
+$("password").addEventListener("keydown", e => { if (e.key==="Enter") login(); });
 async function login(){
   const email=$("email").value.trim(), password=$("password").value;
   if(!email||!password){ $("loginErr").textContent="Enter your email and password."; return; }
   $("loginBtn").disabled=true; $("loginErr").textContent="";
   const { error } = await sb.auth.signInWithPassword({ email, password });
   $("loginBtn").disabled=false;
-  if(error){ $("loginErr").textContent=error.message; return; }
+  if (error) $("loginErr").textContent = error.message;
 }
 function enterApp(session){
   $("loginView").classList.add("hide");
   $("appView").classList.remove("hide");
   $("whoami").textContent = session.user.email;
-  loadProducts();
+  loadAll();
 }
-$("signout").addEventListener("click", async () => { await sb.auth.signOut(); location.reload(); });
+$("signout").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
 
-/* ---------- LOAD + RENDER ---------- */
-async function loadProducts(){
-  const { data, error } = await sb.from("products").select("*").order("sort",{ascending:true}).order("created_at",{ascending:false});
-  if(error){ toast(error.message,true); return; }
-  renderStats(data); renderList(data);
-}
-function money(p){ return "$"+Number(p||0).toFixed(2); }
-function renderStats(items){
-  const active=items.filter(i=>i.active).length;
-  const cats=new Set(items.map(i=>i.category)).size;
-  $("stats").innerHTML=`
-    <div class="stat"><b>${items.length}</b><span>Total Products</span></div>
-    <div class="stat"><b>${active}</b><span>Visible in Store</span></div>
-    <div class="stat"><b>${cats}</b><span>Categories</span></div>`;
-}
-function renderList(items){
-  if(!items.length){ $("list").innerHTML=`<div class="empty"><b>No products yet</b>Click “Add Product” to create your first one.</div>`; return; }
-  $("list").innerHTML = items.map(p=>`
+/* ---------------- TABS ---------------- */
+document.querySelectorAll("[data-tab]").forEach(a=>{
+  a.addEventListener("click", ()=>{
+    TAB = a.dataset.tab;
+    document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x===a));
+    document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
+    $("sect-"+TAB).classList.add("on");
+  });
+});
+
+/* ---------------- LOAD ---------------- */
+async function loadAll(){ await Promise.all([loadKind("apparel"), loadKind("equipment"), loadPosts()]); }
+
+async function loadKind(kind){
+  const { data, error } = await sb.from("products").select("*").eq("kind", kind)
+    .order("sort",{ascending:true}).order("created_at",{ascending:false});
+  if (error){ toast(error.message,true); return; }
+  const items = data || [];
+  $("stats-"+kind).innerHTML =
+    `<div class="stat"><b>${items.length}</b><span>Total Items</span></div>
+     <div class="stat"><b>${items.filter(i=>i.active).length}</b><span>Visible on Site</span></div>
+     <div class="stat"><b>${new Set(items.map(i=>i.category)).size}</b><span>Categories</span></div>`;
+  const list = $("list-"+kind);
+  if (!items.length){ list.innerHTML = `<div class="empty"><b>Nothing here yet</b>Click &ldquo;Add Item&rdquo; to create your first one.</div>`; return; }
+  list.innerHTML = items.map(p=>`
     <div class="prow">
-      ${p.image_url ? `<img class="pthumb" src="${p.image_url}" alt="">` : `<div class="pthumb">P</div>`}
-      <div class="pname">${esc(p.name)}${p.active?"":`<span class="badge-off">Hidden</span>`}<small>${p.description?esc(p.description).slice(0,60):""}</small></div>
+      ${p.image_url ? `<img class="pthumb" src="${esc(p.image_url)}" alt="">` : `<div class="pthumb">P</div>`}
+      <div class="pname">${esc(p.name)}${p.active?"":`<span class="badge-off">Hidden</span>`}<small>${esc((p.description||"").slice(0,70))}</small></div>
       <div class="pcat">${esc(p.category)}</div>
-      <div class="pprice">${p.price_from?`<small>from</small> `:""}${money(p.price)}</div>
+      <div class="pprice">${Number(p.price)>0 ? (p.price_from?"<small>from</small> ":"")+money(p.price) : '<small>—</small>'}</div>
       <div class="pacts">
-        <button class="icon-btn" data-edit="${p.id}" title="Edit">✎</button>
-        <button class="icon-btn del" data-del="${p.id}" title="Delete">🗑</button>
+        <button class="icon-btn" data-pedit="${p.id}">&#9998;</button>
+        <button class="icon-btn del" data-pdel="${p.id}">&#128465;</button>
       </div>
     </div>`).join("");
-  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openForm(items.find(x=>x.id===b.dataset.edit)));
-  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>removeProduct(b.dataset.del, items.find(x=>x.id===b.dataset.del)));
+  list.querySelectorAll("[data-pedit]").forEach(b=>b.onclick=()=>openProduct(items.find(x=>x.id===b.dataset.pedit), kind));
+  list.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>delProduct(b.dataset.pdel, items.find(x=>x.id===b.dataset.pdel), kind));
 }
-function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
-/* ---------- FORM ---------- */
-$("addBtn").onclick=()=>openForm(); $("navAdd").onclick=()=>openForm();
-$("modalClose").onclick=closeForm;
-$("modal").addEventListener("click",e=>{ if(e.target===$("modal")) closeForm(); });
-function openForm(p=null){
-  editingId=p?p.id:null; pickedFile=null; existingImg=p?p.image_url:null;
-  $("modalTitle").textContent=p?"Edit Product":"Add Product";
+async function loadPosts(){
+  const { data, error } = await sb.from("blog_posts").select("*").order("created_at",{ascending:false});
+  if (error){ toast(error.message,true); return; }
+  const posts = data || [];
+  $("stats-blog").innerHTML =
+    `<div class="stat"><b>${posts.length}</b><span>Total Posts</span></div>
+     <div class="stat"><b>${posts.filter(p=>p.published).length}</b><span>Published</span></div>
+     <div class="stat"><b>${new Set(posts.map(p=>p.topic)).size}</b><span>Topics</span></div>`;
+  const list = $("list-blog");
+  if (!posts.length){ list.innerHTML = `<div class="empty"><b>No posts yet</b>Click &ldquo;New Post&rdquo; to write one.</div>`; return; }
+  list.innerHTML = posts.map(p=>`
+    <div class="brow">
+      ${p.image_url ? `<img class="bthumb" src="${esc(p.image_url)}" alt="">` : `<div class="bthumb"></div>`}
+      <div class="pname">${esc(p.title)}
+        <small>${esc(p.topic)} &middot; ${when(p.created_at)}</small></div>
+      <div><span class="pill ${p.published?"live":"draft"}">${p.published?"Published":"Draft"}</span></div>
+      <div class="pacts">
+        <a class="icon-btn" href="/post?slug=${encodeURIComponent(p.slug)}" target="_blank" title="View">&#8599;</a>
+        <button class="icon-btn" data-bedit="${p.id}">&#9998;</button>
+        <button class="icon-btn del" data-bdel="${p.id}">&#128465;</button>
+      </div>
+    </div>`).join("");
+  list.querySelectorAll("[data-bedit]").forEach(b=>b.onclick=()=>openPost(posts.find(x=>x.id===b.dataset.bedit)));
+  list.querySelectorAll("[data-bdel]").forEach(b=>b.onclick=()=>delPost(b.dataset.bdel, posts.find(x=>x.id===b.dataset.bdel)));
+}
+
+/* ---------------- IMAGE UPLOAD ---------------- */
+async function upload(file){
+  const ext = (file.name.split(".").pop()||"jpg").toLowerCase();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const bucket = CFG.IMAGE_BUCKET || "product-images";
+  const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl:"3600", upsert:false });
+  if (error) throw error;
+  return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+function paint(dropEl, url){
+  dropEl.querySelectorAll("img,.change").forEach(n=>n.remove());
+  if(!url) return;
+  const img=document.createElement("img"); img.src=url;
+  const tag=document.createElement("div"); tag.className="change"; tag.textContent="Change";
+  dropEl.append(img, tag);
+}
+function wireDrop(dropId, fileId, onPick){
+  const drop=$(dropId), file=$(fileId);
+  drop.onclick=()=>file.click();
+  file.onchange=()=>{ if(file.files[0]) onPick(file.files[0]); };
+  ["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop",e=>{ const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith("image/")) onPick(f); });
+}
+wireDrop("drop","file",  f=>{ pFile=f; paint($("drop"), URL.createObjectURL(f)); });
+wireDrop("bdrop","bfile",f=>{ bFile=f; paint($("bdrop"), URL.createObjectURL(f)); });
+
+/* ---------------- PRODUCT / EQUIPMENT MODAL ---------------- */
+document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>openProduct(null, b.dataset.add));
+$("modalClose").onclick=()=>$("modal").classList.add("hide");
+$("modal").addEventListener("click",e=>{ if(e.target===$("modal")) $("modal").classList.add("hide"); });
+let pKind="apparel";
+function openProduct(p, kind){
+  pKind = kind || p?.kind || "apparel";
+  pEdit = p ? p.id : null; pFile=null; pImg = p ? p.image_url : null;
+  $("modalTitle").textContent = (p?"Edit ":"Add ") + (pKind==="equipment"?"Equipment":"Apparel");
   $("pName").value=p?p.name:""; $("pPrice").value=p?p.price:""; $("pCat").value=p?p.category:"";
   $("pDesc").value=p?(p.description||""):""; $("pStripe").value=p?(p.stripe_url||""):"";
   $("pFrom").checked=p?!!p.price_from:false; $("pActive").checked=p?!!p.active:true;
-  $("formErr").textContent="";
-  paintDrop(p?p.image_url:null);
+  $("formErr").textContent=""; paint($("drop"), p?p.image_url:null);
   $("modal").classList.remove("hide");
 }
-function closeForm(){ $("modal").classList.add("hide"); }
-function paintDrop(url){
-  const d=$("drop");
-  d.querySelectorAll("img,.change").forEach(n=>n.remove());
-  if(url){ const img=document.createElement("img"); img.src=url; const tag=document.createElement("div"); tag.className="change"; tag.textContent="Change"; d.append(img,tag); }
-}
-/* dropzone events */
-const drop=$("drop"), file=$("file");
-drop.onclick=()=>file.click();
-file.onchange=()=>{ if(file.files[0]) setFile(file.files[0]); };
-["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag");}));
-["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag");}));
-drop.addEventListener("drop",e=>{ const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith("image/")) setFile(f); });
-function setFile(f){ pickedFile=f; paintDrop(URL.createObjectURL(f)); }
-
-$("saveBtn").onclick=save;
-async function save(){
+$("saveBtn").onclick=async ()=>{
   const name=$("pName").value.trim();
-  const price=parseFloat($("pPrice").value);
-  const category=$("pCat").value.trim()||"General";
-  if(!name){ $("formErr").textContent="Product needs a name."; return; }
-  if(isNaN(price)){ $("formErr").textContent="Enter a valid price."; return; }
-  $("saveBtn").disabled=true; $("formErr").textContent=""; $("saveBtn").textContent="Saving…";
+  const price=parseFloat($("pPrice").value||"0");
+  if(!name){ $("formErr").textContent="Needs a name."; return; }
+  $("saveBtn").disabled=true; $("saveBtn").textContent="Saving…"; $("formErr").textContent="";
   try{
-    let image_url=existingImg;
-    if(pickedFile){ image_url=await uploadImage(pickedFile); }
-    const row={ name, price, category,
-      description:$("pDesc").value.trim()||null,
-      stripe_url:$("pStripe").value.trim()||null,
-      price_from:$("pFrom").checked, active:$("pActive").checked, image_url };
-    let error;
-    if(editingId){ ({ error }=await sb.from("products").update(row).eq("id",editingId)); }
-    else { ({ error }=await sb.from("products").insert(row)); }
+    let image_url=pImg;
+    if(pFile) image_url = await upload(pFile);
+    const row={ name, price: isNaN(price)?0:price, category:$("pCat").value.trim()||"General",
+      description:$("pDesc").value.trim()||null, stripe_url:$("pStripe").value.trim()||null,
+      price_from:$("pFrom").checked, active:$("pActive").checked, image_url, kind:pKind };
+    const { error } = pEdit
+      ? await sb.from("products").update(row).eq("id",pEdit)
+      : await sb.from("products").insert(row);
     if(error) throw error;
-    closeForm(); toast(editingId?"Product updated":"Product added"); loadProducts();
-  }catch(err){ $("formErr").textContent=err.message||"Something went wrong."; }
+    $("modal").classList.add("hide"); toast(pEdit?"Item updated":"Item added"); loadKind(pKind);
+  }catch(err){ $("formErr").textContent = err.message || "Something went wrong."; }
   finally{ $("saveBtn").disabled=false; $("saveBtn").textContent="Save Product"; }
-}
-async function uploadImage(f){
-  const ext=(f.name.split(".").pop()||"jpg").toLowerCase();
-  const path=`${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
-  const { error }=await sb.storage.from(CFG.IMAGE_BUCKET||"product-images").upload(path,f,{cacheControl:"3600",upsert:false});
-  if(error) throw error;
-  const { data }=sb.storage.from(CFG.IMAGE_BUCKET||"product-images").getPublicUrl(path);
-  return data.publicUrl;
+};
+async function delProduct(id,p,kind){
+  if(!confirm(`Delete “${p?.name||"this item"}”? This can't be undone.`)) return;
+  const { error } = await sb.from("products").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Deleted"); loadKind(kind);
 }
 
-/* ---------- DELETE ---------- */
-async function removeProduct(id, p){
-  if(!confirm(`Delete “${p?.name||"this product"}”? This can't be undone.`)) return;
-  const { error }=await sb.from("products").delete().eq("id",id);
+/* ---------------- BLOG MODAL ---------------- */
+$("addPost").onclick=()=>openPost(null);
+$("bClose").onclick=()=>$("bmodal").classList.add("hide");
+$("bmodal").addEventListener("click",e=>{ if(e.target===$("bmodal")) $("bmodal").classList.add("hide"); });
+$("bName").addEventListener("blur",()=>{ if(!$("bSlug").value.trim()) $("bSlug").value = slugify($("bName").value); });
+function openPost(p){
+  bEdit = p ? p.id : null; bFile=null; bImg = p ? p.image_url : null;
+  $("bTitle").textContent = p ? "Edit Post" : "New Post";
+  $("bName").value=p?p.title:""; $("bSlug").value=p?p.slug:""; $("bTopic").value=p?p.topic:"";
+  $("bExcerpt").value=p?(p.excerpt||""):""; $("bBody").value=p?p.body:"";
+  $("bPub").checked=p?!!p.published:true; $("bErr").textContent="";
+  paint($("bdrop"), p?p.image_url:null);
+  $("bmodal").classList.remove("hide");
+}
+$("bSave").onclick=async ()=>{
+  const title=$("bName").value.trim(), body=$("bBody").value.trim();
+  if(!title){ $("bErr").textContent="Needs a title."; return; }
+  if(!body){ $("bErr").textContent="Needs some content."; return; }
+  $("bSave").disabled=true; $("bSave").textContent="Saving…"; $("bErr").textContent="";
+  try{
+    let image_url=bImg;
+    if(bFile) image_url = await upload(bFile);
+    const row={ title, slug: ($("bSlug").value.trim()||slugify(title)),
+      topic:$("bTopic").value.trim()||"Gym News",
+      excerpt:$("bExcerpt").value.trim()||null, body, image_url,
+      published:$("bPub").checked };
+    const { error } = bEdit
+      ? await sb.from("blog_posts").update(row).eq("id",bEdit)
+      : await sb.from("blog_posts").insert(row);
+    if(error) throw error;
+    $("bmodal").classList.add("hide"); toast(bEdit?"Post updated":"Post published"); loadPosts();
+  }catch(err){
+    $("bErr").textContent = /duplicate|unique/i.test(err.message||"")
+      ? "That URL slug is already used — try a different one."
+      : (err.message || "Something went wrong.");
+  }
+  finally{ $("bSave").disabled=false; $("bSave").textContent="Save Post"; }
+};
+async function delPost(id,p){
+  if(!confirm(`Delete “${p?.title||"this post"}”? This can't be undone.`)) return;
+  const { error } = await sb.from("blog_posts").delete().eq("id",id);
   if(error){ toast(error.message,true); return; }
-  toast("Product deleted"); loadProducts();
+  toast("Post deleted"); loadPosts();
 }
 </script>
 </body>

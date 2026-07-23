@@ -9,7 +9,10 @@
 
   var header =
   '<header class="pn"><div class="pn-bar">' +
-    '<a class="pn-logo" href="/"><b>PUNCH</b><span>Boxing &amp; Fitness</span></a>' +
+    '<a class="pn-logo" href="/" aria-label="Punch Boxing and Fitness home">' +
+      '<img src="/assets/logo/punch-logo.png" alt="Punch Boxing &amp; Fitness" '+
+      'onerror="this.onerror=null;this.src=\'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/d0e600c1-b98a-4d8e-becb-3d99ab28b51e/PUNCH+LOGO+1+NEW+2026+WEBSITE.png?format=300w\'">' +
+      '<b>PUNCH</b><span>Boxing &amp; Fitness</span></a>' +
     '<nav class="pn-nav">' +
       '<div class="pn-item"><button class="pn-link">Workouts<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
@@ -79,11 +82,58 @@
   '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
 
+
+  // ---- SMS / free-intro popup (PushPress form) ---------------------------
+  var LEAD_FORM = "ImN6zXT4qKiHOZHPOvXz";   // PushPress Free Intro form
+  var POP_KEY = "punch_popup_seen_v1";
+  var POP_DELAY = 12000;                     // ms before it appears
+
+  function buildPopup() {
+    try { if (localStorage.getItem(POP_KEY)) return; } catch (e) {}
+    if (/\/admin/.test(location.pathname)) return;
+
+    var ov = document.createElement("div");
+    ov.className = "ps-ov";
+    ov.innerHTML =
+      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Claim your free class">' +
+        '<button class="ps-x" id="psX" aria-label="Close">&times;</button>' +
+        '<div class="ps-top">' +
+          '<div class="ps-eyebrow">South Hills Pittsburgh</div>' +
+          '<div class="ps-h">Your First Class<br>Is On Us.</div>' +
+          '<p class="ps-p">Drop your info and we\'ll text you the details &mdash; class times, what to bring, and how to claim your free workout. No experience needed.</p>' +
+        '</div>' +
+        '<div class="ps-body">' +
+          '<div class="pushpress-form" data-form-id="' + LEAD_FORM + '"></div>' +
+          '<p class="ps-note">By submitting you agree to receive texts from Punch Boxing &amp; Fitness. Message and data rates may apply. Reply STOP to opt out.</p>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+
+    if (!document.querySelector('script[src*="form_embed.js"]')) {
+      var fs = document.createElement("script");
+      fs.src = "https://api.grow.pushpress.com/js/form_embed.js";
+      fs.defer = true;
+      document.head.appendChild(fs);
+    }
+
+    function close() {
+      ov.classList.remove("on");
+      try { localStorage.setItem(POP_KEY, "1"); } catch (e) {}
+      setTimeout(function () { ov.remove(); }, 300);
+    }
+    document.getElementById("psX").addEventListener("click", close);
+    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+    setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+  }
+
   function init() {
     document.body.insertAdjacentHTML("afterbegin", header);
     document.body.insertAdjacentHTML("beforeend", footer);
     var b = document.getElementById("pnBurger"), d = document.getElementById("pnDrawer");
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
+    buildPopup();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
