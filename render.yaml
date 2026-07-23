@@ -1,0 +1,30 @@
+# Render config: publishes this folder as a STATIC SITE (no build step).
+# Note: the weekly auto-blog (api/generate-blog.js) is a serverless function and
+# runs on Vercel. On Render it would need a separate Cron Job service.
+services:
+  - type: web
+    name: punchpgh
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    routes:
+      - { type: redirect, source: /30-day-program, destination: /membership-options }
+      - { type: redirect, source: /anthony-colonna-fitness-entrepreneur, destination: /about }
+      - { type: redirect, source: /classes-1, destination: /classes }
+      - { type: redirect, source: /pricing, destination: /membership-options }
+      - { type: redirect, source: /blog, destination: /blog-events }
+      - { type: rewrite, source: /classes, destination: /classes.html }
+      - { type: rewrite, source: /schedule, destination: /schedule.html }
+      - { type: rewrite, source: /free-trial, destination: /free-trial.html }
+      - { type: rewrite, source: /membership-options, destination: /membership-options.html }
+      - { type: rewrite, source: /personal-training, destination: /personal-training.html }
+      - { type: rewrite, source: /senior-fitness-and-boxing-pittsburgh, destination: /senior-fitness-and-boxing-pittsburgh.html }
+      - { type: rewrite, source: /youth-boxing-camp, destination: /youth-boxing-camp.html }
+      - { type: rewrite, source: /boxing-gloves-for-fitness-classes, destination: /boxing-gloves-for-fitness-classes.html }
+      - { type: rewrite, source: /punch-apparel, destination: /punch-apparel.html }
+      - { type: rewrite, source: /blog-events, destination: /blog-events.html }
+      - { type: rewrite, source: /post, destination: /post.html }
+      - { type: rewrite, source: /contact, destination: /contact.html }
+      - { type: rewrite, source: /about, destination: /about.html }
+      - { type: rewrite, source: /terms-conditions, destination: /terms-conditions.html }
+      - { type: rewrite, source: /admin, destination: /admin.html }

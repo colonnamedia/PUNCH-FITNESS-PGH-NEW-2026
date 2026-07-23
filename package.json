@@ -1,0 +1,10 @@
+{
+  "name": "punchpgh",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Punch Boxing & Fitness — static site (no build step required).",
+  "scripts": {
+    "build": "echo \"Static site — nothing to build.\"",
+    "start": "npx --yes serve ."
+  }
+}
