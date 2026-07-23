@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blog &amp; Events | Punch Boxing &amp; Fitness Pittsburgh</title>
+<meta name="description" content="Boxing for fitness, nutrition, and Parkinson's boxing benefits — training tips and gym news from Punch Boxing &amp; Fitness in Pittsburgh's South Hills." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://punchpgh.com/blog-events" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://punchpgh.com/blog-events" />
+<meta property="og:title" content="Blog &amp; Events | Punch Boxing &amp; Fitness" />
+<meta property="og:description" content="Training tips, nutrition, and Parkinson's boxing insight from Punch Boxing &amp; Fitness Pittsburgh." />
+<meta property="og:image" content="https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/366eed6e-bb43-47da-9346-c9fbcc1682f5/Punch+Fitness+Boxing+Studio-04018.jpg" />
+<meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="/punch.css" />
+<script src="/config.js"></script>
+<script src="/nav.js" defer></script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":["SportsActivityLocation","LocalBusiness"],"@id":"https://punchpgh.com/#business","name":"Punch Boxing and Fitness","url":"https://punchpgh.com","telephone":"+14125123261","email":"punchpgh@gmail.com","address":{"@type":"PostalAddress","streetAddress":"2101 Greentree Rd, Unit 119","addressLocality":"Pittsburgh","addressRegion":"PA","postalCode":"15220","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.4106","longitude":"-80.0834"},"areaServed":["Pittsburgh","South Hills","Greentree","Bethel Park","Mt. Lebanon","Upper St. Clair","Carnegie","Dormont","Castle Shannon"],"priceRange":"$$","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"80"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"06:00","closes":"20:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday","Sunday"],"opens":"08:00","closes":"13:00"}],"sameAs":["https://www.facebook.com/punchpgh","https://www.instagram.com/punchpgh"]}
+</script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="ph-wrap" style="min-height:52vh">
+  <img class="ph-video" src="https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/366eed6e-bb43-47da-9346-c9fbcc1682f5/Punch+Fitness+Boxing+Studio-04018.jpg" alt="Punch Boxing &amp; Fitness studio" />
+  <div class="ph-overlay"></div>
+  <div class="ph-content"><div class="ph-left">
+    <h1 class="ph-title">The<br><span class="ph-red">Punch</span><br><span class="ph-out">Blog.</span></h1>
+    <p class="ph-sub">Boxing for fitness &middot; Nutrition &middot; Parkinson's boxing benefits</p>
+  </div></div>
+</div>
+
+<div id="plp">
+  <div class="s" id="punch-body">
+    <div class="si" style="text-align:center">
+      <span class="lbl">Latest From the Gym</span>
+      <h2 class="h2">Train Smarter.<br><span>Live Better.</span></h2>
+      <p class="sub" style="margin:0 auto">Practical, no-hype advice from the coaches at Punch.</p>
+    </div>
+    <div class="si"><div id="blog-root"><p class="trial-note" style="margin-top:34px">Loading posts…</p></div></div>
+  </div>
+
+  <div class="final">
+    <span class="lbl" style="color:rgba(255,255,255,.6)">Ready to Train?</span>
+    <div class="final-title">Reading About It Is Step One.</div>
+    <div class="final-sub">Your first class at Punch is free. Come try the thing you've been reading about.</div>
+    <div class="final-btns">
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim My Free Class</a>
+      <a href="/membership-options" class="btn-ghost-w">See Memberships</a>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const CFG = window.PUNCH_CONFIG || {};
+const root = document.getElementById("blog-root");
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const when = d => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+
+if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
+  root.innerHTML = '<p class="trial-note" style="margin-top:34px">Blog is being set up. Check back soon.</p>';
+} else {
+  const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  load(sb);
+}
+async function load(sb){
+  const { data, error } = await sb.from("blog_posts").select("*")
+    .eq("published", true).order("created_at",{ascending:false}).limit(30);
+  if (error){ root.innerHTML = '<p class="trial-note" style="margin-top:34px">Couldn\'t load posts right now.</p>'; return; }
+  if (!data || !data.length){ root.innerHTML = '<p class="trial-note" style="margin-top:34px">First posts coming soon.</p>'; return; }
+  root.innerHTML = '<div class="blog-grid">' + data.map(card).join("") + '</div>';
+  const ld = {"@context":"https://schema.org","@type":"Blog","name":"Punch Boxing & Fitness Blog",
+    "url":"https://punchpgh.com/blog-events",
+    "blogPost":data.slice(0,10).map(p=>({"@type":"BlogPosting","headline":p.title,
+      "url":"https://punchpgh.com/post?slug="+encodeURIComponent(p.slug),
+      "datePublished":p.created_at,"description":p.excerpt||"",
+      "author":{"@type":"Organization","name":"Punch Boxing & Fitness"}}))};
+  const s=document.createElement("script"); s.type="application/ld+json";
+  s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+}
+function card(p){
+  const media = p.image_url
+    ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
+    : `<span>Punch</span>`;
+  return `<a class="bpost" href="/post?slug=${encodeURIComponent(p.slug)}" style="text-decoration:none">
+    <div class="bpost-media">${media}</div>
+    <div class="bpost-body">
+      <div class="bpost-topic">${esc(p.topic)}</div>
+      <div class="bpost-title">${esc(p.title)}</div>
+      <p class="bpost-ex">${esc(p.excerpt||"")}</p>
+      <div class="bpost-date">${when(p.created_at)}</div>
+      <div class="bpost-link">Read More →</div>
+    </div></a>`;
+}
+</script>
+</body>
+</html>

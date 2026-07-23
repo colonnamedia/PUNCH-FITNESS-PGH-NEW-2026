@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Punch Apparel | Fight. Train. Sweat. — Punch Boxing & Fitness Pittsburgh</title>
+<meta name="description" content="Shop Punch Boxing & Fitness apparel — tees, tanks, crops, leggings, joggers, and hoodies. Fight. Train. Sweat. Rep the South Hills' best boxing gym." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://punchpgh.com/punch-apparel" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://punchpgh.com/punch-apparel" />
+<meta property="og:title" content="Punch Apparel | Fight. Train. Sweat." />
+<meta property="og:image" content="https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/366eed6e-bb43-47da-9346-c9fbcc1682f5/Punch+Fitness+Boxing+Studio-04018.jpg" />
+<meta property="og:site_name" content="Punch Boxing & Fitness" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://images.squarespace-cdn.com" />
+<link rel="stylesheet" href="/punch.css" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"CollectionPage","name":"Punch Apparel","url":"https://punchpgh.com/punch-apparel","description":"Official apparel from Punch Boxing & Fitness — tees, tanks, crops, leggings, joggers, and hoodies.","isPartOf":{"@type":"WebSite","name":"Punch Boxing & Fitness","url":"https://punchpgh.com"},"about":{"@type":"SportsActivityLocation","name":"Punch Boxing and Fitness","@id":"https://punchpgh.com/#business"}}
+</script>
+<script src="/config.js"></script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+
+<script src="/nav.js" defer></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<!-- HERO -->
+<div class="ph-wrap" style="min-height:58vh">
+  <img class="ph-video" src="https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/366eed6e-bb43-47da-9346-c9fbcc1682f5/Punch+Fitness+Boxing+Studio-04018.jpg" alt="Punch Boxing & Fitness studio" />
+  <div class="ph-overlay"></div>
+  <div class="ph-content" style="padding-top:90px;padding-bottom:70px">
+    <div class="ph-left">
+      <h1 class="ph-title">Punch<br><span class="ph-red">Apparel.</span></h1>
+      <p class="ph-sub">Fight &middot; Train &middot; Sweat &middot; Wear it everywhere &middot; Rep the South Hills' best boxing gym</p>
+      <a href="#shop" class="ph-btn">Shop the Drop &rarr;</a>
+    </div>
+  </div>
+  <a href="#shop" class="ph-scroll"><span>Scroll</span><div class="ph-scroll-line"></div></a>
+</div>
+
+<div id="plp">
+  <div class="s" id="shop">
+    <div class="si" style="text-align:center;margin-bottom:6px">
+      <span class="lbl">The Collection</span>
+      <h2 class="h2">Gear That <span>Hits Back.</span></h2>
+      <p class="sub" style="margin:0 auto">Studio-tested fits in the Punch red-and-black.</p>
+    </div>
+    <div class="si"><div id="shop-root"><p class="shop-note" id="shop-status">Loading the collection…</p></div></div>
+  </div>
+
+  <div class="final">
+    <span class="lbl" style="color:rgba(255,255,255,.5)">Rep the Gym</span>
+    <div class="final-title">Look the Part. Put in the Work.</div>
+    <div class="final-sub">New to Punch? Your first class is free. Come train, then grab the gear.</div>
+    <div class="final-btns">
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim a Free Class</a>
+      <a href="/contact" class="btn-ghost-w">Questions? Contact Us</a>
+    </div>
+  </div>
+
+  
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const CFG = window.PUNCH_CONFIG || {};
+const root = document.getElementById("shop-root");
+const status = (m) => root.innerHTML = `<p class="shop-note">${m}</p>`;
+const money = (p) => "$" + Number(p||0).toFixed(2);
+const esc = (s) => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
+  status("Store is being set up. Check back soon.");
+} else {
+  const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  load(sb);
+}
+
+async function load(sb){
+  const { data, error } = await sb.from("products").select("*").eq("active", true)
+    .order("sort",{ascending:true}).order("created_at",{ascending:false});
+  if (error){ status("Couldn't load the store right now."); return; }
+  if (!data.length){ status("New gear dropping soon — check back."); return; }
+
+  // group by category, preserving first-seen order
+  const groups = [];
+  const idx = {};
+  for (const p of data){
+    const c = p.category || "General";
+    if (idx[c] === undefined){ idx[c] = groups.length; groups.push({ cat:c, items:[] }); }
+    groups[idx[c]].items.push(p);
+  }
+
+  root.innerHTML = groups.map(g => `
+    <div class="shop-cat-h">${esc(g.cat)}</div>
+    <div class="shop-grid">
+      ${g.items.map(card).join("")}
+    </div>`).join("");
+
+  injectProductSchema(data);
+}
+
+function injectProductSchema(items){
+  const ld = {
+    "@context":"https://schema.org","@type":"ItemList",
+    "itemListElement": items.map((p,i)=>({
+      "@type":"ListItem","position":i+1,
+      "item":{
+        "@type":"Product","name":p.name,
+        ...(p.image_url?{"image":p.image_url}:{}),
+        ...(p.description?{"description":p.description}:{}),
+        "category":p.category,"brand":{"@type":"Brand","name":"Punch Boxing & Fitness"},
+        "offers":{"@type":"Offer","price":Number(p.price||0).toFixed(2),"priceCurrency":"USD",
+          "availability":p.stripe_url?"https://schema.org/InStock":"https://schema.org/PreOrder",
+          ...(p.stripe_url?{"url":p.stripe_url}:{})}
+      }
+    }))
+  };
+  const s=document.createElement("script"); s.type="application/ld+json";
+  s.textContent=JSON.stringify(ld); document.head.appendChild(s);
+}
+
+function card(p){
+  const media = p.image_url
+    ? `<img src="${p.image_url}" alt="${esc(p.name)}" loading="lazy">`
+    : `<span class="shop-ph">Punch</span>`;
+  const buy = p.stripe_url
+    ? `<a class="shop-buy" href="${esc(p.stripe_url)}" target="_blank" rel="noopener">Buy · ${p.price_from?"from ":""}${money(p.price)}</a>`
+    : `<a class="shop-buy" style="background:#bbb;pointer-events:none" href="#">Coming Soon</a>`;
+  return `<div class="shop-card">
+    <div class="shop-media">${media}</div>
+    <div class="shop-body">
+      <div class="shop-name">${esc(p.name)}</div>
+      <div class="shop-price">${p.price_from?"<small>from</small> ":""}${money(p.price)}</div>
+      ${buy}
+    </div>
+  </div>`;
+}
+</script>
+</body>
+</html>

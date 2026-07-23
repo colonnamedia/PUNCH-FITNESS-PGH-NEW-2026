@@ -1,0 +1,14 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "crons": [
+    { "path": "/api/generate-blog", "schedule": "0 14 * * 1" }
+  ],
+  "redirects": [
+    { "source": "/30-day-program", "destination": "/membership-options", "permanent": true },
+    { "source": "/anthony-colonna-fitness-entrepreneur", "destination": "/about", "permanent": true },
+    { "source": "/classes-1", "destination": "/classes", "permanent": true },
+    { "source": "/pricing", "destination": "/membership-options", "permanent": true },
+    { "source": "/blog", "destination": "/blog-events", "permanent": true }
+  ]
+}
