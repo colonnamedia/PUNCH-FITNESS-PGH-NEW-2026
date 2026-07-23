@@ -83,38 +83,60 @@
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
 
 
-  // ---- SMS / free-intro popup (PushPress form) ---------------------------
-  var LEAD_FORM = "ImN6zXT4qKiHOZHPOvXz";   // PushPress Free Intro form
-  var POP_KEY = "punch_popup_seen_v1";
-  var POP_DELAY = 12000;                     // ms before it appears
+  // ---- Trial-offer popup -------------------------------------------------
+  var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b";
+  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43";
+  var POP_KEY = "punch_popup_seen_v2";
+  var POP_DELAY = 12000;
 
   function buildPopup() {
     try { if (localStorage.getItem(POP_KEY)) return; } catch (e) {}
-    if (/\/admin/.test(location.pathname)) return;
+    if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return;
 
     var ov = document.createElement("div");
     ov.className = "ps-ov";
     ov.innerHTML =
-      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Claim your free class">' +
+      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Start your trial">' +
         '<button class="ps-x" id="psX" aria-label="Close">&times;</button>' +
         '<div class="ps-top">' +
-          '<div class="ps-eyebrow">South Hills Pittsburgh</div>' +
+          '<div class="ps-eyebrow">South Hills Pittsburgh &middot; All Levels Welcome</div>' +
           '<div class="ps-h">Your First Class<br>Is On Us.</div>' +
-          '<p class="ps-p">Drop your info and we\'ll text you the details &mdash; class times, what to bring, and how to claim your free workout. No experience needed.</p>' +
+          '<p class="ps-p">No experience needed. Pick how you want to start &mdash; free first workout, or a full week with gloves and wraps to keep.</p>' +
         '</div>' +
-        '<div class="ps-body">' +
-          '<div class="pushpress-form" data-form-id="' + LEAD_FORM + '"></div>' +
-          '<p class="ps-note">By submitting you agree to receive texts from Punch Boxing &amp; Fitness. Message and data rates may apply. Reply STOP to opt out.</p>' +
-        '</div>' +
+        '<div class="ps-body"><div class="ps-cards">' +
+
+          '<div class="ps-card">' +
+            '<div class="ps-lbl">First Workout</div>' +
+            '<div class="ps-price">Free</div>' +
+            '<div class="ps-meta">Single class &middot; No credit card</div>' +
+            '<ul class="ps-perks">' +
+              '<li><span class="ps-tick">&#10003;</span> 1 free workout of your choice</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Fight, Train, or Sweat format</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Gloves provided</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Meet your coaches &amp; the gym</li>' +
+            '</ul>' +
+            '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Claim Free Class &rarr;</a>' +
+            '<p class="ps-fine">Local residents w/ID &middot; use within 7 days</p>' +
+          '</div>' +
+
+          '<div class="ps-card feat">' +
+            '<div class="ps-flag">&#9889; Best Value</div>' +
+            '<div class="ps-lbl">7-Day Starter Pack</div>' +
+            '<div class="ps-price"><sup>$</sup>59.99</div>' +
+            '<div class="ps-meta">Unlimited classes &middot; 7 days</div>' +
+            '<ul class="ps-perks">' +
+              '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Free boxing gloves to keep</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Free hand wraps to keep</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Personal intro tour &amp; coaching</li>' +
+            '</ul>' +
+            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7-Day Pack &rarr;</a>' +
+            '<p class="ps-fine">One-time payment &middot; no auto-renew</p>' +
+          '</div>' +
+
+        '</div></div>' +
       '</div>';
     document.body.appendChild(ov);
-
-    if (!document.querySelector('script[src*="form_embed.js"]')) {
-      var fs = document.createElement("script");
-      fs.src = "https://api.grow.pushpress.com/js/form_embed.js";
-      fs.defer = true;
-      document.head.appendChild(fs);
-    }
 
     function close() {
       ov.classList.remove("on");
@@ -124,6 +146,9 @@
     document.getElementById("psX").addEventListener("click", close);
     ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    ov.querySelectorAll(".ps-btn").forEach(function (b) {
+      b.addEventListener("click", function () { try { localStorage.setItem(POP_KEY, "1"); } catch (e) {} });
+    });
 
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
   }

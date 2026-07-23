@@ -465,3 +465,80 @@ html,body{margin:0;padding:0;background:#fff}
 .sch-apps a{flex:1;text-align:center;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:11px 8px;border-radius:8px;border:1.5px solid rgba(255,255,255,.25);color:#fff}
 .sch-apps a:hover{border-color:#fff;background:rgba(255,255,255,.08)}
 @media(max-width:900px){.sch-grid{grid-template-columns:1fr}}
+
+/* =============  NAV v3 — correct logo size, no wrapping text  ============= */
+.pn-bar{height:82px;gap:18px;max-width:1320px}
+.pn-logo img{height:38px}                      /* wide horizontal logo — natural size */
+.pn-nav{gap:0}
+.pn-link{font-size:16px;letter-spacing:.04em;padding:10px 12px;white-space:nowrap}
+.pn-phone{font-size:17px;white-space:nowrap}
+.pn-cta{padding:12px 20px;font-size:15px;white-space:nowrap}
+@media(max-width:1400px){.pn-link{font-size:15px;padding:10px 10px}.pn-bar{gap:12px}}
+@media(max-width:1240px){.pn-nav,.pn-phone,.pn-cta{display:none}.pn-burger{display:flex}}
+@media(max-width:1000px){.pn-bar{height:72px}.pn-logo img{height:32px}}
+
+/* ==================  POPUP v2 — two trial offers  ======================== */
+.ps-box{max-width:880px}
+.ps-body{padding:24px}
+.ps-offers{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ps-card{border:1.5px solid #e6e6e6;border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;position:relative}
+.ps-card.feat{border:2px solid #D92B2B;background:#fff9f9}
+.ps-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#D92B2B;color:#fff;font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:100px;white-space:nowrap}
+.ps-lbl{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.ps-card.feat .ps-lbl{margin-top:8px}
+.ps-price{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:44px;line-height:1;color:#1a1a1a;margin-bottom:2px}
+.ps-card.feat .ps-price{color:#D92B2B}
+.ps-price sup{font-size:.4em;vertical-align:super;font-weight:700}
+.ps-sub{font-size:11px;color:#aaa;letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px}
+.ps-perks{list-style:none;margin:0 0 16px;flex:1}
+.ps-perks li{font-size:13px;color:#444;font-weight:500;padding:5px 0 5px 20px;position:relative;border-bottom:1px solid #f4f4f4}
+.ps-perks li:last-child{border-bottom:0}
+.ps-perks li::before{content:'\2713';position:absolute;left:0;color:#D92B2B;font-weight:800;font-size:11px}
+.ps-btn{display:block;text-align:center;text-decoration:none;padding:13px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#1a1a1a;color:#fff;transition:background .2s}
+.ps-btn:hover{background:#333}
+.ps-card.feat .ps-btn{background:#D92B2B}
+.ps-card.feat .ps-btn:hover{background:#ff3333}
+@media(max-width:720px){
+  .ps-offers{grid-template-columns:1fr;gap:22px}
+  .ps-body{max-height:52vh;padding:20px}
+  .ps-price{font-size:38px}
+}
+
+/* =============  NAV v3 — correct logo size, no wrapping  ================== */
+.pn-bar{height:84px;gap:16px;flex-wrap:nowrap}
+.pn-logo{flex:0 0 auto}
+.pn-logo img{height:38px;width:auto;max-width:270px;object-fit:contain}
+.pn-nav{gap:0;flex-wrap:nowrap}
+.pn-link{font-size:16px;letter-spacing:.05em;padding:10px 12px;white-space:nowrap}
+.pn-phone{font-size:17px;white-space:nowrap}
+.pn-cta{white-space:nowrap;padding:12px 20px;font-size:15px}
+.pn-menu{min-width:250px}
+@media(max-width:1240px){.pn-link{font-size:15px;padding:10px 9px}.pn-bar{gap:12px}.pn-logo img{height:34px}}
+@media(max-width:1150px){.pn-nav,.pn-phone,.pn-cta{display:none}.pn-burger{display:flex}}
+@media(max-width:1000px){.pn-bar{height:74px}.pn-logo img{height:34px}}
+
+/* ==================  POPUP v2 — two trial offers  ======================== */
+.ps-box{max-width:900px}
+.ps-top{padding:24px 28px 22px}
+.ps-body{padding:22px 24px 26px;max-height:64vh}
+.ps-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ps-card{border:1.5px solid #e4e4e4;border-radius:14px;padding:20px 18px;display:flex;flex-direction:column;background:#fff;position:relative}
+.ps-card.feat{border:2px solid #D92B2B;background:#fff9f9}
+.ps-flag{position:absolute;top:-1px;left:-1px;right:-1px;background:#D92B2B;color:#fff;font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;text-align:center;padding:6px 0;border-radius:13px 13px 0 0}
+.ps-card.feat .ps-lbl{margin-top:20px}
+.ps-lbl{font-size:10px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:#aaa;margin-bottom:4px}
+.ps-price{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:44px;line-height:1;color:#1a1a1a;letter-spacing:-1px}
+.ps-card.feat .ps-price{color:#D92B2B}
+.ps-price sup{font-size:.42em;vertical-align:super;font-weight:700;margin-right:1px}
+.ps-meta{font-size:11px;color:#aaa;letter-spacing:.5px;text-transform:uppercase;margin:4px 0 12px}
+.ps-perks{list-style:none;margin:0 0 16px;padding:0;flex:1}
+.ps-perks li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:#444;font-weight:500;padding:4px 0;border-bottom:1px solid #f4f4f4}
+.ps-perks li:last-child{border-bottom:0}
+.ps-tick{width:17px;height:17px;border-radius:50%;background:#f0f0f0;color:#888;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.ps-card.feat .ps-tick{background:#FFF0F0;color:#D92B2B}
+.ps-btn{display:block;text-align:center;text-decoration:none;padding:12px;border-radius:9px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:#1a1a1a;color:#fff;transition:background .2s}
+.ps-btn:hover{background:#333}
+.ps-card.feat .ps-btn{background:#D92B2B}
+.ps-card.feat .ps-btn:hover{background:#ff3333}
+.ps-fine{text-align:center;font-size:10.5px;color:#bbb;margin-top:8px;font-style:italic}
+@media(max-width:700px){.ps-cards{grid-template-columns:1fr}.ps-body{max-height:60vh}.ps-h{font-size:26px}}
