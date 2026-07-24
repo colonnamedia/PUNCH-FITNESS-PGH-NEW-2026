@@ -71,7 +71,8 @@
       '<a href="/punch-apparel">Apparel</a>' +
       '<a href="/blog-events">Blog</a>' +
       '<a href="/about">About Us</a>' +
-      '<a href="/contact">Contact Us</a></div>' +
+      '<a href="/contact">Contact Us</a>' +
+      '<a href="/careers">Careers</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
       '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
       '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
@@ -92,6 +93,9 @@
   function buildPopup() {
     try { if (localStorage.getItem(POP_KEY)) return; } catch (e) {}
     if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return;
+    // desktop only — the popup is too cramped on phones
+    if (window.matchMedia && !window.matchMedia("(min-width: 1000px)").matches) return;
+    if (!window.matchMedia && (window.innerWidth || 0) < 1000) return;
 
     var ov = document.createElement("div");
     ov.className = "ps-ov";

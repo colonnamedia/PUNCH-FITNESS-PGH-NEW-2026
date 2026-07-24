@@ -15,6 +15,9 @@ services:
       - { type: redirect, source: /blog, destination: /blog-events }
       - { type: rewrite, source: /trial, destination: /trial.html }
       - { type: rewrite, source: /24-hour-special, destination: /24-hour-special.html }
+      - { type: rewrite, source: /careers, destination: /careers.html }
+      - { type: rewrite, source: /waiver, destination: /waiver.html }
+      - { type: rewrite, source: /claim, destination: /claim.html }
       - { type: rewrite, source: /classes, destination: /classes.html }
       - { type: rewrite, source: /schedule, destination: /schedule.html }
       - { type: rewrite, source: /free-trial, destination: /free-trial.html }

@@ -30,6 +30,13 @@ const GUIDE = {
     "How low-impact, controlled boxing supports people living with Parkinson's: balance, coordination, rhythm, posture, confidence, and community. Must state Punch is NOT a Rock Steady Boxing affiliate, that the program is fitness-based and not medical treatment or therapy, and that readers should consult their physician.",
 };
 
+
+const TOPIC_IMAGE = {
+  "Boxing for Fitness": "/assets/punch-pittsburgh-6.jpg",
+  "Nutrition": "/assets/punch-pittsburgh-31.jpg",
+  "Parkinson's Boxing Benefits": "/assets/punch-pittsburgh-40.jpg",
+};
+
 function slugify(s) {
   return String(s).toLowerCase().trim()
     .replace(/['’]/g, "")
@@ -136,6 +143,7 @@ Respond with ONLY a JSON object, no markdown fence, no preamble:
         topic,
         excerpt: (post.excerpt || "").slice(0, 200),
         body: post.body,
+        image_url: TOPIC_IMAGE[topic] || "/assets/punch-pittsburgh-41.jpg",
         published: true,
       }),
     });

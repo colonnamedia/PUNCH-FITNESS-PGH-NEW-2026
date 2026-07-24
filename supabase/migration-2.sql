@@ -34,13 +34,13 @@ on conflict do nothing;
 
 -- 4) Give the three starter blog posts a header image ------------------------
 update public.blog_posts set image_url =
-  'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/c17b0e57-23b7-45b9-a70c-4f95ea148b56/Punch+Fitness+Boxing+Studio-06634.jpg'
+  '/assets/punch-pittsburgh-6.jpg'
   where topic = 'Boxing for Fitness' and image_url is null;
 
 update public.blog_posts set image_url =
-  'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/1740771490055-X3M8P8QQ7T4L9H2IQLC9/DSC08935.jpeg'
+  '/assets/punch-pittsburgh-31.jpg'
   where topic = 'Nutrition' and image_url is null;
 
 update public.blog_posts set image_url =
-  'https://images.squarespace-cdn.com/content/6509de1678b4160657354615/550764b2-7031-4138-aa9c-1add5ac8c130/punch+parkinsons+and+senior+fit+classes.png?content-type=image%2Fpng'
+  '/assets/punch-pittsburgh-40.jpg'
   where topic like 'Parkinson%' and image_url is null;
