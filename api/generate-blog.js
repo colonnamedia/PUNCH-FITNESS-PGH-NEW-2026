@@ -65,6 +65,27 @@ export default async function handler(req, res) {
       "Content-Type": "application/json",
     };
 
+
+    // ---- 0. Respect the weekly post limit set in the admin -----------------
+    let perWeek = 1;
+    try {
+      const setRes = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=value&key=eq.blog`, { headers: sbHeaders });
+      const setJson = await setRes.json();
+      const v = Array.isArray(setJson) && setJson[0] ? setJson[0].value : null;
+      if (v && Number(v.posts_per_week)) perWeek = Math.min(3, Math.max(1, Number(v.posts_per_week)));
+    } catch (e) { /* fall back to 1 */ }
+
+    const weekAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+    const recentRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/blog_posts?select=id&created_at=gte.${weekAgo}`,
+      { headers: { ...sbHeaders, Prefer: "count=exact" } }
+    );
+    const recent = await recentRes.json();
+    const postedThisWeek = Array.isArray(recent) ? recent.length : 0;
+    if (postedThisWeek >= perWeek && !(req.query && req.query.force)) {
+      return res.status(200).json({ ok: true, skipped: true, reason: `weekly limit reached (${postedThisWeek}/${perWeek})` });
+    }
+
     // ---- 1. Pick the next topic in rotation --------------------------------
     const lastRes = await fetch(
       `${SUPABASE_URL}/rest/v1/blog_posts?select=topic,slug&order=created_at.desc&limit=1`,
@@ -83,9 +104,17 @@ FOCUS: ${GUIDE[topic]}
 
 Voice: personal, direct, warm, motivational. Words that fit: journey, community, confidence, stronger, fitter, consistency, transformation. Avoid: athlete, performance, hardcore, elite, dominate. Never invent statistics, studies, member names, or testimonials. No medical claims. Do not promise specific weight-loss results.
 
-Write a fresh post (450-650 words) with 3-4 "## " subheadings, short paragraphs, and a closing line inviting the reader to try a free first class at Punch. Use markdown.
+Write a fresh post (500-750 words) with 3-4 "## " subheadings and short paragraphs.
 
-Respond with ONLY a JSON object, no markdown fence, no preamble:
+SOURCING RULES (important):
+- Any general health, fitness, or medical claim must be attributed to a recognised organisation and linked, e.g. the Mayo Clinic, Cleveland Clinic, Harvard Health, the CDC, the American Heart Association, the NHS, the Parkinson's Foundation, or the American College of Sports Medicine.
+- Write claims as attributed statements ("According to the Cleveland Clinic, ...") rather than as Punch's own findings.
+- Do NOT invent statistics, study results, percentages, member names, or testimonials. If you are not certain of a number, describe the effect qualitatively instead.
+- End the post with a "## Sources" section listing 2-4 markdown links to the organisations you referenced, using their real homepage or topic-hub URLs. Do not fabricate deep article URLs.
+- Add one closing line inviting the reader to try a free first class at Punch.
+- For anything health-related, include a short line noting this is general information and readers should talk to their doctor.
+
+Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
 {"title": "...", "excerpt": "one sentence under 160 characters", "body": "full markdown post"}`;
 
     const aiRes = await fetch("https://api.anthropic.com/v1/messages", {

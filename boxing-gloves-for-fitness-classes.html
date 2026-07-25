@@ -68,6 +68,26 @@
   <p class="sub" style="margin:0 auto">Included with every membership.</p>
  </div>
  <div class="si"><div id="equip-root"><p class="trial-note" style="margin-top:26px">Loading equipment…</p></div></div>
+ <p class="disclose">Some links above are affiliate links. If you buy through them, Punch may earn a small commission at no extra cost to you &mdash; it helps support the gym. We only recommend gear we actually use on the floor.</p>
+</div>
+
+<div class="s off">
+ <div class="si" style="text-align:center;margin-bottom:26px">
+  <span class="lbl">Coach Partner</span>
+  <h2 class="h2">Superare <span>Fight Gear.</span></h2>
+ </div>
+ <div class="partner-band">
+  <div>
+   <h3>20% Off Superare<br>Through Our Coach.</h3>
+   <p>One of our coaches partners with Superare &mdash; gloves, wraps, apparel, and fight gear built for people who actually train. Use her code and it comes off at checkout.</p>
+   <div class="code-chip">EMPOWER20</div>
+   <p style="font-size:13px">Applied automatically when you use the link below.</p>
+  </div>
+  <div style="text-align:center">
+   <a href="http://superareshop.com/EMPOWER20" class="btn-red" target="_blank" rel="noopener sponsored" style="display:inline-block">Shop Superare &rarr;</a>
+   <p style="color:rgba(255,255,255,.35);font-size:12px;margin-top:12px;font-style:italic">Opens superareshop.com</p>
+  </div>
+ </div>
 </div>
 
 <div class="s off">
@@ -143,10 +163,16 @@ else {
         <div class="shop-cat-h">${esc(g.c)}</div>
         <div class="shop-grid">${g.items.map(p=>`
           <div class="shop-card">
-            <div class="shop-media">${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:`<span class="shop-ph">Punch</span>`}</div>
+            <div class="shop-media">${(p.amazon_url||p.partner_url)?`<span class="pick">Coach Pick</span>`:""}${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:`<span class="shop-ph">Punch</span>`}</div>
             <div class="shop-body">
               <div class="shop-name">${esc(p.name)}</div>
-              <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:6px">${esc(p.description||"")}</p>
+              <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">${esc(p.description||"")}</p>
+              <div class="buy-row">
+                ${p.amazon_url?`<a class="buy-amz" href="${esc(p.amazon_url)}" target="_blank" rel="noopener sponsored">Buy on Amazon &rarr;</a>`:""}
+                ${p.partner_url?`<a class="buy-partner" href="${esc(p.partner_url)}" target="_blank" rel="noopener sponsored">${esc(p.partner_label||"Shop Partner")} &rarr;</a>`:""}
+                ${p.stripe_url?`<a class="buy-partner" href="${esc(p.stripe_url)}" target="_blank" rel="noopener">Buy Now &rarr;</a>`:""}
+                ${p.partner_note?`<div class="buy-note">${esc(p.partner_note)}</div>`:""}
+              </div>
             </div>
           </div>`).join("")}</div>`).join("");
     });

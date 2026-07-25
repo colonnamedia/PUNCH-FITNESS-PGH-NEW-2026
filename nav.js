@@ -78,7 +78,9 @@
       '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
       '<a class="pf-mail" href="' + LOGIN + '" target="_blank" rel="noopener">Member Login &rarr;</a>' +
       '<div class="pf-soc"><a href="https://instagram.com/punchpgh" target="_blank" rel="noopener">Instagram</a>' +
-      '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a></div></div>' +
+      '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a>' +
+      '<a href="https://www.youtube.com/@punchpgh" target="_blank" rel="noopener">YouTube</a>' +
+      '<a href="https://www.tiktok.com/@punchpgh" target="_blank" rel="noopener">TikTok</a></div></div>' +
   '</div>' +
   '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
@@ -157,12 +159,53 @@
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
   }
 
+
+  // ---- Scroll reveal + sticky mobile CTA (added by refinement layer) -------
+  function enhance() {
+    // sticky mobile CTA (skip on funnel/ad/admin pages)
+    if (!/\/admin|\/claim|\/trial\b|\/24-hour-special/.test(location.pathname)) {
+      var bar = document.createElement("div");
+      bar.className = "mcta";
+      bar.innerHTML =
+        '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>' +
+        '<a class="m-call" href="tel:+14125123261">Call</a>';
+      document.body.appendChild(bar);
+    }
+
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) return;
+
+    // auto-tag reveal targets inside #plp without touching markup
+    var scope = document.getElementById("plp");
+    if (!scope) return;
+    var sel = ".si > *, .prog-card, .trial-card, .diff-card, .review, .bpost, .freq-card, .journey-step, .class-photo-card, .stat, .shop-card";
+    var els = Array.prototype.slice.call(scope.querySelectorAll(sel));
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+    els.forEach(function (el, i) {
+      // skip if already visible on load (above the fold) to avoid a flash
+      var r = el.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.92) return;
+      el.classList.add("reveal");
+      // gentle stagger among siblings
+      var sibIndex = 0, p = el.previousElementSibling;
+      while (p) { if (p.classList && p.classList.contains("reveal")) sibIndex++; p = p.previousElementSibling; }
+      el.style.transitionDelay = Math.min(sibIndex * 70, 280) + "ms";
+      io.observe(el);
+    });
+  }
+
   function init() {
     document.body.insertAdjacentHTML("afterbegin", header);
     document.body.insertAdjacentHTML("beforeend", footer);
     var b = document.getElementById("pnBurger"), d = document.getElementById("pnDrawer");
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
     buildPopup();
+    enhance();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

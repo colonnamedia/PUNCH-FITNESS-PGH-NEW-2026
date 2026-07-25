@@ -33,3 +33,17 @@ services:
       - { type: rewrite, source: /about, destination: /about.html }
       - { type: rewrite, source: /terms-conditions, destination: /terms-conditions.html }
       - { type: rewrite, source: /admin, destination: /admin.html }
+
+  - type: cron
+    name: punchpgh-autoblog
+    runtime: node
+    schedule: "0 14 * * 1,3,5"        # Mon/Wed/Fri 14:00 UTC; script enforces 1-3/week
+    buildCommand: npm install
+    startCommand: node cron/generate-blog.js
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false

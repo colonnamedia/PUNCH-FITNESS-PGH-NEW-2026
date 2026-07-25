@@ -20,6 +20,11 @@
     <label for="password">Password</label>
     <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
     <button class="btn btn-red btn-block" id="loginBtn">Sign In</button>
+    <div id="mfaPrompt" class="hide">
+      <label for="loginCode">Authenticator Code</label>
+      <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" />
+      <button class="btn btn-red btn-block" id="loginVerify">Verify</button>
+    </div>
     <div class="err" id="loginErr"></div>
   </div>
 </div>
@@ -32,6 +37,7 @@
       <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
+      <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
     </nav>
@@ -68,8 +74,56 @@
         <div><h1 class="mono-h">Blog</h1><div class="sub">Posts appear on /blog-events. New posts also arrive automatically each week.</div></div>
         <button class="btn btn-red" id="addPost">&#65291; New Post</button>
       </div>
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-h"><h2>Automatic Posts</h2></div>
+        <div style="padding:20px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <label style="margin:0 0 6px">Posts per week</label>
+            <select id="freq" style="max-width:220px">
+              <option value="1">1 per week</option>
+              <option value="2">2 per week</option>
+              <option value="3">3 per week</option>
+            </select>
+            <p class="hint">Topics rotate: Boxing for Fitness &rarr; Nutrition &rarr; Parkinson&#39;s Boxing Benefits. Posts run Mon/Wed/Fri and stop once the weekly limit is hit. Maximum 3.</p>
+          </div>
+          <button class="btn btn-red" id="saveFreq">Save</button>
+        </div>
+      </div>
       <div class="stats" id="stats-blog"></div>
       <div class="panel"><div class="panel-h"><h2>All Posts</h2></div><div id="list-blog"></div></div>
+    </section>
+
+    <!-- ============ SECURITY ============ -->
+    <section class="sect" id="sect-security">
+      <div class="top">
+        <div><h1 class="mono-h">Security</h1><div class="sub">Two-factor authentication for this admin account.</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Two-Factor Authentication</h2><span id="mfaState" class="pill">Checking…</span></div>
+        <div style="padding:22px" id="mfaBody">
+          <p style="color:var(--mut2);font-size:15px;line-height:1.7;max-width:620px">
+            Adds a second step at login using an authenticator app (Google Authenticator, Authy, or 1Password).
+            Even if someone learns your password, they can&#39;t get in without the rotating code on your phone.
+          </p>
+          <div id="mfaEnroll" class="hide" style="margin-top:22px">
+            <div style="background:#fff;padding:16px;border-radius:12px;display:inline-block" id="qrWrap"></div>
+            <p class="hint" style="max-width:520px">Scan this with your authenticator app. Can&#39;t scan? Enter this key manually:
+              <code id="mfaSecret" style="display:block;margin-top:8px;background:var(--ink3);padding:10px;border-radius:8px;word-break:break-all;color:#fff"></code>
+            </p>
+            <label for="mfaCode">Enter the 6-digit code to confirm</label>
+            <input id="mfaCode" inputmode="numeric" maxlength="6" placeholder="123456" style="max-width:220px" />
+            <div style="margin-top:14px;display:flex;gap:10px">
+              <button class="btn btn-red" id="mfaVerify">Turn On 2FA</button>
+              <button class="btn btn-ghost" id="mfaCancel">Cancel</button>
+            </div>
+            <div class="err" id="mfaErr"></div>
+          </div>
+          <div style="margin-top:22px">
+            <button class="btn btn-red" id="mfaStart">Set Up Two-Factor</button>
+            <button class="btn btn-ghost hide" id="mfaOff">Turn Off 2FA</button>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 </div>
@@ -113,6 +167,23 @@
 
     <label for="pStripe">Stripe Payment Link (optional — enables the Buy button)</label>
     <input id="pStripe" placeholder="https://buy.stripe.com/..." />
+
+    <label for="pAmazon">Amazon Link (optional)</label>
+    <input id="pAmazon" placeholder="https://www.amazon.com/dp/..." />
+    <p class="hint">Shows a “Buy on Amazon” button. You can use this instead of Stripe, or both together.</p>
+
+    <div class="grid2">
+      <div>
+        <label for="pPartner">Partner Link (optional)</label>
+        <input id="pPartner" placeholder="http://superareshop.com/EMPOWER20" />
+      </div>
+      <div>
+        <label for="pPartnerLabel">Partner Button Text</label>
+        <input id="pPartnerLabel" placeholder="Shop Superare" />
+      </div>
+    </div>
+    <label for="pPartnerNote">Partner Note (e.g. discount code)</label>
+    <input id="pPartnerNote" placeholder="Use code EMPOWER20 at checkout" />
 
     <div class="grid2">
       <div class="row-check"><input type="checkbox" id="pFrom" /><label for="pFrom">Show “from” price</label></div>
@@ -206,11 +277,12 @@ async function login(){
   $("loginBtn").disabled=false;
   if (error) $("loginErr").textContent = error.message;
 }
-function enterApp(session){
+async function enterApp(session){
+  if (!(await mfaGate())) return;
   $("loginView").classList.add("hide");
   $("appView").classList.remove("hide");
   $("whoami").textContent = session.user.email;
-  loadAll();
+  loadAll(); loadFreq(); refreshMfa();
 }
 $("signout").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
 
@@ -317,6 +389,8 @@ function openProduct(p, kind){
   $("modalTitle").textContent = (p?"Edit ":"Add ") + (pKind==="equipment"?"Equipment":"Apparel");
   $("pName").value=p?p.name:""; $("pPrice").value=p?p.price:""; $("pCat").value=p?p.category:"";
   $("pDesc").value=p?(p.description||""):""; $("pStripe").value=p?(p.stripe_url||""):"";
+  $("pAmazon").value=p?(p.amazon_url||""):""; $("pPartner").value=p?(p.partner_url||""):"";
+  $("pPartnerLabel").value=p?(p.partner_label||""):""; $("pPartnerNote").value=p?(p.partner_note||""):"";
   $("pFrom").checked=p?!!p.price_from:false; $("pActive").checked=p?!!p.active:true;
   $("formErr").textContent=""; paint($("drop"), p?p.image_url:null);
   $("modal").classList.remove("hide");
@@ -331,7 +405,11 @@ $("saveBtn").onclick=async ()=>{
     if(pFile) image_url = await upload(pFile);
     const row={ name, price: isNaN(price)?0:price, category:$("pCat").value.trim()||"General",
       description:$("pDesc").value.trim()||null, stripe_url:$("pStripe").value.trim()||null,
-      price_from:$("pFrom").checked, active:$("pActive").checked, image_url, kind:pKind };
+      price_from:$("pFrom").checked, active:$("pActive").checked, image_url, kind:pKind,
+      amazon_url:$("pAmazon").value.trim()||null,
+      partner_url:$("pPartner").value.trim()||null,
+      partner_label:$("pPartnerLabel").value.trim()||null,
+      partner_note:$("pPartnerNote").value.trim()||null };
     const { error } = pEdit
       ? await sb.from("products").update(row).eq("id",pEdit)
       : await sb.from("products").insert(row);
@@ -391,6 +469,110 @@ async function delPost(id,p){
   if(error){ toast(error.message,true); return; }
   toast("Post deleted"); loadPosts();
 }
+/* ---------------- BLOG FREQUENCY ---------------- */
+async function loadFreq(){
+  const { data } = await sb.from("site_settings").select("value").eq("key","blog").maybeSingle();
+  const n = data && data.value && Number(data.value.posts_per_week) ? Number(data.value.posts_per_week) : 1;
+  $("freq").value = String(Math.min(3, Math.max(1, n)));
+}
+$("saveFreq").onclick = async () => {
+  const n = Math.min(3, Math.max(1, parseInt($("freq").value,10) || 1));
+  $("saveFreq").disabled = true;
+  const { error } = await sb.from("site_settings")
+    .upsert({ key:"blog", value:{ posts_per_week:n }, updated_at:new Date().toISOString() }, { onConflict:"key" });
+  $("saveFreq").disabled = false;
+  toast(error ? error.message : `Saved — ${n} post${n>1?"s":""} per week`, !!error);
+};
+
+/* ---------------- TWO-FACTOR (TOTP) ---------------- */
+let enrollId = null;
+async function refreshMfa(){
+  try{
+    const { data, error } = await sb.auth.mfa.listFactors();
+    if (error) throw error;
+    const verified = (data.totp || []).filter(f => f.status === "verified");
+    const on = verified.length > 0;
+    $("mfaState").textContent = on ? "Enabled" : "Not enabled";
+    $("mfaState").className = "pill " + (on ? "live" : "draft");
+    $("mfaStart").classList.toggle("hide", on);
+    $("mfaOff").classList.toggle("hide", !on);
+    $("mfaOff").dataset.factor = on ? verified[0].id : "";
+  }catch(e){
+    $("mfaState").textContent = "Unavailable";
+    $("mfaState").className = "pill";
+  }
+}
+$("mfaStart").onclick = async () => {
+  $("mfaErr").textContent = "";
+  const { data, error } = await sb.auth.mfa.enroll({ factorType:"totp", friendlyName:"Punch Admin " + Date.now() });
+  if (error){ toast(error.message, true); return; }
+  enrollId = data.id;
+  $("qrWrap").innerHTML = data.totp.qr_code
+    ? (data.totp.qr_code.startsWith("<svg") ? data.totp.qr_code : `<img src="${data.totp.qr_code}" alt="2FA QR code" style="width:190px;height:190px">`)
+    : "";
+  $("mfaSecret").textContent = data.totp.secret || "";
+  $("mfaEnroll").classList.remove("hide");
+  $("mfaStart").classList.add("hide");
+};
+$("mfaCancel").onclick = async () => {
+  if (enrollId) { try { await sb.auth.mfa.unenroll({ factorId: enrollId }); } catch(e){} }
+  enrollId = null; $("mfaEnroll").classList.add("hide"); refreshMfa();
+};
+$("mfaVerify").onclick = async () => {
+  const code = $("mfaCode").value.trim();
+  if (code.length !== 6){ $("mfaErr").textContent = "Enter the 6-digit code."; return; }
+  $("mfaVerify").disabled = true;
+  try{
+    const ch = await sb.auth.mfa.challenge({ factorId: enrollId });
+    if (ch.error) throw ch.error;
+    const v = await sb.auth.mfa.verify({ factorId: enrollId, challengeId: ch.data.id, code });
+    if (v.error) throw v.error;
+    enrollId = null; $("mfaEnroll").classList.add("hide"); $("mfaCode").value="";
+    toast("Two-factor is on"); refreshMfa();
+  }catch(e){ $("mfaErr").textContent = e.message || "That code didn't work."; }
+  finally{ $("mfaVerify").disabled = false; }
+};
+$("mfaOff").onclick = async () => {
+  const id = $("mfaOff").dataset.factor;
+  if (!id) return;
+  if (!confirm("Turn off two-factor authentication for this account?")) return;
+  const { error } = await sb.auth.mfa.unenroll({ factorId: id });
+  toast(error ? error.message : "Two-factor turned off", !!error);
+  refreshMfa();
+};
+
+/* login-time MFA challenge */
+async function mfaGate(){
+  try{
+    const { data, error } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (error) return true;
+    if (data.nextLevel === "aal2" && data.nextLevel !== data.currentLevel){
+      $("mfaPrompt").classList.remove("hide");
+      $("loginBtn").classList.add("hide");
+      $("loginErr").textContent = "Enter the code from your authenticator app.";
+      return false;
+    }
+  }catch(e){}
+  return true;
+}
+$("loginVerify").onclick = async () => {
+  const code = $("loginCode").value.trim();
+  if (code.length !== 6){ $("loginErr").textContent = "Enter the 6-digit code."; return; }
+  $("loginVerify").disabled = true;
+  try{
+    const { data: f } = await sb.auth.mfa.listFactors();
+    const factor = (f.totp || []).find(x => x.status === "verified");
+    const ch = await sb.auth.mfa.challenge({ factorId: factor.id });
+    if (ch.error) throw ch.error;
+    const v = await sb.auth.mfa.verify({ factorId: factor.id, challengeId: ch.data.id, code });
+    if (v.error) throw v.error;
+    const { data:{ session } } = await sb.auth.getSession();
+    $("mfaPrompt").classList.add("hide");
+    enterApp(session);
+  }catch(e){ $("loginErr").textContent = e.message || "That code didn't work."; }
+  finally{ $("loginVerify").disabled = false; }
+};
+
 </script>
 </body>
 </html>
