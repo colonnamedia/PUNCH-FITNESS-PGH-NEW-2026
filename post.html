@@ -23,7 +23,7 @@
         <p class="trial-note">Loading…</p>
       </div>
       <div style="max-width:760px;margin:44px auto 0;text-align:center">
-        <a href="/blog-events" class="btn-dark">&larr; All Posts</a>
+        <a href="/blog-events.html" class="btn-dark">&larr; All Posts</a>
       </div>
     </div>
   </div>
@@ -34,7 +34,7 @@
     <div class="final-sub">Come try it in person — no experience needed, all levels welcome.</div>
     <div class="final-btns">
       <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim My Free Class</a>
-      <a href="/membership-options" class="btn-ghost-w">See Memberships</a>
+      <a href="/membership-options.html" class="btn-ghost-w">See Memberships</a>
     </div>
   </div>
 </div>
@@ -74,12 +74,12 @@ else if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")){
 }
 async function load(sb){
   const { data, error } = await sb.from("blog_posts").select("*").eq("slug", slug).eq("published",true).single();
-  if (error || !data){ root.innerHTML = '<p class="trial-note">Post not found. <a href="/blog-events" style="color:#D92B2B">See all posts</a></p>'; return; }
+  if (error || !data){ root.innerHTML = '<p class="trial-note">Post not found. <a href="/blog-events.html" style="color:#D92B2B">See all posts</a></p>'; return; }
   document.title = data.title + " | Punch Boxing & Fitness";
   const dm = document.querySelector('meta[name="description"]');
   if (dm && data.excerpt) dm.setAttribute("content", data.excerpt);
   const link = document.createElement("link"); link.rel="canonical";
-  link.href = "https://punchpgh.com/post?slug=" + encodeURIComponent(data.slug);
+  link.href = "https://punchpgh.com/post.html?slug=" + encodeURIComponent(data.slug);
   document.head.appendChild(link);
 
   root.innerHTML = `
@@ -91,7 +91,7 @@ async function load(sb){
 
   const ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":data.title,
     "datePublished":data.created_at,"description":data.excerpt||"",
-    "url":"https://punchpgh.com/post?slug="+encodeURIComponent(data.slug),
+    "url":"https://punchpgh.com/post.html?slug="+encodeURIComponent(data.slug),
     "author":{"@type":"Organization","name":"Punch Boxing & Fitness"},
     "publisher":{"@type":"Organization","name":"Punch Boxing & Fitness"}};
   const s=document.createElement("script"); s.type="application/ld+json";

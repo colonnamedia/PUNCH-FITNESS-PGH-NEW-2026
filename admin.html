@@ -38,8 +38,8 @@
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
-      <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
-      <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
+      <a href="/punch-apparel.html" target="_blank"><span class="i">&#8599;</span> View Store</a>
+      <a href="/blog-events.html" target="_blank"><span class="i">&#8599;</span> View Blog</a>
     </nav>
     <div class="side-foot">
       <div class="side-user" id="whoami"></div>
@@ -342,7 +342,7 @@ async function loadPosts(){
         <small>${esc(p.topic)} &middot; ${when(p.created_at)}</small></div>
       <div><span class="pill ${p.published?"live":"draft"}">${p.published?"Published":"Draft"}</span></div>
       <div class="pacts">
-        <a class="icon-btn" href="/post?slug=${encodeURIComponent(p.slug)}" target="_blank" title="View">&#8599;</a>
+        <a class="icon-btn" href="/post.html?slug=${encodeURIComponent(p.slug)}" target="_blank" title="View">&#8599;</a>
         <button class="icon-btn" data-bedit="${p.id}">&#9998;</button>
         <button class="icon-btn del" data-bdel="${p.id}">&#128465;</button>
       </div>

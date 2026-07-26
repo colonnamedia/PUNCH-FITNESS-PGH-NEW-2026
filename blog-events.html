@@ -52,7 +52,7 @@
     <div class="final-sub">Your first class at Punch is free. Come try the thing you've been reading about.</div>
     <div class="final-btns">
       <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim My Free Class</a>
-      <a href="/membership-options" class="btn-ghost-w">See Memberships</a>
+      <a href="/membership-options.html" class="btn-ghost-w">See Memberships</a>
     </div>
   </div>
 </div>
@@ -79,7 +79,7 @@ async function load(sb){
   const ld = {"@context":"https://schema.org","@type":"Blog","name":"Punch Boxing & Fitness Blog",
     "url":"https://punchpgh.com/blog-events",
     "blogPost":data.slice(0,10).map(p=>({"@type":"BlogPosting","headline":p.title,
-      "url":"https://punchpgh.com/post?slug="+encodeURIComponent(p.slug),
+      "url":"https://punchpgh.com/post.html?slug="+encodeURIComponent(p.slug),
       "datePublished":p.created_at,"description":p.excerpt||"",
       "author":{"@type":"Organization","name":"Punch Boxing & Fitness"}}))};
   const s=document.createElement("script"); s.type="application/ld+json";
@@ -89,7 +89,7 @@ function card(p){
   const media = p.image_url
     ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
     : `<span>Punch</span>`;
-  return `<a class="bpost" href="/post?slug=${encodeURIComponent(p.slug)}" style="text-decoration:none">
+  return `<a class="bpost" href="/post.html?slug=${encodeURIComponent(p.slug)}" style="text-decoration:none">
     <div class="bpost-media">${media}</div>
     <div class="bpost-body">
       <div class="bpost-topic">${esc(p.topic)}</div>

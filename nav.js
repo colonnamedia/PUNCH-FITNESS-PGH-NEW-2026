@@ -16,19 +16,18 @@
     '<nav class="pn-nav">' +
       '<div class="pn-item"><button class="pn-link">Workouts<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
-          '<a href="/classes">Group Fitness</a>' +
-          '<a href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-          '<a href="/youth-boxing-camp">Youth Boxing</a>' +
-          '<a href="/personal-training">Personal Training</a>' +
-          '<a href="/schedule">Schedule</a></div></div>' +
+          '<a href="/classes.html">Group Fitness</a>' +
+          '<a href="/senior-fitness-and-boxing-pittsburgh.html">Parkinson\'s &amp; Senior Fit</a>' +
+          '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
+          '<a href="/personal-training.html">Personal Training</a>' +
+          '<a href="/schedule.html">Schedule</a></div></div>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
-          '<a href="/membership-options">Membership Options</a>' +
-          '<a href="/free-trial">Free Trial Class</a>' +
-          '<a href="/boxing-gloves-for-fitness-classes">Boxing Gloves</a>' +
-          '<a href="/punch-apparel">Apparel</a></div></div>' +
-      '<a class="pn-link" href="/blog-events">Blog</a>' +
-      '<a class="pn-link" href="/contact">Contact</a>' +
+          '<a href="/membership-options.html">Membership Options</a>' +
+          '<a href="/free-trial.html">Free Trial Class</a>' +
+          '<a href="/boxing-gloves-for-fitness-classes.html">Boxing Gloves</a>' +
+          '<a href="/punch-apparel.html">Apparel</a></div></div>' +
+      '<a class="pn-link" href="/contact.html">Contact</a>' +
     '</nav>' +
     '<a class="pn-phone" href="tel:+14125123261">412-512-3261</a>' +
     '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Trial</a>' +
@@ -36,17 +35,17 @@
   '</div>' +
   '<div class="pn-drawer" id="pnDrawer">' +
     '<details><summary>Workouts</summary>' +
-      '<a href="/classes">Group Fitness</a>' +
-      '<a href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-      '<a href="/youth-boxing-camp">Youth Boxing</a>' +
-      '<a href="/personal-training">Personal Training</a>' +
-      '<a href="/schedule">Schedule</a></details>' +
+      '<a href="/classes.html">Group Fitness</a>' +
+      '<a href="/senior-fitness-and-boxing-pittsburgh.html">Parkinson\'s &amp; Senior Fit</a>' +
+      '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
+      '<a href="/personal-training.html">Personal Training</a>' +
+      '<a href="/schedule.html">Schedule</a></details>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
-      '<a href="/membership-options">Membership Options</a>' +
-      '<a href="/free-trial">Free Trial Class</a>' +
-      '<a href="/boxing-gloves-for-fitness-classes">Boxing Gloves</a>' +
-      '<a href="/punch-apparel">Apparel</a></details>' +
-    '<a href="/blog-events">Blog</a><a href="/contact">Contact Us</a>' +
+      '<a href="/membership-options.html">Membership Options</a>' +
+      '<a href="/free-trial.html">Free Trial Class</a>' +
+      '<a href="/boxing-gloves-for-fitness-classes.html">Boxing Gloves</a>' +
+      '<a href="/punch-apparel.html">Apparel</a></details>' +
+    '<a href="/contact.html">Contact Us</a>' +
     '<a href="tel:+14125123261">412-512-3261</a>' +
     '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Trial</a>' +
   '</div></header>';
@@ -60,19 +59,19 @@
       '<a class="pf-tel" href="tel:+14125123261">412-512-3261</a>' +
       '<a class="pf-mail" href="mailto:punchpgh@gmail.com">punchpgh@gmail.com</a></div>' +
     '<div class="pf-col"><div class="pf-h">Workouts</div>' +
-      '<a href="/classes">Group Fitness</a>' +
-      '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
-      '<a href="/youth-boxing-camp">Youth Boxing</a>' +
-      '<a href="/personal-training">Personal Training</a>' +
-      '<a href="/schedule">Schedule</a></div>' +
+      '<a href="/classes.html">Group Fitness</a>' +
+      '<a href="/senior-fitness-and-boxing-pittsburgh.html">Senior &amp; Parkinson\'s</a>' +
+      '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
+      '<a href="/personal-training.html">Personal Training</a>' +
+      '<a href="/schedule.html">Schedule</a></div>' +
     '<div class="pf-col"><div class="pf-h">Get Started</div>' +
-      '<a href="/free-trial">Free Trial Class</a>' +
-      '<a href="/membership-options">Memberships</a>' +
-      '<a href="/punch-apparel">Apparel</a>' +
-      '<a href="/blog-events">Blog</a>' +
-      '<a href="/about">About Us</a>' +
-      '<a href="/contact">Contact Us</a>' +
-      '<a href="/careers">Careers</a></div>' +
+      '<a href="/free-trial.html">Free Trial Class</a>' +
+      '<a href="/membership-options.html">Memberships</a>' +
+      '<a href="/punch-apparel.html">Apparel</a>' +
+      '<a href="/blog-events.html">Blog</a>' +
+      '<a href="/about.html">About Us</a>' +
+      '<a href="/contact.html">Contact Us</a>' +
+      '<a href="/careers.html">Careers</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
       '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
       '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
@@ -83,7 +82,7 @@
       '<a href="https://www.tiktok.com/@punchpgh" target="_blank" rel="noopener">TikTok</a></div></div>' +
   '</div>' +
   '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
-  '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
+  '<span><a href="/terms-conditions.html">Terms &amp; Conditions</a></span></div></footer>';
 
 
   // ---- Trial-offer popup -------------------------------------------------
