@@ -19,8 +19,8 @@
           '<a href="/classes.html">Group Fitness</a>' +
           '<a href="/senior-fitness-and-boxing-pittsburgh.html">Parkinson\'s &amp; Senior Fit</a>' +
           '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
-          '<a href="/personal-training.html">Personal Training</a>' +
-          '<a href="/schedule.html">Schedule</a></div></div>' +
+          '<a href="/personal-training.html">Personal Training</a></div></div>' +
+      '<a class="pn-link" href="/schedule.html">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
           '<a href="/membership-options.html">Membership Options</a>' +
@@ -30,7 +30,7 @@
       '<a class="pn-link" href="/contact.html">Contact</a>' +
     '</nav>' +
     '<a class="pn-phone" href="tel:+14125123261">412-512-3261</a>' +
-    '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Trial</a>' +
+    '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
     '<button class="pn-burger" id="pnBurger" aria-label="Menu"><span></span><span></span><span></span></button>' +
   '</div>' +
   '<div class="pn-drawer" id="pnDrawer">' +
@@ -38,8 +38,8 @@
       '<a href="/classes.html">Group Fitness</a>' +
       '<a href="/senior-fitness-and-boxing-pittsburgh.html">Parkinson\'s &amp; Senior Fit</a>' +
       '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
-      '<a href="/personal-training.html">Personal Training</a>' +
-      '<a href="/schedule.html">Schedule</a></details>' +
+      '<a href="/personal-training.html">Personal Training</a></details>' +
+    '<a href="/schedule.html">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
       '<a href="/membership-options.html">Membership Options</a>' +
       '<a href="/free-trial.html">Free Trial Class</a>' +
@@ -47,7 +47,7 @@
       '<a href="/punch-apparel.html">Apparel</a></details>' +
     '<a href="/contact.html">Contact Us</a>' +
     '<a href="tel:+14125123261">412-512-3261</a>' +
-    '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Trial</a>' +
+    '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
   '</div></header>';
 
   var year = new Date().getFullYear();
