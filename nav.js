@@ -19,7 +19,8 @@
           '<a href="/classes.html">Group Fitness</a>' +
           '<a href="/senior-fitness-and-boxing-pittsburgh.html">Parkinson\'s &amp; Senior Fit</a>' +
           '<a href="/youth-boxing-camp.html">Youth Boxing</a>' +
-          '<a href="/personal-training.html">Personal Training</a></div></div>' +
+          '<a href="/personal-training.html">Personal Training</a>' +
+          '<a href="/trainers.html">Meet the Trainers</a></div></div>' +
       '<a class="pn-link" href="/schedule.html">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
@@ -71,6 +72,7 @@
       '<a href="/blog-events.html">Blog</a>' +
       '<a href="/about.html">About Us</a>' +
       '<a href="/contact.html">Contact Us</a>' +
+      '<a href="/trainers.html">Trainers</a>' +
       '<a href="/careers.html">Careers</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
       '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +

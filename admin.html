@@ -38,6 +38,7 @@
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
       <a data-tab="pages"><span class="i">&#128444;</span> Pages</a>
+      <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel.html" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events.html" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -100,6 +101,16 @@
         <div><h1 class="mono-h">Pages &amp; Media</h1><div class="sub">Swap the hero image or video on any page. Upload a file or paste a link, then set how it fits.</div></div>
       </div>
       <div id="pages-root"><div class="empty"><b>Loading&hellip;</b></div></div>
+    </section>
+
+    <!-- ============ TRAINERS ============ -->
+    <section class="sect" id="sect-trainers">
+      <div class="top">
+        <div><h1 class="mono-h">Trainers</h1><div class="sub">Add a photo and name. They appear on the Trainers page with a black &amp; white filter.</div></div>
+        <button class="btn btn-red" id="addTrainer">&#65291; Add Trainer</button>
+      </div>
+      <div class="stats" id="stats-trainers"></div>
+      <div class="panel"><div class="panel-h"><h2>Roster</h2></div><div id="list-trainers"></div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -250,6 +261,27 @@
   </div>
 </div>
 
+
+<!-- ============================== TRAINER MODAL ============================== -->
+<div class="overlay hide" id="tmodal">
+  <div class="modal">
+    <div class="modal-h"><h3 id="tTitle">Add Trainer</h3><button class="x" id="tClose">&times;</button></div>
+    <label>Photo</label>
+    <div class="drop" id="tdrop">
+      <div class="drop-ic">&#128247;</div><div class="drop-t">Click or drag a photo</div>
+      <div class="drop-s">Portrait (3:4) looks best</div>
+      <input type="file" id="tfile" accept="image/*" class="hide" />
+    </div>
+    <label for="tName">Name</label>
+    <input id="tName" placeholder="Anthony Colonna" />
+    <label for="tRole">Role / Title (optional)</label>
+    <input id="tRole" placeholder="Owner & Head Coach" />
+    <div class="row-check"><input type="checkbox" id="tActive" checked /><label for="tActive">Show on the Trainers page</label></div>
+    <button class="btn btn-red btn-block" id="tSave">Save Trainer</button>
+    <div class="err" id="tErr"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -303,6 +335,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
     $("sect-"+TAB).classList.add("on");
     if(TAB==="pages") loadPages();
+    if(TAB==="trainers") loadTrainers();
   });
 });
 
@@ -478,6 +511,63 @@ async function delPost(id,p){
   const { error } = await sb.from("blog_posts").delete().eq("id",id);
   if(error){ toast(error.message,true); return; }
   toast("Post deleted"); loadPosts();
+}
+
+
+/* ---------------- TRAINERS ---------------- */
+let tEdit=null, tFile=null, tImg=null;
+wireDrop("tdrop","tfile", f=>{ tFile=f; paint($("tdrop"), URL.createObjectURL(f)); });
+$("addTrainer") && ($("addTrainer").onclick = ()=>openTrainer(null));
+$("tClose") && ($("tClose").onclick = ()=>$("tmodal").classList.add("hide"));
+$("tmodal") && $("tmodal").addEventListener("click",e=>{ if(e.target===$("tmodal")) $("tmodal").classList.add("hide"); });
+
+async function loadTrainers(){
+  const { data, error } = await sb.from("trainers").select("*").order("sort",{ascending:true}).order("created_at",{ascending:true});
+  if(error){ toast(error.message,true); return; }
+  const items = data||[];
+  $("stats-trainers").innerHTML =
+    `<div class="stat"><b>${items.length}</b><span>Total</span></div>
+     <div class="stat"><b>${items.filter(t=>t.active).length}</b><span>Shown</span></div>`;
+  const list=$("list-trainers");
+  if(!items.length){ list.innerHTML=`<div class="empty"><b>No trainers yet</b>Click &ldquo;Add Trainer&rdquo; to build your roster.</div>`; return; }
+  list.innerHTML = items.map(t=>`
+    <div class="prow">
+      ${t.image_url?`<img class="pthumb" src="${esc(t.image_url)}" alt="">`:`<div class="pthumb">${esc((t.name||"?").slice(0,1))}</div>`}
+      <div class="pname">${esc(t.name)}${t.active?"":`<span class="badge-off">Hidden</span>`}<small>${esc(t.role||"")}</small></div>
+      <div class="pcat"></div><div class="pprice"></div>
+      <div class="pacts">
+        <button class="icon-btn" data-tedit="${t.id}">&#9998;</button>
+        <button class="icon-btn del" data-tdel="${t.id}">&#128465;</button>
+      </div>
+    </div>`).join("");
+  list.querySelectorAll("[data-tedit]").forEach(b=>b.onclick=()=>openTrainer(items.find(x=>x.id===b.dataset.tedit)));
+  list.querySelectorAll("[data-tdel]").forEach(b=>b.onclick=()=>delTrainer(b.dataset.tdel, items.find(x=>x.id===b.dataset.tdel)));
+}
+function openTrainer(t){
+  tEdit=t?t.id:null; tFile=null; tImg=t?t.image_url:null;
+  $("tTitle").textContent=t?"Edit Trainer":"Add Trainer";
+  $("tName").value=t?t.name:""; $("tRole").value=t?(t.role||""):""; $("tActive").checked=t?!!t.active:true;
+  $("tErr").textContent=""; paint($("tdrop"), t?t.image_url:null);
+  $("tmodal").classList.remove("hide");
+}
+$("tSave") && ($("tSave").onclick=async ()=>{
+  const name=$("tName").value.trim();
+  if(!name){ $("tErr").textContent="Needs a name."; return; }
+  $("tSave").disabled=true; $("tSave").textContent="Saving…"; $("tErr").textContent="";
+  try{
+    let image_url=tImg; if(tFile) image_url=await upload(tFile);
+    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url };
+    const { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
+    if(error) throw error;
+    $("tmodal").classList.add("hide"); toast(tEdit?"Trainer updated":"Trainer added"); loadTrainers();
+  }catch(e){ $("tErr").textContent=e.message||"Something went wrong."; }
+  finally{ $("tSave").disabled=false; $("tSave").textContent="Save Trainer"; }
+});
+async function delTrainer(id,t){
+  if(!confirm(`Remove ${t?.name||"this trainer"}?`)) return;
+  const { error } = await sb.from("trainers").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Removed"); loadTrainers();
 }
 
 /* ---------------- PAGES / MEDIA ---------------- */

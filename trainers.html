@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meet the Trainers | Punch Boxing &amp; Fitness Pittsburgh</title>
+<meta name="description" content="Meet the coaches at Punch Boxing &amp; Fitness in Pittsburgh's South Hills. Experienced, certified, and genuinely invested in your progress." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://punchpgh.com/trainers" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://punchpgh.com/trainers" />
+<meta property="og:title" content="Meet the Trainers | Punch Boxing &amp; Fitness Pittsburgh" />
+<meta property="og:description" content="Meet the coaches at Punch Boxing &amp; Fitness in Pittsburgh's South Hills. Experienced, certified, and genuinely invested in your progress." />
+<meta property="og:image" content="/assets/punch-pittsburgh-38.jpg" />
+<meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://images.squarespace-cdn.com" />
+<link rel="stylesheet" href="/punch.css" />
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+<script src="/config.js"></script>
+<script src="/nav.js" defer></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<div class="ph-wrap" style="min-height:58vh">
+  <img class="ph-video" src="/assets/punch-pittsburgh-38.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
+  <div class="ph-overlay"></div>
+  <div class="ph-content"><div class="ph-left">
+    <h1 class="ph-title">The<br><span class="ph-red">People Behind</span><br><span class="ph-out">Your Progress.</span></h1>
+    <p class="ph-sub">Certified coaches who learn your name, push your limits, and celebrate your wins &middot; South Hills Pittsburgh</p>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="ph-btn" target="_blank" rel="noopener">Train With Us &rarr;</a>
+  </div></div>
+  <a href="#punch-body" class="ph-scroll"><span>Scroll</span><div class="ph-scroll-line"></div></a>
+</div>
+<div id="plp">
+<div class="s" id="punch-body">
+ <div class="si" style="text-align:center;max-width:720px">
+  <span class="lbl">Your Coaches</span>
+  <h2 class="h2">Meet the <span>Team.</span></h2>
+  <p class="sub" style="margin:0 auto">The coaches who make Punch feel like home. Every one of them is here for the same reason &mdash; to help you become the strongest version of yourself.</p>
+ </div>
+ <div class="si"><div id="trainers-root" class="tr-grid">
+   <!-- fallback roster (shows if the database is empty) -->
+ </div></div>
+</div>
+
+<div class="final">
+  <span class="lbl" style="color:rgba(255,255,255,.6)">No Risk &middot; No Commitment</span>
+  <div class="final-title">Come Train With Us.</div>
+  <div class="final-sub">Your first class is free &mdash; meet the coaches in person and see why members stay for years.</div>
+  <div class="final-btns">
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim My Free Class</a>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-ghost-w" target="_blank" rel="noopener">7-Day Pack &mdash; $59.99</a>
+  </div>
+  <div class="final-note">South Hills Pittsburgh &middot; Local residents w/ID &middot; All levels welcome</div>
+</div>
+
+</div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const CFG = window.PUNCH_CONFIG || {};
+const root = document.getElementById("trainers-root");
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const FALLBACK = [
+  { name:"Anthony Colonna", role:"Owner &amp; Head Coach", image_url:"/assets/trainers/anthony.jpg" },
+  { name:"Coach Emily",     role:"Boxing &amp; Conditioning", image_url:"/assets/trainers/emily.jpg" },
+  { name:"Coach E.O.",      role:"Strength &amp; Boxing", image_url:"/assets/trainers/eo.jpg" },
+];
+function card(t){
+  return '<figure class="tr-card">' +
+    (t.image_url ? '<img src="'+esc(t.image_url)+'" alt="'+esc(t.name)+'" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="tr-ph"></div>') +
+    '<figcaption class="tr-name">'+esc(t.name)+(t.role?'<span class="tr-role">'+t.role+'</span>':'')+'</figcaption>' +
+  '</figure>';
+}
+function render(list){ root.innerHTML = list.map(card).join(""); }
+render(FALLBACK);
+if (CFG.SUPABASE_URL && CFG.SUPABASE_URL.indexOf("YOUR-PROJECT")===-1) {
+  const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  sb.from("trainers").select("*").eq("active",true).order("sort",{ascending:true}).then(({data,error})=>{
+    if(!error && data && data.length) render(data);
+  });
+}
+</script>
+</body></html>
