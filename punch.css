@@ -898,3 +898,33 @@ body.has-mcta{padding-bottom:0}
 #plp .sa-wraps .btn-red{white-space:nowrap}
 @media(max-width:820px){#plp .sa-grid[style]{grid-template-columns:1fr 1fr!important}}
 @media(max-width:520px){#plp .sa-grid[style]{grid-template-columns:1fr!important}}
+
+/* ---------- SCHEDULE — large stacked option rows ---------- */
+#plp .sch-stack{display:flex;flex-direction:column;gap:18px;margin-top:38px;max-width:1000px;margin-left:auto;margin-right:auto}
+#plp .sch-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:28px;background:#1a1a1d;border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:34px 36px}
+#plp .sch-row.feat{background:#fff;border:2px solid var(--red)}
+#plp .sch-row-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(48px,6vw,84px);line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.25)}
+#plp .sch-row.feat .sch-row-num{-webkit-text-stroke:2px var(--red)}
+#plp .sch-row .sch-step{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+#plp .sch-row-h{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(26px,3.2vw,40px);line-height:.95;text-transform:uppercase;color:#fff;margin-bottom:10px}
+#plp .sch-row.feat .sch-row-h{color:#1a1a1d}
+#plp .sch-row-p{font-size:14.5px;line-height:1.6;color:rgba(255,255,255,.6);max-width:520px}
+#plp .sch-row.feat .sch-row-p{color:#555}
+#plp .sch-row-act{min-width:230px}
+#plp .sch-row-act .sch-btn{display:block;text-align:center;text-decoration:none;padding:15px 20px;border-radius:10px;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:#2e2e33;color:#fff;transition:background .2s,transform .2s}
+#plp .sch-row.feat .sch-row-act .sch-btn{background:#1a1a1d}
+#plp .sch-row-act .sch-btn:hover{transform:translateY(-2px)}
+#plp .sch-row-act .sch-btn.red{background:var(--red)}
+#plp .sch-row-act .sch-btn.red:hover{background:#ff3b30}
+@media(max-width:820px){#plp .sch-row{grid-template-columns:1fr;gap:14px;text-align:left;padding:28px 24px}#plp .sch-row-num{font-size:52px}#plp .sch-row-act{min-width:0}}
+
+/* ---------- mobile: stack product grids (equipment + apparel) ---------- */
+@media(max-width:640px){
+  #plp .shop-grid[style]{grid-template-columns:1fr!important}
+  #plp .sa-grid[style]{grid-template-columns:1fr!important}
+}
+@media(min-width:641px) and (max-width:900px){
+  #plp .sa-grid[style]{grid-template-columns:1fr 1fr!important}
+}
+/* apparel hero: keep text hard-left so the model stays visible */
+#plp .ph-left, .ph-left{text-align:left}

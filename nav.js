@@ -8,7 +8,7 @@
   var LOGIN = "https://members.pushpress.com/";
 
   var header =
-  '<header class="pn"><div class="pn-bar">' +
+  '<header class="pn" id="pnHeader"><div class="pn-bar">' +
     '<a class="pn-logo" href="/" aria-label="Punch Boxing and Fitness home">' +
       '<img src="/assets/logo/punch-logo.png" alt="Punch Boxing &amp; Fitness" '+
       'onerror="this.onerror=null;this.src=\'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/d0e600c1-b98a-4d8e-becb-3d99ab28b51e/PUNCH+LOGO+1+NEW+2026+WEBSITE.png?format=300w\'">' +
@@ -29,7 +29,7 @@
           '<a href="/punch-apparel.html">Apparel</a></div></div>' +
       '<a class="pn-link" href="/contact.html">Contact</a>' +
     '</nav>' +
-    '<a class="pn-phone" href="tel:+14125123261">412-512-3261</a>' +
+    '<a class="pn-phone" href="sms:+14125123261?&body=Hello%20Punch%20Team%2C">Txt: 412-512-3261</a>' +
     '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
     '<button class="pn-burger" id="pnBurger" aria-label="Menu"><span></span><span></span><span></span></button>' +
   '</div>' +
@@ -46,7 +46,7 @@
       '<a href="/boxing-gloves-for-fitness-classes.html">Boxing Gloves</a>' +
       '<a href="/punch-apparel.html">Apparel</a></details>' +
     '<a href="/contact.html">Contact Us</a>' +
-    '<a href="tel:+14125123261">412-512-3261</a>' +
+    '<a href="sms:+14125123261?&body=Hello%20Punch%20Team%2C">Txt: 412-512-3261</a>' +
     '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
   '</div></header>';
 
@@ -199,6 +199,7 @@
   }
 
   function init() {
+    if (document.getElementById("pnHeader")) return;
     document.body.insertAdjacentHTML("afterbegin", header);
     document.body.insertAdjacentHTML("beforeend", footer);
     var b = document.getElementById("pnBurger"), d = document.getElementById("pnDrawer");
