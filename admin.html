@@ -37,6 +37,7 @@
       <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
+      <a data-tab="pages"><span class="i">&#128444;</span> Pages</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel.html" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events.html" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -91,6 +92,14 @@
       </div>
       <div class="stats" id="stats-blog"></div>
       <div class="panel"><div class="panel-h"><h2>All Posts</h2></div><div id="list-blog"></div></div>
+    </section>
+
+    <!-- ============ PAGES / MEDIA ============ -->
+    <section class="sect" id="sect-pages">
+      <div class="top">
+        <div><h1 class="mono-h">Pages &amp; Media</h1><div class="sub">Swap the hero image or video on any page. Upload a file or paste a link, then set how it fits.</div></div>
+      </div>
+      <div id="pages-root"><div class="empty"><b>Loading&hellip;</b></div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -293,6 +302,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x===a));
     document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
     $("sect-"+TAB).classList.add("on");
+    if(TAB==="pages") loadPages();
   });
 });
 
@@ -469,6 +479,113 @@ async function delPost(id,p){
   if(error){ toast(error.message,true); return; }
   toast("Post deleted"); loadPosts();
 }
+
+/* ---------------- PAGES / MEDIA ---------------- */
+var MEDIA_SLOTS = [
+  { group:"Homepage", items:[
+    { slot:"home.hero_video",   label:"Hero Video",                 type:"video" },
+    { slot:"home.promise_image",label:"'Train Like a Fighter' Image",type:"image" },
+    { slot:"home.prog_adult",   label:"Program: Adult Boxing",       type:"image" },
+    { slot:"home.prog_youth",   label:"Program: Youth Boxing",       type:"image" },
+    { slot:"home.prog_senior",  label:"Program: Senior & Parkinson's",type:"image" },
+    { slot:"home.prog_pt",      label:"Program: Personal Training",  type:"image" },
+  ]},
+  { group:"Free Trial",   items:[{ slot:"free-trial.hero_video", label:"Hero Video", type:"video" }]},
+  { group:"Memberships",  items:[{ slot:"membership.hero_video", label:"Hero Video", type:"video" }]},
+  { group:"Senior & Parkinson's", items:[{ slot:"senior.hero_video", label:"Hero Video", type:"video" }]},
+  { group:"Youth Boxing", items:[
+    { slot:"youth.hero",      label:"Hero Image",   type:"image" },
+    { slot:"youth.secondary", label:"Second Photo", type:"image" }]},
+  { group:"Personal Training", items:[{ slot:"pt.hero",       label:"Hero Image", type:"image" }]},
+  { group:"Schedule",     items:[{ slot:"schedule.hero",   label:"Hero Image", type:"image" }]},
+  { group:"Classes",      items:[{ slot:"classes.hero",    label:"Hero Image", type:"image" }]},
+  { group:"Apparel",      items:[{ slot:"apparel.hero",    label:"Hero Image", type:"image" }]},
+  { group:"About",        items:[{ slot:"about.hero",      label:"Hero Image", type:"image" }]},
+  { group:"Contact",      items:[{ slot:"contact.hero",    label:"Hero Image", type:"image" }]},
+];
+var POSITIONS = ["center","center top","center bottom","left","right","left top","right top","left bottom","right bottom"];
+var MAX_IMG = 5*1024*1024;      // 5 MB images
+var MAX_VID = 40*1024*1024;     // 40 MB video (link recommended for bigger)
+
+async function loadPages(){
+  var root = $("pages-root");
+  var current = {};
+  try {
+    var { data } = await sb.from("page_media").select("*");
+    (data||[]).forEach(function(r){ current[r.slot]=r; });
+  } catch(e){}
+  root.innerHTML = MEDIA_SLOTS.map(function(g){
+    return '<div class="pm-group"><div class="pm-group-h">'+esc(g.group)+'</div>' +
+      g.items.map(function(it){
+        var r = current[it.slot] || {};
+        var url = r.url || "";
+        var fit = r.fit || "cover";
+        var pos = r.position || "center";
+        var prev = url
+          ? (it.type==="video"
+              ? '<video src="'+esc(url)+'" muted></video>'
+              : '<img src="'+esc(url)+'" alt="">')
+          : '<span class="pm-ph">No media</span>';
+        var posOpts = POSITIONS.map(function(p){return '<option value="'+p+'"'+(p===pos?' selected':'')+'>'+p+'</option>';}).join("");
+        return '<div class="pm-slot" data-slot="'+esc(it.slot)+'" data-type="'+it.type+'">' +
+          '<div class="pm-prev"><span class="pm-badge">'+it.type+'</span>'+prev+'</div>' +
+          '<div class="pm-body">' +
+            '<div class="pm-name">'+esc(it.label)+'</div>' +
+            '<div class="pm-row">' +
+              '<input type="text" class="pm-url" placeholder="Paste an image or video URL" value="'+esc(url)+'">' +
+              '<button class="pm-up" type="button">Upload</button>' +
+              '<input type="file" class="pm-file hide" accept="'+(it.type==="video"?"video/*":"image/*")+'">' +
+            '</div>' +
+            '<div class="pm-controls">' +
+              '<label style="margin:0">Fit</label>' +
+              '<select class="pm-fit"><option value="cover"'+(fit==="cover"?" selected":"")+'>Cover (fill)</option><option value="contain"'+(fit==="contain"?" selected":"")+'>Contain (whole image)</option></select>' +
+              '<label style="margin:0">Position</label>' +
+              '<select class="pm-pos">'+posOpts+'</select>' +
+              '<button class="pm-save" type="button">Save</button>' +
+              '<span class="pm-hint"></span>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join("") + '</div>';
+  }).join("");
+
+  root.querySelectorAll(".pm-slot").forEach(function(row){
+    var slot = row.dataset.slot, type = row.dataset.type;
+    var fileEl = row.querySelector(".pm-file");
+    var urlEl = row.querySelector(".pm-url");
+    var hint = row.querySelector(".pm-hint");
+    row.querySelector(".pm-up").onclick = function(){ fileEl.click(); };
+    fileEl.onchange = async function(){
+      var f = fileEl.files[0]; if(!f) return;
+      var limit = type==="video"?MAX_VID:MAX_IMG;
+      if(f.size>limit){ hint.textContent = "Too big — max "+(limit/1024/1024)+"MB. Use a link for large files."; hint.style.color="#ff8a80"; return; }
+      hint.style.color="var(--mut)"; hint.textContent="Uploading…";
+      try{
+        var ext=(f.name.split(".").pop()||"bin").toLowerCase();
+        var path=slot.replace(/[^a-z0-9]/gi,"_")+"-"+Date.now()+"."+ext;
+        var up=await sb.storage.from("site-media").upload(path,f,{cacheControl:"3600",upsert:true});
+        if(up.error) throw up.error;
+        var pub=sb.storage.from("site-media").getPublicUrl(path).data.publicUrl;
+        urlEl.value=pub; hint.textContent="Uploaded — click Save";
+      }catch(e){ hint.style.color="#ff8a80"; hint.textContent=e.message||"Upload failed"; }
+    };
+    row.querySelector(".pm-save").onclick = async function(){
+      var payload={ slot:slot, url:urlEl.value.trim()||null,
+        fit:row.querySelector(".pm-fit").value, position:row.querySelector(".pm-pos").value,
+        updated_at:new Date().toISOString() };
+      hint.style.color="var(--mut)"; hint.textContent="Saving…";
+      var { error } = await sb.from("page_media").upsert(payload,{onConflict:"slot"});
+      if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
+      hint.style.color="#8fe3a0"; hint.textContent="Saved ✓";
+      var prev=row.querySelector(".pm-prev");
+      if(urlEl.value.trim()){
+        prev.innerHTML='<span class="pm-badge">'+type+'</span>'+(type==="video"?'<video src="'+esc(urlEl.value.trim())+'" muted></video>':'<img src="'+esc(urlEl.value.trim())+'">');
+      }
+      toast("Media saved");
+    };
+  });
+}
+
 /* ---------------- BLOG FREQUENCY ---------------- */
 async function loadFreq(){
   const { data } = await sb.from("site_settings").select("value").eq("key","blog").maybeSingle();

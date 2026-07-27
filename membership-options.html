@@ -26,13 +26,14 @@
 {"@context":"https://schema.org","@type":["SportsActivityLocation","LocalBusiness"],"@id":"https://punchpgh.com/#business","name":"Punch Boxing and Fitness","url":"https://punchpgh.com","telephone":"+14125123261","email":"punchpgh@gmail.com","address":{"@type":"PostalAddress","streetAddress":"2101 Greentree Rd, Unit 119","addressLocality":"Pittsburgh","addressRegion":"PA","postalCode":"15220","addressCountry":"US"},"priceRange":"$$","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"80"},"sameAs":["https://www.facebook.com/punchpgh","https://www.instagram.com/punchpgh","https://www.youtube.com/@punchpgh","https://www.tiktok.com/@punchpgh"]}
 </script>
 <script src="/nav.js" defer></script>
+<script src="/config.js"></script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- ============================ HERO (video) ============================ -->
 <section class="pm-hero-v2">
-  <video class="pm-hero-v2__video" autoplay muted loop playsinline preload="auto"
+  <video  data-slot="membership.hero_video"class="pm-hero-v2__video" autoplay muted loop playsinline preload="auto"
     poster="https://cdn.jsdelivr.net/gh/colonnamedia/PUNCH-ASSETS-JUNE/punch-pittsburgh-16.jpg">
     <source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/PUNCH%20NEW%20WEBSITE%20VIDEOS/Punch%20Boxing%20and%20Fitness%20-%20Pittsburgh.mp4" type="video/mp4" />
   </video>
@@ -175,5 +176,6 @@
 
   
 </div>
+<script src="/media.js" defer></script>
 </body>
 </html>

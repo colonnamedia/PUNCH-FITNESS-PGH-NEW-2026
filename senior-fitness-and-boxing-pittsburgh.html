@@ -39,13 +39,14 @@
 {"@context":"https://schema.org","@type":"Service","name":"Senior Slugger Program — Low-Impact Boxing for 65+ & Parkinson's","serviceType":"Senior fitness and Parkinson's boxing fitness class","url":"https://punchpgh.com/senior-fitness-and-boxing-pittsburgh","description":"Controlled, low-impact boxing and functional fitness for adults 65+ and people living with Parkinson's. Classes Monday, Wednesday, and Friday at 12:30 PM in Scott Township.","provider":{"@type":"SportsActivityLocation","name":"Punch Boxing and Fitness","@id":"https://punchpgh.com/#business"},"areaServed":["Pittsburgh","South Hills","Scott Township","Bethel Park","Mt. Lebanon","Upper St. Clair"],"offers":{"@type":"Offer","price":"69.99","priceCurrency":"USD","description":"Senior Fit — 4 classes per month"}}
 </script>
 <script src="/nav.js" defer></script>
+<script src="/config.js"></script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- ============================ VIDEO HERO ============================ -->
 <div class="ph-wrap">
-  <video class="ph-video" autoplay muted loop playsinline preload="auto"
+  <video  data-slot="senior.hero_video"class="ph-video" autoplay muted loop playsinline preload="auto"
     poster="https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/9c4ac4e5-1b32-4641-a0d9-a9f5faec4b66/FD39B942-5382-49D1-9191-122853866135.png">
     <source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/PUNCH%20NEW%20WEBSITE%20VIDEOS/PARKINSONS%20VIDEO%20HERO.mp4" type="video/mp4" />
   </video>
@@ -268,5 +269,6 @@
   
 
 </div>
+<script src="/media.js" defer></script>
 </body>
 </html>
