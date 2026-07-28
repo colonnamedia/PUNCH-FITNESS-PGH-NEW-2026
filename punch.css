@@ -999,3 +999,13 @@ body.has-mcta{padding-bottom:0}
   #plp .ph-content{padding:90px 22px 60px;align-items:flex-start;text-align:left}
   #plp .ph-left{align-items:flex-start;text-align:left}
 }
+
+/* ---------- hero eyebrow pinned to TOP of hero (all pages, inside or outside #plp) ---------- */
+.ph-wrap .hero-brow, .vhero .hero-brow{position:absolute;top:clamp(24px,4.5vh,42px);left:clamp(24px,5vw,64px);z-index:3;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.32em;
+  text-transform:uppercase;color:#ff5555;display:inline-flex;align-items:center;gap:14px}
+.ph-wrap .hero-brow::before, .vhero .hero-brow::before{content:"";width:44px;height:2px;background:#ff5555}
+@media(max-width:760px){
+  .ph-wrap .hero-brow, .vhero .hero-brow{top:20px;left:22px;font-size:11px;letter-spacing:.18em;gap:10px}
+  .ph-wrap .hero-brow::before, .vhero .hero-brow::before{width:28px}
+}

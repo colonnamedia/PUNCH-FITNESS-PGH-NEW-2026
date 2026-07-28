@@ -575,7 +575,12 @@ $("tSave") && ($("tSave").onclick=async ()=>{
   try{
     let image_url=tImg; if(tFile) image_url=await upload(tFile);
     const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tPos").value };
-    const { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
+    let { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
+    if(error && /image_fit|image_position|schema cache|column/i.test(error.message||"")){
+      // DB not migrated for fit/position yet — save the rest so it still works
+      const basic={ name:row.name, role:row.role, active:row.active, image_url:row.image_url };
+      ({ error } = tEdit ? await sb.from("trainers").update(basic).eq("id",tEdit) : await sb.from("trainers").insert(basic));
+    }
     if(error) throw error;
     $("tmodal").classList.add("hide"); toast(tEdit?"Trainer updated":"Trainer added"); loadTrainers();
   }catch(e){ $("tErr").textContent=e.message||"Something went wrong."; }
