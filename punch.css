@@ -982,3 +982,8 @@ body.has-mcta{padding-bottom:0}
 
 /* section separator */
 #plp .cls-sep{height:1px;background:linear-gradient(90deg,transparent,#ddd,transparent);max-width:1100px;margin:0 auto}
+
+/* ---------- hero content shifted ~left on all pages ---------- */
+#plp .ph-content{justify-content:flex-start}
+#plp .ph-left{max-width:640px;margin-right:auto}
+#plp .hero-stmt-content{max-width:660px}

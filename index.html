@@ -17,7 +17,6 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://images.squarespace-cdn.com" />
 <link rel="stylesheet" href="/punch.css" />
-<link rel="stylesheet" href="/home.css" />
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
@@ -28,157 +27,294 @@
 <script src="/nav.js" defer></script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "VideoObject", "name": "Boxing workout at Punch Boxing & Fitness Pittsburgh", "description": "Boxing and fitness training at Punch Boxing & Fitness, South Hills Pittsburgh.", "thumbnailUrl": "https://i.ytimg.com/vi/DJSPPBZ2DX8/hqdefault.jpg", "uploadDate": "2026-01-01", "contentUrl": "https://www.youtube.com/watch?v=DJSPPBZ2DX8", "embedUrl": "https://www.youtube.com/embed/DJSPPBZ2DX8", "publisher": {"@type": "Organization", "name": "Punch Boxing & Fitness", "url": "https://punchpgh.com"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "VideoObject", "name": "Morning fitness at Punch Boxing & Fitness Pittsburgh", "description": "Boxing and fitness training at Punch Boxing & Fitness, South Hills Pittsburgh.", "thumbnailUrl": "https://i.ytimg.com/vi/AICZH56ShvY/hqdefault.jpg", "uploadDate": "2026-01-01", "contentUrl": "https://www.youtube.com/watch?v=AICZH56ShvY", "embedUrl": "https://www.youtube.com/embed/AICZH56ShvY", "publisher": {"@type": "Organization", "name": "Punch Boxing & Fitness", "url": "https://punchpgh.com"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "VideoObject", "name": "Punch Fitness powerhouses \u2014 South Hills Pittsburgh", "description": "Boxing and fitness training at Punch Boxing & Fitness, South Hills Pittsburgh.", "thumbnailUrl": "https://i.ytimg.com/vi/LY6l3MXGmsE/hqdefault.jpg", "uploadDate": "2026-01-01", "contentUrl": "https://www.youtube.com/watch?v=LY6l3MXGmsE", "embedUrl": "https://www.youtube.com/embed/LY6l3MXGmsE", "publisher": {"@type": "Organization", "name": "Punch Boxing & Fitness", "url": "https://punchpgh.com"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "VideoObject", "name": "Punch Boxing and Fitness \u2014 South Hills Pittsburgh", "description": "Boxing and fitness training at Punch Boxing & Fitness, South Hills Pittsburgh.", "thumbnailUrl": "https://i.ytimg.com/vi/fcucX_X8AJc/hqdefault.jpg", "uploadDate": "2026-01-01", "contentUrl": "https://www.youtube.com/watch?v=fcucX_X8AJc", "embedUrl": "https://www.youtube.com/embed/fcucX_X8AJc", "publisher": {"@type": "Organization", "name": "Punch Boxing & Fitness", "url": "https://punchpgh.com"}}}]}</script>
 <script src="/config.js"></script>
+<style>
+/* ==== GRITTY LAYER over the proven landing-page structure ==== */
+#plp{font-family:'Barlow',sans-serif;position:relative}
+#plp .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.045;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#plp .h2,#plp .prog-name,#plp .hero-stmt-title,#plp .class-photo-name,#plp .challenge-title,#plp .final-title,#plp .journey-title,#plp .diff-title,#plp .combo-step-title,#plp .big-quote-text,#plp .stat-num,#plp .trial-price{font-family:'Barlow Condensed',sans-serif;letter-spacing:-.01em}
+#plp .h2,#plp .prog-name,#plp .hero-stmt-title,#plp .class-photo-name,#plp .challenge-title,#plp .final-title{font-weight:900}
+#plp .dark,#plp .exp-text.exp-dark,#plp .combo-text{background:#17171a}
+#plp .diff-card{background:#232327}
+/* bigger, more predominant program boxes, further across the page */
+#plp .prog-grid{max-width:1280px;gap:14px}
+#plp .prog-card{height:clamp(420px,42vw,520px)}
+#plp .prog-name{font-size:clamp(30px,3.4vw,44px)}
+/* reviews: slightly bigger section */
+#plp .reviews-grid .review{flex:1 1 300px}
+
+/* ==== GRITTY VIDEO HERO (top of page) ==== */
+#plp .vhero{position:relative;min-height:94vh;display:flex;align-items:flex-end;overflow:hidden;background:#17171a;z-index:2}
+#plp .vhero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+#plp .vhero-ov{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(15,15,17,.5) 0%,rgba(15,15,17,.12) 32%,rgba(15,15,17,.6) 72%,#17171a 100%),linear-gradient(90deg,rgba(15,15,17,.8),transparent 60%)}
+#plp .vhero-in{position:relative;z-index:2;padding:150px clamp(24px,5vw,64px) clamp(48px,7vw,96px);max-width:760px;color:#fff}
+#plp .vhero-eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.34em;text-transform:uppercase;color:#ff6a60;display:inline-flex;align-items:center;gap:14px;margin-bottom:16px}
+#plp .vhero-eyebrow::before{content:"";width:44px;height:2px;background:#ff6a60}
+#plp .vhero-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(56px,11vw,150px);line-height:.85;letter-spacing:-.025em;text-transform:uppercase;margin-bottom:22px;text-shadow:0 4px 40px rgba(0,0,0,.5)}
+#plp .vhero-title em{font-style:normal;color:#D92B2B}
+#plp .vhero-title .out{color:transparent;-webkit-text-stroke:2.5px #fff}
+#plp .vhero-sub{font-size:clamp(16px,1.7vw,21px);line-height:1.6;color:#eceae4;max-width:560px;margin-bottom:30px}
+#plp .vhero-btns{display:flex;gap:14px;flex-wrap:wrap}
+#plp .vhero-note{margin-top:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#c7c4bc}
+#plp .vhero-note b{color:#fff}
+/* shift hero content ~left on ALL #plp pages */
+#plp .ph-content{justify-content:flex-start}
+#plp .ph-left{max-width:640px}
+#plp .hero-stmt-content{max-width:660px}
+@media(max-width:600px){#plp .prog-grid{grid-template-columns:1fr}#plp .prog-card{height:340px}}
+</style>
+
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script src="/config.js"></script>
 <script src="/nav.js" defer></script>
 
-<div id="home">
+<div id="plp">
 <div class="grain"></div>
 
-<!-- HERO -->
-<section class="hero">
+<!-- ============ GRITTY VIDEO HERO ============ -->
+<section class="vhero">
   <video data-slot="home.hero_video" autoplay muted loop playsinline preload="auto" poster="/assets/punch-pittsburgh-41.jpg"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/PUNCH%20NEW%20WEBSITE%20VIDEOS/Punch%20Boxing%20and%20Fitness%20-%20Greentree%2015220.mp4" type="video/mp4"></video>
-  <div class="hov"></div>
-  <div class="wrap"><div class="hero-inner">
-    <span class="kick">South Hills Pittsburgh &middot; Boxing + Strength</span>
-    <h1>Your Life<br><em>Changes</em><br><span class="out">Here.</span></h1>
-    <p class="hsub">The boxing gym where beginners become regulars and regulars become unrecognizable. Up to 800 calories a class. No experience required &mdash; just show up.</p>
-    <div class="hbtns">
-      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn btn-red" target="_blank" rel="noopener">Claim Your Free Class</a>
-      <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn btn-out" target="_blank" rel="noopener">7-Day Pack <span class="amt">&middot; $59.99</span></a>
+  <div class="vhero-ov"></div>
+  <div class="vhero-in">
+    <span class="vhero-eyebrow">South Hills Pittsburgh &middot; Boxing + Strength</span>
+    <h1 class="vhero-title">Your Life<br><em>Changes</em><br><span class="out">Here.</span></h1>
+    <p class="vhero-sub">The boxing gym where beginners become regulars and regulars become unrecognizable. Up to 800 calories a class. No experience required &mdash; just show up.</p>
+    <div class="vhero-btns">
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-red" target="_blank" rel="noopener">Claim Your Free Class</a>
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-ghost-w" target="_blank" rel="noopener">7-Day Pack &mdash; $59.99</a>
     </div>
-    <div class="hnote">&#9733;&#9733;&#9733;&#9733;&#9733; <b>4.9</b> on Google &middot; <b>200+</b> members &middot; No card required</div>
-  </div></div>
+    <div class="vhero-note">&#9733;&#9733;&#9733;&#9733;&#9733; <b>4.9</b> on Google &middot; <b>200+</b> members &middot; No card required</div>
+  </div>
 </section>
 
-<!-- STATS -->
-<section class="stats"><div class="row">
-  <div class="cell"><div class="n">4.9<sup>&#9733;</sup></div><div class="l">Google Rating</div></div>
-  <div class="cell"><div class="n">200<sup>+</sup></div><div class="l">Active Members</div></div>
-  <div class="cell"><div class="n">800<sup>cal</sup></div><div class="l">Burned Per Class</div></div>
-  <div class="cell"><div class="n">45&ndash;55<sup>min</sup></div><div class="l">Every Session</div></div>
-</div></section>
-
-<!-- SPLIT 1 — the promise (they like this one) -->
-<section class="split bone">
-  <div class="s-text">
-    <span class="kick">The Best Workout in the South Hills</span>
-    <h2>Lose Weight.<br>Tone Up.<br><em>Train Like a Fighter.</em></h2>
-    <p class="lead">The workout that finally sticks. Boxing, strength, and conditioning that torches up to 800 calories a class and builds the lean, strong, confident body you've been chasing &mdash; no experience needed, zero intimidation. Show up, throw down, walk out feeling like a badass.</p>
-    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn btn-red" target="_blank" rel="noopener">Claim Your Free Class &rarr;</a>
+<!-- COMBINED HEADER -->
+<div class="s off" style="text-align:center;padding-bottom:48px">
+  <div class="si" style="max-width:760px">
+    <span class="lbl">South Hills Pittsburgh</span>
+    <h2 class="h2">A Life-Changing Fitness<br><span>Community for Everyone.</span></h2>
+    <p class="sub" style="margin:0 auto">No pressure. No perfect schedule. All levels welcome &mdash; from first-timers to regulars. Find your program below.</p>
   </div>
-  <div class="s-img"><img data-slot="home.promise_image" src="/assets/punch-pittsburgh-12.jpg" alt="Punch member Pittsburgh"></div>
-</section>
+</div>
 
-<!-- SPLIT 2 — a workout you'll look forward to -->
-<section class="split dark rev">
-  <div class="s-text">
-    <span class="kick">The Punch Experience</span>
-    <h2>A Workout You'll<br>Actually <em>Look<br>Forward To.</em></h2>
-    <p class="lead">When you love coming to the gym, consistency takes care of itself &mdash; and the results follow. Boxing fitness, strength training, and HIIT that keeps you coming back every single time.</p>
-    <a href="/classes.html" class="btn btn-out">See How It Works &rarr;</a>
-  </div>
-  <div class="s-img"><img src="/assets/punch-pittsburgh-6.jpg" alt="Punch boxing floor"></div>
-</section>
-
-<!-- PROGRAMS -->
-<section class="sec bone"><div class="wrap">
-  <div style="text-align:center;max-width:720px;margin:0 auto">
-    <span class="kick c">Find Your Program</span>
-    <h2 class="big">A Program for <em>Everyone.</em></h2>
-    <p class="lead" style="margin:0 auto">No pressure, all levels welcome. Pick where you want to start.</p>
-  </div>
-  <div class="pblocks progs4" style="margin-top:38px">
-    <div class="pblock"><img data-slot="home.prog_adult" src="/assets/punch-pittsburgh-6.jpg" alt="Adult Boxing"><div class="pbov"></div><div class="pbc"><div class="pbk">All Levels</div><div class="pbn">Adult Boxing &amp; Fitness</div><div class="pbd">Boxing, strength &amp; HIIT for every level.</div><a class="pbbtn" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Workout &rarr;</a></div></div>
-    <div class="pblock"><img data-slot="home.prog_youth" src="/assets/punch-youth-1.jpg" alt="Youth Boxing"><div class="pbov"></div><div class="pbc"><div class="pbk">Ages 7&ndash;17</div><div class="pbn">Youth Boxing</div><div class="pbd">Confidence, discipline &amp; fitness for kids.</div><a class="pbbtn" href="/youth-boxing-camp.html">Learn More &rarr;</a></div></div>
-    <div class="pblock"><img data-slot="home.prog_senior" src="/assets/punch-pittsburgh-40.jpg" alt="Senior & Parkinson's"><div class="pbov"></div><div class="pbc"><div class="pbk">Seniors &amp; Parkinson's</div><div class="pbn">Senior &amp; Parkinson's</div><div class="pbd">Low-impact boxing for balance &amp; quality of life.</div><a class="pbbtn" href="/senior-fitness-and-boxing-pittsburgh.html">Learn More &rarr;</a></div></div>
-    <div class="pblock"><img data-slot="home.prog_pt" src="/assets/punch-pittsburgh-38.jpg" alt="Personal Training"><div class="pbov"></div><div class="pbc"><div class="pbk">Custom Workouts</div><div class="pbn">Personal Training</div><div class="pbd">One-on-one coaching built around your goals.</div><a class="pbbtn" href="/personal-training.html">Get a Consultation &rarr;</a></div></div>
-  </div>
-</div></section>
-
-<!-- SPLIT 3 — boxing + strength w/ steps -->
-<section class="split dark2">
-  <div class="s-img"><img src="/assets/punch-pittsburgh-44.jpg" alt="Boxing and strength at Punch"></div>
-  <div class="s-text">
-    <span class="kick">The Secret Formula</span>
-    <h2>Boxing + Strength.<br><em>The Combination That<br>Changes Everything.</em></h2>
-    <p class="lead">Every class alternates between boxing rounds and strength circuits. That's what makes results happen fast.</p>
-    <div class="steps">
-      <div class="step"><div class="sn">01</div><div><div class="st">Boxing Rounds</div><div class="sd">Heavy bags, combinations, footwork, cardio intervals. Heart rate spikes and stays there.</div></div></div>
-      <div class="step"><div class="sn">02</div><div><div class="st">Strength Circuits</div><div class="sd">Barbells, dumbbells, cables, kettlebells. Functional movements that build real lean muscle.</div></div></div>
-      <div class="step"><div class="sn">03</div><div><div class="st">The Afterburn</div><div class="sd">Boxing + strength triggers EPOC &mdash; your body keeps burning for up to 24 hours after class.</div></div></div>
+<!-- PROGRAMS (big cards) -->
+<div class="s off" style="padding-top:0">
+  <div class="si" style="max-width:1280px">
+    <div class="prog-grid">
+      <div class="prog-card">
+        <img data-slot="home.prog_adult" src="/assets/punch-pittsburgh-6.jpg" alt="Adult Boxing & Fitness" />
+        <div class="prog-ov"><div class="prog-tag">Adults &middot; All Levels</div><div class="prog-name">Adult Boxing &amp; Fitness</div><p class="prog-desc">Boxing, strength, and HIIT classes for every fitness level. No experience needed &mdash; just show up.</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="prog-lnk" target="_blank" rel="noopener">Claim Free Workout &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_youth" src="/assets/punch-youth-1.jpg" alt="Youth Boxing" />
+        <div class="prog-ov"><div class="prog-tag">Ages 7&ndash;17</div><div class="prog-name">Youth Boxing</div><p class="prog-desc">Build confidence, discipline, and fitness through coach-led youth boxing. Fun, safe, structured.</p><a href="/youth-boxing-camp.html" class="prog-lnk">Learn About Youth Boxing &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_senior" src="/assets/punch-pittsburgh-40.jpg" alt="Senior & Parkinson's Boxing" />
+        <div class="prog-ov"><div class="prog-tag">Seniors &amp; Parkinson's</div><div class="prog-name">Senior &amp; Parkinson's Boxing</div><p class="prog-desc">Low-impact boxing proven to improve balance, coordination, and quality of life.</p><a href="/senior-fitness-and-boxing-pittsburgh.html" class="prog-lnk">Learn More &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_pt" src="/assets/punch-pittsburgh-38.jpg" alt="Personal Training" />
+        <div class="prog-ov"><div class="prog-tag">Custom Workouts</div><div class="prog-name">Personal Training</div><p class="prog-desc">New programming every day. Join the community that keeps coming back because the results speak for themselves.</p><a href="/personal-training.html" class="prog-lnk">Get a Consultation &rarr;</a></div>
+      </div>
     </div>
-    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn btn-red" target="_blank" rel="noopener">Try It Free &rarr;</a>
   </div>
-</section>
+</div>
 
-<!-- QUOTE BAND — social proof -->
-<section class="quoteband">
-  <div class="qmark">&ldquo;</div>
-  <blockquote>I've tried every gym in the South Hills and nothing comes close. The coaches actually care, the energy is unreal, and I've never worked this hard and had this much fun at the same time.</blockquote>
-  <div class="qwho">Rachel K. &middot; Member Since 2023 &middot; Lost 28 lbs</div>
-</section>
-
-<!-- SPLIT 4 — real transformation -->
-<section class="split bone">
-  <div class="s-text">
-    <span class="kick">The Punch Journey</span>
-    <h2>This Isn't a Quick Fix.<br><em>It's a Real<br>Transformation.</em></h2>
-    <p class="lead">Punch works because it's built for the long game. The experience gets you in the door. The results keep you coming back for years &mdash; real strength, real conditioning, real confidence.</p>
-    <div class="steps">
-      <div class="step"><div class="sn">&rarr;</div><div><div class="st">Strength that builds week over week</div></div></div>
-      <div class="step"><div class="sn">&rarr;</div><div><div class="st">Coaches who track your progress</div></div></div>
-      <div class="step"><div class="sn">&rarr;</div><div><div class="st">Results most members see within 30 days</div></div></div>
+<!-- TRIAL CTA -->
+<div class="s off" style="padding-top:0">
+  <div class="trial-cta">
+    <div class="trial-cards">
+      <div class="trial-card">
+        <div class="trial-icon">&#x1F94A;</div><div class="trial-lbl">First Workout</div><div class="trial-price">Free</div>
+        <div class="trial-desc">Local Residents w/ID &middot; Use Within 7 Days</div><span class="trial-chip">Best Way to Start</span><div class="trial-div"></div>
+        <ul class="trial-perks">
+          <li><span class="trial-check">&#x2713;</span> 1 Free Workout of Your Choice</li>
+          <li><span class="trial-check">&#x2713;</span> Fight, Train, or Sweat Format</li>
+          <li><span class="trial-check">&#x2713;</span> Meet Your Coaches &amp; the Gym</li>
+          <li><span class="trial-check">&#x2713;</span> No Credit Card Required</li>
+        </ul>
+        <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="trial-btn" target="_blank" rel="noopener">Claim First Workout Free &rarr;</a>
+        <p class="trial-note">Zero cost &middot; zero commitment</p>
+      </div>
+      <div class="trial-card feat">
+        <div class="trial-best">&#x26A1; Best Value</div><div class="trial-icon">&#x1F525;</div><div class="trial-lbl">7-Day Starter Pack</div><div class="trial-price"><sup>$</sup>59.99</div>
+        <div class="trial-desc">Local Residents w/ID &middot; One Time</div><span class="trial-chip">Unlimited Classes &middot; 7 Days</span><div class="trial-div"></div>
+        <ul class="trial-perks">
+          <li><span class="trial-check">&#x2713;</span> 7 Days Unlimited Classes</li>
+          <li><span class="trial-check">&#x2713;</span> Free Boxing Gloves to Keep</li>
+          <li><span class="trial-check">&#x2713;</span> Free Hand Wraps to Keep</li>
+          <li><span class="trial-check">&#x2713;</span> Personal Intro &amp; Coaching Plan</li>
+        </ul>
+        <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="trial-btn" target="_blank" rel="noopener">Start 7-Day Pack &rarr;</a>
+        <p class="trial-note">One-time payment &middot; no auto-renew</p>
+      </div>
     </div>
-    <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn btn-red" target="_blank" rel="noopener">Start Your Journey &mdash; $59.99 &rarr;</a>
   </div>
-  <div class="s-img"><img src="/assets/punch-pittsburgh-43.jpg" alt="Punch strength training"></div>
-</section>
+</div>
 
-<!-- STORIES — more social proof -->
-<section class="sec paper"><div class="wrap">
-  <div style="text-align:center;max-width:680px;margin:0 auto">
-    <span class="kick c">Real Members</span>
-    <h2 class="big">They Started Where <em>You Are.</em></h2>
-  </div>
-  <div class="stories">
-    <div class="story"><div class="rs">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rq">"Signed up for the free trial just to try it. That was 6 months ago &mdash; down 22 lbs and I love the gym now."</p><div class="who"><div class="av">J</div><div><div class="nm">Jessica M.</div><div class="mt">Member &middot; 6 months</div></div></div></div>
-    <div class="story"><div class="rs">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rq">"Zero boxing experience. First class the coaches had me throwing real combos and I felt incredible."</p><div class="who"><div class="av">M</div><div><div class="nm">Marcus T.</div><div class="mt">Member &middot; 7 months</div></div></div></div>
-    <div class="story"><div class="rs">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="rq">"My son loves youth boxing. The coaches are patient, encouraging, and he's learned so much discipline."</p><div class="who"><div class="av">J</div><div><div class="nm">Jennifer K.</div><div class="mt">Youth boxing parent</div></div></div></div>
-  </div>
-</div></section>
+<!-- STATS BAR -->
+<div class="stats-bar"><div class="stats-grid">
+  <div class="stat"><div class="stat-num">800<sup>+</sup></div><div class="stat-lbl">Calories Per Class</div></div>
+  <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Class Types</div></div>
+  <div class="stat"><div class="stat-num">45&ndash;55<sup>min</sup></div><div class="stat-lbl">Per Session</div></div>
+  <div class="stat"><div class="stat-num">200<sup>+</sup></div><div class="stat-lbl">Active Members</div></div>
+  <div class="stat"><div class="stat-num">4.9<sup>&#9733;</sup></div><div class="stat-lbl">Google Rating</div></div>
+</div></div>
 
-<!-- OFFER (boxed) -->
-<section class="sec dark"><div class="wrap narrow">
-  <div style="text-align:center;max-width:620px;margin:0 auto">
-    <span class="kick c">Two Ways to Start</span>
-    <h2 class="big">Walk In This Week.</h2>
+<!-- HERO STATEMENT (full image) -->
+<div class="hero-stmt">
+  <img src="/assets/punch-pittsburgh-41.jpg" alt="Punch Boxing Fitness Pittsburgh" class="hero-stmt-img" />
+  <div class="hero-stmt-ov"></div>
+  <div class="hero-stmt-content">
+    <span class="hero-stmt-eyebrow">The Best Workout in the South Hills</span>
+    <h2 class="hero-stmt-title">Lose Weight.<br>Tone Up.<br><span>Train Like<br>a Fighter.</span></h2>
+    <p class="hero-stmt-body">The workout that finally sticks. Boxing, strength, and conditioning that torches up to 800 calories a class and builds the lean, strong, confident body you've been chasing &mdash; zero intimidation.</p>
+    <div class="vhero-btns">
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-red" target="_blank" rel="noopener">Claim Free Workout &rarr;</a>
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-ghost-w" target="_blank" rel="noopener">7-Day Pack &mdash; $59.99</a>
+    </div>
   </div>
-  <div class="ocards">
-    <div class="ocard"><div class="otag">First Workout</div><div class="oprice">Free</div><div class="osub">Single Class &middot; No Card</div>
-      <ul><li><b>&#10003;</b> One free workout, any format</li><li><b>&#10003;</b> Gloves provided</li><li><b>&#10003;</b> Coaches guide you through</li></ul>
-      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn btn-out" target="_blank" rel="noopener">Claim Free Class</a></div>
-    <div class="ocard feat"><div class="otag">7-Day Starter Pack</div><div class="oprice"><sup>$</sup>59.99</div><div class="osub">Unlimited &middot; 7 Days</div>
-      <ul><li><b>&#10003;</b> 7 days unlimited classes</li><li><b>&#10003;</b> Gloves &amp; wraps <b style="color:#fff">to keep</b></li><li><b>&#10003;</b> Personal intro &amp; plan</li></ul>
-      <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn btn-red" target="_blank" rel="noopener">Start the 7-Day Pack</a></div>
+</div>
+
+<!-- EXP SPLIT — side text + full image -->
+<div class="exp-split">
+  <div class="exp-img-wrap"><img src="/assets/punch-pittsburgh-6.jpg" alt="The Punch Experience" class="exp-img" /></div>
+  <div class="exp-text exp-dark">
+    <span class="lbl">The Punch Experience</span>
+    <h2 class="h2">A Workout You'll Actually<br><span>Look Forward To.</span></h2>
+    <p class="sub">Most people dread the gym. Punch members count down the hours until their next class. The second you step on the floor, the energy hits you.</p>
+    <ul class="exp-list">
+      <li>High energy from the first minute</li>
+      <li>Coach-led &mdash; no standing around guessing</li>
+      <li>Real boxing technique you'll actually learn</li>
+      <li>New programming every day &mdash; zero boredom</li>
+    </ul>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-red" target="_blank" rel="noopener">Experience It Free &rarr;</a>
   </div>
-</div></section>
+</div>
 
-<!-- REELS -->
-<section class="sec paper tight"><div class="wrap">
-  <div style="text-align:center;max-width:640px;margin:0 auto"><span class="kick c">See It For Yourself</span><h2 class="big">This Is a <em>Class.</em></h2></div>
-  <div class="reels"><div class="reel"><iframe src="https://www.youtube.com/embed/DJSPPBZ2DX8" title="Punch Boxing Pittsburgh" loading="lazy" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div><div class="reel"><iframe src="https://www.youtube.com/embed/AICZH56ShvY" title="Punch Boxing Pittsburgh" loading="lazy" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div><div class="reel"><iframe src="https://www.youtube.com/embed/LY6l3MXGmsE" title="Punch Boxing Pittsburgh" loading="lazy" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div><div class="reel"><iframe src="https://www.youtube.com/embed/fcucX_X8AJc" title="Punch Boxing Pittsburgh" loading="lazy" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div></div>
-</div></section>
+<!-- BIG QUOTE -->
+<div class="big-quote"><div class="big-quote-inner">
+  <span class="big-quote-mark">&ldquo;</span>
+  <p class="big-quote-text">I've tried every gym in Pittsburgh. Nothing comes close. The coaches actually care, the energy is unreal, and I've never worked this hard and had this much fun at the same time.</p>
+  <div class="big-quote-who">Rachel K. &nbsp;&middot;&nbsp; Member Since 2023 &nbsp;&middot;&nbsp; Lost 28 lbs</div>
+</div></div>
 
-<!-- FINAL -->
-<section class="final"><div class="ghost">PUNCH</div>
-  <h2>Gloves On.<br><em>Let's Go.</em></h2>
-  <p class="fsub">Your first class is free. The hardest part is walking in &mdash; we handle the rest.</p>
-  <div class="fbtns"><a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn btn-red" target="_blank" rel="noopener">Claim Your Free Class</a><a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn btn-out" target="_blank" rel="noopener">7-Day Pack &middot; $59.99</a></div>
-  <div class="fnote">2101 Greentree Rd, Suite 119 &middot; Pittsburgh PA 15220 &middot; 412-512-3261</div>
-</section>
+<!-- EXP SPLIT REVERSE -->
+<div class="exp-split">
+  <div class="exp-text exp-light">
+    <span class="lbl">The Punch Journey</span>
+    <h2 class="h2">This Isn't a Quick Fix.<br><span>It's a Real Transformation.</span></h2>
+    <p class="sub">Punch works because it's built for the long game. The experience gets you in the door. The results keep you coming back for years. Real strength, real conditioning, real confidence.</p>
+    <ul class="exp-list">
+      <li>Strength that builds week over week</li>
+      <li>Coaches who track your progress and push you</li>
+      <li>A community that pulls you back on tough days</li>
+      <li>Results most members see within 30 days</li>
+    </ul>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-red" target="_blank" rel="noopener">Start Your Journey &mdash; $59.99 &rarr;</a>
+  </div>
+  <div class="exp-img-wrap"><img src="/assets/punch-pittsburgh-43.jpg" alt="The Punch Journey" class="exp-img" /></div>
+</div>
+
+<!-- JOURNEY MILESTONES -->
+<div class="s off"><div class="si">
+  <span class="lbl">Your Timeline</span>
+  <h2 class="h2">What Happens When<br><span>You Commit.</span></h2>
+  <div class="journey-grid">
+    <div class="journey-step"><div class="journey-day">Day 1</div><div class="journey-title">First Class</div><p class="journey-desc">You'll be nervous. You'll be challenged. You'll walk out spent and already thinking about coming back.</p></div>
+    <div class="journey-step"><div class="journey-day">Week 1&ndash;2</div><div class="journey-title">You're Hooked</div><p class="journey-desc">The coaches know your name. Your combinations are sharper. You're sleeping better and your energy is up.</p></div>
+    <div class="journey-step"><div class="journey-day">Day 30</div><div class="journey-title">Visible Changes</div><p class="journey-desc">Clothes fitting differently. Most members report losing 8&ndash;15 lbs in their first consistent month.</p></div>
+    <div class="journey-step"><div class="journey-day">Month 3+</div><div class="journey-title">New You</div><p class="journey-desc">This is just what you do now. Stronger, leaner, more confident &mdash; and you can't imagine going back.</p></div>
+  </div>
+</div></div>
+
+<!-- WHAT MAKES DIFFERENT -->
+<div class="s dark"><div class="si">
+  <span class="lbl">Why Punch</span>
+  <h2 class="h2">What Makes Us <span>Different.</span></h2>
+  <div class="diff-grid">
+    <div class="diff-card"><span class="diff-icon">&#x1F94A;</span><div class="diff-title">Real Boxing. Real Results.</div><p class="diff-desc">We teach actual boxing technique &mdash; not just cardio with gloves. Combinations, footwork, and defense while burning serious calories.</p></div>
+    <div class="diff-card"><span class="diff-icon">&#x1F465;</span><div class="diff-title">Small Classes, Big Coaching</div><p class="diff-desc">Classes stay small so every coach knows your name, your level, and your goals. You're never just a number.</p></div>
+    <div class="diff-card"><span class="diff-icon">&#x1F4C5;</span><div class="diff-title">New Programming Daily</div><p class="diff-desc">No cookie-cutter workouts. Fresh programming every day so you never get bored.</p></div>
+    <div class="diff-card"><span class="diff-icon">&#x1F525;</span><div class="diff-title">Three Ways to Train</div><p class="diff-desc">Fight, Train, or Sweat &mdash; each a complete 45&ndash;55 minute full-body workout.</p></div>
+    <div class="diff-card"><span class="diff-icon">&#x2764;&#xFE0F;</span><div class="diff-title">Inclusive Community</div><p class="diff-desc">From 16 to 70+, all levels, all backgrounds. The community is why members stay for years.</p></div>
+    <div class="diff-card"><span class="diff-icon">&#x1F3C6;</span><div class="diff-title">Specialized Programs</div><p class="diff-desc">Youth boxing, senior fitness, and Parkinson's classes &mdash; run by coaches trained for every population.</p></div>
+  </div>
+</div></div>
+
+<!-- FIGHT TRAIN SWEAT + PHOTO STRIP -->
+<div class="s" style="background:#fff;padding-bottom:0"><div class="si">
+  <span class="lbl">The Workouts</span>
+  <h2 class="h2">Fight. Train. <span>Sweat.</span></h2>
+  <p class="sub">Three distinct class formats. Every one a complete full-body workout. Mix and match &mdash; all included.</p>
+</div>
+<div class="class-photo-grid" style="max-width:1100px;margin:48px auto 0">
+  <div class="class-photo-card"><img src="/assets/punch-pittsburgh-6.jpg" alt="Fight Class" /><div class="class-photo-ov"><div class="class-photo-tag">Boxing Cardio &middot; 45&ndash;55 Min</div><div class="class-photo-name">Fight</div><p class="class-photo-desc">Heavy bag combinations, real technique, serious cardio. Intense, skill-driven, addictive.</p><div class="class-photo-stat">600&ndash;800</div><div class="class-photo-stat-lbl">Calories Burned</div></div></div>
+  <div class="class-photo-card"><img src="/assets/punch-pittsburgh-44.jpg" alt="Train Class" /><div class="class-photo-ov"><div class="class-photo-tag">Strength &middot; 45&ndash;55 Min</div><div class="class-photo-name">Train</div><p class="class-photo-desc">Functional resistance training with barbells, dumbbells, and cables. Fresh programming every session.</p><div class="class-photo-stat">New Daily</div><div class="class-photo-stat-lbl">Programming</div></div></div>
+  <div class="class-photo-card"><img src="/assets/punch-pittsburgh-1.jpg" alt="Sweat Class" /><div class="class-photo-ov"><div class="class-photo-tag">HIIT Circuit &middot; 45&ndash;55 Min</div><div class="class-photo-name">Sweat</div><p class="class-photo-desc">Air bikes, rowers, circuits, boxing stations. Max calorie torch with 24-hour afterburn.</p><div class="class-photo-stat">24HR</div><div class="class-photo-stat-lbl">Afterburn Effect</div></div></div>
+</div>
+<div class="photo-strip" style="max-width:1100px;margin:3px auto 0">
+  <img src="/assets/punch-pittsburgh-11.jpg" alt="Punch Pittsburgh" loading="lazy" />
+  <img src="/assets/punch-pittsburgh-21.jpg" alt="Punch members" loading="lazy" />
+  <img src="/assets/punch-youth-1.jpg" alt="Youth boxing Pittsburgh" loading="lazy" />
+  <img src="/assets/punch-pittsburgh-3.jpg" alt="Punch Boxing" loading="lazy" />
+  <img src="/assets/punch-pittsburgh-40.jpg" alt="Senior boxing Pittsburgh" loading="lazy" />
+</div></div>
+
+<!-- BOXING + STRENGTH COMBO -->
+<div class="combo-grid">
+  <div><img src="/assets/punch-pittsburgh-43.jpg" alt="Boxing and Strength" class="combo-img" /></div>
+  <div class="combo-text">
+    <span class="lbl">The Secret Formula</span>
+    <h2 class="h2" style="color:#fff;margin-bottom:8px">Boxing + Strength.<br><span>The Combination<br>That Changes Everything.</span></h2>
+    <p style="font-size:13px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.04em;line-height:1.75">Every class alternates between boxing rounds and strength circuits. That's what makes results happen fast.</p>
+    <div class="combo-steps">
+      <div class="combo-step"><div class="combo-step-num">01</div><div><div class="combo-step-title">Boxing Rounds</div><div class="combo-step-desc">Heavy bags, combinations, footwork, cardio intervals. Heart rate spikes and stays there.</div></div></div>
+      <div class="combo-step"><div class="combo-step-num">02</div><div><div class="combo-step-title">Strength Circuits</div><div class="combo-step-desc">Barbells, dumbbells, cables, kettlebells. Functional movements that build real lean muscle.</div></div></div>
+      <div class="combo-step"><div class="combo-step-num">03</div><div><div class="combo-step-title">The Afterburn</div><div class="combo-step-desc">Boxing + strength triggers EPOC &mdash; your body keeps burning for up to 24 hours after class.</div></div></div>
+    </div>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-red" target="_blank" rel="noopener">Try It Free &rarr;</a>
+  </div>
+</div>
+
+<!-- CHALLENGE -->
+<div class="challenge-sec">
+  <span class="challenge-bg-num">12</span>
+  <h2 class="challenge-title">12 Classes in 20 Days<br>Challenge</h2>
+  <p class="challenge-sub">Complete 12 classes in 20 days and you'll never look back. This is the challenge that turns first-timers into lifelong members.</p>
+  <div class="challenge-btns">
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-wht" target="_blank" rel="noopener">Start the Challenge &rarr;</a>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-ghost-w" target="_blank" rel="noopener">Start With a Free Workout</a>
+  </div>
+</div>
+
+<!-- REVIEWS (6) -->
+<div class="s off"><div class="si">
+  <span class="lbl">Real Members. Real Results.</span>
+  <h2 class="h2">What People Say<br><span>After Their First Week.</span></h2>
+  <div class="reviews-grid">
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Signed up for the free trial just to try it. That was 6 months ago. I've lost 22 lbs and genuinely love coming to the gym."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">J</div><div><div class="r-name">Jessica M.</div><div class="r-meta">Member &middot; 6 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Zero boxing experience. Within the first class the coaches had me throwing combos and I felt incredible. The community is unlike anywhere I've been."</p><div class="r-who"><div class="r-av" style="background:#1a4fa0">M</div><div><div class="r-name">Marcus T.</div><div class="r-meta">Member &middot; 7 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best $59.99 I've ever spent."</p><div class="r-who"><div class="r-av" style="background:#1a7a3a">A</div><div><div class="r-name">Ashley R.</div><div class="r-meta">Member &middot; 5 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"My son loves youth boxing. The coaches are amazing with the kids &mdash; patient, encouraging, and he's learned so much discipline."</p><div class="r-who"><div class="r-av" style="background:#7a3a1a">J</div><div><div class="r-name">Jennifer K.</div><div class="r-meta">Youth Boxing Parent</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"The Parkinson's class has genuinely improved my balance and coordination. I feel stronger every week. The coaches are exceptional."</p><div class="r-who"><div class="r-av" style="background:#3a3a7a">R</div><div><div class="r-name">Robert D.</div><div class="r-meta">Parkinson's Program</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"I've tried every gym in Pittsburgh. Nothing comes close to the energy, the coaching, and the community at Punch."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">R</div><div><div class="r-name">Rachel K.</div><div class="r-meta">Member since 2023</div></div></div></div>
+  </div>
+</div></div>
+
+<!-- FINAL CTA -->
+<div class="final">
+  <span class="lbl" style="color:rgba(255,255,255,.5)">No Risk. No Commitment.</span>
+  <div class="final-title">Your First Step Costs Nothing.</div>
+  <div class="final-sub">Start with a free workout or get the 7-Day Starter Pack for $59.99. Either way, you'll know within one session why Punch members don't quit.</div>
+  <div class="final-btns">
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43" class="btn-wht" target="_blank" rel="noopener">&#x26A1; Start 7-Day Pack &mdash; $59.99</a>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-ghost-w" target="_blank" rel="noopener">Claim My Free Workout</a>
+  </div>
+  <div class="final-note">South Hills Pittsburgh &middot; 412-512-3261 &middot; Local residents w/ID &middot; All levels welcome</div>
+</div>
 
 </div>
 <script src="/media.js" defer></script>
