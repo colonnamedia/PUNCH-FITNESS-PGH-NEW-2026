@@ -61,6 +61,17 @@
 #plp .ph-left{max-width:640px}
 #plp .hero-stmt-content{max-width:660px}
 @media(max-width:600px){#plp .prog-grid{grid-template-columns:1fr}#plp .prog-card{height:340px}}
+
+/* programs section: darker + slightly smaller cards */
+#plp .prog-sec{background:#17171a}
+#plp .prog-sec .prog-grid{max-width:1240px}
+#plp .prog-sec .prog-card{height:clamp(360px,34vw,440px)}
+/* remove white seams between stacked light sections */
+#plp .s.off + .s.off{margin-top:-1px}
+/* GRITTIER: stronger grain, deeper darks, heavier heads */
+#plp .grain{opacity:.08}
+#plp .dark,#plp .exp-text.exp-dark,#plp .combo-text,#plp .prog-sec{background:#141416}
+#plp .h2,#plp .prog-name,#plp .hero-stmt-title,#plp .class-photo-name,#plp .challenge-title,#plp .final-title{letter-spacing:-.02em}
 </style>
 
 </head>
@@ -89,7 +100,7 @@
 </section>
 
 <!-- COMBINED HEADER -->
-<div class="s off" style="text-align:center;padding-bottom:48px">
+<div class="s off" style="text-align:center;padding-top:56px;padding-bottom:28px">
   <div class="si" style="max-width:760px">
     <span class="lbl">South Hills Pittsburgh</span>
     <h2 class="h2">A Life-Changing Fitness<br><span>Community for Everyone.</span></h2>
@@ -97,32 +108,8 @@
   </div>
 </div>
 
-<!-- PROGRAMS (big cards) -->
-<div class="s off" style="padding-top:0">
-  <div class="si" style="max-width:1280px">
-    <div class="prog-grid">
-      <div class="prog-card">
-        <img data-slot="home.prog_adult" src="/assets/punch-pittsburgh-6.jpg" alt="Adult Boxing & Fitness" />
-        <div class="prog-ov"><div class="prog-tag">Adults &middot; All Levels</div><div class="prog-name">Adult Boxing &amp; Fitness</div><p class="prog-desc">Boxing, strength, and HIIT classes for every fitness level. No experience needed &mdash; just show up.</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="prog-lnk" target="_blank" rel="noopener">Claim Free Workout &rarr;</a></div>
-      </div>
-      <div class="prog-card">
-        <img data-slot="home.prog_youth" src="/assets/punch-youth-1.jpg" alt="Youth Boxing" />
-        <div class="prog-ov"><div class="prog-tag">Ages 7&ndash;17</div><div class="prog-name">Youth Boxing</div><p class="prog-desc">Build confidence, discipline, and fitness through coach-led youth boxing. Fun, safe, structured.</p><a href="/youth-boxing-camp.html" class="prog-lnk">Learn About Youth Boxing &rarr;</a></div>
-      </div>
-      <div class="prog-card">
-        <img data-slot="home.prog_senior" src="/assets/punch-pittsburgh-40.jpg" alt="Senior & Parkinson's Boxing" />
-        <div class="prog-ov"><div class="prog-tag">Seniors &amp; Parkinson's</div><div class="prog-name">Senior &amp; Parkinson's Boxing</div><p class="prog-desc">Low-impact boxing proven to improve balance, coordination, and quality of life.</p><a href="/senior-fitness-and-boxing-pittsburgh.html" class="prog-lnk">Learn More &rarr;</a></div>
-      </div>
-      <div class="prog-card">
-        <img data-slot="home.prog_pt" src="/assets/punch-pittsburgh-38.jpg" alt="Personal Training" />
-        <div class="prog-ov"><div class="prog-tag">Custom Workouts</div><div class="prog-name">Personal Training</div><p class="prog-desc">New programming every day. Join the community that keeps coming back because the results speak for themselves.</p><a href="/personal-training.html" class="prog-lnk">Get a Consultation &rarr;</a></div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- TRIAL CTA -->
-<div class="s off" style="padding-top:0">
+<div class="s off" style="padding-top:0;padding-bottom:44px">
   <div class="trial-cta">
     <div class="trial-cards">
       <div class="trial-card">
@@ -153,6 +140,31 @@
   </div>
 </div>
 
+
+<!-- PROGRAMS (big cards) -->
+<div class="s prog-sec" style="padding-top:44px;padding-bottom:56px">
+  <div class="si" style="max-width:1280px">
+    <div class="prog-grid">
+      <div class="prog-card">
+        <img data-slot="home.prog_adult" src="/assets/punch-pittsburgh-6.jpg" alt="Adult Boxing & Fitness" />
+        <div class="prog-ov"><div class="prog-tag">Adults &middot; All Levels</div><div class="prog-name">Adult Boxing &amp; Fitness</div><p class="prog-desc">Boxing, strength, and HIIT classes for every fitness level. No experience needed &mdash; just show up.</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="prog-lnk" target="_blank" rel="noopener">Claim Free Workout &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_youth" src="/assets/punch-youth-1.jpg" alt="Youth Boxing" />
+        <div class="prog-ov"><div class="prog-tag">Ages 7&ndash;17</div><div class="prog-name">Youth Boxing</div><p class="prog-desc">Build confidence, discipline, and fitness through coach-led youth boxing. Fun, safe, structured.</p><a href="/youth-boxing-camp.html" class="prog-lnk">Learn About Youth Boxing &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_senior" src="/assets/punch-pittsburgh-40.jpg" alt="Senior & Parkinson's Boxing" />
+        <div class="prog-ov"><div class="prog-tag">Seniors &amp; Parkinson's</div><div class="prog-name">Senior &amp; Parkinson's Boxing</div><p class="prog-desc">Low-impact boxing proven to improve balance, coordination, and quality of life.</p><a href="/senior-fitness-and-boxing-pittsburgh.html" class="prog-lnk">Learn More &rarr;</a></div>
+      </div>
+      <div class="prog-card">
+        <img data-slot="home.prog_pt" src="/assets/punch-pittsburgh-38.jpg" alt="Personal Training" />
+        <div class="prog-ov"><div class="prog-tag">Custom Workouts</div><div class="prog-name">Personal Training</div><p class="prog-desc">New programming every day. Join the community that keeps coming back because the results speak for themselves.</p><a href="/personal-training.html" class="prog-lnk">Get a Consultation &rarr;</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- STATS BAR -->
 <div class="stats-bar"><div class="stats-grid">
   <div class="stat"><div class="stat-num">800<sup>+</sup></div><div class="stat-lbl">Calories Per Class</div></div>
@@ -176,6 +188,21 @@
     </div>
   </div>
 </div>
+
+<!-- REVIEWS (6) -->
+<div class="s off"><div class="si">
+  <span class="lbl">Real Members. Real Results.</span>
+  <h2 class="h2">What People Say<br><span>After Their First Week.</span></h2>
+  <div class="reviews-grid">
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Signed up for the free trial just to try it. That was 6 months ago. I've lost 22 lbs and genuinely love coming to the gym."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">J</div><div><div class="r-name">Jessica M.</div><div class="r-meta">Member &middot; 6 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Zero boxing experience. Within the first class the coaches had me throwing combos and I felt incredible. The community is unlike anywhere I've been."</p><div class="r-who"><div class="r-av" style="background:#1a4fa0">M</div><div><div class="r-name">Marcus T.</div><div class="r-meta">Member &middot; 7 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best $59.99 I've ever spent."</p><div class="r-who"><div class="r-av" style="background:#1a7a3a">A</div><div><div class="r-name">Ashley R.</div><div class="r-meta">Member &middot; 5 months</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"My son loves youth boxing. The coaches are amazing with the kids &mdash; patient, encouraging, and he's learned so much discipline."</p><div class="r-who"><div class="r-av" style="background:#7a3a1a">J</div><div><div class="r-name">Jennifer K.</div><div class="r-meta">Youth Boxing Parent</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"The Parkinson's class has genuinely improved my balance and coordination. I feel stronger every week. The coaches are exceptional."</p><div class="r-who"><div class="r-av" style="background:#3a3a7a">R</div><div><div class="r-name">Robert D.</div><div class="r-meta">Parkinson's Program</div></div></div></div>
+    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"I've tried every gym in Pittsburgh. Nothing comes close to the energy, the coaching, and the community at Punch."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">R</div><div><div class="r-name">Rachel K.</div><div class="r-meta">Member since 2023</div></div></div></div>
+  </div>
+</div></div>
+
 
 <!-- EXP SPLIT — side text + full image -->
 <div class="exp-split">
@@ -289,20 +316,6 @@
     <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-ghost-w" target="_blank" rel="noopener">Start With a Free Workout</a>
   </div>
 </div>
-
-<!-- REVIEWS (6) -->
-<div class="s off"><div class="si">
-  <span class="lbl">Real Members. Real Results.</span>
-  <h2 class="h2">What People Say<br><span>After Their First Week.</span></h2>
-  <div class="reviews-grid">
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Signed up for the free trial just to try it. That was 6 months ago. I've lost 22 lbs and genuinely love coming to the gym."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">J</div><div><div class="r-name">Jessica M.</div><div class="r-meta">Member &middot; 6 months</div></div></div></div>
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Zero boxing experience. Within the first class the coaches had me throwing combos and I felt incredible. The community is unlike anywhere I've been."</p><div class="r-who"><div class="r-av" style="background:#1a4fa0">M</div><div><div class="r-name">Marcus T.</div><div class="r-meta">Member &middot; 7 months</div></div></div></div>
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best $59.99 I've ever spent."</p><div class="r-who"><div class="r-av" style="background:#1a7a3a">A</div><div><div class="r-name">Ashley R.</div><div class="r-meta">Member &middot; 5 months</div></div></div></div>
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"My son loves youth boxing. The coaches are amazing with the kids &mdash; patient, encouraging, and he's learned so much discipline."</p><div class="r-who"><div class="r-av" style="background:#7a3a1a">J</div><div><div class="r-name">Jennifer K.</div><div class="r-meta">Youth Boxing Parent</div></div></div></div>
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"The Parkinson's class has genuinely improved my balance and coordination. I feel stronger every week. The coaches are exceptional."</p><div class="r-who"><div class="r-av" style="background:#3a3a7a">R</div><div><div class="r-name">Robert D.</div><div class="r-meta">Parkinson's Program</div></div></div></div>
-    <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"I've tried every gym in Pittsburgh. Nothing comes close to the energy, the coaching, and the community at Punch."</p><div class="r-who"><div class="r-av" style="background:#D92B2B">R</div><div><div class="r-name">Rachel K.</div><div class="r-meta">Member since 2023</div></div></div></div>
-  </div>
-</div></div>
 
 <!-- FINAL CTA -->
 <div class="final">

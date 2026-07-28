@@ -1,6 +1,4 @@
--- ============================================================
--- migration-2.sql
--- ============================================================
+-- ===== migration-2 =====
 -- ============================================================================
 -- PUNCH — migration 2 (run AFTER schema.sql and blog-schema.sql)
 -- Adds: product "kind" (apparel vs equipment), placeholder items, blog images.
@@ -48,10 +46,7 @@ update public.blog_posts set image_url =
   '/assets/punch-pittsburgh-40.jpg'
   where topic like 'Parkinson%' and image_url is null;
 
-
--- ============================================================
--- migration-3.sql
--- ============================================================
+-- ===== migration-3 =====
 -- ============================================================================
 -- PUNCH — migration 3 (run after migration-2.sql). Safe to re-run.
 -- Gives the placeholder apparel branded "photo coming soon" tiles, and gives
@@ -102,10 +97,7 @@ update public.blog_posts set image_url='/assets/punch-pittsburgh-40.jpg'
 update public.blog_posts set image_url='/assets/punch-pittsburgh-41.jpg'
   where image_url is null;
 
-
--- ============================================================
--- migration-4.sql
--- ============================================================
+-- ===== migration-4 =====
 -- ============================================================================
 -- PUNCH — migration 4 (run after migration-3.sql). Safe to re-run.
 -- Adds: external buy links (Amazon / Superare) + a settings table for the blog.
@@ -158,10 +150,7 @@ values
    'https://www.amazon.com/dp/B00PCIWX3W/ref=cm_sw_r_as_gl_api_gl_i_343T9Z30QPY533S5HXVH?linkCode=ml1&tag=anthonycolonn-20&linkId=b9e9bc33dd9655c536b2e2331cc7e1b4')
 on conflict do nothing;
 
-
--- ============================================================
--- migration-5.sql
--- ============================================================
+-- ===== migration-5 =====
 -- ============================================================================
 -- PUNCH — migration 5 (run after migration-4.sql). Safe to re-run.
 -- Attaches the real product photos you uploaded, and adds the apparel pieces
@@ -207,10 +196,7 @@ where not exists (
 update public.products set active = false
  where kind = 'apparel' and image_url like '%placeholder-%';
 
-
--- ============================================================
--- migration-6.sql
--- ============================================================
+-- ===== migration-6 =====
 -- ============================================================================
 -- PUNCH — migration 6 : page media manager (hero images/videos per page)
 -- Run after previous migrations. Safe to re-run.
@@ -241,11 +227,7 @@ drop policy if exists "site-media auth upload" on storage.objects;
 create policy "site-media public read" on storage.objects for select using (bucket_id = 'site-media');
 create policy "site-media auth upload" on storage.objects for insert to authenticated with check (bucket_id = 'site-media');
 
-
-
--- ============================================================
--- migration-7.sql
--- ============================================================
+-- ===== migration-7 =====
 -- ============================================================================
 -- PUNCH — migration 7 : trainers roster. Run after previous migrations. Re-runnable.
 -- ============================================================================
@@ -263,3 +245,20 @@ drop policy if exists "trainers public read" on public.trainers;
 drop policy if exists "trainers auth all"    on public.trainers;
 create policy "trainers public read" on public.trainers for select using (true);
 create policy "trainers auth all"    on public.trainers for all to authenticated using (true) with check (true);
+
+-- seed roster (first names only, no titles) — runs once, only if table is empty
+insert into public.trainers (name, image_url, sort)
+select v.name, v.img, v.s from (values
+  ('Anthony','/assets/trainers/anthony.jpg',1),
+  ('Jocelyn','/assets/trainers/jocelyn.jpg',2),
+  ('Emily','/assets/trainers/emily.jpg',3),
+  ('Luc','/assets/trainers/luc.jpg',4),
+  ('Chelsea','/assets/trainers/chelsea.jpg',5),
+  ('Jess','/assets/trainers/jess.jpg',6)
+) as v(name,img,s)
+where not exists (select 1 from public.trainers);
+
+-- image fit + position controls for trainer photos
+alter table public.trainers add column if not exists image_fit text default 'cover';
+alter table public.trainers add column if not exists image_position text default 'center';
+

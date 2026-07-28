@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://punchpgh.com/trainers" />
 <meta property="og:title" content="Meet the Trainers | Punch Boxing &amp; Fitness Pittsburgh" />
 <meta property="og:description" content="Meet the coaches at Punch Boxing &amp; Fitness in Pittsburgh's South Hills. Experienced, certified, and genuinely invested in your progress." />
-<meta property="og:image" content="/assets/punch-pittsburgh-38.jpg" />
+<meta property="og:image" content="/assets/punchpgh-3.jpg" />
 <meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://images.squarespace-cdn.com" />
@@ -26,7 +26,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="ph-wrap" style="min-height:58vh">
-  <img class="ph-video" src="/assets/punch-pittsburgh-38.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
+  <img class="ph-video" src="/assets/punchpgh-3.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
   <div class="ph-overlay"></div>
   <div class="ph-content"><div class="ph-left">
     <h1 class="ph-title">The<br><span class="ph-red">People Behind</span><br><span class="ph-out">Your Progress.</span></h1>
@@ -66,14 +66,17 @@ const CFG = window.PUNCH_CONFIG || {};
 const root = document.getElementById("trainers-root");
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const FALLBACK = [
-  { name:"Anthony Colonna", role:"Owner &amp; Head Coach", image_url:"/assets/trainers/anthony.jpg" },
-  { name:"Coach Emily",     role:"Boxing &amp; Conditioning", image_url:"/assets/trainers/emily.jpg" },
-  { name:"Coach E.O.",      role:"Strength &amp; Boxing", image_url:"/assets/trainers/eo.jpg" },
+  { name:"Anthony", image_url:"/assets/trainers/anthony.jpg" },
+  { name:"Jocelyn", image_url:"/assets/trainers/jocelyn.jpg" },
+  { name:"Emily",   image_url:"/assets/trainers/emily.jpg" },
+  { name:"Luc",     image_url:"/assets/trainers/luc.jpg" },
+  { name:"Chelsea", image_url:"/assets/trainers/chelsea.jpg" },
+  { name:"Jess",    image_url:"/assets/trainers/jess.jpg" },
 ];
 function card(t){
   return '<figure class="tr-card">' +
-    (t.image_url ? '<img src="'+esc(t.image_url)+'" alt="'+esc(t.name)+'" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="tr-ph"></div>') +
-    '<figcaption class="tr-name">'+esc(t.name)+(t.role?'<span class="tr-role">'+t.role+'</span>':'')+'</figcaption>' +
+    (t.image_url ? '<img src="'+esc(t.image_url)+'" alt="'+esc(t.name)+'" loading="lazy" style="object-fit:'+(t.image_fit||"cover")+';object-position:'+(t.image_position||"center")+'" onerror="this.style.display=\'none\'">' : '<div class="tr-ph"></div>') +
+    '<figcaption class="tr-name">'+esc(t.name)+'</figcaption>' +
   '</figure>';
 }
 function render(list){ root.innerHTML = list.map(card).join(""); }

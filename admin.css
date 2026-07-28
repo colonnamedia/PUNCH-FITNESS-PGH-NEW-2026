@@ -146,3 +146,11 @@ textarea.long{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mon
 .pm-save{background:var(--red);color:#fff;border:0;padding:9px 18px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
 .pm-hint{font-size:11px;color:var(--mut)}
 @media(max-width:640px){.pm-slot{grid-template-columns:1fr}.pm-prev{width:100%;height:150px}}
+
+/* ---------- Pages expandable submenu ---------- */
+.pm-caret{margin-left:auto;font-size:10px;opacity:.6;transition:transform .2s}
+.pm-submenu{display:none;flex-direction:column;padding:4px 0 8px 0;margin:0 0 4px 0}
+.pm-submenu.open{display:flex}
+.pm-submenu a{display:block;padding:8px 16px 8px 42px;font-size:13px;color:var(--mut2);text-decoration:none;border-radius:8px;cursor:pointer;transition:background .15s,color .15s}
+.pm-submenu a:hover{background:var(--ink3);color:#fff}
+.pm-submenu a.on{color:#fff;background:var(--ink3);border-left:2px solid var(--red)}

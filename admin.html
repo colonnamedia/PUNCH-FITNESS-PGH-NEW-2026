@@ -37,7 +37,8 @@
       <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
-      <a data-tab="pages"><span class="i">&#128444;</span> Pages</a>
+      <a data-tab="pages" id="nav-pages"><span class="i">&#128444;</span> Pages <span class="pm-caret" id="pm-caret">&#9656;</span></a>
+      <div class="pm-submenu" id="pages-sub"></div>
       <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel.html" target="_blank"><span class="i">&#8599;</span> View Store</a>
@@ -275,7 +276,23 @@
     <label for="tName">Name</label>
     <input id="tName" placeholder="Anthony Colonna" />
     <label for="tRole">Role / Title (optional)</label>
-    <input id="tRole" placeholder="Owner & Head Coach" />
+    <input id="tRole" placeholder="Leave blank for name only" />
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+      <div style="flex:1;min-width:140px"><label>Image Fit</label>
+        <select id="tFit"><option value="cover">Cover (fill)</option><option value="contain">Contain (whole photo)</option></select></div>
+      <div style="flex:1;min-width:140px"><label>Position (H / V)</label>
+        <select id="tPos">
+          <option value="center">Center</option>
+          <option value="center top">Top</option>
+          <option value="center bottom">Bottom</option>
+          <option value="left">Left</option>
+          <option value="right">Right</option>
+          <option value="left top">Top-Left</option>
+          <option value="right top">Top-Right</option>
+          <option value="left bottom">Bottom-Left</option>
+          <option value="right bottom">Bottom-Right</option>
+        </select></div>
+    </div>
     <div class="row-check"><input type="checkbox" id="tActive" checked /><label for="tActive">Show on the Trainers page</label></div>
     <button class="btn btn-red btn-block" id="tSave">Save Trainer</button>
     <div class="err" id="tErr"></div>
@@ -334,7 +351,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x===a));
     document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
     $("sect-"+TAB).classList.add("on");
-    if(TAB==="pages") loadPages();
+    if(TAB==="pages"){ buildPagesSubmenu(); const sub=$("pages-sub"); if(sub) sub.classList.toggle("open"); const c=$("pm-caret"); if(c) c.innerHTML = sub && sub.classList.contains("open") ? "&#9662;" : "&#9656;"; loadPages(); }
     if(TAB==="trainers") loadTrainers();
   });
 });
@@ -547,6 +564,7 @@ function openTrainer(t){
   tEdit=t?t.id:null; tFile=null; tImg=t?t.image_url:null;
   $("tTitle").textContent=t?"Edit Trainer":"Add Trainer";
   $("tName").value=t?t.name:""; $("tRole").value=t?(t.role||""):""; $("tActive").checked=t?!!t.active:true;
+  $("tFit").value=t?(t.image_fit||"cover"):"cover"; $("tPos").value=t?(t.image_position||"center"):"center";
   $("tErr").textContent=""; paint($("tdrop"), t?t.image_url:null);
   $("tmodal").classList.remove("hide");
 }
@@ -556,7 +574,7 @@ $("tSave") && ($("tSave").onclick=async ()=>{
   $("tSave").disabled=true; $("tSave").textContent="Saving…"; $("tErr").textContent="";
   try{
     let image_url=tImg; if(tFile) image_url=await upload(tFile);
-    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url };
+    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tPos").value };
     const { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
     if(error) throw error;
     $("tmodal").classList.add("hide"); toast(tEdit?"Trainer updated":"Trainer added"); loadTrainers();
@@ -601,6 +619,22 @@ var POSITIONS = ["center","center top","center bottom","left","right","left top"
 var MAX_IMG = 5*1024*1024;      // 5 MB images
 var MAX_VID = 40*1024*1024;     // 40 MB video (link recommended for bigger)
 
+let PAGES_FILTER = null;
+function buildPagesSubmenu(){
+  const sub = $("pages-sub"); if(!sub || sub.dataset.built) return;
+  sub.dataset.built = "1";
+  sub.innerHTML = '<a data-pg="__all">All Pages</a>' + MEDIA_SLOTS.map(g=>'<a data-pg="'+esc(g.group)+'">'+esc(g.group)+'</a>').join("");
+  sub.querySelectorAll("a").forEach(a=>a.onclick=(e)=>{
+    e.stopPropagation();
+    PAGES_FILTER = a.dataset.pg==="__all" ? null : a.dataset.pg;
+    sub.querySelectorAll("a").forEach(x=>x.classList.toggle("on", x===a));
+    // ensure Pages tab is open
+    document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x.dataset.tab==="pages"));
+    document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
+    $("sect-pages").classList.add("on");
+    loadPages();
+  });
+}
 async function loadPages(){
   var root = $("pages-root");
   var current = {};
@@ -608,7 +642,8 @@ async function loadPages(){
     var { data } = await sb.from("page_media").select("*");
     (data||[]).forEach(function(r){ current[r.slot]=r; });
   } catch(e){}
-  root.innerHTML = MEDIA_SLOTS.map(function(g){
+  const _groups = PAGES_FILTER ? MEDIA_SLOTS.filter(g=>g.group===PAGES_FILTER) : MEDIA_SLOTS;
+  root.innerHTML = _groups.map(function(g){
     return '<div class="pm-group"><div class="pm-group-h">'+esc(g.group)+'</div>' +
       g.items.map(function(it){
         var r = current[it.slot] || {};

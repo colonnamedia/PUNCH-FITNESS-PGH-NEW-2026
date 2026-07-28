@@ -927,7 +927,6 @@ body.has-mcta{padding-bottom:0}
   #plp .sa-grid[style]{grid-template-columns:1fr 1fr!important}
 }
 /* apparel hero: keep text hard-left so the model stays visible */
-#plp .ph-left, .ph-left{text-align:left}
 
 /* ---------- TRAINERS — B&W grid, name centered low ---------- */
 #plp .tr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
@@ -957,7 +956,7 @@ body.has-mcta{padding-bottom:0}
 #plp .cls-feats{list-style:none;padding:0;margin:0}
 #plp .cls-feats li{display:flex;gap:11px;align-items:flex-start;padding:8px 0;font-size:14.5px;color:rgba(255,255,255,.85)}
 #plp .cls-txt.light .cls-feats li{color:#333}
-#plp .cls-feats li::before{content:"\\2713";color:#D92B2B;font-weight:900}
+#plp .cls-feats li::before{content:"✓";color:#D92B2B;font-weight:900}
 @media(max-width:860px){#plp .cls-style{grid-template-columns:1fr;min-height:0}#plp .cls-style.rev .cls-txt{order:0}#plp .cls-img{min-height:44vh}}
 
 /* 10-day journey */
@@ -983,7 +982,20 @@ body.has-mcta{padding-bottom:0}
 /* section separator */
 #plp .cls-sep{height:1px;background:linear-gradient(90deg,transparent,#ddd,transparent);max-width:1100px;margin:0 auto}
 
-/* ---------- hero content shifted ~left on all pages ---------- */
-#plp .ph-content{justify-content:flex-start}
-#plp .ph-left{max-width:640px;margin-right:auto}
-#plp .hero-stmt-content{max-width:660px}
+
+/* ---------- TRAINERS — full-bleed B&W ---------- */
+#plp #trainers-root.tr-grid{grid-template-columns:repeat(3,1fr);gap:0;margin-top:0;max-width:none;width:100vw;margin-left:calc(50% - 50vw)}
+#plp #trainers-root .tr-card{aspect-ratio:4/5;border-radius:0}
+#plp #trainers-root .tr-name{top:62%;font-size:clamp(30px,3vw,50px)}
+@media(max-width:900px){#plp #trainers-root.tr-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){#plp #trainers-root.tr-grid{grid-template-columns:1fr}}
+
+
+/* ---------- CONSISTENT hero-left shift on ALL pages (matches landing hero) ---------- */
+#plp .ph-content{max-width:none;margin:0;padding:120px clamp(24px,5vw,64px) 80px;align-items:flex-start;text-align:left}
+#plp .ph-left{max-width:700px;align-items:flex-start;text-align:left}
+#plp .hero-stmt-content{max-width:680px}
+@media(max-width:760px){
+  #plp .ph-content{padding:90px 22px 60px;align-items:flex-start;text-align:left}
+  #plp .ph-left{align-items:flex-start;text-align:left}
+}
