@@ -5,8 +5,8 @@ services:
   - type: web
     name: punchpgh
     runtime: static
-    buildCommand: ""
-    staticPublishPath: .
+    buildCommand: npm run build
+    staticPublishPath: dist
     routes:
       - { type: redirect, source: /30-day-program, destination: /membership-options }
       - { type: redirect, source: /anthony-colonna-fitness-entrepreneur, destination: /about }
@@ -40,7 +40,7 @@ services:
     runtime: node
     schedule: "0 14 * * 1,3,5"        # Mon/Wed/Fri 14:00 UTC; script enforces 1-3/week
     buildCommand: npm install
-    startCommand: node cron/generate-blog.js
+    startCommand: node scripts/run-blog.js
     envVars:
       - key: ANTHROPIC_API_KEY
         sync: false
