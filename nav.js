@@ -30,7 +30,6 @@
           '<a href="/punch-apparel.html">Apparel</a></div></div>' +
       '<a class="pn-link" href="/contact.html">Contact</a>' +
     '</nav>' +
-    '<a class="pn-phone" href="sms:+14125123261?&body=Hello%20Punch%20Team%2C">Txt: 412-512-3261</a>' +
     '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
     '<button class="pn-burger" id="pnBurger" aria-label="Menu"><span></span><span></span><span></span></button>' +
   '</div>' +
@@ -47,7 +46,6 @@
       '<a href="/boxing-gloves-for-fitness-classes.html">Boxing Gloves</a>' +
       '<a href="/punch-apparel.html">Apparel</a></details>' +
     '<a href="/contact.html">Contact Us</a>' +
-    '<a href="sms:+14125123261?&body=Hello%20Punch%20Team%2C">Txt: 412-512-3261</a>' +
     '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
   '</div></header>';
 
@@ -212,3 +210,13 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
 })();
+
+  // PushPress / LeadConnector chat widget (loads once)
+  if (!document.getElementById("lc-chat-widget")) {
+    var cw = document.createElement("script");
+    cw.id = "lc-chat-widget";
+    cw.src = "https://widgets.leadconnectorhq.com/loader.js";
+    cw.setAttribute("data-resources-url", "https://widgets.leadconnectorhq.com/chat-widget/loader.js");
+    cw.setAttribute("data-widget-id", "6a69f17b1519ba6675839b9b");
+    document.body.appendChild(cw);
+  }
