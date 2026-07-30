@@ -1027,3 +1027,12 @@ header.pn .pn-link{font-size:20px;letter-spacing:.05em}
 .pf-col a{font-size:16px}
 .pf-h{font-size:11px}
 .pf-mail,.pf-addr{font-size:15px}
+
+/* refer-a-friend card (trial pages) */
+.ref-card{background:#fff;border:2px solid #D92B2B;border-radius:18px;padding:36px;margin-top:30px;display:flex;flex-wrap:wrap;align-items:center;gap:26px;box-shadow:0 12px 44px rgba(217,43,43,.1)}
+.ref-icon{font-size:52px;flex-shrink:0;line-height:1}
+.ref-text{flex:1 1 280px}
+.ref-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:24px;text-transform:uppercase;margin-bottom:8px;color:#1a1a1d;letter-spacing:.01em}
+.ref-desc{font-size:14px;color:#666;line-height:1.6}
+.ref-cta .btn-red{border:0;cursor:pointer;font-family:inherit}
+@media(max-width:700px){.ref-card{flex-direction:column;text-align:center;padding:28px}}

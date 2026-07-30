@@ -110,25 +110,26 @@ export default async function handler(req, res) {
     const topic = TOPICS[(lastIdx + 1) % TOPICS.length]; // -1 + 1 = 0 → first topic
 
     // ---- 2. Write the post with Claude -------------------------------------
-    const prompt = `You are writing a blog post for Punch Boxing & Fitness, a boxing-based fitness gym in Pittsburgh's South Hills (Greentree, 15220).
+    const prompt = `You are curating a blog post for Punch Boxing & Fitness, a boxing-based fitness gym in Pittsburgh's South Hills (Greentree, 15220).
 
 TOPIC: ${topic}
 FOCUS: ${GUIDE[topic]}
 
-Voice: personal, direct, warm, motivational. Words that fit: journey, community, confidence, stronger, fitter, consistency, transformation. Avoid: athlete, performance, hardcore, elite, dominate. Never invent statistics, studies, member names, or testimonials. No medical claims. Do not promise specific weight-loss results.
+STEP 1 — Use web search to find ONE recent, reputable article (ideally within the last 90 days) related to this topic: boxing for fitness, weight loss, HIIT, strength training, healthy habits, senior fitness, or Parkinson's boxing. Prefer well-known health/fitness publications or organizations.
 
-Write a fresh post (500-750 words) with 3-4 "## " subheadings and short paragraphs.
+STEP 2 — Write an ORIGINAL 450-650 word blog post in Punch's voice that summarizes and reacts to that article's key takeaways for our members. Voice: personal, direct, warm, motivational (journey, community, confidence, stronger, consistency). Avoid: athlete, elite, hardcore, dominate.
 
-SOURCING RULES (important):
-- Any general health, fitness, or medical claim must be attributed to a recognised organisation and linked, e.g. the Mayo Clinic, Cleveland Clinic, Harvard Health, the CDC, the American Heart Association, the NHS, the Parkinson's Foundation, or the American College of Sports Medicine.
-- Write claims as attributed statements ("According to the Cleveland Clinic, ...") rather than as Punch's own findings.
-- Do NOT invent statistics, study results, percentages, member names, or testimonials. If you are not certain of a number, describe the effect qualitatively instead.
-- End the post with a "## Sources" section listing 2-4 markdown links to the organisations you referenced, using their real homepage or topic-hub URLs. Do not fabricate deep article URLs.
+RULES:
+- Put the whole thing in YOUR OWN WORDS. Do NOT copy sentences from the article. Never invent statistics, studies, member names, or testimonials.
+- Attribute claims to the source ("According to a recent piece from [Source]...") and link recognised orgs where relevant.
+- Include 3-4 "## " subheadings and short paragraphs.
+- Near the end, add a line linking to the original: "Read the original article at [Source Name](exact URL)."
+- End with a "## Sources" section listing the article link plus any organizations referenced (use their real URLs from your search).
 - Add one closing line inviting the reader to try a free first class at Punch.
-- For anything health-related, include a short line noting this is general information and readers should talk to their doctor.
+- For anything health-related, add a short line that this is general info and readers should talk to their doctor.
 
-Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
-{"title": "...", "excerpt": "one sentence under 160 characters", "body": "full markdown post"}`;
+Respond with ONLY a JSON object, no markdown fence, no preamble:
+{"title":"...","excerpt":"one sentence under 160 characters","body":"full markdown post","source_name":"the publication name","source_url":"https://exact-article-url","image_url":"https://direct-image-url-from-the-article-if-you-can-identify-one-otherwise-null"}`;
 
     const aiRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -139,7 +140,8 @@ Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-6",
-        max_tokens: 2000,
+        max_tokens: 3000,
+        tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 4 }],
         messages: [{ role: "user", content: prompt }],
       }),
     });
@@ -150,12 +152,15 @@ Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
     }
 
     const aiJson = await aiRes.json();
-    const text = (aiJson.content || [])
+    let text = (aiJson.content || [])
       .filter((b) => b.type === "text")
       .map((b) => b.text)
-      .join("")
+      .join("\n")
       .replace(/```json|```/g, "")
       .trim();
+    // pull out the JSON object even if the model added any preamble
+    const jStart = text.indexOf("{"), jEnd = text.lastIndexOf("}");
+    if (jStart !== -1 && jEnd !== -1) text = text.slice(jStart, jEnd + 1);
 
     let post;
     try {
@@ -185,7 +190,7 @@ Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
         topic,
         excerpt: (post.excerpt || "").slice(0, 200),
         body: post.body,
-        image_url: pickImage(topic, post.title),
+        image_url: (post.image_url && /^https?:\/\//.test(post.image_url)) ? post.image_url : pickImage(topic, post.title),
         published: true,
       }),
     });

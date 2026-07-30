@@ -27,7 +27,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="ph-wrap" style="min-height:64vh">
-  <img class="ph-video" src="/assets/punch-pittsburgh-6.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
+  <img data-slot="equipment.photo1" class="ph-video" src="/assets/punch-pittsburgh-6.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
   <div class="ph-overlay"></div>
   <div class="ph-content"><div class="ph-left">
     <div class="ph-eyebrow">South Hills Pittsburgh</div>
@@ -46,7 +46,7 @@
  </div>
  <div class="si"><div class="shop-grid" style="grid-template-columns:repeat(3,1fr)">
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Top Pick</span><img src="/assets/equipment/gloves-pro-mex.jpg" alt="Pro Boxing Gloves — 14oz" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Top Pick</span><img data-slot="equipment.photo2" src="/assets/equipment/gloves-pro-mex.jpg" alt="Pro Boxing Gloves — 14oz" loading="lazy"></div>
         <div class="shop-body">
           <div class="shop-name">Pro Boxing Gloves — 14oz</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Our top pick for members training several times a week. Premium leather, holds up to daily bag and pad work.</p>
@@ -54,7 +54,7 @@
         </div>
       </div>
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Coach Pick</span><img src="/assets/equipment/gloves-rdx.jpg" alt="Mid-Range Gloves — 14oz" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo3" src="/assets/equipment/gloves-rdx.jpg" alt="Mid-Range Gloves — 14oz" loading="lazy"></div>
         <div class="shop-body">
           <div class="shop-name">Mid-Range Gloves — 14oz</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Great value if you're newer or training once or twice a week. Same 14oz weight we recommend for class.</p>
@@ -62,7 +62,7 @@
         </div>
       </div>
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Coach Pick</span><img src="/assets/equipment/quick-wraps-rdx.jpg" alt="Quick Wraps — Med / Large" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo4" src="/assets/equipment/quick-wraps-rdx.jpg" alt="Quick Wraps — Med / Large" loading="lazy"></div>
         <div class="shop-body">
           <div class="shop-name">Quick Wraps — Med / Large</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Slip-on wraps that protect your hands and wrists without the learning curve. Grab your size and go.</p>
@@ -233,4 +233,5 @@ else {
   if (el) el.textContent = colors[Math.floor(Math.random()*colors.length)];
 })();
 </script>
+<script src="/media.js" defer></script>
 </body></html>
