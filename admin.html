@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/favicon.svg" />
+
 <meta name="robots" content="noindex, nofollow" />
 <title>Punch Admin · Products</title>
 <link rel="stylesheet" href="/admin.css" />
@@ -41,6 +45,7 @@
       <div class="pm-submenu" id="pages-sub"></div>
       <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
       <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
+      <a data-tab="branding"><span class="i">&#127912;</span> Branding</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -126,6 +131,34 @@
         <div class="err" id="termsErr" style="margin-top:10px"></div>
         <div class="sub" style="margin-top:10px">Tip: the live page shows this text. To go back to the built-in default, clear this box and save.</div>
       </div></div>
+    </section>
+
+    <!-- ============ BRANDING ============ -->
+    <section class="sect" id="sect-branding">
+      <div class="top">
+        <div><h1 class="mono-h">Branding</h1><div class="sub">Change the header logo and the browser favicon. Updates everywhere on the site.</div></div>
+        <button class="btn btn-red" id="brandSave">Save Branding</button>
+      </div>
+      <div class="panel"><div class="panel-b" style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
+        <div>
+          <label>Header Logo</label>
+          <div class="drop" id="logoDrop" style="background:#111">
+            <div class="drop-ic">&#128444;</div><div class="drop-t">Click or drag a logo</div>
+            <div class="drop-s">Wide/horizontal PNG with transparent background works best</div>
+            <input type="file" id="logoFile" accept="image/*" class="hide" />
+          </div>
+        </div>
+        <div>
+          <label>Favicon (browser tab icon)</label>
+          <div class="drop" id="favDrop">
+            <div class="drop-ic">&#11088;</div><div class="drop-t">Click or drag a favicon</div>
+            <div class="drop-s">Square image — 512&times;512 PNG or an SVG</div>
+            <input type="file" id="favFile" accept="image/*,.svg" class="hide" />
+          </div>
+        </div>
+      </div>
+      <div class="err" id="brandErr" style="margin:0 20px 18px"></div>
+      </div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -360,6 +393,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     if(TAB==="pages"){ buildPagesSubmenu(); const sub=$("pages-sub"); if(sub) sub.classList.toggle("open"); const c=$("pm-caret"); if(c) c.innerHTML = sub && sub.classList.contains("open") ? "&#9662;" : "&#9656;"; loadPages(); }
     if(TAB==="trainers") loadTrainers();
     if(TAB==="terms") loadTerms();
+    if(TAB==="branding") loadBrandingAdmin();
   });
 });
 
@@ -609,6 +643,35 @@ async function delTrainer(id,t){
   toast("Removed"); loadTrainers();
 }
 
+
+
+/* ---------------- BRANDING (logo + favicon) ---------------- */
+let logoFileSel=null, favFileSel=null, logoCur=null, favCur=null;
+wireDrop && wireDrop("logoDrop","logoFile", f=>{ logoFileSel=f; paint($("logoDrop"), URL.createObjectURL(f)); });
+wireDrop && wireDrop("favDrop","favFile", f=>{ favFileSel=f; paint($("favDrop"), URL.createObjectURL(f)); });
+async function loadBrandingAdmin(){
+  try{
+    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url"]);
+    (data||[]).forEach(r=>{
+      if(r.key==="logo_url" && r.value && r.value.url){ logoCur=r.value.url; paint($("logoDrop"), r.value.url); }
+      if(r.key==="favicon_url" && r.value && r.value.url){ favCur=r.value.url; paint($("favDrop"), r.value.url); }
+    });
+  }catch(e){ $("brandErr").textContent=e.message||""; }
+}
+$("brandSave") && ($("brandSave").onclick = async ()=>{
+  $("brandSave").disabled=true; $("brandSave").textContent="Saving…"; $("brandErr").textContent="";
+  try{
+    let logo_url=logoCur, favicon_url=favCur;
+    if(logoFileSel) logo_url=await upload(logoFileSel);
+    if(favFileSel)  favicon_url=await upload(favFileSel);
+    const rows=[];
+    if(logo_url) rows.push({ key:"logo_url", value:{ url:logo_url } });
+    if(favicon_url) rows.push({ key:"favicon_url", value:{ url:favicon_url } });
+    if(rows.length){ const { error } = await sb.from("site_settings").upsert(rows, { onConflict:"key" }); if(error) throw error; }
+    toast("Branding saved — refresh the site to see it");
+  }catch(e){ $("brandErr").textContent=e.message||"Save failed."; }
+  finally{ $("brandSave").disabled=false; $("brandSave").textContent="Save Branding"; }
+});
 
 /* ---------------- TERMS & CONDITIONS ---------------- */
 async function loadTerms(){

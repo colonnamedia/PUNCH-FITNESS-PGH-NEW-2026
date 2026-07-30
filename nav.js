@@ -10,7 +10,7 @@
   var header =
   '<header class="pn" id="pnHeader"><div class="pn-bar">' +
     '<a class="pn-logo" href="/" aria-label="Punch Boxing and Fitness home">' +
-      '<img src="/assets/logo/punch-logo.png" alt="Punch Boxing &amp; Fitness" '+
+      '<img id="pnLogoImg" src="/assets/logo/punch-logo.png" alt="Punch Boxing &amp; Fitness" '+
       'onerror="this.onerror=null;this.src=\'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/d0e600c1-b98a-4d8e-becb-3d99ab28b51e/PUNCH+LOGO+1+NEW+2026+WEBSITE.png?format=300w\'">' +
       '<b>PUNCH</b><span>Boxing &amp; Fitness</span></a>' +
     '<nav class="pn-nav">' +
@@ -237,3 +237,22 @@
     document.body.appendChild(rs);
   }
   window.PunchRefer = function(e){ if(e) e.preventDefault(); document.getElementById("punch-refer-wrap").style.display="flex"; return false; };
+
+  // Load custom logo + favicon set in the admin (Branding tab)
+  (function loadBranding(){
+    var cfg = window.PUNCH_CONFIG||{};
+    if(!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT")!==-1) return;
+    fetch(cfg.SUPABASE_URL+"/rest/v1/site_settings?select=key,value&key=in.(logo_url,favicon_url)",
+      { headers:{ apikey:cfg.SUPABASE_ANON_KEY, Authorization:"Bearer "+cfg.SUPABASE_ANON_KEY } })
+      .then(function(r){ return r.json(); })
+      .then(function(rows){
+        (rows||[]).forEach(function(row){
+          var v = row.value && row.value.url;
+          if(!v) return;
+          if(row.key==="logo_url"){ var img=document.getElementById("pnLogoImg"); if(img){ img.onerror=null; img.src=v; } }
+          if(row.key==="favicon_url"){
+            document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(function(l){ l.href=v; });
+          }
+        });
+      }).catch(function(){});
+  })();
