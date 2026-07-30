@@ -280,18 +280,10 @@
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
       <div style="flex:1;min-width:140px"><label>Image Fit</label>
         <select id="tFit"><option value="cover">Cover (fill)</option><option value="contain">Contain (whole photo)</option></select></div>
-      <div style="flex:1;min-width:140px"><label>Position (H / V)</label>
-        <select id="tPos">
-          <option value="center">Center</option>
-          <option value="center top">Top</option>
-          <option value="center bottom">Bottom</option>
-          <option value="left">Left</option>
-          <option value="right">Right</option>
-          <option value="left top">Top-Left</option>
-          <option value="right top">Top-Right</option>
-          <option value="left bottom">Bottom-Left</option>
-          <option value="right bottom">Bottom-Right</option>
-        </select></div>
+      <div style="flex:1;min-width:180px"><label>Position</label>
+        <div class="pm-slider"><label style="min-width:74px">Horizontal &#8596;</label><input type="range" id="tX" min="0" max="100" value="50"><input type="number" id="tXV" class="pm-num" min="0" max="100" step="1" value="50"><span class="pm-pct">%</span></div>
+        <div class="pm-slider" style="margin-top:6px"><label style="min-width:74px">Vertical &#8597;</label><input type="range" id="tY" min="0" max="100" value="50"><input type="number" id="tYV" class="pm-num" min="0" max="100" step="1" value="50"><span class="pm-pct">%</span></div>
+      </div>
     </div>
     <div class="row-check"><input type="checkbox" id="tActive" checked /><label for="tActive">Show on the Trainers page</label></div>
     <button class="btn btn-red btn-block" id="tSave">Save Trainer</button>
@@ -564,7 +556,16 @@ function openTrainer(t){
   tEdit=t?t.id:null; tFile=null; tImg=t?t.image_url:null;
   $("tTitle").textContent=t?"Edit Trainer":"Add Trainer";
   $("tName").value=t?t.name:""; $("tRole").value=t?(t.role||""):""; $("tActive").checked=t?!!t.active:true;
-  $("tFit").value=t?(t.image_fit||"cover"):"cover"; $("tPos").value=t?(t.image_position||"center"):"center";
+  $("tFit").value=t?(t.image_fit||"cover"):"cover";
+  var _xy=posToXY(t?t.image_position:"center"); $("tX").value=_xy.x; $("tY").value=_xy.y; $("tXV").value=_xy.x; $("tYV").value=_xy.y;
+  function tClamp(v){ v=parseInt(v,10); if(isNaN(v))v=50; return Math.max(0,Math.min(100,v)); }
+  function tUpd(src){
+    if(src==="num"){ $("tXV").value=tClamp($("tXV").value); $("tYV").value=tClamp($("tYV").value); $("tX").value=$("tXV").value; $("tY").value=$("tYV").value; }
+    else { $("tXV").value=$("tX").value; $("tYV").value=$("tY").value; }
+    var im=$("tdrop").querySelector("img"); if(im) im.style.objectPosition=$("tX").value+"% "+$("tY").value+"%";
+  }
+  $("tX").oninput=function(){tUpd("slider")}; $("tY").oninput=function(){tUpd("slider")};
+  $("tXV").oninput=function(){tUpd("num")}; $("tYV").oninput=function(){tUpd("num")};
   $("tErr").textContent=""; paint($("tdrop"), t?t.image_url:null);
   $("tmodal").classList.remove("hide");
 }
@@ -574,7 +575,7 @@ $("tSave") && ($("tSave").onclick=async ()=>{
   $("tSave").disabled=true; $("tSave").textContent="Saving…"; $("tErr").textContent="";
   try{
     let image_url=tImg; if(tFile) image_url=await upload(tFile);
-    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tPos").value };
+    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tX").value+"% "+$("tY").value+"%" };
     let { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
     if(error && /image_fit|image_position|schema cache|column/i.test(error.message||"")){
       // DB not migrated for fit/position yet — save the rest so it still works
@@ -623,6 +624,7 @@ var MEDIA_SLOTS = [
     { slot:"classes.senior",label:"Senior block image", type:"image" },
   ]},
   { group:"Free Trial",   items:[{ slot:"free-trial.hero_video", label:"Hero Video", type:"video" }]},
+  { group:"Ad Landing (punch-ad-trials)", items:[{ slot:"ad-trials.hero_video", label:"Hero Video", type:"video" }]},
   { group:"Memberships",  items:[{ slot:"membership.hero_video", label:"Hero Video", type:"video" }]},
   { group:"Senior & Parkinson's", items:[{ slot:"senior.hero_video", label:"Hero Video", type:"video" }]},
   { group:"Youth Boxing", items:[
@@ -635,6 +637,13 @@ var MEDIA_SLOTS = [
   { group:"About",        items:[{ slot:"about.hero",      label:"Hero Image", type:"image" }]},
   { group:"Contact",      items:[{ slot:"contact.hero",    label:"Hero Image", type:"image" }]},
 ];
+function posToXY(pos){
+  if(!pos) return {x:50,y:50};
+  var m=String(pos).match(/(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%/);
+  if(m) return {x:Math.round(+m[1]),y:Math.round(+m[2])};
+  var map={center:[50,50],left:[0,50],right:[100,50],top:[50,0],bottom:[50,100],"center top":[50,0],"center bottom":[50,100],"left top":[0,0],"right top":[100,0],"left bottom":[0,100],"right bottom":[100,100]};
+  return map[pos]?{x:map[pos][0],y:map[pos][1]}:{x:50,y:50};
+}
 var POSITIONS = ["center","center top","center bottom","left","right","left top","right top","left bottom","right bottom"];
 var MAX_IMG = 5*1024*1024;      // 5 MB images
 var MAX_VID = 40*1024*1024;     // 40 MB video (link recommended for bigger)
@@ -675,7 +684,7 @@ async function loadPages(){
               ? '<video src="'+esc(url)+'" muted></video>'
               : '<img src="'+esc(url)+'" alt="">')
           : '<span class="pm-ph">No media</span>';
-        var posOpts = POSITIONS.map(function(p){return '<option value="'+p+'"'+(p===pos?' selected':'')+'>'+p+'</option>';}).join("");
+        var xy = posToXY(pos);
         return '<div class="pm-slot" data-slot="'+esc(it.slot)+'" data-type="'+it.type+'">' +
           '<div class="pm-prev"><span class="pm-badge">'+it.type+'</span>'+prev+'</div>' +
           '<div class="pm-body">' +
@@ -688,8 +697,8 @@ async function loadPages(){
             '<div class="pm-controls">' +
               '<label style="margin:0">Fit</label>' +
               '<select class="pm-fit"><option value="cover"'+(fit==="cover"?" selected":"")+'>Cover (fill)</option><option value="contain"'+(fit==="contain"?" selected":"")+'>Contain (whole image)</option></select>' +
-              '<label style="margin:0">Position</label>' +
-              '<select class="pm-pos">'+posOpts+'</select>' +
+              '<div class="pm-slider"><label>Horizontal &#8596;</label><input type="range" class="pm-x" min="0" max="100" value="'+xy.x+'"><input type="number" class="pm-xv pm-num" min="0" max="100" step="1" value="'+xy.x+'"><span class="pm-pct">%</span></div>' +
+              '<div class="pm-slider"><label>Vertical &#8597;</label><input type="range" class="pm-y" min="0" max="100" value="'+xy.y+'"><input type="number" class="pm-yv pm-num" min="0" max="100" step="1" value="'+xy.y+'"><span class="pm-pct">%</span></div>' +
               '<button class="pm-save" type="button">Save</button>' +
               '<span class="pm-hint"></span>' +
             '</div>' +
@@ -703,6 +712,16 @@ async function loadPages(){
     var fileEl = row.querySelector(".pm-file");
     var urlEl = row.querySelector(".pm-url");
     var hint = row.querySelector(".pm-hint");
+    var xEl=row.querySelector(".pm-x"), yEl=row.querySelector(".pm-y");
+    var xNum=row.querySelector(".pm-xv"), yNum=row.querySelector(".pm-yv");
+    function pmClamp(v){ v=parseInt(v,10); if(isNaN(v))v=50; return Math.max(0,Math.min(100,v)); }
+    function pmUpd(src){
+      if(src==="num"){ xNum.value=pmClamp(xNum.value); yNum.value=pmClamp(yNum.value); xEl.value=xNum.value; yEl.value=yNum.value; }
+      else { xNum.value=xEl.value; yNum.value=yEl.value; }
+      var im=row.querySelector(".pm-prev img,.pm-prev video"); if(im) im.style.objectPosition=xEl.value+"% "+yEl.value+"%";
+    }
+    if(xEl) xEl.oninput=function(){pmUpd("slider")}; if(yEl) yEl.oninput=function(){pmUpd("slider")};
+    if(xNum) xNum.oninput=function(){pmUpd("num")}; if(yNum) yNum.oninput=function(){pmUpd("num")};
     row.querySelector(".pm-up").onclick = function(){ fileEl.click(); };
     fileEl.onchange = async function(){
       var f = fileEl.files[0]; if(!f) return;
@@ -720,7 +739,7 @@ async function loadPages(){
     };
     row.querySelector(".pm-save").onclick = async function(){
       var payload={ slot:slot, url:urlEl.value.trim()||null,
-        fit:row.querySelector(".pm-fit").value, position:row.querySelector(".pm-pos").value,
+        fit:row.querySelector(".pm-fit").value, position:row.querySelector(".pm-x").value+"% "+row.querySelector(".pm-y").value+"%",
         updated_at:new Date().toISOString() };
       hint.style.color="var(--mut)"; hint.textContent="Saving…";
       var { error } = await sb.from("page_media").upsert(payload,{onConflict:"slot"});

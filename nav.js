@@ -71,6 +71,7 @@
       '<a href="/about">About Us</a>' +
       '<a href="/contact">Contact Us</a>' +
       '<a href="/trainers">Trainers</a>' +
+      '<a href="https://punchpgh.pushpress.com/refer" target="_blank" rel="noopener" onclick="return PunchRefer(event)">Refer a Friend</a>' +
       '<a href="/careers">Careers</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
       '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
@@ -220,3 +221,19 @@
     cw.setAttribute("data-widget-id", "6a69f17b1519ba6675839b9b");
     document.body.appendChild(cw);
   }
+
+  // Refer-a-Friend popup (loads once). PunchRefer() opens it.
+  if (!document.getElementById("punch-refer-wrap")) {
+    var rw = document.createElement("div");
+    rw.id = "punch-refer-wrap";
+    rw.style.cssText = "position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);padding:20px";
+    rw.innerHTML = '<div style="position:relative;width:100%;max-width:520px;background:#fff;border-radius:14px;overflow:hidden">' +
+      '<button onclick="document.getElementById(\'punch-refer-wrap\').style.display=\'none\'" style="position:absolute;top:8px;right:10px;z-index:2;background:#111;color:#fff;border:0;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer">&times;</button>' +
+      '<iframe src="https://api.grow.pushpress.com/widget/form/z1zyzYjLAj2Yt9nh2lyQ" style="width:100%;height:520px;border:none;display:block" title="Refer a Friend"></iframe>' +
+      '</div>';
+    document.body.appendChild(rw);
+    var rs = document.createElement("script");
+    rs.src = "https://api.grow.pushpress.com/js/form_embed.js";
+    document.body.appendChild(rs);
+  }
+  window.PunchRefer = function(e){ if(e) e.preventDefault(); document.getElementById("punch-refer-wrap").style.display="flex"; return false; };

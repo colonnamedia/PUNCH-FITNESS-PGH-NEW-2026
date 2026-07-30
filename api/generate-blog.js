@@ -36,6 +36,19 @@ const TOPIC_IMAGE = {
   "Nutrition": "/assets/punch-pittsburgh-31.jpg",
   "Parkinson's Boxing Benefits": "/assets/punch-pittsburgh-40.jpg",
 };
+// pool of real gym photos so each post gets a varied, relevant image
+const IMAGE_POOL = [
+  "punch-pittsburgh-6.jpg","punch-pittsburgh-1.jpg","punch-pittsburgh-11.jpg",
+  "punch-pittsburgh-14.jpg","punch-pittsburgh-21.jpg","punch-pittsburgh-22.jpg",
+  "punch-pittsburgh-31.jpg","punch-pittsburgh-40.jpg","punch-pittsburgh-41.jpg",
+  "punch-pittsburgh-43.jpg","punch-pittsburgh-44.jpg"
+].map(f => "/assets/" + f);
+function pickImage(topic, title){
+  if (TOPIC_IMAGE[topic]) return TOPIC_IMAGE[topic];
+  // deterministic-but-varied: hash the title so posts don't all share one photo
+  let h = 0; for (const c of String(title)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return IMAGE_POOL[h % IMAGE_POOL.length];
+}
 
 function slugify(s) {
   return String(s).toLowerCase().trim()
@@ -172,7 +185,7 @@ Use markdown. Respond with ONLY a JSON object, no markdown fence, no preamble:
         topic,
         excerpt: (post.excerpt || "").slice(0, 200),
         body: post.body,
-        image_url: TOPIC_IMAGE[topic] || "/assets/punch-pittsburgh-41.jpg",
+        image_url: pickImage(topic, post.title),
         published: true,
       }),
     });

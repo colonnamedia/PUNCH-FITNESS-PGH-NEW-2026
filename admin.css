@@ -154,3 +154,16 @@ textarea.long{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mon
 .pm-submenu a{display:block;padding:8px 16px 8px 42px;font-size:13px;color:var(--mut2);text-decoration:none;border-radius:8px;cursor:pointer;transition:background .15s,color .15s}
 .pm-submenu a:hover{background:var(--ink3);color:#fff}
 .pm-submenu a.on{color:#fff;background:var(--ink3);border-left:2px solid var(--red)}
+
+/* image placement sliders */
+.pm-slider{display:inline-flex;align-items:center;gap:8px;margin-right:12px}
+.pm-slider label{margin:0;font-size:11px;color:var(--mut2)}
+.pm-slider input[type=range]{width:110px;accent-color:var(--red);cursor:pointer}
+.pm-slider b{font-size:11px;color:#fff;min-width:36px;text-align:right}
+
+/* precise number inputs for image placement */
+.pm-num{width:58px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--ink2);color:#fff;font-size:14px;font-weight:700;text-align:center;-moz-appearance:textfield}
+.pm-num:focus{outline:none;border-color:var(--red)}
+.pm-pct{color:var(--mut2);font-size:13px;font-weight:700;margin-left:-2px}
+.pm-slider{display:flex;align-items:center;gap:10px}
+.pm-slider input[type=range]{flex:1}
