@@ -40,6 +40,7 @@
       <a data-tab="pages" id="nav-pages"><span class="i">&#128444;</span> Pages <span class="pm-caret" id="pm-caret">&#9656;</span></a>
       <div class="pm-submenu" id="pages-sub"></div>
       <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
+      <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -112,6 +113,19 @@
       </div>
       <div class="stats" id="stats-trainers"></div>
       <div class="panel"><div class="panel-h"><h2>Roster</h2></div><div id="list-trainers"></div></div>
+    </section>
+
+    <!-- ============ TERMS ============ -->
+    <section class="sect" id="sect-terms">
+      <div class="top">
+        <div><h1 class="mono-h">Terms &amp; Conditions</h1><div class="sub">Paste your updated Terms &amp; Conditions here each year. It publishes to the /terms-conditions page instantly. Leave blank to use the built-in default text.</div></div>
+        <button class="btn btn-red" id="termsSave">Save Terms</button>
+      </div>
+      <div class="panel"><div class="panel-b" style="padding:18px">
+        <textarea id="termsText" placeholder="Paste the full Terms &amp; Conditions text here. Separate sections with a blank line; put section titles in ALL CAPS on their own line and they'll become headings automatically. You can also paste formatted HTML." style="width:100%;min-height:520px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--ink2);color:#fff;font-size:14px;line-height:1.6;font-family:inherit;resize:vertical"></textarea>
+        <div class="err" id="termsErr" style="margin-top:10px"></div>
+        <div class="sub" style="margin-top:10px">Tip: the live page shows this text. To go back to the built-in default, clear this box and save.</div>
+      </div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -345,6 +359,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     $("sect-"+TAB).classList.add("on");
     if(TAB==="pages"){ buildPagesSubmenu(); const sub=$("pages-sub"); if(sub) sub.classList.toggle("open"); const c=$("pm-caret"); if(c) c.innerHTML = sub && sub.classList.contains("open") ? "&#9662;" : "&#9656;"; loadPages(); }
     if(TAB==="trainers") loadTrainers();
+    if(TAB==="terms") loadTerms();
   });
 });
 
@@ -593,6 +608,26 @@ async function delTrainer(id,t){
   if(error){ toast(error.message,true); return; }
   toast("Removed"); loadTrainers();
 }
+
+
+/* ---------------- TERMS & CONDITIONS ---------------- */
+async function loadTerms(){
+  try{
+    const { data } = await sb.from("site_settings").select("value").eq("key","terms_html").maybeSingle();
+    const html = data && data.value && (data.value.html || data.value.text) || "";
+    $("termsText").value = html;
+  }catch(e){ $("termsErr").textContent = e.message||"Could not load."; }
+}
+$("termsSave") && ($("termsSave").onclick = async ()=>{
+  $("termsSave").disabled=true; $("termsSave").textContent="Saving…"; $("termsErr").textContent="";
+  try{
+    const html = $("termsText").value;
+    const { error } = await sb.from("site_settings").upsert({ key:"terms_html", value:{ html } }, { onConflict:"key" });
+    if(error) throw error;
+    toast("Terms updated — live on the site");
+  }catch(e){ $("termsErr").textContent = e.message||"Save failed."; }
+  finally{ $("termsSave").disabled=false; $("termsSave").textContent="Save Terms"; }
+});
 
 /* ---------------- PAGES / MEDIA ---------------- */
 var MEDIA_SLOTS = [
