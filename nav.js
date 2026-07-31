@@ -72,7 +72,8 @@
       '<a href="/contact">Contact Us</a>' +
       '<a href="/trainers">Trainers</a>' +
       '<a href="https://punchpgh.pushpress.com/refer" target="_blank" rel="noopener" onclick="return PunchRefer(event)">Refer a Friend</a>' +
-      '<a href="/careers">Careers</a></div>' +
+      '<a href="/careers">Careers</a>' +
+      '<a href="/terms-conditions">Terms &amp; Conditions</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
       '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
       '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
