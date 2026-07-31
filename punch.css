@@ -1037,19 +1037,32 @@ header.pn .pn-link{font-size:20px;letter-spacing:.05em}
 .ref-cta .btn-red{border:0;cursor:pointer;font-family:inherit}
 @media(max-width:700px){.ref-card{flex-direction:column;text-align:center;padding:28px}}
 
-/* ---------- MOBILE hero: STACKED — photo banner on top, text on a dark panel below (never covers faces) ---------- */
+/* ---------- MOBILE hero ---------- */
 @media(max-width:760px){
-  .ph-wrap{flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;min-height:0 !important;background:#141416}
-  .ph-video{position:relative !important;inset:auto !important;width:100% !important;height:46vh !important;object-fit:cover}
-  .ph-overlay{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;bottom:auto !important;height:46vh !important;background:linear-gradient(to top, #141416 0%, rgba(20,20,22,.15) 55%, transparent 100%) !important}
-  .ph-content{position:relative !important;z-index:3 !important;background:#141416 !important;max-width:none !important;margin:0 !important;padding:0 22px 40px !important;margin-top:-46px !important;align-items:center !important;text-align:center !important;justify-content:flex-start !important}
-  .ph-left{align-items:center !important;text-align:center !important}
-  .ph-eyebrow{margin-bottom:12px !important}
-  .ph-title{font-size:clamp(36px,10vw,54px) !important;line-height:.95 !important}
-  .ph-sub{font-size:13px !important;margin-top:10px;color:rgba(255,255,255,.7) !important}
-  .ph-btn{margin-top:16px}
-  .ph-scroll{display:none !important}
-  /* homepage 'Lose Weight' full-image statement: keep bottom-anchored w/ strong scrim */
+  /* (A) fix horizontal overflow / cut-off text on ALL heroes */
+  .ph-content{box-sizing:border-box !important;width:100% !important;max-width:100% !important;margin-left:0 !important;margin-right:0 !important}
+  .ph-left{box-sizing:border-box !important;width:100% !important;max-width:100% !important}
+  .ph-title,.ph-sub{max-width:100% !important;overflow-wrap:break-word;word-break:break-word}
+  .ph-sub{font-size:12.5px !important}
+
+  /* (B) STACK — image heroes only (photo banner up top, text on dark panel below, fading together) */
+  .ph-wrap:has(img.ph-video){flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;min-height:0 !important;background:#141416 !important}
+  .ph-wrap:has(img.ph-video) img.ph-video{position:relative !important;inset:auto !important;width:100% !important;height:52vh !important;object-fit:cover}
+  .ph-wrap:has(img.ph-video) .ph-overlay{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;bottom:auto !important;height:52vh !important;background:linear-gradient(to top, #141416 6%, rgba(20,20,22,.85) 20%, rgba(20,20,22,.25) 46%, transparent 78%) !important}
+  .ph-wrap:has(img.ph-video) .ph-content{position:relative !important;z-index:3 !important;background:#141416 !important;padding:0 22px 40px !important;margin-top:-84px !important;align-items:center !important;text-align:center !important;justify-content:flex-start !important}
+  .ph-wrap:has(img.ph-video) .ph-left{align-items:center !important;text-align:center !important}
+  .ph-wrap:has(img.ph-video) .ph-eyebrow{margin-bottom:12px !important}
+  .ph-wrap:has(img.ph-video) .ph-title{font-size:clamp(34px,9.5vw,50px) !important;line-height:.96 !important}
+  .ph-wrap:has(img.ph-video) .ph-sub{margin-top:10px;color:rgba(255,255,255,.72) !important}
+  .ph-wrap:has(img.ph-video) .ph-btn{margin-top:16px}
+  .ph-wrap:has(img.ph-video) .ph-scroll{display:none !important}
+
+  /* (C) VIDEO heroes stay full-screen overlay — just bottom-anchor the text so it clears the subject */
+  .ph-wrap:has(video.ph-video){align-items:flex-end !important;min-height:82vh !important}
+  .ph-wrap:has(video.ph-video) .ph-content{justify-content:flex-end !important;padding-bottom:34px !important}
+  .ph-wrap:has(video.ph-video) .ph-overlay{background:linear-gradient(to top, rgba(8,8,10,.95) 0%, rgba(8,8,10,.5) 45%, rgba(8,8,10,.35) 70%, rgba(8,8,10,.6) 100%) !important}
+
+  /* homepage 'Lose Weight' full-image statement */
   .hero-stmt{align-items:flex-end !important;min-height:78vh !important}
   .hero-stmt-content{padding-bottom:34px !important}
   .hero-stmt-ov{background:linear-gradient(to top, rgba(8,8,10,.96) 0%, rgba(8,8,10,.5) 48%, rgba(8,8,10,.5) 100%) !important}
