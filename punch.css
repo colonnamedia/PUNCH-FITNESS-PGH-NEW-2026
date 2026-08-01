@@ -992,10 +992,10 @@ body.has-mcta{padding-bottom:0}
 
 
 /* ---------- hero content CENTERED on inner pages (eyebrow > title > desc > button) ---------- */
-.ph-content{max-width:900px !important;margin:0 auto !important;padding:120px 24px 80px;align-items:center !important;text-align:center !important}
-.ph-left{max-width:760px;align-items:center !important;text-align:center !important;margin:0 auto}
+.ph-content{max-width:none !important;margin:0 !important;padding:120px clamp(24px,5vw,64px) 80px;align-items:flex-start !important;text-align:left !important}
+.ph-left{max-width:700px;align-items:flex-start !important;text-align:left !important;margin:0}
 .ph-eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.32em;
-  text-transform:uppercase;color:#ff5555;display:inline-flex;align-items:center;gap:14px;margin-bottom:18px;justify-content:center}
+  text-transform:uppercase;color:#ff5555;display:inline-flex;align-items:center;gap:14px;margin-bottom:18px;justify-content:flex-start}
 .ph-eyebrow::before{content:"";width:44px;height:2px;background:#ff5555}
 @media(max-width:760px){
   .ph-content{padding:96px 22px 60px}
@@ -1059,7 +1059,8 @@ header.pn .pn-link{font-size:20px;letter-spacing:.05em}
 
   /* (C) VIDEO heroes stay full-screen overlay — just bottom-anchor the text so it clears the subject */
   .ph-wrap:has(video.ph-video){align-items:flex-end !important;min-height:82vh !important}
-  .ph-wrap:has(video.ph-video) .ph-content{justify-content:flex-end !important;padding-bottom:34px !important}
+  .ph-wrap:has(video.ph-video) .ph-content{justify-content:flex-end !important;padding-bottom:34px !important;align-items:center !important;text-align:center !important}
+  .ph-wrap:has(video.ph-video) .ph-left{align-items:center !important;text-align:center !important}
   .ph-wrap:has(video.ph-video) .ph-overlay{background:linear-gradient(to top, rgba(8,8,10,.95) 0%, rgba(8,8,10,.5) 45%, rgba(8,8,10,.35) 70%, rgba(8,8,10,.6) 100%) !important}
 
   /* homepage 'Lose Weight' full-image statement */
