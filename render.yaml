@@ -27,6 +27,7 @@ services:
       - { type: rewrite, source: /personal-training, destination: /personal-training.html }
       - { type: rewrite, source: /senior-fitness-and-boxing-pittsburgh, destination: /senior-fitness-and-boxing-pittsburgh.html }
       - { type: rewrite, source: /youth-boxing-camp, destination: /youth-boxing-camp.html }
+      - { type: rewrite, source: /superare, destination: /superare.html }
       - { type: rewrite, source: /boxing-gloves-for-fitness-classes, destination: /boxing-gloves-for-fitness-classes.html }
       - { type: rewrite, source: /punch-apparel, destination: /punch-apparel.html }
       - { type: rewrite, source: /blog-events, destination: /blog-events.html }
