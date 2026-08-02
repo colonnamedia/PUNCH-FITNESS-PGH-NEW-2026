@@ -66,7 +66,6 @@
     '<div class="pf-col"><div class="pf-h">Get Started</div>' +
       '<a href="/free-trial">Free Trial Class</a>' +
       '<a href="/membership-options">Memberships</a>' +
-      '<a href="/punch-apparel">Apparel</a>' +
       '<a href="/blog-events">Blog</a>' +
       '<a href="/about">About Us</a>' +
       '<a href="/contact">Contact Us</a>' +
@@ -81,7 +80,11 @@
       '<div class="pf-soc"><a href="https://instagram.com/punchpgh" target="_blank" rel="noopener">Instagram</a>' +
       '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a>' +
       '<a href="https://www.youtube.com/@punchpgh" target="_blank" rel="noopener">YouTube</a>' +
-      '<a href="https://www.tiktok.com/@punchpgh" target="_blank" rel="noopener">TikTok</a></div></div>' +
+      '<a href="https://www.tiktok.com/@punchpgh" target="_blank" rel="noopener">TikTok</a></div>' +
+      '<div class="pf-h" style="margin-top:22px">Shop</div>' +
+      '<a href="/punch-apparel">Apparel</a>' +
+      '<a href="/boxing-gloves-for-fitness-classes">Equipment</a>' +
+      '<a href="/superare">Superare</a></div>' +
   '</div>' +
   '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
