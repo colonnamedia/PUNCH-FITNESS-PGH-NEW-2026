@@ -233,7 +233,7 @@
     rw.style.cssText = "position:fixed;inset:0;z-index:99999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6);padding:20px";
     rw.innerHTML = '<div style="position:relative;width:100%;max-width:520px;background:#fff;border-radius:14px;overflow:hidden">' +
       '<button onclick="document.getElementById(\'punch-refer-wrap\').style.display=\'none\'" style="position:absolute;top:8px;right:10px;z-index:2;background:#111;color:#fff;border:0;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer">&times;</button>' +
-      '<iframe src="https://api.grow.pushpress.com/widget/form/z1zyzYjLAj2Yt9nh2lyQ" style="width:100%;height:520px;border:none;display:block" title="Refer a Friend"></iframe>' +
+      '<iframe src="https://api.grow.pushpress.com/widget/form/z1zyzYjLAj2Yt9nh2lyQ" style="width:100%;height:520px;border:none;display:block" title="WEBSITE - SECTION - Refer a Friend / Family Member v7.0"></iframe>' +
       '</div>';
     document.body.appendChild(rw);
     var rs = document.createElement("script");

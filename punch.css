@@ -1078,10 +1078,6 @@ header.pn .pn-link{font-size:20px;letter-spacing:.05em}
 
 /* MOBILE: membership video hero matches the standard video hero look */
 @media(max-width:760px){
-  .pm-hero-v2{min-height:84vh !important;display:flex !important;align-items:flex-end !important}
-  .pm-hero-v2__scrim{background:linear-gradient(to top, rgba(8,8,10,.96) 0%, rgba(8,8,10,.5) 46%, rgba(8,8,10,.35) 70%, rgba(8,8,10,.6) 100%) !important}
-  .pm-hero-v2__inner{padding:0 22px 40px !important}
-  .pm-hero-v2__copy,.pm-hero-v2__notice{display:none !important}
 }
 /* ---------- testimonial reels (portrait member videos) ---------- */
 .reels-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
@@ -1104,7 +1100,9 @@ header.pn .pn-link{font-size:20px;letter-spacing:.05em}
 
 /* MEMBERSHIP video hero (pm-hero-v2) stacks too */
 @media(max-width:760px){
-  .pm-hero-v2{flex-direction:column !important;align-items:stretch !important;min-height:0 !important;background:#141416 !important;display:flex !important}
+  .pm-hero-v2{flex-direction:column !important;align-items:stretch !important;justify-content:flex-start !important;min-height:0 !important;padding:0 !important;background:#141416 !important;display:flex !important}
+  .pm-hero-v2::before{display:none !important}
+  .pm-hero-v2__copy,.pm-hero-v2__notice{display:none !important}
   .pm-hero-v2__video,.pm-hero-v2 video{position:relative !important;inset:auto !important;width:100% !important;height:56vh !important;object-fit:cover}
   .pm-hero-v2__scrim{position:absolute !important;top:0 !important;left:0 !important;right:0 !important;bottom:auto !important;height:56vh !important;background:linear-gradient(to top,#141416 16%,rgba(20,20,22,.7) 34%,rgba(20,20,22,.28) 54%,transparent 84%) !important}
   .pm-hero-v2__inner{position:relative !important;z-index:3 !important;background:#141416 !important;padding:32px 22px 40px !important;margin-top:-2px !important}
