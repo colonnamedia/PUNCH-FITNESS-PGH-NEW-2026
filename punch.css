@@ -159,7 +159,7 @@ html,body{margin:0;padding:0;background:#fff}
 .ph-left{display:flex;flex-direction:column;align-items:flex-start}
 .ph-btn{display:inline-block;padding:18px 36px;background:#e02020;color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;border-radius:6px;white-space:nowrap;flex-shrink:0;box-shadow:0 6px 24px rgba(224,32,32,.35);transition:background .2s,transform .15s;margin-top:28px}
 .ph-btn:hover{background:#bf1515;transform:translateY(-2px)}
-.ph-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(48px,6vw,84px);font-weight:900;line-height:.92;text-transform:uppercase;color:#fff;margin-bottom:20px;letter-spacing:-.01em}
+.ph-title{font-family:'Barlow Condensed',sans-serif;font-size:clamp(52px,8vw,116px);font-weight:900;line-height:.9;text-transform:uppercase;color:#fff;margin-bottom:22px;letter-spacing:-.02em}
 .ph-title .ph-red{color:#e02020}
 .ph-title .ph-out{-webkit-text-stroke:2.5px #fff;color:transparent}
 .ph-sub{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);line-height:2;max-width:560px}
@@ -1133,9 +1133,9 @@ img[data-slot].slot-ready,video[data-slot].slot-ready{opacity:1}
 @media(min-width:761px){
   #plp .ph-wrap, .ph-wrap,
   #plp .vhero,
-  .pm-hero-v2{height:auto !important;min-height:82vh !important;max-height:none !important}
-  #punch-trial-hero .pth-wrap{aspect-ratio:auto !important;height:auto !important;min-height:82vh !important;max-height:none !important}
-  #plp .hero-stmt{min-height:82vh !important}
+  .pm-hero-v2{height:auto !important;min-height:88vh !important;max-height:none !important}
+  #punch-trial-hero .pth-wrap{aspect-ratio:auto !important;height:auto !important;min-height:88vh !important;max-height:none !important}
+  #plp .hero-stmt{min-height:88vh !important}
   /* trim padding so the content fits inside the uniform height */
   #plp .vhero .vhero-in{padding-top:0 !important;padding-bottom:0 !important}
   /* membership + ad-trials heroes: left-aligned text like the rest */
@@ -1165,4 +1165,10 @@ img[data-slot].slot-ready,video[data-slot].slot-ready{opacity:1}
 @media(max-width:860px){
   #plp .cls-style::after{display:none}
   #plp .cls-style:hover{transform:none}
+}
+
+
+/* force consistent hero content padding regardless of #plp nesting (fixes left cut-off) */
+@media(min-width:761px){
+  .ph-wrap .ph-content, #plp .ph-wrap .ph-content{padding-left:clamp(24px,5vw,64px) !important;padding-right:clamp(24px,5vw,64px) !important}
 }
