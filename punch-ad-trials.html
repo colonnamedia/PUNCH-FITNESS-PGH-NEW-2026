@@ -38,7 +38,9 @@
 #punch-trial-hero .pth-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 #punch-trial-hero .pth-overlay{position:absolute;inset:0;background:rgba(0,0,0,.46);pointer-events:none;z-index:2}
 #punch-trial-hero .pth-content{position:relative;z-index:10;text-align:left;padding:40px clamp(28px,5vw,64px);max-width:820px;width:100%}
-#punch-trial-hero h1{font-size:clamp(48px,7.5vw,110px);font-weight:900;line-height:.9;letter-spacing:-1px;text-transform:uppercase;color:#fff;margin-bottom:26px}
+#punch-trial-hero .pth-eyebrow{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:#ff5555;display:inline-flex;align-items:center;gap:14px;margin-bottom:14px}
+#punch-trial-hero .pth-eyebrow::before{content:"";width:44px;height:2px;background:#ff5555}
+#punch-trial-hero h1{font-size:clamp(56px,8.6vw,132px);font-weight:900;line-height:.9;letter-spacing:-1px;text-transform:uppercase;color:#fff;margin-bottom:22px}
 #punch-trial-hero h1 .line-red{color:#D92B2B;display:block}
 #punch-trial-hero h1 .line-outline{-webkit-text-stroke:2px rgba(255,255,255,.75);color:transparent;display:block}
 #punch-trial-hero h1 .line-white{color:#fff;display:block}
@@ -54,7 +56,9 @@
   #punch-trial-hero .pth-video{position:relative;inset:auto;width:100%;height:58vh}
   #punch-trial-hero .pth-overlay{position:absolute;top:0;left:0;right:0;bottom:auto;height:58vh;background:linear-gradient(to top,#141416 15%,rgba(20,20,22,.7) 32%,rgba(20,20,22,.28) 52%,rgba(20,20,22,.06) 70%,transparent 84%)}
   #punch-trial-hero .pth-content{position:relative;z-index:10;background:#141416;padding:30px 20px 40px;margin-top:-2px}
-  #punch-trial-hero h1{font-size:clamp(48px,7.5vw,110px);margin-bottom:16px;letter-spacing:-.5px}
+  #punch-trial-hero .pth-eyebrow{font-size:11px;letter-spacing:.2em;gap:10px;margin-bottom:10px}
+  #punch-trial-hero .pth-eyebrow::before{width:28px}
+  #punch-trial-hero h1{font-size:clamp(34px,9.5vw,50px);margin-bottom:12px;letter-spacing:-.5px}
   #punch-trial-hero .pth-btn-primary,#punch-trial-hero .pth-btn-ghost{padding:13px 24px;font-size:12px;letter-spacing:1.5px}
 }
 </style>
@@ -64,6 +68,7 @@
   </video>
   <div class="pth-overlay"></div>
   <div class="pth-content">
+    <div class="pth-eyebrow">South Hills Pittsburgh &mdash; Trial Offer</div>
     <h1>
       <span class="line-white">Lose Weight.</span>
       <span class="line-red">Feel Amazing.</span>
@@ -96,10 +101,10 @@
   <h2 class="h2" style="font-size:clamp(24px,3.2vw,36px)">Find Your <span>Fit.</span></h2>
  </div>
  <div class="si"><div class="prog-quick">
-   <a href="/classes" class="pq-card"><div><div class="pq-k">All Levels</div><div class="pq-n">Adult Boxing &amp; Fitness</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
-   <a href="/personal-training" class="pq-card"><div><div class="pq-k">1-on-1</div><div class="pq-n">Personal Training</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
-   <a href="/senior-fitness-and-boxing-pittsburgh" class="pq-card"><div><div class="pq-k">Ages 65+</div><div class="pq-n">Senior &amp; Parkinson's</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
-   <a href="/youth-boxing-camp" class="pq-card"><div><div class="pq-k">Ages 7&ndash;13</div><div class="pq-n">Youth Boxing</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
+   <a href="/classes" class="pq-card" style="background-image:url('/assets/punch-pittsburgh-6.jpg')"><div><div class="pq-k">All Levels</div><div class="pq-n">Adult Boxing &amp; Fitness</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
+   <a href="/personal-training" class="pq-card" style="background-image:url('/assets/punch-pittsburgh-38.jpg')"><div><div class="pq-k">1-on-1</div><div class="pq-n">Personal Training</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
+   <a href="/senior-fitness-and-boxing-pittsburgh" class="pq-card" style="background-image:url('/assets/punch-pittsburgh-40.jpg')"><div><div class="pq-k">Ages 65+</div><div class="pq-n">Senior &amp; Parkinson's</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
+   <a href="/youth-boxing-camp" class="pq-card" style="background-image:url('/assets/punch-youth-1.jpg')"><div><div class="pq-k">Ages 7&ndash;13</div><div class="pq-n">Youth Boxing</div></div><div class="pq-arrow">Learn More &rarr;</div></a>
  </div></div>
 </div>
 
