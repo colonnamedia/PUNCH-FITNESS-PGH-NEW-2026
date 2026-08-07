@@ -99,9 +99,6 @@
   function buildPopup() {
     try { if (localStorage.getItem(POP_KEY)) return; } catch (e) {}
     if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return;
-    // desktop only — the popup is too cramped on phones
-    if (window.matchMedia && !window.matchMedia("(min-width: 1000px)").matches) return;
-    if (!window.matchMedia && (window.innerWidth || 0) < 1000) return;
 
     var ov = document.createElement("div");
     ov.className = "ps-ov";
@@ -163,6 +160,72 @@
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
   }
 
+  // ---- Custom image popup (admin-managed, /admin > Popups) -----------------
+  function buildCustomPopup(p) {
+    var key = "punch_popup_seen_" + p.id;
+    try { if (localStorage.getItem(key)) return; } catch (e) {}
+    if (!p.image_url) return;
+
+    var ov = document.createElement("div");
+    ov.className = "ps-ov";
+    var safeTitle = (p.title || "Special offer").replace(/"/g, "&quot;");
+    ov.innerHTML =
+      '<div class="ps-imgbox" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
+        '<button class="ps-x" id="psxImg" aria-label="Close">&times;</button>' +
+        (p.link_url ? ('<a href="' + p.link_url + '" target="_blank" rel="noopener">') : '') +
+          '<img src="' + p.image_url + '" alt="' + safeTitle + '">' +
+        (p.link_url ? '</a>' : '') +
+      '</div>';
+    document.body.appendChild(ov);
+
+    function close() {
+      ov.classList.remove("on");
+      try { localStorage.setItem(key, "1"); } catch (e) {}
+      setTimeout(function () { ov.remove(); }, 300);
+    }
+    document.getElementById("psxImg").addEventListener("click", close);
+    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+    var link = ov.querySelector("a");
+    if (link) link.addEventListener("click", function () { try { localStorage.setItem(key, "1"); } catch (e) {} });
+
+    setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+  }
+
+  // ---- Popup dispatcher — reads /admin > Popups criteria, falls back to the
+  // original hardcoded behavior (trial popup, desktop only) if the "popups"
+  // table hasn't been migrated yet or the fetch fails. -----------------------
+  function initPopups() {
+    var cfg = window.PUNCH_CONFIG || {};
+    var isDesktop = window.matchMedia
+      ? window.matchMedia("(min-width: 761px)").matches
+      : (window.innerWidth || 0) >= 761;
+    var onLanding = /^\/(index(\.html)?)?$/.test(location.pathname);
+
+    function fallback() { if (isDesktop) buildPopup(); }
+
+    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) { fallback(); return; }
+
+    fetch(cfg.SUPABASE_URL + "/rest/v1/popups?select=*&order=sort.asc",
+      { headers: { apikey: cfg.SUPABASE_ANON_KEY, Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY } })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (rows) {
+        if (!rows || !rows.length) { fallback(); return; }
+        function matches(p) {
+          if (!p.active) return false;
+          if (isDesktop && p.show_desktop === false) return false;
+          if (!isDesktop && p.show_mobile === false) return false;
+          if (p.pages === "landing" && !onLanding) return false;
+          return true;
+        }
+        var trial = rows.filter(function (p) { return p.type === "trial"; })[0];
+        if (trial) { if (matches(trial)) buildPopup(); return; }
+        var custom = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; })[0];
+        if (custom) buildCustomPopup(custom);
+      })
+      .catch(fallback);
+  }
+
 
   // ---- Scroll reveal + sticky mobile CTA (added by refinement layer) -------
   function enhance() {
@@ -209,7 +272,7 @@
     document.body.insertAdjacentHTML("beforeend", footer);
     var b = document.getElementById("pnBurger"), d = document.getElementById("pnDrawer");
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
-    buildPopup();
+    initPopups();
     enhance();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);

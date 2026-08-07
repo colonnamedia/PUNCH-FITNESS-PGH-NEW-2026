@@ -46,6 +46,7 @@
       <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
       <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
       <a data-tab="branding"><span class="i">&#127912;</span> Branding</a>
+      <a data-tab="popups"><span class="i">&#128276;</span> Popups</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -159,6 +160,15 @@
       </div>
       <div class="err" id="brandErr" style="margin:0 20px 18px"></div>
       </div>
+    </section>
+
+    <!-- ============ POPUPS ============ -->
+    <section class="sect" id="sect-popups">
+      <div class="top">
+        <div><h1 class="mono-h">Popups</h1><div class="sub">The trial popup, plus any promotional flyers you want to pop up on the site. Each one can be limited to desktop only, mobile only, or both.</div></div>
+        <button class="btn btn-red" id="addPopup">&#65291; Add Popup</button>
+      </div>
+      <div class="panel"><div class="panel-h"><h2>All Popups</h2></div><div id="list-popups"></div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -338,6 +348,45 @@
   </div>
 </div>
 
+<!-- ============================== POPUP MODAL ============================== -->
+<div class="overlay hide" id="pmodal">
+  <div class="modal">
+    <div class="modal-h"><h3 id="pTitle">Add Popup</h3><button class="x" id="pClose">&times;</button></div>
+
+    <div id="pTrialNote" class="hide" style="background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--mut2)">
+      This is the built-in trial/special popup (the two-plan offer card). You can&#39;t delete it or change its image &mdash; just turn it on/off and choose where it shows.
+    </div>
+
+    <div id="pCustomFields">
+      <label>Popup Image (PNG or JPG)</label>
+      <div class="drop" id="pdrop">
+        <div class="drop-ic">&#128196;</div>
+        <div class="drop-t">Click or drag a flyer image</div>
+        <div class="drop-s">Portrait works best &mdash; this shows as-is, no cropping</div>
+        <input type="file" id="pfile" accept="image/*" class="hide" />
+      </div>
+      <label for="pLabel">Internal Label (for your reference only)</label>
+      <input id="pLabel" placeholder="August Flash Sale" />
+      <label for="pLink">Link (optional &mdash; where it goes when clicked)</label>
+      <input id="pLink" placeholder="https://punchpgh.pushpress.com/landing/plans/..." />
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+      <div class="row-check"><input type="checkbox" id="pActive" checked /><label for="pActive">Active</label></div>
+      <div class="row-check"><input type="checkbox" id="pDesktop" checked /><label for="pDesktop">Show on Desktop</label></div>
+      <div class="row-check"><input type="checkbox" id="pMobile" checked /><label for="pMobile">Show on Mobile</label></div>
+    </div>
+    <label for="pPages">Show On</label>
+    <select id="pPages">
+      <option value="all">All Pages</option>
+      <option value="landing">Landing Page Only</option>
+    </select>
+
+    <button class="btn btn-red btn-block" id="pSave">Save Popup</button>
+    <div class="err" id="pErr"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -394,6 +443,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     if(TAB==="trainers") loadTrainers();
     if(TAB==="terms") loadTerms();
     if(TAB==="branding") loadBrandingAdmin();
+    if(TAB==="popups") loadPopups();
   });
 });
 
@@ -643,6 +693,96 @@ async function delTrainer(id,t){
   toast("Removed"); loadTrainers();
 }
 
+/* ---------------- POPUPS ---------------- */
+let pEditId=null, pFileSel=null, pImgCur=null, pEditType="custom";
+wireDrop && wireDrop("pdrop","pfile", f=>{ pFileSel=f; paint($("pdrop"), URL.createObjectURL(f)); });
+$("addPopup") && ($("addPopup").onclick = ()=>openPopup(null));
+$("pClose") && ($("pClose").onclick = ()=>$("pmodal").classList.add("hide"));
+$("pmodal") && $("pmodal").addEventListener("click", e=>{ if(e.target===$("pmodal")) $("pmodal").classList.add("hide"); });
+
+async function loadPopups(){
+  const { data, error } = await sb.from("popups").select("*").order("type",{ascending:false}).order("sort",{ascending:true}).order("created_at",{ascending:true});
+  if(error){
+    // table not migrated yet
+    $("list-popups").innerHTML = `<div class="empty"><b>Popups aren&#39;t set up yet</b>Run <code>supabase/migration-8.sql</code> in the Supabase SQL Editor, then reload this page. Until then the site uses the original trial popup (desktop only).</div>`;
+    return;
+  }
+  const items = data||[];
+  const list = $("list-popups");
+  if(!items.length){ list.innerHTML = `<div class="empty"><b>No popups yet</b>Click &ldquo;Add Popup&rdquo; to create one.</div>`; return; }
+  list.innerHTML = items.map(p=>{
+    const isTrial = p.type==="trial";
+    const label = isTrial ? "Trial Offer Popup (built-in)" : (p.title || "Untitled popup");
+    const where = p.pages==="landing" ? "Landing page only" : "All pages";
+    const devices = (p.show_desktop!==false?"Desktop":"") + (p.show_desktop!==false && p.show_mobile!==false ? " + " : "") + (p.show_mobile!==false?"Mobile":"") || "Hidden everywhere";
+    return `
+    <div class="prow">
+      ${(!isTrial && p.image_url)?`<img class="pthumb" src="${esc(p.image_url)}" alt="">`:`<div class="pthumb">${isTrial?"&#127942;":"&#128196;"}</div>`}
+      <div class="pname">${esc(label)}${p.active?"":`<span class="badge-off">Off</span>`}<small>${esc(where)} &middot; ${esc(devices)}</small></div>
+      <div class="pcat"></div><div class="pprice"></div>
+      <div class="pacts">
+        <button class="icon-btn" data-pedit="${p.id}">&#9998;</button>
+        ${isTrial?"":`<button class="icon-btn del" data-pdel="${p.id}">&#128465;</button>`}
+      </div>
+    </div>`;
+  }).join("");
+  list.querySelectorAll("[data-pedit]").forEach(b=>b.onclick=()=>openPopup(items.find(x=>x.id===b.dataset.pedit)));
+  list.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>delPopup(b.dataset.pdel, items.find(x=>x.id===b.dataset.pdel)));
+}
+
+function openPopup(p){
+  pEditId = p ? p.id : null;
+  pEditType = p ? p.type : "custom";
+  pFileSel = null; pImgCur = p ? p.image_url : null;
+  $("pTitle").textContent = p ? (pEditType==="trial" ? "Edit Trial Popup" : "Edit Popup") : "Add Popup";
+  $("pTrialNote").classList.toggle("hide", pEditType!=="trial");
+  $("pCustomFields").classList.toggle("hide", pEditType==="trial");
+  $("pLabel").value = p ? (p.title||"") : "";
+  $("pLink").value = p ? (p.link_url||"") : "";
+  $("pActive").checked = p ? !!p.active : true;
+  $("pDesktop").checked = p ? p.show_desktop!==false : true;
+  $("pMobile").checked = p ? p.show_mobile!==false : true;
+  $("pPages").value = p ? (p.pages||"all") : "all";
+  $("pErr").textContent = "";
+  paint($("pdrop"), p?p.image_url:null);
+  $("pmodal").classList.remove("hide");
+}
+
+$("pSave") && ($("pSave").onclick = async ()=>{
+  $("pSave").disabled=true; $("pSave").textContent="Saving…"; $("pErr").textContent="";
+  try{
+    let image_url = pImgCur;
+    if(pEditType!=="trial"){
+      if(pFileSel) image_url = await upload(pFileSel);
+      if(!image_url){ $("pErr").textContent="Add an image for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
+    }
+    const row = {
+      active: $("pActive").checked,
+      show_desktop: $("pDesktop").checked,
+      show_mobile: $("pMobile").checked,
+      pages: $("pPages").value
+    };
+    if(pEditType!=="trial"){
+      row.title = $("pLabel").value.trim() || null;
+      row.link_url = $("pLink").value.trim() || null;
+      row.image_url = image_url;
+      row.type = "custom";
+    }
+    const { error } = pEditId
+      ? await sb.from("popups").update(row).eq("id",pEditId)
+      : await sb.from("popups").insert(Object.assign({type:"custom"}, row));
+    if(error) throw error;
+    $("pmodal").classList.add("hide"); toast(pEditId?"Popup updated":"Popup added"); loadPopups();
+  }catch(err){ $("pErr").textContent = err.message || "Something went wrong."; }
+  finally{ $("pSave").disabled=false; $("pSave").textContent="Save Popup"; }
+});
+
+async function delPopup(id,p){
+  if(!confirm(`Delete "${p?.title||"this popup"}"? This can't be undone.`)) return;
+  const { error } = await sb.from("popups").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Deleted"); loadPopups();
+}
 
 
 /* ---------------- BRANDING (logo + favicon) ---------------- */
