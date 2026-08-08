@@ -97,8 +97,8 @@
   var POP_DELAY = 12000;
 
   function buildPopup() {
-    try { if (localStorage.getItem(POP_KEY)) return; } catch (e) {}
-    if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return;
+    try { if (localStorage.getItem(POP_KEY)) return false; } catch (e) {}
+    if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return false;
 
     var ov = document.createElement("div");
     ov.className = "ps-ov";
@@ -158,13 +158,15 @@
     });
 
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+    return true;
   }
 
   // ---- Custom image popup (admin-managed, /admin > Popups) -----------------
   function buildCustomPopup(p) {
     var key = "punch_popup_seen_" + p.id;
-    try { if (localStorage.getItem(key)) return; } catch (e) {}
-    if (!p.image_url) return;
+    try { if (localStorage.getItem(key)) return false; } catch (e) {}
+    if (/\/admin/.test(location.pathname)) return false;
+    if (!p.image_url) return false;
 
     var ov = document.createElement("div");
     ov.className = "ps-ov";
@@ -190,6 +192,7 @@
     if (link) link.addEventListener("click", function () { try { localStorage.setItem(key, "1"); } catch (e) {} });
 
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+    return true;
   }
 
   // ---- Popup dispatcher — reads /admin > Popups criteria, falls back to the
@@ -219,9 +222,9 @@
           return true;
         }
         var trial = rows.filter(function (p) { return p.type === "trial"; })[0];
-        if (trial) { if (matches(trial)) buildPopup(); return; }
-        var custom = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; })[0];
-        if (custom) buildCustomPopup(custom);
+        if (trial && matches(trial) && buildPopup()) return;
+        var customs = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; });
+        for (var i = 0; i < customs.length; i++) { if (buildCustomPopup(customs[i])) return; }
       })
       .catch(fallback);
   }
