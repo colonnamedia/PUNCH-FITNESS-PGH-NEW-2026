@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
 <link rel="icon" href="/assets/favicon.svg" />
 <link rel="apple-touch-icon" href="/assets/favicon.svg" />
@@ -372,7 +372,7 @@
     </div>
 
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
-      <div class="row-check"><input type="checkbox" id="pActive" checked /><label for="pActive">Active</label></div>
+      <div class="row-check"><input type="checkbox" id="pPopActive" checked /><label for="pPopActive">Active</label></div>
       <div class="row-check"><input type="checkbox" id="pDesktop" checked /><label for="pDesktop">Show on Desktop</label></div>
       <div class="row-check"><input type="checkbox" id="pMobile" checked /><label for="pMobile">Show on Mobile</label></div>
     </div>
@@ -739,7 +739,7 @@ function openPopup(p){
   $("pCustomFields").classList.toggle("hide", pEditType==="trial");
   $("pLabel").value = p ? (p.title||"") : "";
   $("pLink").value = p ? (p.link_url||"") : "";
-  $("pActive").checked = p ? !!p.active : true;
+  $("pPopActive").checked = p ? !!p.active : true;
   $("pDesktop").checked = p ? p.show_desktop!==false : true;
   $("pMobile").checked = p ? p.show_mobile!==false : true;
   $("pPages").value = p ? (p.pages||"all") : "all";
@@ -757,7 +757,7 @@ $("pSave") && ($("pSave").onclick = async ()=>{
       if(!image_url){ $("pErr").textContent="Add an image for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
     }
     const row = {
-      active: $("pActive").checked,
+      active: $("pPopActive").checked,
       show_desktop: $("pDesktop").checked,
       show_mobile: $("pMobile").checked,
       pages: $("pPages").value

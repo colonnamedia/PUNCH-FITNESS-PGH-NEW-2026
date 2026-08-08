@@ -262,3 +262,28 @@ where not exists (select 1 from public.trainers);
 alter table public.trainers add column if not exists image_fit text default 'cover';
 alter table public.trainers add column if not exists image_position text default 'center';
 
+
+-- ============================================================================
+-- migration 8 : site popups (admin-managed)
+-- ============================================================================
+create table if not exists public.popups (
+  id            uuid primary key default gen_random_uuid(),
+  type          text not null default 'custom',
+  title         text,
+  image_url     text,
+  link_url      text,
+  active        boolean not null default true,
+  show_desktop  boolean not null default true,
+  show_mobile   boolean not null default true,
+  pages         text not null default 'all',
+  sort          int not null default 0,
+  created_at    timestamptz not null default now()
+);
+alter table public.popups enable row level security;
+drop policy if exists "popups public read" on public.popups;
+drop policy if exists "popups auth all"    on public.popups;
+create policy "popups public read" on public.popups for select using (true);
+create policy "popups auth all"    on public.popups for all to authenticated using (true) with check (true);
+insert into public.popups (type, title, active, show_desktop, show_mobile, pages, sort)
+select 'trial', 'Trial Offer Popup', true, true, false, 'all', 0
+where not exists (select 1 from public.popups where type = 'trial');
