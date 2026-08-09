@@ -240,6 +240,21 @@
         '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>' +
         '<a class="m-call" href="tel:+14125123261">Call</a>';
       document.body.appendChild(bar);
+
+      // Keep the bar pinned to the TRUE visible area on iOS/Android — env(safe-area-inset-bottom)
+      // only accounts for the home-indicator notch, not the browser's own address/toolbar, which
+      // shrinks and grows the visual viewport as the person scrolls. Track it directly so the bar
+      // never ends up tucked underneath that browser chrome.
+      if (window.visualViewport) {
+        var pinBar = function () {
+          var vv = window.visualViewport;
+          var hidden = window.innerHeight - vv.height - vv.offsetTop;
+          bar.style.bottom = Math.max(0, Math.round(hidden)) + "px";
+        };
+        window.visualViewport.addEventListener("resize", pinBar);
+        window.visualViewport.addEventListener("scroll", pinBar);
+        pinBar();
+      }
     }
 
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
