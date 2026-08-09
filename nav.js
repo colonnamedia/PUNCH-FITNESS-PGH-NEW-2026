@@ -237,8 +237,7 @@
       var bar = document.createElement("div");
       bar.className = "mcta";
       bar.innerHTML =
-        '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>' +
-        '<a class="m-call" href="tel:+14125123261">Call</a>';
+        '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>';
       document.body.appendChild(bar);
 
       // Keep the bar pinned to the TRUE visible area on iOS/Android — env(safe-area-inset-bottom)

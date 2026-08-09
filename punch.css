@@ -723,6 +723,7 @@ html.rv-on .rv.in{opacity:1;transform:none}
 .mcta .m-call{flex:0 0 auto;background:rgba(255,255,255,.1);color:#fff;padding:14px 18px;border:1px solid rgba(255,255,255,.2)}
 @media(max-width:1000px){.mcta{display:flex}}
 body.has-mcta{padding-bottom:0}
+.mcta{justify-content:flex-start}
 
 /* ============================================================================
    ██  REFINEMENT LAYER v2  ██  — elevated craft, applied system-wide
@@ -842,7 +843,7 @@ body.has-mcta{padding-bottom:0}
 .mcta{position:fixed;left:0;right:0;bottom:0;z-index:1200;display:none;gap:10px;padding:12px 12px calc(16px + env(safe-area-inset-bottom));
   background:rgba(12,12,13,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.08)}
 .mcta a{flex:1;text-align:center;text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:14px;border-radius:var(--r-sm);font-size:15px}
-.mcta .m-red{background:var(--red);color:#fff;flex:2;box-shadow:var(--sh-red)}
+.mcta .m-red{background:var(--red);color:#fff;flex:0 1 auto;width:64%;max-width:320px;box-shadow:var(--sh-red)}
 .mcta .m-call{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
 @media(max-width:1000px){.mcta{display:flex}body{padding-bottom:88px}}
 
