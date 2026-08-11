@@ -38,6 +38,10 @@
     {
       "source": "/personal-training/thank-you",
       "destination": "/personal-training/thank-you.html"
+    },
+    {
+      "source": "/punch-ad-trials/thank-you",
+      "destination": "/punch-ad-trials/thank-you.html"
     }
   ]
 }
