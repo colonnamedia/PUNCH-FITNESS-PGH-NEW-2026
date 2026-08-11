@@ -33,5 +33,11 @@
       "destination": "/blog-events",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/personal-training/thank-you",
+      "destination": "/personal-training-thank-you.html"
+    }
   ]
 }

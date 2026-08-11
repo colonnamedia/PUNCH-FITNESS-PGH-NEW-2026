@@ -25,6 +25,7 @@ services:
       - { type: rewrite, source: /free-trial, destination: /free-trial.html }
       - { type: rewrite, source: /membership-options, destination: /membership-options.html }
       - { type: rewrite, source: /personal-training, destination: /personal-training.html }
+      - { type: rewrite, source: /personal-training/thank-you, destination: /personal-training-thank-you.html }
       - { type: rewrite, source: /senior-fitness-and-boxing-pittsburgh, destination: /senior-fitness-and-boxing-pittsburgh.html }
       - { type: rewrite, source: /youth-boxing-camp, destination: /youth-boxing-camp.html }
       - { type: rewrite, source: /superare, destination: /superare.html }
