@@ -10,8 +10,8 @@
   var header =
   '<header class="pn" id="pnHeader"><div class="pn-bar">' +
     '<a class="pn-logo" href="/" aria-label="Punch Boxing and Fitness home">' +
-      '<img id="pnLogoImg" src="/assets/logo/punch-logo.png" alt="Punch Boxing &amp; Fitness" '+
-      'onerror="this.onerror=null;this.src=\'https://images.squarespace-cdn.com/content/v1/6509de1678b4160657354615/d0e600c1-b98a-4d8e-becb-3d99ab28b51e/PUNCH+LOGO+1+NEW+2026+WEBSITE.png?format=300w\'">' +
+      '<img id="pnLogoImg" src="/assets/punch-logo-1.png" alt="Punch Boxing &amp; Fitness" '+
+      'onerror="this.onerror=null;this.style.display=\'none\';var t=this.parentNode;t.querySelector(\'b\').style.display=\'block\';t.querySelector(\'span\').style.display=\'block\'">' +
       '<b>PUNCH</b><span>Boxing &amp; Fitness</span></a>' +
     '<nav class="pn-nav">' +
       '<div class="pn-item"><button class="pn-link">Workouts<span class="pn-caret">&#9660;</span></button>' +
