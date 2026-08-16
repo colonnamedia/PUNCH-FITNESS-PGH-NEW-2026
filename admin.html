@@ -137,7 +137,7 @@
     <!-- ============ BRANDING ============ -->
     <section class="sect" id="sect-branding">
       <div class="top">
-        <div><h1 class="mono-h">Branding</h1><div class="sub">Change the header logo and the browser favicon. Updates everywhere on the site.</div></div>
+        <div><h1 class="mono-h">Branding</h1><div class="sub">Change the header logo, favicon, and default share image. Logo &amp; favicon update live; the share image applies on your next site deploy.</div></div>
         <button class="btn btn-red" id="brandSave">Save Branding</button>
       </div>
       <div class="panel"><div class="panel-b" style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
@@ -155,6 +155,14 @@
             <div class="drop-ic">&#11088;</div><div class="drop-t">Click or drag a favicon</div>
             <div class="drop-s">Square image — 512&times;512 PNG or an SVG</div>
             <input type="file" id="favFile" accept="image/*,.svg" class="hide" />
+          </div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <label>Default Share Image (link preview)</label>
+          <div class="drop" id="ogDrop" style="background:#111">
+            <div class="drop-ic">&#128247;</div><div class="drop-t">Click or drag a share image</div>
+            <div class="drop-s">Shown when your site link is shared (Facebook, iMessage, texts, etc.). Wide 1200&times;630 JPG/PNG works best. Applies on your next site deploy.</div>
+            <input type="file" id="ogFile" accept="image/*" class="hide" />
           </div>
         </div>
       </div>
@@ -785,30 +793,34 @@ async function delPopup(id,p){
 }
 
 
-/* ---------------- BRANDING (logo + favicon) ---------------- */
-let logoFileSel=null, favFileSel=null, logoCur=null, favCur=null;
+/* ---------------- BRANDING (logo + favicon + share image) ---------------- */
+let logoFileSel=null, favFileSel=null, ogFileSel=null, logoCur=null, favCur=null, ogCur=null;
 wireDrop && wireDrop("logoDrop","logoFile", f=>{ logoFileSel=f; paint($("logoDrop"), URL.createObjectURL(f)); });
 wireDrop && wireDrop("favDrop","favFile", f=>{ favFileSel=f; paint($("favDrop"), URL.createObjectURL(f)); });
+wireDrop && wireDrop("ogDrop","ogFile", f=>{ ogFileSel=f; paint($("ogDrop"), URL.createObjectURL(f)); });
 async function loadBrandingAdmin(){
   try{
-    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url"]);
+    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url"]);
     (data||[]).forEach(r=>{
       if(r.key==="logo_url" && r.value && r.value.url){ logoCur=r.value.url; paint($("logoDrop"), r.value.url); }
       if(r.key==="favicon_url" && r.value && r.value.url){ favCur=r.value.url; paint($("favDrop"), r.value.url); }
+      if(r.key==="og_image_url" && r.value && r.value.url){ ogCur=r.value.url; paint($("ogDrop"), r.value.url); }
     });
   }catch(e){ $("brandErr").textContent=e.message||""; }
 }
 $("brandSave") && ($("brandSave").onclick = async ()=>{
   $("brandSave").disabled=true; $("brandSave").textContent="Saving…"; $("brandErr").textContent="";
   try{
-    let logo_url=logoCur, favicon_url=favCur;
+    let logo_url=logoCur, favicon_url=favCur, og_image_url=ogCur;
     if(logoFileSel) logo_url=await upload(logoFileSel);
     if(favFileSel)  favicon_url=await upload(favFileSel);
+    if(ogFileSel)   og_image_url=await upload(ogFileSel);
     const rows=[];
     if(logo_url) rows.push({ key:"logo_url", value:{ url:logo_url } });
     if(favicon_url) rows.push({ key:"favicon_url", value:{ url:favicon_url } });
+    if(og_image_url) rows.push({ key:"og_image_url", value:{ url:og_image_url } });
     if(rows.length){ const { error } = await sb.from("site_settings").upsert(rows, { onConflict:"key" }); if(error) throw error; }
-    toast("Branding saved — refresh the site to see it");
+    toast("Branding saved. Logo & favicon are live; the share image applies on your next deploy.");
   }catch(e){ $("brandErr").textContent=e.message||"Save failed."; }
   finally{ $("brandSave").disabled=false; $("brandSave").textContent="Save Branding"; }
 });
