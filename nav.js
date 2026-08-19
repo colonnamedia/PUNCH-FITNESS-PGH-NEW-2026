@@ -285,6 +285,22 @@
         if (e.key === "Escape") { removeWrap(); document.removeEventListener("keydown", esc); }
       });
 
+      // Auto-close when the WIDGET'S OWN close button is used. We can't see
+      // inside the iframe (cross-origin) to know it was clicked, but when it
+      // is, the widget hides/removes its own content and the box collapses
+      // down to near-nothing — leaving just our little X floating alone on
+      // the backdrop. Watch for that specific shrink and auto-remove
+      // everything together, so people never have to close it twice.
+      if (window.ResizeObserver) {
+        var everSized = false;
+        var ro = new ResizeObserver(function (entries) {
+          var r = entries[0].contentRect;
+          if (r.height > 40 && r.width > 40) { everSized = true; return; }
+          if (everSized) { removeWrap(); ro.disconnect(); }
+        });
+        ro.observe(host);
+      }
+
       return true;
     }
 
