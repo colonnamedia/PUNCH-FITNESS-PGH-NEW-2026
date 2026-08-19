@@ -196,32 +196,20 @@
   }
 
   // ---- Form / embed popup (admin-managed, /admin > Popups > Form/Embed) ----
-  // Renders whatever embed code the admin pasted in (iframe, script, etc.)
-  // inside the same popup shell as the other popups. innerHTML alone does
-  // NOT execute <script> tags, so they're manually re-created below —
-  // otherwise most third-party embeds (which rely on a script tag) would
-  // silently fail to render anything.
-  function buildFormPopup(p) {
-    var key = "punch_popup_seen_" + p.id;
-    try { if (localStorage.getItem(key)) return false; } catch (e) {}
-    if (/\/admin/.test(location.pathname)) return false;
-    if (!p.embed_html) return false;
+  // Two kinds of "embed code" behave very differently:
+  //  1) A self-managing widget (contains a <script> tag — e.g. PushPress Grow,
+  //     GoHighLevel, etc.) that builds and controls ITS OWN popup UI. These
+  //     must be dropped directly into the page, NOT nested inside another
+  //     popup box — nesting them breaks their own show/hide logic (the
+  //     classic symptom: a blurred backdrop with nothing visible inside it,
+  //     because the widget's own iframe never gets revealed).
+  //  2) A plain iframe/HTML snippet with no script — this has no popup
+  //     behavior of its own, so it's wrapped in the site's own popup shell
+  //     (dark backdrop + close button) same as the trial/custom popups.
+  var FORM_POP_DELAY = 3000;
 
-    var ov = document.createElement("div");
-    ov.className = "ps-ov";
-    var safeTitle = (p.title || "Get started").replace(/"/g, "&quot;");
-    ov.innerHTML =
-      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
-        '<button class="ps-x" id="psxForm" aria-label="Close">&times;</button>' +
-        '<div class="ps-body" id="psFormMount" style="padding:0;max-height:88vh"></div>' +
-      '</div>';
-    document.body.appendChild(ov);
-
-    // Inject the embed HTML, then walk it for <script> tags and re-create
-    // each one as a real script element so it actually executes.
-    var mount = document.getElementById("psFormMount");
-    mount.innerHTML = p.embed_html;
-    mount.querySelectorAll("script").forEach(function (old) {
+  function runScripts(root) {
+    root.querySelectorAll("script").forEach(function (old) {
       var s = document.createElement("script");
       for (var i = 0; i < old.attributes.length; i++) {
         s.setAttribute(old.attributes[i].name, old.attributes[i].value);
@@ -229,17 +217,53 @@
       s.text = old.textContent || "";
       old.parentNode.replaceChild(s, old);
     });
+  }
 
-    function close() {
-      ov.classList.remove("on");
+  function buildFormPopup(p) {
+    var key = "punch_popup_seen_" + p.id;
+    try { if (localStorage.getItem(key)) return false; } catch (e) {}
+    if (/\/admin/.test(location.pathname)) return false;
+    if (!p.embed_html) return false;
+
+    var isSelfManaged = /<script[\s>]/i.test(p.embed_html);
+
+    setTimeout(function () {
       try { localStorage.setItem(key, "1"); } catch (e) {}
-      setTimeout(function () { ov.remove(); }, 300);
-    }
-    document.getElementById("psxForm").addEventListener("click", close);
-    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
 
-    setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+      if (isSelfManaged) {
+        // Drop straight into the page — the widget builds its own popup UI.
+        var host = document.createElement("div");
+        host.id = "psFormHost-" + p.id;
+        document.body.appendChild(host);
+        host.innerHTML = p.embed_html;
+        runScripts(host);
+        return;
+      }
+
+      // Plain iframe/HTML with no self-popup behavior — use our own shell.
+      var ov = document.createElement("div");
+      ov.className = "ps-ov";
+      var safeTitle = (p.title || "Get started").replace(/"/g, "&quot;");
+      ov.innerHTML =
+        '<div class="ps-box" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
+          '<button class="ps-x" id="psxForm" aria-label="Close">&times;</button>' +
+          '<div class="ps-body" id="psFormMount" style="padding:0;max-height:88vh"></div>' +
+        '</div>';
+      document.body.appendChild(ov);
+      var mount = document.getElementById("psFormMount");
+      mount.innerHTML = p.embed_html;
+      runScripts(mount);
+
+      function close() {
+        ov.classList.remove("on");
+        setTimeout(function () { ov.remove(); }, 300);
+      }
+      document.getElementById("psxForm").addEventListener("click", close);
+      ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+      setTimeout(function () { ov.classList.add("on"); }, 10);
+    }, FORM_POP_DELAY);
+
     return true;
   }
 
