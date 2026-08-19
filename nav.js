@@ -227,20 +227,27 @@
 
     var isSelfManaged = /<script[\s>]/i.test(p.embed_html);
 
+    if (isSelfManaged) {
+      // The widget owns its own trigger timing and popup display (e.g.
+      // PushPress Grow's "Show after N seconds" / Popup layout, configured
+      // in its own dashboard). Drop it straight onto the page immediately —
+      // do NOT add our own delay on top, or it double-delays and the widget
+      // no longer sees normal page-load timing, which can affect how it
+      // renders. The widget's own configured trigger handles the wait.
+      try { localStorage.setItem(key, "1"); } catch (e) {}
+      var host = document.createElement("div");
+      host.id = "psFormHost-" + p.id;
+      document.body.appendChild(host);
+      host.innerHTML = p.embed_html;
+      runScripts(host);
+      return true;
+    }
+
+    // Plain iframe/HTML with no self-popup behavior — use our own shell,
+    // with our own delay since nothing else is controlling the timing.
     setTimeout(function () {
       try { localStorage.setItem(key, "1"); } catch (e) {}
 
-      if (isSelfManaged) {
-        // Drop straight into the page — the widget builds its own popup UI.
-        var host = document.createElement("div");
-        host.id = "psFormHost-" + p.id;
-        document.body.appendChild(host);
-        host.innerHTML = p.embed_html;
-        runScripts(host);
-        return;
-      }
-
-      // Plain iframe/HTML with no self-popup behavior — use our own shell.
       var ov = document.createElement("div");
       ov.className = "ps-ov";
       var safeTitle = (p.title || "Get started").replace(/"/g, "&quot;");
