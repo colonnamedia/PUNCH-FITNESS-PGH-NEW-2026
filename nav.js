@@ -245,38 +245,45 @@
         "justify-content:center;padding:20px;background:rgba(0,0,0,.72);" +
         "backdrop-filter:blur(3px)";
 
+      // "frame" hugs the box's actual rendered size (a flex child shrinks to
+      // its content) so the close button below can pin to its corner —
+      // regardless of the widget's own internal size/scroll.
+      var frame = document.createElement("div");
+      frame.style.cssText = "position:relative;max-width:100%;max-height:100%";
+
       var host = document.createElement("div");
       host.id = "psFormHost-" + p.id;
       host.style.cssText =
-        "width:100%;max-width:min(94vw,640px);max-height:min(90vh,720px);" +
+        "width:min(94vw,640px);max-height:min(90vh,720px);" +
         "overflow:auto;border-radius:14px;background:#fff;" +
         "box-shadow:0 30px 90px rgba(0,0,0,.5)";
 
-      wrap.appendChild(host);
+      // A close button we fully control — do NOT rely on detecting the
+      // widget's own close action (it may hide/remove its own content in
+      // ways we can't reliably observe, leaving our backdrop stuck on
+      // screen). This guarantees a way out no matter what the widget does.
+      var xbtn = document.createElement("button");
+      xbtn.setAttribute("aria-label", "Close");
+      xbtn.innerHTML = "&times;";
+      xbtn.style.cssText =
+        "position:absolute;top:-14px;right:-14px;width:34px;height:34px;" +
+        "border-radius:50%;background:#111;color:#fff;border:2px solid #fff;" +
+        "font-size:20px;line-height:30px;text-align:center;padding:0;" +
+        "cursor:pointer;z-index:2001;box-shadow:0 4px 14px rgba(0,0,0,.35)";
+
+      frame.appendChild(host);
+      frame.appendChild(xbtn);
+      wrap.appendChild(frame);
       document.body.appendChild(wrap);
       host.innerHTML = p.embed_html;
       runScripts(host);
 
       function removeWrap() { if (wrap.parentNode) wrap.remove(); }
+      xbtn.addEventListener("click", removeWrap);
       wrap.addEventListener("click", function (e) { if (e.target === wrap) removeWrap(); });
       document.addEventListener("keydown", function esc(e) {
         if (e.key === "Escape") { removeWrap(); document.removeEventListener("keydown", esc); }
       });
-
-      // Widgets like this one toggle their own iframe's inline "display"
-      // style to show/hide themselves rather than removing it outright.
-      // Watch for that so clicking the WIDGET'S OWN close button also
-      // removes our frame/backdrop — otherwise a blurred overlay could get
-      // stuck on screen after the person closes the form.
-      var everShown = false;
-      var mo = new MutationObserver(function () {
-        var f = host.querySelector("iframe");
-        if (!f) return;
-        var hidden = f.style.display === "none" || f.style.visibility === "hidden";
-        if (!hidden) everShown = true;
-        else if (everShown) { removeWrap(); mo.disconnect(); }
-      });
-      mo.observe(host, { attributes: true, attributeFilter: ["style"], subtree: true });
 
       return true;
     }
