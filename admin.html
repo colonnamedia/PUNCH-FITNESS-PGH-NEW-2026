@@ -365,6 +365,14 @@
       This is the built-in trial/special popup (the two-plan offer card). You can&#39;t delete it or change its image &mdash; just turn it on/off and choose where it shows.
     </div>
 
+    <div id="pTypeRow" class="hide">
+      <label for="pNewType">Popup Type</label>
+      <select id="pNewType">
+        <option value="custom">Image (flyer / promo graphic)</option>
+        <option value="form">Form / Embed (lead-capture form, e.g. a pasted embed code)</option>
+      </select>
+    </div>
+
     <div id="pCustomFields">
       <label>Popup Image (PNG or JPG)</label>
       <div class="drop" id="pdrop">
@@ -377,6 +385,14 @@
       <input id="pLabel" placeholder="August Flash Sale" />
       <label for="pLink">Link (optional &mdash; where it goes when clicked)</label>
       <input id="pLink" placeholder="https://punchpgh.pushpress.com/landing/plans/..." />
+    </div>
+
+    <div id="pFormFields" class="hide">
+      <label for="pFormLabel">Internal Label (for your reference only)</label>
+      <input id="pFormLabel" placeholder="F45-style lead form" />
+      <label for="pEmbed">Embed Code</label>
+      <textarea id="pEmbed" rows="8" placeholder="Paste the embed/iframe/script code here" style="width:100%;font-family:monospace;font-size:12.5px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--fg)"></textarea>
+      <div class="drop-s" style="margin-top:6px">Paste whatever embed code you're given (iframe, script, etc.). It renders inside the same popup window as your other popups. Where the submit button sends people is controlled by that embed itself, not by this site.</div>
     </div>
 
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
@@ -720,13 +736,14 @@ async function loadPopups(){
   if(!items.length){ list.innerHTML = `<div class="empty"><b>No popups yet</b>Click &ldquo;Add Popup&rdquo; to create one.</div>`; return; }
   list.innerHTML = items.map(p=>{
     const isTrial = p.type==="trial";
-    const label = isTrial ? "Trial Offer Popup (built-in)" : (p.title || "Untitled popup");
+    const isForm = p.type==="form";
+    const label = isTrial ? "Trial Offer Popup (built-in)" : (p.title || (isForm ? "Untitled form popup" : "Untitled popup"));
     const where = p.pages==="landing" ? "Landing page only" : "All pages";
     const devices = (p.show_desktop!==false?"Desktop":"") + (p.show_desktop!==false && p.show_mobile!==false ? " + " : "") + (p.show_mobile!==false?"Mobile":"") || "Hidden everywhere";
     return `
     <div class="prow">
-      ${(!isTrial && p.image_url)?`<img class="pthumb" src="${esc(p.image_url)}" alt="">`:`<div class="pthumb">${isTrial?"&#127942;":"&#128196;"}</div>`}
-      <div class="pname">${esc(label)}${p.active?"":`<span class="badge-off">Off</span>`}<small>${esc(where)} &middot; ${esc(devices)}</small></div>
+      ${(!isTrial && !isForm && p.image_url)?`<img class="pthumb" src="${esc(p.image_url)}" alt="">`:`<div class="pthumb">${isTrial?"&#127942;":(isForm?"&#128203;":"&#128196;")}</div>`}
+      <div class="pname">${esc(label)}${isForm?` <span class="badge-off" style="background:var(--ink2);color:var(--mut2)">Form</span>`:""}${p.active?"":`<span class="badge-off">Off</span>`}<small>${esc(where)} &middot; ${esc(devices)}</small></div>
       <div class="pcat"></div><div class="pprice"></div>
       <div class="pacts">
         <button class="icon-btn" data-pedit="${p.id}">&#9998;</button>
@@ -744,9 +761,14 @@ function openPopup(p){
   pFileSel = null; pImgCur = p ? p.image_url : null;
   $("pTitle").textContent = p ? (pEditType==="trial" ? "Edit Trial Popup" : "Edit Popup") : "Add Popup";
   $("pTrialNote").classList.toggle("hide", pEditType!=="trial");
-  $("pCustomFields").classList.toggle("hide", pEditType==="trial");
+  $("pTypeRow").classList.toggle("hide", !!p); // only show the type picker when ADDING a new popup
+  $("pNewType").value = pEditType==="form" ? "form" : "custom";
+  $("pCustomFields").classList.toggle("hide", pEditType==="trial" || pEditType==="form");
+  $("pFormFields").classList.toggle("hide", pEditType!=="form");
   $("pLabel").value = p ? (p.title||"") : "";
+  $("pFormLabel").value = p ? (p.title||"") : "";
   $("pLink").value = p ? (p.link_url||"") : "";
+  $("pEmbed").value = p ? (p.embed_html||"") : "";
   $("pPopActive").checked = p ? !!p.active : true;
   $("pDesktop").checked = p ? p.show_desktop!==false : true;
   $("pMobile").checked = p ? p.show_mobile!==false : true;
@@ -755,22 +777,31 @@ function openPopup(p){
   paint($("pdrop"), p?p.image_url:null);
   $("pmodal").classList.remove("hide");
 }
+$("pNewType") && ($("pNewType").onchange = ()=>{
+  pEditType = $("pNewType").value; // only relevant while adding (row hidden when editing)
+  $("pCustomFields").classList.toggle("hide", pEditType==="form");
+  $("pFormFields").classList.toggle("hide", pEditType!=="form");
+});
 
 $("pSave") && ($("pSave").onclick = async ()=>{
   $("pSave").disabled=true; $("pSave").textContent="Saving…"; $("pErr").textContent="";
   try{
-    let image_url = pImgCur;
-    if(pEditType!=="trial"){
-      if(pFileSel) image_url = await upload(pFileSel);
-      if(!image_url){ $("pErr").textContent="Add an image for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
-    }
     const row = {
       active: $("pPopActive").checked,
       show_desktop: $("pDesktop").checked,
       show_mobile: $("pMobile").checked,
       pages: $("pPages").value
     };
-    if(pEditType!=="trial"){
+    if(pEditType==="form"){
+      const embed_html = $("pEmbed").value.trim();
+      if(!embed_html){ $("pErr").textContent="Paste an embed code for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
+      row.title = $("pFormLabel").value.trim() || null;
+      row.embed_html = embed_html;
+      row.type = "form";
+    } else if(pEditType!=="trial"){
+      let image_url = pImgCur;
+      if(pFileSel) image_url = await upload(pFileSel);
+      if(!image_url){ $("pErr").textContent="Add an image for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
       row.title = $("pLabel").value.trim() || null;
       row.link_url = $("pLink").value.trim() || null;
       row.image_url = image_url;
@@ -778,7 +809,7 @@ $("pSave") && ($("pSave").onclick = async ()=>{
     }
     const { error } = pEditId
       ? await sb.from("popups").update(row).eq("id",pEditId)
-      : await sb.from("popups").insert(Object.assign({type:"custom"}, row));
+      : await sb.from("popups").insert(Object.assign({type:pEditType}, row));
     if(error) throw error;
     $("pmodal").classList.add("hide"); toast(pEditId?"Popup updated":"Popup added"); loadPopups();
   }catch(err){ $("pErr").textContent = err.message || "Something went wrong."; }
