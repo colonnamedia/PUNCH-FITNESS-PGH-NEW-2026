@@ -225,7 +225,14 @@
     if (/\/admin/.test(location.pathname)) return false;
     if (!p.embed_html) return false;
 
-    var isSelfManaged = /<script[\s>]/i.test(p.embed_html);
+    // Detect a true self-managed popup (e.g. PushPress Grow with Embed
+    // Layout Type = "Popup", which builds and controls its own overlay UI).
+    // We specifically look for that layout marker rather than just "has a
+    // <script> tag" — Inline/Sticky/Slide-in embeds from the same platforms
+    // also ship a script tag, but don't manage their own popup lifecycle,
+    // so they're safe (and more reliable) to show in OUR OWN popup shell
+    // below instead of trying to coordinate with a black-box widget.
+    var isSelfManaged = /data-layout[^>]*POPUP/i.test(p.embed_html);
 
     if (isSelfManaged) {
       // The widget owns its own trigger timing and popup display (e.g.
