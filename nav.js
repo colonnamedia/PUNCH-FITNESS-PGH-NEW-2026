@@ -195,6 +195,54 @@
     return true;
   }
 
+  // ---- Form / embed popup (admin-managed, /admin > Popups > Form/Embed) ----
+  // Renders whatever embed code the admin pasted in (iframe, script, etc.)
+  // inside the same popup shell as the other popups. innerHTML alone does
+  // NOT execute <script> tags, so they're manually re-created below —
+  // otherwise most third-party embeds (which rely on a script tag) would
+  // silently fail to render anything.
+  function buildFormPopup(p) {
+    var key = "punch_popup_seen_" + p.id;
+    try { if (localStorage.getItem(key)) return false; } catch (e) {}
+    if (/\/admin/.test(location.pathname)) return false;
+    if (!p.embed_html) return false;
+
+    var ov = document.createElement("div");
+    ov.className = "ps-ov";
+    var safeTitle = (p.title || "Get started").replace(/"/g, "&quot;");
+    ov.innerHTML =
+      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
+        '<button class="ps-x" id="psxForm" aria-label="Close">&times;</button>' +
+        '<div class="ps-body" id="psFormMount" style="padding:0;max-height:88vh"></div>' +
+      '</div>';
+    document.body.appendChild(ov);
+
+    // Inject the embed HTML, then walk it for <script> tags and re-create
+    // each one as a real script element so it actually executes.
+    var mount = document.getElementById("psFormMount");
+    mount.innerHTML = p.embed_html;
+    mount.querySelectorAll("script").forEach(function (old) {
+      var s = document.createElement("script");
+      for (var i = 0; i < old.attributes.length; i++) {
+        s.setAttribute(old.attributes[i].name, old.attributes[i].value);
+      }
+      s.text = old.textContent || "";
+      old.parentNode.replaceChild(s, old);
+    });
+
+    function close() {
+      ov.classList.remove("on");
+      try { localStorage.setItem(key, "1"); } catch (e) {}
+      setTimeout(function () { ov.remove(); }, 300);
+    }
+    document.getElementById("psxForm").addEventListener("click", close);
+    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+    setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
+    return true;
+  }
+
   // ---- Popup dispatcher — reads /admin > Popups criteria, falls back to the
   // original hardcoded behavior (trial popup, desktop only) if the "popups"
   // table hasn't been migrated yet or the fetch fails. -----------------------
@@ -223,8 +271,10 @@
         }
         var trial = rows.filter(function (p) { return p.type === "trial"; })[0];
         if (trial && matches(trial) && buildPopup()) return;
+        var forms = rows.filter(function (p) { return p.type === "form" && matches(p) && p.embed_html; });
+        for (var i = 0; i < forms.length; i++) { if (buildFormPopup(forms[i])) return; }
         var customs = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; });
-        for (var i = 0; i < customs.length; i++) { if (buildCustomPopup(customs[i])) return; }
+        for (var j = 0; j < customs.length; j++) { if (buildCustomPopup(customs[j])) return; }
       })
       .catch(fallback);
   }
