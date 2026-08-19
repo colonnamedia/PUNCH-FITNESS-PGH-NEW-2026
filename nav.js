@@ -230,16 +230,54 @@
     if (isSelfManaged) {
       // The widget owns its own trigger timing and popup display (e.g.
       // PushPress Grow's "Show after N seconds" / Popup layout, configured
-      // in its own dashboard). Drop it straight onto the page immediately —
-      // do NOT add our own delay on top, or it double-delays and the widget
-      // no longer sees normal page-load timing, which can affect how it
-      // renders. The widget's own configured trigger handles the wait.
+      // in its own dashboard) — but it has no idea it's being dropped into
+      // OUR page, so it doesn't reliably center or size itself on every
+      // screen. Give it a centered, generously-sized frame from the outside
+      // WITHOUT constraining or hiding its own content (that's what broke it
+      // last time) — just position + a scroll fallback if it's still taller
+      // than the viewport.
       try { localStorage.setItem(key, "1"); } catch (e) {}
+
+      var wrap = document.createElement("div");
+      wrap.id = "psFormWrap-" + p.id;
+      wrap.style.cssText =
+        "position:fixed;inset:0;z-index:2000;display:flex;align-items:center;" +
+        "justify-content:center;padding:20px;background:rgba(0,0,0,.72);" +
+        "backdrop-filter:blur(3px)";
+
       var host = document.createElement("div");
       host.id = "psFormHost-" + p.id;
-      document.body.appendChild(host);
+      host.style.cssText =
+        "width:100%;max-width:min(94vw,640px);max-height:min(90vh,720px);" +
+        "overflow:auto;border-radius:14px;background:#fff;" +
+        "box-shadow:0 30px 90px rgba(0,0,0,.5)";
+
+      wrap.appendChild(host);
+      document.body.appendChild(wrap);
       host.innerHTML = p.embed_html;
       runScripts(host);
+
+      function removeWrap() { if (wrap.parentNode) wrap.remove(); }
+      wrap.addEventListener("click", function (e) { if (e.target === wrap) removeWrap(); });
+      document.addEventListener("keydown", function esc(e) {
+        if (e.key === "Escape") { removeWrap(); document.removeEventListener("keydown", esc); }
+      });
+
+      // Widgets like this one toggle their own iframe's inline "display"
+      // style to show/hide themselves rather than removing it outright.
+      // Watch for that so clicking the WIDGET'S OWN close button also
+      // removes our frame/backdrop — otherwise a blurred overlay could get
+      // stuck on screen after the person closes the form.
+      var everShown = false;
+      var mo = new MutationObserver(function () {
+        var f = host.querySelector("iframe");
+        if (!f) return;
+        var hidden = f.style.display === "none" || f.style.visibility === "hidden";
+        if (!hidden) everShown = true;
+        else if (everShown) { removeWrap(); mo.disconnect(); }
+      });
+      mo.observe(host, { attributes: true, attributeFilter: ["style"], subtree: true });
+
       return true;
     }
 
