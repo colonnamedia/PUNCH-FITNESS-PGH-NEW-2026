@@ -1,53 +1,17 @@
-/* hero-slider.js — runs on EVERY page. Reads /admin > Hero Slides
-   (hero_slides table, filtered by the current page's key, ordered by
-   sort_order):
-     - 0 rows  -> does nothing; that page's existing static hero plays
+/* hero-slider.js — homepage-only. Reads /admin > Hero Slides
+   (hero_slides table, ordered by sort_order):
+     - 0 rows  -> does nothing; the existing static hero in index.html plays
                   exactly as coded, untouched (safest possible fallback).
-     - 1 row   -> swaps in that single slide as a BARE element matching the
-                  page's own proven hero structure exactly (same tag, same
-                  class) — no new wrapper, no new CSS surface, so it inherits
-                  whatever styling already correctly works on that page.
-     - 2+ rows -> stacks multiple elements sharing the SAME class the page's
-                  hero already uses (ph-video / pth-video / plain video on
-                  home) PLUS a shared .hero-cf-slide crossfade class, so
-                  sizing/position/mobile-behavior is identical to the proven
-                  single-hero case, with only opacity crossfading added.
-   Any failure (no config for this page, fetch error, timeout, load error)
-   leaves that page's original static hero exactly as-is. */
+     - 1 row   -> swaps in that single slide as a BARE <video>/<img> matching
+                  the homepage hero's own structure — no wrapper, no new CSS
+                  surface, so it inherits whatever already correctly works.
+     - 2+ rows -> auto-advancing crossfade with dot indicators.
+   Any failure (no config, fetch error, timeout, load error) leaves the
+   original static hero exactly as-is — this can never break the hero. */
 (function () {
-  var PAGE_MAP = {
-    "/": "home", "/index": "home", "/index.html": "home",
-    "/free-trial": "free-trial",
-    "/punch-ad-trials": "punch-ad-trials",
-    "/schedule": "schedule",
-    "/classes": "classes",
-    "/senior-fitness-and-boxing-pittsburgh": "senior",
-    "/youth-boxing-camp": "youth",
-    "/personal-training": "personal-training",
-    "/about": "about",
-    "/contact": "contact",
-    "/trainers": "trainers"
-  };
-  var path = location.pathname.replace(/\/$/, "") || "/";
-  var pageKey = PAGE_MAP[path];
-  if (!pageKey) return; // no hero-slider support configured for this page
-
-  // Locate this page's existing hero element + the class it needs to keep
-  // (so it inherits that page's own proven sizing/position/mobile rules).
-  var original, reuseClass;
-  if (pageKey === "home") {
-    var vhero = document.querySelector(".vhero");
-    original = vhero && vhero.querySelector(":scope > video");
-    reuseClass = null; // home's base video has no special class to preserve
-  } else if (pageKey === "punch-ad-trials") {
-    original = document.querySelector(".pth-wrap video.pth-video, .pth-wrap img.pth-video");
-    reuseClass = "pth-video";
-  } else {
-    original = document.querySelector(".ph-wrap video.ph-video, .ph-wrap img.ph-video");
-    reuseClass = "ph-video";
-  }
-  if (!original || !original.parentNode) return;
-  var container = original.parentNode;
+  var section = document.querySelector(".vhero");
+  var original = section && section.querySelector(":scope > video");
+  if (!section || !original) return;
 
   var CFG = window.PUNCH_CONFIG || {};
   if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
@@ -66,8 +30,7 @@
       el.src = row.url;
       el.alt = row.alt_text || "";
     }
-    if (reuseClass) el.classList.add(reuseClass);
-    if (extraClass) el.className = (el.className ? el.className + " " : "") + extraClass;
+    if (extraClass) el.className = extraClass;
     return el;
   }
 
@@ -75,23 +38,19 @@
     try {
       var mod = await import("https://esm.sh/@supabase/supabase-js@2");
       var sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-      var res = await sb.from("hero_slides").select("*").eq("page", pageKey).order("sort_order", { ascending: true });
+      var res = await sb.from("hero_slides").select("*").order("sort_order", { ascending: true });
       var rows = (!res.error && res.data) ? res.data.filter(function (r) { return r && r.url; }) : [];
-      if (!rows.length) return; // nothing configured for this page — leave default alone
+      if (!rows.length) return; // nothing configured — leave the static default alone
 
       var els;
       if (rows.length === 1) {
-        // Bare element, no wrapper, no crossfade class — identical in shape
-        // to the page's original hero, so it inherits that page's already-
-        // proven CSS untouched. This is deliberately the SAME safe strategy
-        // already verified working on the homepage.
         var only = makeEl(rows[0], null);
-        if (pageKey === "home") only.style.background = "#141416";
+        only.style.background = "#141416";
         els = [only];
       } else {
         els = rows.map(function (r, i) {
           var el = makeEl(r, "hero-cf-slide" + (i === 0 ? " active" : ""));
-          container.appendChild(el);
+          section.appendChild(el);
           return el;
         });
       }
@@ -101,7 +60,7 @@
         if (rows.length === 1) {
           original.replaceWith(els[0]);
         } else {
-          original.remove(); // multi-slide elements are already appended to container above
+          original.remove();
         }
         if (els.length > 1) {
           var dots = document.createElement("div");
@@ -113,7 +72,7 @@
             dots.appendChild(b);
             return b;
           });
-          container.appendChild(dots);
+          section.appendChild(dots);
 
           var idx = 0;
           function goTo(next) {
@@ -134,11 +93,10 @@
         }
       }
 
-      // Reveal only once the FIRST slide has actually finished loading —
-      // never swap out (or leave visible over) the known-good default with
-      // something that hasn't confirmed it works. If it errors, or simply
-      // takes too long, we abandon and the original hero stays exactly as
-      // it was — this can never leave a blank/broken hero on screen.
+      // Reveal only once the first slide has ACTUALLY finished loading —
+      // never swap out the known-good default for something unconfirmed.
+      // If it errors, or just takes too long, we abandon and leave the
+      // original hero exactly as it was.
       var first = els[0];
       var settled = false;
       function succeed() { if (!settled) { settled = true; clearTimeout(giveUp); swapIn(); } }
@@ -155,6 +113,6 @@
         first.addEventListener("load", succeed, { once: true });
         first.addEventListener("error", abandon, { once: true });
       }
-    } catch (e) { /* leave the page's original static hero exactly as-is */ }
+    } catch (e) { /* leave the static default hero exactly as-is */ }
   })();
 })();

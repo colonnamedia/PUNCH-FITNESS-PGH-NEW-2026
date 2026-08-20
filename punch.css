@@ -1133,11 +1133,20 @@ img[data-slot].slot-ready,video[data-slot].slot-ready{opacity:1}
    desktop-safe) — on ph-wrap/pth-wrap pages the slide keeps its normal class
    too (ph-video/pth-video) so the page's own existing mobile stacking rules
    keep working untouched. */
-.hero-cf-slide{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;opacity:0 !important;transition:opacity 1s ease !important;z-index:1 !important}
-.hero-cf-slide.active{opacity:1 !important;z-index:2 !important}
-.hero-cf-dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px;z-index:5}
+.hero-cf-slide{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;opacity:0 !important;transition:opacity 1s ease !important;z-index:0 !important}
+.hero-cf-slide.active{opacity:1 !important}
+.hero-cf-dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px;z-index:6}
 .hero-cf-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);border:0;padding:0;cursor:pointer;transition:background .2s,transform .2s}
 .hero-cf-dot.active{background:#fff;transform:scale(1.3)}
+/* Defensive, unconditional (not mobile-only) fix: the crossfade slides above
+   are position:absolute and can otherwise paint OVER a page's hero text/CTA
+   if that content isn't itself clearly elevated on desktop. This never
+   changes layout (position:relative with no offsets doesn't move anything)
+   — it only guarantees these three content containers always win the
+   stacking order against the slides, on every page that uses them. */
+#plp .vhero-in{position:relative !important;z-index:6 !important}
+.ph-content{z-index:6 !important}
+#punch-trial-hero .pth-content{position:relative !important;z-index:6 !important}
 .pm-hero-v2{min-height:76vh !important}
 #punch-trial-hero .pth-wrap{aspect-ratio:auto !important;min-height:76vh !important}
 
