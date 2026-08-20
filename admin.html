@@ -47,6 +47,7 @@
       <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
       <a data-tab="branding"><span class="i">&#127912;</span> Branding</a>
       <a data-tab="popups"><span class="i">&#128276;</span> Popups</a>
+      <a data-tab="heroslides"><span class="i">&#127916;</span> Hero Slides</a>
       <a data-tab="security"><span class="i">&#128274;</span> Security</a>
       <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
       <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
@@ -177,6 +178,14 @@
         <button class="btn btn-red" id="addPopup">&#65291; Add Popup</button>
       </div>
       <div class="panel"><div class="panel-h"><h2>All Popups</h2></div><div id="list-popups"></div></div>
+    </section>
+
+    <section class="sect" id="sect-heroslides">
+      <div class="top">
+        <div><h1 class="mono-h">Hero Slides</h1><div class="sub">Homepage hero only. No slides &rarr; today's default hero plays as-is. One slide &rarr; that single photo/video, no carousel. Two or more &rarr; auto-rotating slider with dots, like F45's.</div></div>
+        <button class="btn btn-red" id="addHeroSlide">&#65291; Add Slide</button>
+      </div>
+      <div class="panel"><div class="panel-h"><h2>Homepage Hero</h2></div><div id="list-heroslides"></div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -411,6 +420,32 @@
   </div>
 </div>
 
+<div class="overlay hide" id="hsmodal">
+  <div class="modal">
+    <div class="modal-h"><h3>Add Hero Slide</h3><button class="x" id="hsClose">&times;</button></div>
+
+    <label for="hsType">Slide Type</label>
+    <select id="hsType">
+      <option value="video">Video</option>
+      <option value="image">Photo</option>
+    </select>
+
+    <label for="hsUrl">Media URL</label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="text" id="hsUrl" placeholder="Paste a video or image URL" style="flex:1" />
+      <button class="btn" type="button" id="hsUploadBtn">Upload</button>
+      <input type="file" id="hsFile" class="hide" accept="video/*,image/*" />
+    </div>
+    <div class="drop-s" id="hsHint" style="margin:6px 0 0">Videos up to 40MB, images up to 5MB. Bigger file? Host it (e.g. your R2 bucket) and paste the URL instead.</div>
+
+    <label for="hsAlt" style="margin-top:14px">Alt Text (photos only, for accessibility)</label>
+    <input type="text" id="hsAlt" placeholder="Describe the image" />
+
+    <button class="btn btn-red btn-block" id="hsSave" style="margin-top:16px">Save Slide</button>
+    <div class="err" id="hsErr"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script type="module">
@@ -468,6 +503,7 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     if(TAB==="terms") loadTerms();
     if(TAB==="branding") loadBrandingAdmin();
     if(TAB==="popups") loadPopups();
+    if(TAB==="heroslides") loadHeroSlides();
   });
 });
 
@@ -821,6 +857,105 @@ async function delPopup(id,p){
   const { error } = await sb.from("popups").delete().eq("id",id);
   if(error){ toast(error.message,true); return; }
   toast("Deleted"); loadPopups();
+}
+
+/* ---------------- HERO SLIDES (homepage only) ---------------- */
+$("addHeroSlide") && ($("addHeroSlide").onclick = ()=>openHeroSlide());
+$("hsClose") && ($("hsClose").onclick = ()=>$("hsmodal").classList.add("hide"));
+$("hsmodal") && $("hsmodal").addEventListener("click", e=>{ if(e.target===$("hsmodal")) $("hsmodal").classList.add("hide"); });
+
+async function loadHeroSlides(){
+  const { data, error } = await sb.from("hero_slides").select("*").order("sort_order",{ascending:true});
+  if(error){
+    $("list-heroslides").innerHTML = `<div class="empty"><b>Hero Slides aren&#39;t set up yet</b>Run <code>supabase/migration-10-hero-slides.sql</code> in the Supabase SQL Editor, then reload this page. Until then the homepage uses its existing default hero.</div>`;
+    return;
+  }
+  const items = data||[];
+  const list = $("list-heroslides");
+  if(!items.length){ list.innerHTML = `<div class="empty"><b>No slides yet</b>The homepage hero plays its current default. Click &ldquo;Add Slide&rdquo; to start building a slider &mdash; one slide replaces the default, two or more turns it into a rotating slider.</div>`; return; }
+  list.innerHTML = items.map((s,i)=>{
+    const thumb = s.media_type==="video"
+      ? `<video class="pthumb" src="${esc(s.url)}" muted></video>`
+      : `<img class="pthumb" src="${esc(s.url)}" alt="">`;
+    return `
+    <div class="prow">
+      ${thumb}
+      <div class="pname">Slide ${i+1} &mdash; ${s.media_type==="video"?"Video":"Photo"}<small>${i===0 && items.length===1 ? "Single hero, no slider" : (items.length>1 ? "Part of a "+items.length+"-slide rotation" : "")}</small></div>
+      <div class="pcat"></div><div class="pprice"></div>
+      <div class="pacts">
+        <button class="icon-btn" data-hsup="${s.id}" ${i===0?"disabled":""} title="Move earlier">&#8593;</button>
+        <button class="icon-btn" data-hsdown="${s.id}" ${i===items.length-1?"disabled":""} title="Move later">&#8595;</button>
+        <button class="icon-btn del" data-hsdel="${s.id}">&#128465;</button>
+      </div>
+    </div>`;
+  }).join("");
+  list.querySelectorAll("[data-hsup]").forEach(b=>b.onclick=()=>moveHeroSlide(items,b.dataset.hsup,-1));
+  list.querySelectorAll("[data-hsdown]").forEach(b=>b.onclick=()=>moveHeroSlide(items,b.dataset.hsdown,1));
+  list.querySelectorAll("[data-hsdel]").forEach(b=>b.onclick=()=>delHeroSlide(b.dataset.hsdel));
+}
+
+async function moveHeroSlide(items, id, dir){
+  const i = items.findIndex(x=>x.id===id);
+  const j = i+dir;
+  if(i<0 || j<0 || j>=items.length) return;
+  const a = items[i], b = items[j];
+  const { error } = await sb.from("hero_slides").upsert([
+    { id:a.id, sort_order:b.sort_order },
+    { id:b.id, sort_order:a.sort_order }
+  ]);
+  if(error){ toast(error.message,true); return; }
+  loadHeroSlides();
+}
+
+function openHeroSlide(){
+  $("hsType").value = "video";
+  $("hsUrl").value = "";
+  $("hsAlt").value = "";
+  $("hsErr").textContent = "";
+  $("hsmodal").classList.remove("hide");
+}
+
+$("hsUploadBtn") && ($("hsUploadBtn").onclick = ()=>$("hsFile").click());
+$("hsFile") && ($("hsFile").onchange = async ()=>{
+  const f = $("hsFile").files[0]; if(!f) return;
+  const isVideo = $("hsType").value==="video";
+  const limit = isVideo ? 40*1024*1024 : 5*1024*1024;
+  if(f.size>limit){ $("hsHint").textContent = "Too big — max "+(limit/1024/1024)+"MB. Paste a hosted URL (e.g. your R2 bucket) instead."; $("hsHint").style.color="#ff8a80"; return; }
+  $("hsHint").style.color="var(--mut)"; $("hsHint").textContent="Uploading…";
+  try{
+    const ext = (f.name.split(".").pop()||"bin").toLowerCase();
+    const path = "hero-"+Date.now()+"."+ext;
+    const up = await sb.storage.from("site-media").upload(path, f, { cacheControl:"3600", upsert:true });
+    if(up.error) throw up.error;
+    $("hsUrl").value = sb.storage.from("site-media").getPublicUrl(path).data.publicUrl;
+    $("hsHint").textContent = "Uploaded — click Save Slide";
+  }catch(e){ $("hsHint").style.color="#ff8a80"; $("hsHint").textContent = e.message||"Upload failed"; }
+});
+
+$("hsSave") && ($("hsSave").onclick = async ()=>{
+  const url = $("hsUrl").value.trim();
+  if(!url){ $("hsErr").textContent = "Add a media URL (upload or paste one)."; return; }
+  $("hsSave").disabled = true; $("hsSave").textContent = "Saving…"; $("hsErr").textContent = "";
+  try{
+    const { data: existing } = await sb.from("hero_slides").select("sort_order").order("sort_order",{ascending:false}).limit(1);
+    const nextSort = existing && existing.length ? existing[0].sort_order + 1 : 0;
+    const { error } = await sb.from("hero_slides").insert({
+      media_type: $("hsType").value,
+      url,
+      alt_text: $("hsAlt").value.trim() || null,
+      sort_order: nextSort
+    });
+    if(error) throw error;
+    $("hsmodal").classList.add("hide"); toast("Slide added"); loadHeroSlides();
+  }catch(e){ $("hsErr").textContent = e.message||"Save failed."; }
+  finally{ $("hsSave").disabled=false; $("hsSave").textContent="Save Slide"; }
+});
+
+async function delHeroSlide(id){
+  if(!confirm("Remove this slide? This can't be undone.")) return;
+  const { error } = await sb.from("hero_slides").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Removed"); loadHeroSlides();
 }
 
 
