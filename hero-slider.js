@@ -25,30 +25,55 @@
       var rows = (!res.error && res.data) ? res.data.filter(function (r) { return r && r.url; }) : [];
       if (!rows.length) return; // nothing configured — leave the static default alone
 
-      var wrap = document.createElement("div");
-      wrap.className = "vhero-slides";
-      var els = rows.map(function (r, i) {
-        var el;
-        if (r.media_type === "video") {
-          el = document.createElement("video");
-          el.muted = true; el.autoplay = true; el.loop = true; el.playsInline = true;
-          el.preload = "auto";
-          var src = document.createElement("source");
-          src.src = r.url; src.type = "video/mp4";
-          el.appendChild(src);
+      // For a SINGLE slide, don't introduce any new wrapper/CSS at all — just
+      // build a bare element matching the ORIGINAL hero's exact structure
+      // (same tag, same attributes) so it inherits the site's existing,
+      // proven hero styling untouched. Only 2+ slides need the dedicated
+      // .vhero-slides crossfade wrapper.
+      var wrap = null, els;
+      if (rows.length === 1) {
+        var only;
+        if (rows[0].media_type === "video") {
+          only = document.createElement("video");
+          only.autoplay = true; only.muted = true; only.loop = true; only.playsInline = true;
+          only.preload = "auto";
+          only.style.background = "#141416";
+          var src0 = document.createElement("source");
+          src0.src = rows[0].url; src0.type = "video/mp4";
+          only.appendChild(src0);
         } else {
-          el = document.createElement("img");
-          el.src = r.url;
-          el.alt = r.alt_text || "";
+          only = document.createElement("img");
+          only.src = rows[0].url;
+          only.alt = rows[0].alt_text || "";
+          only.style.width = "100%"; only.style.height = "58vh"; only.style.objectFit = "cover"; only.style.display = "block";
         }
-        el.className = "vhero-slide" + (i === 0 ? " active" : "");
-        wrap.appendChild(el);
-        return el;
-      });
+        els = [only];
+      } else {
+        wrap = document.createElement("div");
+        wrap.className = "vhero-slides";
+        els = rows.map(function (r, i) {
+          var el;
+          if (r.media_type === "video") {
+            el = document.createElement("video");
+            el.muted = true; el.autoplay = true; el.loop = true; el.playsInline = true;
+            el.preload = "auto";
+            var src = document.createElement("source");
+            src.src = r.url; src.type = "video/mp4";
+            el.appendChild(src);
+          } else {
+            el = document.createElement("img");
+            el.src = r.url;
+            el.alt = r.alt_text || "";
+          }
+          el.className = "vhero-slide" + (i === 0 ? " active" : "");
+          wrap.appendChild(el);
+          return el;
+        });
+      }
 
       function swapIn() {
-        if (!original.parentNode) return; // already swapped (safety fired after real load, or vice versa)
-        original.replaceWith(wrap);
+        if (!original.parentNode) return;
+        original.replaceWith(wrap || els[0]);
         if (els.length > 1) {
           var dots = document.createElement("div");
           dots.className = "vhero-dots";
