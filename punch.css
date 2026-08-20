@@ -434,6 +434,12 @@ html,body{margin:0;padding:0;background:#fff}
 .pn-drawer a,.pn-drawer summary{color:#1a1a1a;border-bottom:1px solid #eee;font-size:20px}
 .pn-drawer details a{color:#666}
 .pn-drawer .pn-dcta{color:#fff!important}
+.pn-menu .pn-sub-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;padding:10px 12px 4px}
+.pn-menu .pn-sub-a{padding-left:24px!important}
+.pn-menu .pn-menu-div{height:1px;background:#eee;margin:6px 8px}
+.pn-drawer .pn-sub-h{font-family:'Barlow',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#999;padding:10px 0 2px 14px}
+.pn-drawer .pn-sub-a{padding-left:28px!important}
+.pn-drawer .pn-menu-div{height:1px;background:#eee;margin:4px 0}
 @media(max-width:1100px){.pn-link{font-size:17px;padding:12px 11px}.pn-bar{gap:14px}}
 @media(max-width:1000px){.pn-bar{height:78px}.pn-logo img{height:46px}}
 

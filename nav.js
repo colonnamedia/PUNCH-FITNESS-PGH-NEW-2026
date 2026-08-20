@@ -16,9 +16,11 @@
     '<nav class="pn-nav">' +
       '<div class="pn-item"><button class="pn-link">Workouts<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
-          '<a href="/classes">Group Fitness</a>' +
-          '<a href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-          '<a href="/youth-boxing-camp">Youth Boxing</a>' +
+          '<div class="pn-sub-h">Classes</div>' +
+          '<a class="pn-sub-a" href="/classes">Group Fitness</a>' +
+          '<a class="pn-sub-a" href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
+          '<a class="pn-sub-a" href="/youth-boxing-camp">Youth Boxing</a>' +
+          '<div class="pn-menu-div"></div>' +
           '<a href="/personal-training">Personal Training</a>' +
           '<a href="/trainers">Meet the Trainers</a></div></div>' +
       '<a class="pn-link" href="/schedule">Schedule</a>' +
@@ -35,9 +37,11 @@
   '</div>' +
   '<div class="pn-drawer" id="pnDrawer">' +
     '<details><summary>Workouts</summary>' +
-      '<a href="/classes">Group Fitness</a>' +
-      '<a href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-      '<a href="/youth-boxing-camp">Youth Boxing</a>' +
+      '<div class="pn-sub-h">Classes</div>' +
+      '<a class="pn-sub-a" href="/classes">Group Fitness</a>' +
+      '<a class="pn-sub-a" href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
+      '<a class="pn-sub-a" href="/youth-boxing-camp">Youth Boxing</a>' +
+      '<div class="pn-menu-div"></div>' +
       '<a href="/personal-training">Personal Training</a></details>' +
     '<a href="/schedule">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +

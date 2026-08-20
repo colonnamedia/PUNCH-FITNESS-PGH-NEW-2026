@@ -80,17 +80,23 @@
         }
       }
 
-      // Reveal only once the first slide has real content ready — same
-      // no-flash approach as media.js — with a safety timeout in case the
-      // "ready" event never fires.
+      // Reveal only once the first slide has ACTUALLY finished loading — never
+      // swap out the known-good default for something that hasn't confirmed
+      // it works. If it errors, or simply takes too long (large video files
+      // can take a while), we abandon and leave the original hero exactly as
+      // it was — this can never leave a blank/broken hero on screen.
       var first = els[0];
-      var safety = setTimeout(swapIn, 3000);
+      var settled = false;
+      function succeed() { if (!settled) { settled = true; clearTimeout(giveUp); swapIn(); } }
+      function abandon() { settled = true; clearTimeout(giveUp); }
+      var giveUp = setTimeout(abandon, 15000);
       if (first.tagName === "VIDEO") {
-        first.addEventListener("loadeddata", function () { clearTimeout(safety); swapIn(); }, { once: true });
-        try { first.load(); } catch (e) {}
+        first.addEventListener("loadeddata", succeed, { once: true });
+        first.addEventListener("error", abandon, { once: true });
+        try { first.load(); } catch (e) { abandon(); }
       } else {
-        first.addEventListener("load", function () { clearTimeout(safety); swapIn(); }, { once: true });
-        first.addEventListener("error", function () { clearTimeout(safety); swapIn(); }, { once: true });
+        first.addEventListener("load", succeed, { once: true });
+        first.addEventListener("error", abandon, { once: true });
       }
     } catch (e) { /* leave the static default hero exactly as-is */ }
   })();
