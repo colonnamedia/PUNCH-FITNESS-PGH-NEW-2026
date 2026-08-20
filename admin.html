@@ -182,10 +182,26 @@
 
     <section class="sect" id="sect-heroslides">
       <div class="top">
-        <div><h1 class="mono-h">Hero Slides</h1><div class="sub">Homepage hero only. No slides &rarr; today's default hero plays as-is. One slide &rarr; that single photo/video, no carousel. Two or more &rarr; auto-rotating slider with dots, like F45's.</div></div>
+        <div><h1 class="mono-h">Hero Slides</h1><div class="sub">No slides on a page &rarr; that page's default hero plays as-is. One slide &rarr; that single photo/video, no carousel. Two or more &rarr; auto-rotating slider with dots, like F45's.</div></div>
         <button class="btn btn-red" id="addHeroSlide">&#65291; Add Slide</button>
       </div>
-      <div class="panel"><div class="panel-h"><h2>Homepage Hero</h2></div><div id="list-heroslides"></div></div>
+      <div style="margin:0 0 16px">
+        <label for="hsPageFilter">Page</label>
+        <select id="hsPageFilter">
+          <option value="home">Homepage</option>
+          <option value="free-trial">Free Trial</option>
+          <option value="punch-ad-trials">Punch Ad Trials</option>
+          <option value="schedule">Schedule</option>
+          <option value="classes">Classes</option>
+          <option value="senior">Senior &amp; Parkinson's</option>
+          <option value="youth">Youth Boxing</option>
+          <option value="personal-training">Personal Training</option>
+          <option value="about">About</option>
+          <option value="contact">Contact</option>
+          <option value="trainers">Trainers</option>
+        </select>
+      </div>
+      <div class="panel"><div class="panel-h"><h2>Hero Slides for This Page</h2></div><div id="list-heroslides"></div></div>
     </section>
 
     <!-- ============ SECURITY ============ -->
@@ -424,7 +440,22 @@
   <div class="modal">
     <div class="modal-h"><h3>Add Hero Slide</h3><button class="x" id="hsClose">&times;</button></div>
 
-    <label for="hsType">Slide Type</label>
+    <label for="hsPage">Page</label>
+    <select id="hsPage">
+      <option value="home">Homepage</option>
+      <option value="free-trial">Free Trial</option>
+      <option value="punch-ad-trials">Punch Ad Trials</option>
+      <option value="schedule">Schedule</option>
+      <option value="classes">Classes</option>
+      <option value="senior">Senior &amp; Parkinson's</option>
+      <option value="youth">Youth Boxing</option>
+      <option value="personal-training">Personal Training</option>
+      <option value="about">About</option>
+      <option value="contact">Contact</option>
+      <option value="trainers">Trainers</option>
+    </select>
+
+    <label for="hsType" style="margin-top:14px">Slide Type</label>
     <select id="hsType">
       <option value="video">Video</option>
       <option value="image">Photo</option>
@@ -859,20 +890,22 @@ async function delPopup(id,p){
   toast("Deleted"); loadPopups();
 }
 
-/* ---------------- HERO SLIDES (homepage only) ---------------- */
+/* ---------------- HERO SLIDES (per page) ---------------- */
 $("addHeroSlide") && ($("addHeroSlide").onclick = ()=>openHeroSlide());
 $("hsClose") && ($("hsClose").onclick = ()=>$("hsmodal").classList.add("hide"));
 $("hsmodal") && $("hsmodal").addEventListener("click", e=>{ if(e.target===$("hsmodal")) $("hsmodal").classList.add("hide"); });
+$("hsPageFilter") && ($("hsPageFilter").onchange = ()=>loadHeroSlides());
 
 async function loadHeroSlides(){
-  const { data, error } = await sb.from("hero_slides").select("*").order("sort_order",{ascending:true});
+  const page = $("hsPageFilter") ? $("hsPageFilter").value : "home";
+  const { data, error } = await sb.from("hero_slides").select("*").eq("page",page).order("sort_order",{ascending:true});
   if(error){
-    $("list-heroslides").innerHTML = `<div class="empty"><b>Hero Slides aren&#39;t set up yet</b>Run <code>supabase/migration-10-hero-slides.sql</code> in the Supabase SQL Editor, then reload this page. Until then the homepage uses its existing default hero.</div>`;
+    $("list-heroslides").innerHTML = `<div class="empty"><b>Hero Slides aren&#39;t set up yet</b>Run <code>supabase/migration-10-hero-slides.sql</code> and <code>migration-11-hero-slides-pages.sql</code> in the Supabase SQL Editor, then reload this page.</div>`;
     return;
   }
   const items = data||[];
   const list = $("list-heroslides");
-  if(!items.length){ list.innerHTML = `<div class="empty"><b>No slides yet</b>The homepage hero plays its current default. Click &ldquo;Add Slide&rdquo; to start building a slider &mdash; one slide replaces the default, two or more turns it into a rotating slider.</div>`; return; }
+  if(!items.length){ list.innerHTML = `<div class="empty"><b>No slides yet for this page</b>That page's default hero plays as-is. Click &ldquo;Add Slide&rdquo; to start building a slider &mdash; one slide replaces the default, two or more turns it into a rotating slider.</div>`; return; }
   list.innerHTML = items.map((s,i)=>{
     const thumb = s.media_type==="video"
       ? `<video class="pthumb" src="${esc(s.url)}" muted></video>`
@@ -908,6 +941,7 @@ async function moveHeroSlide(items, id, dir){
 }
 
 function openHeroSlide(){
+  $("hsPage").value = $("hsPageFilter") ? $("hsPageFilter").value : "home";
   $("hsType").value = "video";
   $("hsUrl").value = "";
   $("hsAlt").value = "";
@@ -937,16 +971,20 @@ $("hsSave") && ($("hsSave").onclick = async ()=>{
   if(!url){ $("hsErr").textContent = "Add a media URL (upload or paste one)."; return; }
   $("hsSave").disabled = true; $("hsSave").textContent = "Saving…"; $("hsErr").textContent = "";
   try{
-    const { data: existing } = await sb.from("hero_slides").select("sort_order").order("sort_order",{ascending:false}).limit(1);
+    const page = $("hsPage").value;
+    const { data: existing } = await sb.from("hero_slides").select("sort_order").eq("page",page).order("sort_order",{ascending:false}).limit(1);
     const nextSort = existing && existing.length ? existing[0].sort_order + 1 : 0;
     const { error } = await sb.from("hero_slides").insert({
+      page,
       media_type: $("hsType").value,
       url,
       alt_text: $("hsAlt").value.trim() || null,
       sort_order: nextSort
     });
     if(error) throw error;
-    $("hsmodal").classList.add("hide"); toast("Slide added"); loadHeroSlides();
+    $("hsmodal").classList.add("hide"); toast("Slide added");
+    if($("hsPageFilter")) $("hsPageFilter").value = page;
+    loadHeroSlides();
   }catch(e){ $("hsErr").textContent = e.message||"Save failed."; }
   finally{ $("hsSave").disabled=false; $("hsSave").textContent="Save Slide"; }
 });
@@ -1030,66 +1068,42 @@ var MEDIA_SLOTS = [
     { slot:"home.strip5", label:"Strip 5", type:"image" },
     { slot:"home.combo", label:"Combo", type:"image" }
   ]},
-  { group:'Classes', items:[
-    { slot:"classes.hero", label:"Hero", type:"image" },
-    { slot:"classes.fight", label:"Fight", type:"image" },
-    { slot:"classes.train", label:"Train", type:"image" },
-    { slot:"classes.sweat", label:"Sweat", type:"image" },
-    { slot:"classes.youth", label:"Youth", type:"image" },
-    { slot:"classes.senior", label:"Senior", type:"image" }
-  ]},
-  { group:'Free Trial', items:[
-    { slot:"free-trial.hero_video", label:"Hero Video", type:"video" },
-    { slot:"freetrial.photo1", label:"Photo 1", type:"image" },
-    { slot:"freetrial.photo2", label:"Photo 2", type:"image" },
-    { slot:"freetrial.photo3", label:"Photo 3", type:"image" }
-  ]},
-  { group:'Ad Landing (punch-ad-trials)', items:[
-    { slot:"ad-trials.hero_video", label:"Hero Video", type:"video" },
-    { slot:"adtrials.photo1", label:"Photo 1", type:"image" },
-    { slot:"adtrials.photo2", label:"Photo 2", type:"image" },
-    { slot:"adtrials.photo3", label:"Photo 3", type:"image" }
-  ]},
-  { group:'Memberships', items:[
-    { slot:"membership.hero_video", label:"Hero Video", type:"video" }
-  ]},
-  { group:"Senior & Parkinson's", items:[
-    { slot:"senior.hero_video", label:"Hero Video", type:"video" }
-  ]},
-  { group:'Youth Boxing', items:[
-    { slot:"youth.hero", label:"Hero", type:"image" },
-    { slot:"youth.secondary", label:"Secondary", type:"image" }
-  ]},
-  { group:'Personal Training', items:[
-    { slot:"pt.hero", label:"Hero", type:"image" },
-    { slot:"pt.photo1", label:"Photo 1", type:"image" }
+  // Mirrors the "Workouts" nav dropdown: Classes, Senior & Parkinson's,
+  // Youth Boxing, Personal Training, Trainers — merged into one group so
+  // they visually sit together the way they do in the site's own menu.
+  { group:'Classes (Workouts menu)', items:[
+    { slot:"classes.fight", label:"Classes — Fight", type:"image" },
+    { slot:"classes.train", label:"Classes — Train", type:"image" },
+    { slot:"classes.sweat", label:"Classes — Sweat", type:"image" },
+    { slot:"classes.youth", label:"Classes — Youth", type:"image" },
+    { slot:"classes.senior", label:"Classes — Senior", type:"image" },
+    { slot:"youth.secondary", label:"Youth Boxing — Secondary", type:"image" },
+    { slot:"pt.photo1", label:"Personal Training — Photo 1", type:"image" }
   ]},
   { group:'Schedule', items:[
-    { slot:"schedule.hero", label:"Hero", type:"image" },
     { slot:"schedule.photo1", label:"Photo 1", type:"image" },
     { slot:"schedule.photo2", label:"Photo 2", type:"image" },
     { slot:"schedule.photo3", label:"Photo 3", type:"image" }
   ]},
-  { group:'Apparel', items:[
-    { slot:"apparel.hero", label:"Hero", type:"image" }
+  // Mirrors the "Pricing & Plans" nav dropdown: Membership Options, Free
+  // Trial Class, Boxing Gloves (Equipment), Apparel.
+  { group:'Pricing & Plans menu', items:[
+    { slot:"membership.hero_video", label:"Memberships — Hero Video", type:"video" },
+    { slot:"freetrial.photo1", label:"Free Trial — Photo 1", type:"image" },
+    { slot:"freetrial.photo2", label:"Free Trial — Photo 2", type:"image" },
+    { slot:"freetrial.photo3", label:"Free Trial — Photo 3", type:"image" },
+    { slot:"equipment.photo1", label:"Boxing Gloves — Photo 1", type:"image" },
+    { slot:"equipment.photo2", label:"Boxing Gloves — Photo 2", type:"image" },
+    { slot:"equipment.photo3", label:"Boxing Gloves — Photo 3", type:"image" },
+    { slot:"equipment.photo4", label:"Boxing Gloves — Photo 4", type:"image" },
+    { slot:"apparel.hero", label:"Apparel — Hero", type:"image" }
   ]},
-  { group:'Superare', items:[
-    { slot:'superare.hero', label:'Hero Image', type:'image' }
-  ]},
-  { group:'Equipment / Boxing Gloves', items:[
-    { slot:"equipment.photo1", label:"Photo 1", type:"image" },
-    { slot:"equipment.photo2", label:"Photo 2", type:"image" },
-    { slot:"equipment.photo3", label:"Photo 3", type:"image" },
-    { slot:"equipment.photo4", label:"Photo 4", type:"image" }
-  ]},
-  { group:'Trainers', items:[
-    { slot:"trainers.hero", label:"Hero", type:"image" }
-  ]},
-  { group:'About', items:[
-    { slot:"about.hero", label:"Hero", type:"image" }
-  ]},
-  { group:'Contact', items:[
-    { slot:"contact.hero", label:"Hero", type:"image" }
+  // Not in the header nav — ad landing page + footer-only pages.
+  { group:'More Pages (ad + footer)', items:[
+    { slot:"adtrials.photo1", label:"Ad Landing — Photo 1", type:"image" },
+    { slot:"adtrials.photo2", label:"Ad Landing — Photo 2", type:"image" },
+    { slot:"adtrials.photo3", label:"Ad Landing — Photo 3", type:"image" },
+    { slot:'superare.hero', label:'Superare — Hero Image', type:'image' }
   ]},
 ];
 function posToXY(pos){

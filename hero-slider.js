@@ -1,90 +1,119 @@
-/* hero-slider.js — homepage-only. Supersedes the old single-slot
-   "home.hero_video" media.js wiring for this element specifically.
-   Reads /admin > Hero Slides (hero_slides table, ordered by sort_order):
-     - 0 rows  -> does nothing; the existing static hero in index.html plays
+/* hero-slider.js — runs on EVERY page. Reads /admin > Hero Slides
+   (hero_slides table, filtered by the current page's key, ordered by
+   sort_order):
+     - 0 rows  -> does nothing; that page's existing static hero plays
                   exactly as coded, untouched (safest possible fallback).
-     - 1 row   -> swaps in that single slide (no carousel chrome), same
-                  "hidden until ready" technique as media.js so the default
-                  is never visibly flashed before the real one loads.
-     - 2+ rows -> builds an auto-advancing slider with dot indicators.
-   Any failure (no config, fetch error, timeout) leaves the original static
-   hero exactly as-is — this can never break the homepage hero. */
+     - 1 row   -> swaps in that single slide as a BARE element matching the
+                  page's own proven hero structure exactly (same tag, same
+                  class) — no new wrapper, no new CSS surface, so it inherits
+                  whatever styling already correctly works on that page.
+     - 2+ rows -> stacks multiple elements sharing the SAME class the page's
+                  hero already uses (ph-video / pth-video / plain video on
+                  home) PLUS a shared .hero-cf-slide crossfade class, so
+                  sizing/position/mobile-behavior is identical to the proven
+                  single-hero case, with only opacity crossfading added.
+   Any failure (no config for this page, fetch error, timeout, load error)
+   leaves that page's original static hero exactly as-is. */
 (function () {
-  var section = document.querySelector(".vhero");
-  var original = section && section.querySelector(":scope > video");
-  if (!section || !original) return;
+  var PAGE_MAP = {
+    "/": "home", "/index": "home", "/index.html": "home",
+    "/free-trial": "free-trial",
+    "/punch-ad-trials": "punch-ad-trials",
+    "/schedule": "schedule",
+    "/classes": "classes",
+    "/senior-fitness-and-boxing-pittsburgh": "senior",
+    "/youth-boxing-camp": "youth",
+    "/personal-training": "personal-training",
+    "/about": "about",
+    "/contact": "contact",
+    "/trainers": "trainers"
+  };
+  var path = location.pathname.replace(/\/$/, "") || "/";
+  var pageKey = PAGE_MAP[path];
+  if (!pageKey) return; // no hero-slider support configured for this page
+
+  // Locate this page's existing hero element + the class it needs to keep
+  // (so it inherits that page's own proven sizing/position/mobile rules).
+  var original, reuseClass;
+  if (pageKey === "home") {
+    var vhero = document.querySelector(".vhero");
+    original = vhero && vhero.querySelector(":scope > video");
+    reuseClass = null; // home's base video has no special class to preserve
+  } else if (pageKey === "punch-ad-trials") {
+    original = document.querySelector(".pth-wrap video.pth-video, .pth-wrap img.pth-video");
+    reuseClass = "pth-video";
+  } else {
+    original = document.querySelector(".ph-wrap video.ph-video, .ph-wrap img.ph-video");
+    reuseClass = "ph-video";
+  }
+  if (!original || !original.parentNode) return;
+  var container = original.parentNode;
 
   var CFG = window.PUNCH_CONFIG || {};
   if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
+
+  function makeEl(row, extraClass) {
+    var el;
+    if (row.media_type === "video") {
+      el = document.createElement("video");
+      el.autoplay = true; el.muted = true; el.loop = true; el.playsInline = true;
+      el.preload = "auto";
+      var src = document.createElement("source");
+      src.src = row.url; src.type = "video/mp4";
+      el.appendChild(src);
+    } else {
+      el = document.createElement("img");
+      el.src = row.url;
+      el.alt = row.alt_text || "";
+    }
+    if (reuseClass) el.classList.add(reuseClass);
+    if (extraClass) el.className = (el.className ? el.className + " " : "") + extraClass;
+    return el;
+  }
 
   (async function () {
     try {
       var mod = await import("https://esm.sh/@supabase/supabase-js@2");
       var sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-      var res = await sb.from("hero_slides").select("*").order("sort_order", { ascending: true });
+      var res = await sb.from("hero_slides").select("*").eq("page", pageKey).order("sort_order", { ascending: true });
       var rows = (!res.error && res.data) ? res.data.filter(function (r) { return r && r.url; }) : [];
-      if (!rows.length) return; // nothing configured — leave the static default alone
+      if (!rows.length) return; // nothing configured for this page — leave default alone
 
-      // For a SINGLE slide, don't introduce any new wrapper/CSS at all — just
-      // build a bare element matching the ORIGINAL hero's exact structure
-      // (same tag, same attributes) so it inherits the site's existing,
-      // proven hero styling untouched. Only 2+ slides need the dedicated
-      // .vhero-slides crossfade wrapper.
-      var wrap = null, els;
+      var els;
       if (rows.length === 1) {
-        var only;
-        if (rows[0].media_type === "video") {
-          only = document.createElement("video");
-          only.autoplay = true; only.muted = true; only.loop = true; only.playsInline = true;
-          only.preload = "auto";
-          only.style.background = "#141416";
-          var src0 = document.createElement("source");
-          src0.src = rows[0].url; src0.type = "video/mp4";
-          only.appendChild(src0);
-        } else {
-          only = document.createElement("img");
-          only.src = rows[0].url;
-          only.alt = rows[0].alt_text || "";
-          only.style.width = "100%"; only.style.height = "58vh"; only.style.objectFit = "cover"; only.style.display = "block";
-        }
+        // Bare element, no wrapper, no crossfade class — identical in shape
+        // to the page's original hero, so it inherits that page's already-
+        // proven CSS untouched. This is deliberately the SAME safe strategy
+        // already verified working on the homepage.
+        var only = makeEl(rows[0], null);
+        if (pageKey === "home") only.style.background = "#141416";
         els = [only];
       } else {
-        wrap = document.createElement("div");
-        wrap.className = "vhero-slides";
         els = rows.map(function (r, i) {
-          var el;
-          if (r.media_type === "video") {
-            el = document.createElement("video");
-            el.muted = true; el.autoplay = true; el.loop = true; el.playsInline = true;
-            el.preload = "auto";
-            var src = document.createElement("source");
-            src.src = r.url; src.type = "video/mp4";
-            el.appendChild(src);
-          } else {
-            el = document.createElement("img");
-            el.src = r.url;
-            el.alt = r.alt_text || "";
-          }
-          el.className = "vhero-slide" + (i === 0 ? " active" : "");
-          wrap.appendChild(el);
+          var el = makeEl(r, "hero-cf-slide" + (i === 0 ? " active" : ""));
+          container.appendChild(el);
           return el;
         });
       }
 
       function swapIn() {
         if (!original.parentNode) return;
-        original.replaceWith(wrap || els[0]);
+        if (rows.length === 1) {
+          original.replaceWith(els[0]);
+        } else {
+          original.remove(); // multi-slide elements are already appended to container above
+        }
         if (els.length > 1) {
           var dots = document.createElement("div");
-          dots.className = "vhero-dots";
+          dots.className = "hero-cf-dots";
           var dotEls = els.map(function (_, i) {
             var b = document.createElement("button");
-            b.className = "vhero-dot" + (i === 0 ? " active" : "");
+            b.className = "hero-cf-dot" + (i === 0 ? " active" : "");
             b.setAttribute("aria-label", "Show slide " + (i + 1));
             dots.appendChild(b);
             return b;
           });
-          section.appendChild(dots);
+          container.appendChild(dots);
 
           var idx = 0;
           function goTo(next) {
@@ -105,15 +134,18 @@
         }
       }
 
-      // Reveal only once the first slide has ACTUALLY finished loading — never
-      // swap out the known-good default for something that hasn't confirmed
-      // it works. If it errors, or simply takes too long (large video files
-      // can take a while), we abandon and leave the original hero exactly as
+      // Reveal only once the FIRST slide has actually finished loading —
+      // never swap out (or leave visible over) the known-good default with
+      // something that hasn't confirmed it works. If it errors, or simply
+      // takes too long, we abandon and the original hero stays exactly as
       // it was — this can never leave a blank/broken hero on screen.
       var first = els[0];
       var settled = false;
       function succeed() { if (!settled) { settled = true; clearTimeout(giveUp); swapIn(); } }
-      function abandon() { settled = true; clearTimeout(giveUp); }
+      function abandon() {
+        settled = true; clearTimeout(giveUp);
+        if (rows.length > 1) els.forEach(function (e) { if (e.parentNode) e.remove(); });
+      }
       var giveUp = setTimeout(abandon, 15000);
       if (first.tagName === "VIDEO") {
         first.addEventListener("loadeddata", succeed, { once: true });
@@ -123,6 +155,6 @@
         first.addEventListener("load", succeed, { once: true });
         first.addEventListener("error", abandon, { once: true });
       }
-    } catch (e) { /* leave the static default hero exactly as-is */ }
+    } catch (e) { /* leave the page's original static hero exactly as-is */ }
   })();
 })();

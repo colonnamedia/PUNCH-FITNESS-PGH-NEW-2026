@@ -1126,13 +1126,18 @@ img[data-slot].slot-ready,video[data-slot].slot-ready{opacity:1}
 
 /* ---------- unified hero height across all pages (desktop) ---------- */
 .ph-wrap{min-height:76vh !important}
-#plp .vhero{min-height:76vh !important}
-#plp .vhero-slides{position:relative !important;width:100% !important;height:58vh !important;background:#141416 !important;overflow:hidden !important}
-#plp .vhero-slides video,#plp .vhero-slides img{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;opacity:0 !important;transition:opacity 1s ease !important}
-#plp .vhero-slides video.active,#plp .vhero-slides img.active{opacity:1 !important}
-#plp .vhero-dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px;z-index:5}
-#plp .vhero-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);border:0;padding:0;cursor:pointer;transition:background .2s,transform .2s}
-#plp .vhero-dot.active{background:#fff;transform:scale(1.3)}
+#plp .vhero{min-height:76vh !important;position:relative !important}
+/* Shared crossfade-slide system — used on EVERY page's hero (home, and every
+   ph-wrap/pth-wrap page). Reuses the exact same position:absolute;inset:0
+   pattern that .ph-video/.pth-video already use unconditionally (proven,
+   desktop-safe) — on ph-wrap/pth-wrap pages the slide keeps its normal class
+   too (ph-video/pth-video) so the page's own existing mobile stacking rules
+   keep working untouched. */
+.hero-cf-slide{position:absolute !important;inset:0 !important;width:100% !important;height:100% !important;object-fit:cover !important;opacity:0 !important;transition:opacity 1s ease !important;z-index:1 !important}
+.hero-cf-slide.active{opacity:1 !important;z-index:2 !important}
+.hero-cf-dots{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px;z-index:5}
+.hero-cf-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.4);border:0;padding:0;cursor:pointer;transition:background .2s,transform .2s}
+.hero-cf-dot.active{background:#fff;transform:scale(1.3)}
 .pm-hero-v2{min-height:76vh !important}
 #punch-trial-hero .pth-wrap{aspect-ratio:auto !important;min-height:76vh !important}
 
