@@ -878,23 +878,9 @@ $("termsSave") && ($("termsSave").onclick = async ()=>{
 /* ---------------- PAGES / MEDIA ---------------- */
 var MEDIA_SLOTS = [
   { group:'Homepage', items:[
-    { slot:"home.hero_video", label:"Hero Video", type:"video" },
-    { slot:"home.prog_adult", label:"Prog Adult", type:"image" },
-    { slot:"home.prog_youth", label:"Prog Youth", type:"image" },
-    { slot:"home.prog_senior", label:"Prog Senior", type:"image" },
-    { slot:"home.prog_pt", label:"Prog Pt", type:"image" },
-    { slot:"home.hero_stmt", label:"Hero Stmt", type:"image" },
-    { slot:"home.exp1", label:"Exp 1", type:"image" },
-    { slot:"home.exp2", label:"Exp 2", type:"image" },
-    { slot:"home.fight", label:"Fight", type:"image" },
-    { slot:"home.train", label:"Train", type:"image" },
-    { slot:"home.sweat", label:"Sweat", type:"image" },
-    { slot:"home.strip1", label:"Strip 1", type:"image" },
-    { slot:"home.strip2", label:"Strip 2", type:"image" },
-    { slot:"home.strip3", label:"Strip 3", type:"image" },
-    { slot:"home.strip4", label:"Strip 4", type:"image" },
-    { slot:"home.strip5", label:"Strip 5", type:"image" },
-    { slot:"home.combo", label:"Combo", type:"image" }
+    // Every image/video here now lives inline with its section below
+    // (Hero, Program Cards, Fight/Train/Sweat, etc.) — not listed here to
+    // avoid showing the same upload control twice.
   ]},
   // Order below mirrors the "Workouts" nav dropdown (Classes, Senior &
   // Parkinson's, Youth Boxing, Personal Training, Trainers) — each is its
@@ -1102,70 +1088,110 @@ async function loadPages(){
 // Order here is the ORIGINAL document order and matches HOME_SECTION_ORDER
 // in build.cjs exactly — keep them in sync if a section is ever added/removed.
 var HOME_SECTIONS = [
-  { key:"hero", label:"Hero (always first)", fixed:true, fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]},
-  { key:"cta", label:"Two Big CTAs", fields:[] },
-  { key:"stats", label:"Stats Bar", fields:[] },
-  { key:"reels", label:"Hear It From Them (Reels)", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]},
-  { key:"schedule", label:"Class Schedule", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]},
-  { key:"punch-experience", label:"The Punch Experience", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"combined-header", label:"Community Intro", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]},
-  { key:"programs", label:"Program Cards (4)", fields:[] },
-  { key:"hero-stmt", label:"\u201CLose Weight\u201D Statement", fields:[] },
-  { key:"big-quote", label:"Big Quote / Testimonial", fields:[
-    { key:"text", label:"Quote", type:"textarea" },
-    { key:"attribution", label:"Attribution", type:"text" }
-  ]},
-  { key:"exp-reverse", label:"\u201CNot a Quick Fix\u201D", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"journey", label:"Your Timeline", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"different", label:"What Makes Us Different", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"fight-train-sweat", label:"Fight. Train. Sweat.", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]},
-  { key:"combo", label:"Boxing + Strength Combo", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"reviews", label:"What People Say (Reviews)", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"lead-form", label:"Claim Your Free Class", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" }
-  ]},
-  { key:"final", label:"Final CTA", fields:[
-    { key:"eyebrow", label:"Eyebrow", type:"text" },
-    { key:"title", label:"Title", type:"text" },
-    { key:"subtext", label:"Subtext", type:"textarea" }
-  ]}
+  { key:"hero", label:"Hero", fixed:true,
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H1", type:"text", current:"Your Cardio Just Got A Whole Lot More Fun." },
+      { key:"eyebrow", label:"Eyebrow (small line above headline)", tagLabel:"Label", type:"text", current:"South Hills Pittsburgh · Boxing + Strength" },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Meet your new treadmill. Our punching bags are our cardio. No fighting. No experience needed. Just a full-body workout that makes you feel amazing." }
+    ],
+    imageSlots:["home.hero_video"] },
+  { key:"cta", label:"Two CTAs — Free Class + 7-Day Starter Pack", fields:[],
+    readOnly:"Card 1: \u201CFirst Workout \u2014 Free.\u201D  Card 2: \u201C7-Day Starter Pack \u2014 $59.99.\u201D Full pricing-card details (bullets, buttons) aren\u2019t editable here yet \u2014 this section is reorder-only for now." },
+  { key:"stats", label:"Stats Bar", fields:[],
+    readOnly:"800+ Calories Per Class \u00B7 3 Class Types \u00B7 45\u201355 min Per Session \u00B7 200+ Active Members \u00B7 4.9 \u2605 Google Rating. Not editable here yet \u2014 reorder-only for now." },
+  { key:"reels", label:"Hear It From Them (video reels)",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Hear It From Them." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Stories." },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Real Punch members in their own words." }
+    ] },
+  { key:"schedule", label:"Class Schedule",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Class Schedule. Book Your First Class." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"See It For Yourself" },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Browse the live schedule below and reserve your spot \u2014 your first workout is on us." }
+    ],
+    readOnly:"Live schedule embed: punchpgh.pushpress.com/landing/calendar (day view). Not editable here \u2014 change it in PushPress." },
+  { key:"punch-experience", label:"The Punch Experience",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"A Workout You'll Actually Look Forward To." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Experience" }
+    ],
+    imageSlots:["home.exp1"] },
+  { key:"combined-header", label:"Community Intro",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"A Life-Changing Fitness Community for Everyone." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"South Hills Pittsburgh" },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"No pressure. No perfect schedule. All levels welcome \u2014 from first-timers to regulars. Find your program below." }
+    ] },
+  { key:"programs", label:"Program Cards (Adult / Youth / Senior / PT)", fields:[],
+    imageSlots:["home.prog_adult","home.prog_youth","home.prog_senior","home.prog_pt"] },
+  { key:"hero-stmt", label:"\u201CLose Weight\u201D Statement",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Lose Weight. Tone Up. Train Like a Fighter." }
+    ],
+    imageSlots:["home.hero_stmt"] },
+  { key:"big-quote", label:"Big Quote / Testimonial",
+    fields:[
+      { key:"text", label:"Quote", tagLabel:"Paragraph", type:"textarea", current:"I've tried every gym in Pittsburgh. Nothing comes close. The coaches actually care, the energy is unreal, and I've never worked this hard and had this much fun at the same time." },
+      { key:"attribution", label:"Attribution", tagLabel:"Text", type:"text", current:"Rachel K. \u00B7 Member Since 2023 \u00B7 Lost 28 lbs" }
+    ] },
+  { key:"exp-reverse", label:"\u201CNot a Quick Fix\u201D",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"This Isn't a Quick Fix. It's a Real Transformation." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Journey" }
+    ],
+    imageSlots:["home.exp2"] },
+  { key:"journey", label:"Your Timeline",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"What Happens When You Commit." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Your Timeline" }
+    ] },
+  { key:"different", label:"What Makes Us Different",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"What Makes Us Different." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Why Punch" }
+    ] },
+  { key:"fight-train-sweat", label:"Fight. Train. Sweat.",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Fight. Train. Sweat." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Workouts" },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Three distinct class formats. Every one a complete full-body workout. Mix and match \u2014 all included." }
+    ],
+    imageSlots:["home.fight","home.train","home.sweat","home.strip1","home.strip2","home.strip3","home.strip4","home.strip5"] },
+  { key:"combo", label:"Boxing + Strength Combo",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Boxing + Strength. The Combination That Changes Everything." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Secret Formula" }
+    ],
+    imageSlots:["home.combo"] },
+  { key:"reviews", label:"What People Say (Reviews)",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"What People Say After Their First Week." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Results." }
+    ] },
+  { key:"lead-form", label:"Claim Your Free Class (lead form)",
+    fields:[
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Claim Your Free Class." },
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Ready to Start?" }
+    ] },
+  { key:"final", label:"Final CTA",
+    fields:[
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"No Risk. No Commitment." },
+      { key:"title", label:"Title", tagLabel:"Title", type:"text", current:"Your First Step Costs Nothing." },
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Start with a free workout or get the 7-Day Starter Pack for $59.99. Either way, you'll know within one session why Punch members don't quit." }
+    ] }
 ];
 var HOME_ORDER_KEYS = HOME_SECTIONS.filter(function(s){ return !s.fixed; }).map(function(s){ return s.key; });
 
 async function loadHomeSections(){
   var panel = $("home-sections-panel");
   if (!panel) return;
-  var secRes, textRes;
+  var secRes, textRes, mediaRes;
   try {
     secRes = await sb.from("page_sections").select("*").eq("page","home");
     textRes = await sb.from("page_text").select("*").eq("page","home");
+    mediaRes = await sb.from("page_media").select("*");
   } catch(e) {
     panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Homepage Sections</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
     return;
@@ -1174,6 +1200,8 @@ async function loadHomeSections(){
   (secRes.data||[]).forEach(function(r){ savedOrder[r.section_key] = r.sort_order; });
   var textMap = {};
   (textRes.data||[]).forEach(function(r){ textMap[r.section_key+"."+r.field_key] = r.value; });
+  var mediaMap = {};
+  (mediaRes.data||[]).forEach(function(r){ mediaMap[r.slot] = r; });
 
   var effectiveOrder = HOME_ORDER_KEYS.map(function(key,i){
     return { key: key, order: (key in savedOrder) ? savedOrder[key] : i*100 };
@@ -1181,59 +1209,93 @@ async function loadHomeSections(){
 
   var orderedForDisplay = ["hero"].concat(effectiveOrder);
 
+  function slotLabel(slot){
+    var suffix = slot.split(".").pop() || slot;
+    return suffix.replace(/_/g, " ").replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+  }
+
   function fieldsHtml(cfg){
-    if (!cfg.fields.length) return "";
-    return '<div class="pm-controls" style="flex-direction:column;align-items:stretch;gap:10px">' +
-      cfg.fields.map(function(f){
-        var val = textMap[cfg.key+"."+f.key] || "";
-        var input = f.type==="textarea"
-          ? '<textarea data-field="'+f.key+'" rows="2" placeholder="Default text shows if left blank" style="width:100%;font-family:inherit">'+esc(val)+'</textarea>'
-          : '<input type="text" data-field="'+f.key+'" placeholder="Default text shows if left blank" value="'+esc(val)+'" style="width:100%">';
-        return '<div><label style="margin:0 0 4px">'+esc(f.label)+'</label>'+input+'</div>';
+    var out = "";
+    if (cfg.fields.length){
+      out += '<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">' +
+        cfg.fields.map(function(f){
+          var saved = textMap[cfg.key+"."+f.key];
+          var val = (saved != null) ? saved : f.current;
+          var input = f.type==="textarea"
+            ? '<textarea data-field="'+f.key+'" rows="2" style="width:100%;font-family:inherit">'+esc(val)+'</textarea>'
+            : '<input type="text" data-field="'+f.key+'" value="'+esc(val)+'" style="width:100%">';
+          return '<div><label style="margin:0 0 4px">'+esc(f.tagLabel)+' &mdash; '+esc(f.label)+'</label>'+input+'</div>';
+        }).join("") +
+        '<div style="display:flex;align-items:center;gap:10px">' +
+          '<button class="pm-save" type="button" data-savetext="'+esc(cfg.key)+'">Save Text</button>' +
+          '<span class="pm-hint" data-hint="'+esc(cfg.key)+'"></span>' +
+        '</div>' +
+      '</div>';
+    }
+    if (cfg.readOnly){
+      out += '<div class="drop-s" style="margin-top:10px;padding:10px;background:var(--ink2);border-radius:8px">'+esc(cfg.readOnly)+'</div>';
+    }
+    return out;
+  }
+
+  function imagesHtml(cfg){
+    if (!cfg.imageSlots || !cfg.imageSlots.length) return "";
+    return '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px">' +
+      cfg.imageSlots.map(function(slot){
+        var r = mediaMap[slot] || {};
+        var url = r.url || "";
+        var isVideo = slot.indexOf("video") !== -1 || slot==="home.hero_video";
+        var prev = url
+          ? (isVideo ? '<video src="'+esc(url)+'" muted></video>' : '<img src="'+esc(url)+'" alt="">')
+          : '<span class="pm-ph">No media</span>';
+        return '<div class="pm-slot" data-slot="'+esc(slot)+'" data-type="'+(isVideo?"video":"image")+'" style="flex-direction:column">' +
+          '<div class="pm-prev">'+prev+'</div>' +
+          '<div class="pm-body" style="width:100%">' +
+            '<div class="pm-name" style="font-size:12px">'+esc(slotLabel(slot))+'</div>' +
+            '<div class="pm-row"><input type="text" class="pm-url" placeholder="Paste an image or video URL" value="'+esc(url)+'"><button class="pm-up" type="button">Upload</button><input type="file" class="pm-file hide" accept="'+(isVideo?"video/*":"image/*")+'"></div>' +
+            '<div class="pm-controls"><button class="pm-save" type="button">Save</button><span class="pm-hint"></span></div>' +
+          '</div>' +
+        '</div>';
       }).join("") +
-      '<div style="display:flex;align-items:center;gap:10px">' +
-        '<button class="pm-save" type="button" data-savetext="'+esc(cfg.key)+'">Save Text</button>' +
-        '<span class="pm-hint" data-hint="'+esc(cfg.key)+'"></span>' +
-      '</div>' +
     '</div>';
   }
 
   panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
     '<div class="panel-h"><h2>Homepage Sections</h2></div>' +
-    '<div class="drop-s" style="padding:0 20px 12px">Reorder sections and edit their text below. The page layout/design itself is still changed in code, tested on a branch.</div>' +
+    '<div class="drop-s" style="padding:0 20px 12px">Top to bottom, matching the live page. Reorder with the arrows, edit text inline, manage each section\u2019s image right where it belongs. Layout/design changes still happen in code, tested on a branch.</div>' +
     orderedForDisplay.map(function(key, i){
       var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
       var isFixed = !!cfg.fixed;
       var idx = isFixed ? -1 : effectiveOrder.indexOf(key);
-      return '<div class="pm-slot" data-section-key="'+esc(key)+'">' +
-        '<div class="pm-body" style="width:100%">' +
-          '<div class="pm-name" style="display:flex;align-items:center;justify-content:space-between">' +
-            '<span>'+esc(cfg.label)+'</span>' +
-            (isFixed ? '' :
-              '<span class="pacts" style="display:flex;gap:6px">' +
-                '<button class="icon-btn" data-secup="'+esc(key)+'" '+(idx===0?"disabled":"")+' title="Move earlier">&#8593;</button>' +
-                '<button class="icon-btn" data-secdown="'+esc(key)+'" '+(idx===effectiveOrder.length-1?"disabled":"")+' title="Move later">&#8595;</button>' +
-              '</span>') +
-          '</div>' +
-          fieldsHtml(cfg) +
+      return '<div class="pm-group" data-section-key="'+esc(key)+'" style="border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between">' +
+          '<div class="pm-group-h" style="margin:0">'+(i+1)+'. '+esc(cfg.label)+(isFixed?' <span class="drop-s" style="display:inline">(always first)</span>':'')+'</div>' +
+          (isFixed ? '' :
+            '<span class="pacts" style="display:flex;gap:6px">' +
+              '<button class="icon-btn" data-secup="'+esc(key)+'" '+(idx===0?"disabled":"")+' title="Move earlier">&#8593;</button>' +
+              '<button class="icon-btn" data-secdown="'+esc(key)+'" '+(idx===effectiveOrder.length-1?"disabled":"")+' title="Move later">&#8595;</button>' +
+            '</span>') +
         '</div>' +
+        fieldsHtml(cfg) +
+        imagesHtml(cfg) +
       '</div>';
     }).join("") +
   '</div>';
 
+  // wire text saves
   panel.querySelectorAll("[data-savetext]").forEach(function(btn){
     btn.onclick = async function(){
       var key = btn.dataset.savetext;
-      var row = btn.closest(".pm-slot");
+      var row = btn.closest(".pm-group");
       var hint = row.querySelector('[data-hint="'+key+'"]');
-      hint.style.color="var(--mut)"; hint.textContent="Saving…";
+      hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
       var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
       try{
         for (var fi=0; fi<cfg.fields.length; fi++){
           var f = cfg.fields[fi];
           var el = row.querySelector('[data-field="'+f.key+'"]');
           var val = el.value.trim();
-          if (val){
+          if (val && val !== f.current){
             var up = await sb.from("page_text").upsert({ page:"home", section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
             if (up.error) throw up.error;
           } else {
@@ -1241,14 +1303,46 @@ async function loadHomeSections(){
             if (del.error) throw del.error;
           }
         }
-        hint.style.color="#8fe3a0"; hint.textContent="Saved ✓ (live after next deploy)";
+        hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713 (live after next deploy)";
         toast("Text saved");
       }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
     };
   });
 
+  // wire reorder
   panel.querySelectorAll("[data-secup]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secup, -1); }; });
   panel.querySelectorAll("[data-secdown]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secdown, 1); }; });
+
+  // wire inline image upload/save (same pattern as the main Pages slot editor)
+  panel.querySelectorAll(".pm-slot").forEach(function(row){
+    var slot = row.dataset.slot, type = row.dataset.type;
+    var fileEl = row.querySelector(".pm-file");
+    var urlEl = row.querySelector(".pm-url");
+    var hint = row.querySelector(".pm-hint");
+    row.querySelector(".pm-up").onclick = function(){ fileEl.click(); };
+    fileEl.onchange = async function(){
+      var f = fileEl.files[0]; if(!f) return;
+      var limit = type==="video"?MAX_VID:MAX_IMG;
+      if(f.size>limit){ hint.textContent = "Too big \u2014 max "+(limit/1024/1024)+"MB. Use a link for large files."; hint.style.color="#ff8a80"; return; }
+      hint.style.color="var(--mut)"; hint.textContent="Uploading\u2026";
+      try{
+        var ext=(f.name.split(".").pop()||"bin").toLowerCase();
+        var path=slot.replace(/[^a-z0-9]/gi,"_")+"-"+Date.now()+"."+ext;
+        var up=await sb.storage.from("site-media").upload(path,f,{cacheControl:"3600",upsert:true});
+        if(up.error) throw up.error;
+        var pub=sb.storage.from("site-media").getPublicUrl(path).data.publicUrl;
+        urlEl.value=pub; hint.textContent="Uploaded \u2014 click Save";
+      }catch(e){ hint.style.color="#ff8a80"; hint.textContent=e.message||"Upload failed"; }
+    };
+    row.querySelector(".pm-save").onclick = async function(){
+      var payload={ slot:slot, url:urlEl.value.trim()||null, updated_at:new Date().toISOString() };
+      hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
+      var { error } = await sb.from("page_media").upsert(payload,{onConflict:"slot"});
+      if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
+      hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713";
+      toast("Media saved");
+    };
+  });
 }
 
 async function moveHomeSection(effectiveOrder, key, dir){
@@ -1256,7 +1350,7 @@ async function moveHomeSection(effectiveOrder, key, dir){
   var j = i+dir;
   if (i<0 || j<0 || j>=effectiveOrder.length) return;
   var a = effectiveOrder[i], b = effectiveOrder[j];
-  var aOrder = i*100, bOrder = j*100; // both being written explicitly now, so absolute values are safe
+  var aOrder = i*100, bOrder = j*100;
   try{
     var r1 = await sb.from("page_sections").upsert({ page:"home", section_key:a, sort_order:bOrder }, { onConflict:"page,section_key" });
     if (r1.error) throw r1.error;
