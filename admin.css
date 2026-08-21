@@ -130,6 +130,8 @@ textarea.long{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mon
 /* ---------- Pages / Media manager ---------- */
 .pm-group{margin-bottom:26px}
 .pm-group-h{font-family:ui-monospace,monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.home-sec-card{border:1px solid var(--line);border-left:4px solid var(--red);border-radius:10px;padding:16px;margin-bottom:14px;background:var(--ink2)}
+.home-sec-title{margin:0;font-size:17px;font-weight:800;color:#fff}
 .pm-slot{display:grid;grid-template-columns:150px 1fr;gap:18px;background:var(--ink3);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
 .pm-prev{width:150px;height:100px;border-radius:8px;overflow:hidden;background:#000;display:flex;align-items:center;justify-content:center;position:relative}
 .pm-prev img,.pm-prev video{width:100%;height:100%;object-fit:cover}

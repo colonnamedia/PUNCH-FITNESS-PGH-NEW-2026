@@ -98,10 +98,29 @@ function applyTextOverrides(html, textRows){
   // tagged on an element that DOES nest the same tag inside itself, this
   // naive non-greedy match would stop at the inner closing tag instead of
   // the outer one, so keep tagged elements to simple text leaves only.
-  return html.replace(/<([a-z][a-z0-9]*)([^>]*\sdata-text="([a-z0-9.\-]+)"[^>]*)>([\s\S]*?)<\/\1>/gi,
+  return html.replace(/<([a-z][a-z0-9]*)([^>]*\sdata-text="([a-z0-9_.\-]+)"[^>]*)>([\s\S]*?)<\/\1>/gi,
     function (full, tag, attrs, key, inner){
       if (!(key in map)) return full;
       return "<" + tag + attrs + ">" + escapeHtml(map[key]) + "</" + tag + ">";
+    });
+}
+
+function applyEmbedOverrides(html, textRows){
+  if (!textRows || !textRows.length) return html;
+  const map = {};
+  textRows.forEach(r => { if (r && r.section_key && r.field_key && r.value != null) map[r.section_key + "." + r.field_key] = r.value; });
+  if (!Object.keys(map).length) return html;
+  // Matches <TAG ...data-embed="key"...src="OLD"...> and replaces just the
+  // src value — everything else about the tag (styles, title, etc.) stays
+  // exactly as coded. Only touches elements explicitly marked data-embed.
+  return html.replace(/<([a-z][a-z0-9]*)\b([^>]*\sdata-embed="([a-z0-9_.\-]+)"[^>]*)>/gi,
+    function (full, tag, attrs, key){
+      if (!(key in map) || !map[key]) return full;
+      const newSrc = map[key].replace(/&/g, "&amp;").replace(/"/g, "&quot;");
+      const newAttrs = /\ssrc="[^"]*"/i.test(attrs)
+        ? attrs.replace(/\ssrc="[^"]*"/i, ' src="' + newSrc + '"')
+        : attrs + ' src="' + newSrc + '"';
+      return "<" + tag + newAttrs + ">";
     });
 }
 
@@ -132,8 +151,13 @@ function applySectionOrder(html, sectionRows, orderedKeys){
   if (!sectionRows || !sectionRows.length) return html; // nothing configured — leave as-is
 
   const savedOrder = {};
-  orderedKeys.forEach((key, i) => { savedOrder[key] = i * 100; }); // default: keep original relative position
-  sectionRows.forEach(r => { if (r && r.section_key && (r.section_key in savedOrder) && typeof r.sort_order === "number") savedOrder[r.section_key] = r.sort_order; });
+  const archived = {};
+  orderedKeys.forEach((key, i) => { savedOrder[key] = i * 100; });
+  sectionRows.forEach(r => {
+    if (!r || !r.section_key || !(r.section_key in savedOrder)) return;
+    if (typeof r.sort_order === "number") savedOrder[r.section_key] = r.sort_order;
+    if (r.active === false) archived[r.section_key] = true;
+  });
 
   // Locate every block fresh from the ORIGINAL string (no mutation mid-scan,
   // so there's no index-shifting risk).
@@ -157,7 +181,9 @@ function applySectionOrder(html, sectionRows, orderedKeys){
   const after = html.slice(blocks[blocks.length - 1].end);
   const gap = blocks.length > 1 ? html.slice(blocks[0].end, blocks[1].start) : "\n\n";
 
-  const newOrderKeys = orderedKeys.slice().sort((a, b) => savedOrder[a] - savedOrder[b]);
+  const newOrderKeys = orderedKeys.slice()
+    .filter(k => !archived[k])
+    .sort((a, b) => savedOrder[a] - savedOrder[b]);
   const byKey = {}; blocks.forEach(b => { byKey[b.key] = b; });
   const reassembled = newOrderKeys.map(k => byKey[k].html).join(gap);
 
@@ -334,6 +360,7 @@ function blogPageHtml(p, ogFallback){
       let html = fs.readFileSync(idxPath, "utf8");
       const before = html;
       html = applyTextOverrides(html, content.text);
+      html = applyEmbedOverrides(html, content.text);
       html = applySectionOrder(html, content.sections, HOME_SECTION_ORDER);
       if (html !== before){
         fs.writeFileSync(idxPath, html);

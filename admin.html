@@ -37,6 +37,8 @@
 <div class="app hide" id="appView">
   <aside class="side">
     <div class="side-mark">PUN<span>CH</span></div>
+    <button class="btn btn-red btn-block" id="publishBtn" style="margin:0 14px 14px;width:calc(100% - 28px)">&#128640; Publish Changes</button>
+    <div class="drop-s" id="publishHint" style="margin:-8px 14px 14px;font-size:11px"></div>
     <nav class="nav">
       <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
@@ -164,6 +166,13 @@
             <div class="drop-s">Shown when your site link is shared (Facebook, iMessage, texts, etc.). Wide 1200&times;630 JPG/PNG works best. Applies on your next site deploy.</div>
             <input type="file" id="ogFile" accept="image/*" class="hide" />
           </div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <label for="deployHookUrl">Publish Button &mdash; Render Deploy Hook URL</label>
+          <input type="text" id="deployHookUrl" placeholder="https://api.render.com/deploy/srv-...." />
+          <div class="drop-s" style="margin-top:6px">Powers the &ldquo;Publish Changes&rdquo; button in the sidebar. Find this in Render &rarr; your service &rarr; Settings &rarr; Deploy Hook &rarr; copy the URL, paste it here, Save. One-time setup.</div>
+          <button class="btn" type="button" id="saveDeployHook" style="margin-top:8px">Save</button>
+          <span class="pm-hint" id="deployHookHint" style="margin-left:8px"></span>
         </div>
       </div>
       <div class="err" id="brandErr" style="margin:0 20px 18px"></div>
@@ -831,11 +840,12 @@ wireDrop && wireDrop("favDrop","favFile", f=>{ favFileSel=f; paint($("favDrop"),
 wireDrop && wireDrop("ogDrop","ogFile", f=>{ ogFileSel=f; paint($("ogDrop"), URL.createObjectURL(f)); });
 async function loadBrandingAdmin(){
   try{
-    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url"]);
+    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url","deploy_hook_url"]);
     (data||[]).forEach(r=>{
       if(r.key==="logo_url" && r.value && r.value.url){ logoCur=r.value.url; paint($("logoDrop"), r.value.url); }
       if(r.key==="favicon_url" && r.value && r.value.url){ favCur=r.value.url; paint($("favDrop"), r.value.url); }
       if(r.key==="og_image_url" && r.value && r.value.url){ ogCur=r.value.url; paint($("ogDrop"), r.value.url); }
+      if(r.key==="deploy_hook_url" && r.value && r.value.url){ $("deployHookUrl").value = r.value.url; }
     });
   }catch(e){ $("brandErr").textContent=e.message||""; }
 }
@@ -854,6 +864,54 @@ $("brandSave") && ($("brandSave").onclick = async ()=>{
     toast("Branding saved. Logo & favicon are live; the share image applies on your next deploy.");
   }catch(e){ $("brandErr").textContent=e.message||"Save failed."; }
   finally{ $("brandSave").disabled=false; $("brandSave").textContent="Save Branding"; }
+});
+
+$("saveDeployHook") && ($("saveDeployHook").onclick = async ()=>{
+  const url = $("deployHookUrl").value.trim();
+  const hint = $("deployHookHint");
+  hint.style.color="var(--mut)"; hint.textContent="Saving…";
+  try{
+    const { error } = await sb.from("site_settings").upsert({ key:"deploy_hook_url", value:{ url } }, { onConflict:"key" });
+    if(error) throw error;
+    hint.style.color="#8fe3a0"; hint.textContent="Saved ✓";
+  }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
+});
+
+/* ---------------- PUBLISH (Render Deploy Hook) ----------------
+   Note on security: the hook URL is stored in site_settings, which (like
+   logo_url/og_image_url) is readable via the public anon key — so it's not
+   a true secret once saved here. Worst case if someone finds it: they can
+   trigger extra rebuilds (wastes build minutes), not access data or change
+   content. If that's ever a concern, don't use this field — trigger deploys
+   manually from Render instead. */
+$("publishBtn") && ($("publishBtn").onclick = async ()=>{
+  const hint = $("publishHint");
+  $("publishBtn").disabled = true;
+  const original = $("publishBtn").innerHTML;
+  $("publishBtn").innerHTML = "&#128640; Publishing…";
+  hint.style.color = "var(--mut)"; hint.textContent = "";
+  try{
+    const { data, error } = await sb.from("site_settings").select("value").eq("key","deploy_hook_url").maybeSingle();
+    if (error) throw error;
+    const url = data && data.value && data.value.url;
+    if (!url){
+      hint.style.color = "#ff8a80";
+      hint.textContent = "No deploy hook set yet — add one under Branding.";
+      return;
+    }
+    // no-cors: the request is sent either way, we just can't read the
+    // response cross-origin, so we report this as a best-effort trigger
+    // rather than a confirmed success.
+    await fetch(url, { method: "POST", mode: "no-cors" });
+    hint.style.color = "#8fe3a0";
+    hint.textContent = "Publish requested — usually live in 2\u20133 min. Check Render for status.";
+  }catch(e){
+    hint.style.color = "#ff8a80";
+    hint.textContent = "Couldn't reach the hook. Trigger the deploy directly in Render instead.";
+  }finally{
+    $("publishBtn").disabled = false;
+    $("publishBtn").innerHTML = original;
+  }
 });
 
 /* ---------------- TERMS & CONDITIONS ---------------- */
@@ -1095,10 +1153,24 @@ var HOME_SECTIONS = [
       { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Meet your new treadmill. Our punching bags are our cardio. No fighting. No experience needed. Just a full-body workout that makes you feel amazing." }
     ],
     imageSlots:["home.hero_video"] },
-  { key:"cta", label:"Two CTAs — Free Class + 7-Day Starter Pack", fields:[],
-    readOnly:"Card 1: \u201CFirst Workout \u2014 Free.\u201D  Card 2: \u201C7-Day Starter Pack \u2014 $59.99.\u201D Full pricing-card details (bullets, buttons) aren\u2019t editable here yet \u2014 this section is reorder-only for now." },
-  { key:"stats", label:"Stats Bar", fields:[],
-    readOnly:"800+ Calories Per Class \u00B7 3 Class Types \u00B7 45\u201355 min Per Session \u00B7 200+ Active Members \u00B7 4.9 \u2605 Google Rating. Not editable here yet \u2014 reorder-only for now." },
+  { key:"cta", label:"Two CTAs — Free Class + 7-Day Starter Pack",
+    fields:[
+      { key:"card1_label", label:"Card 1 Label", tagLabel:"Text", type:"text", current:"First Workout" },
+      { key:"card1_price", label:"Card 1 Price", tagLabel:"Text", type:"text", current:"Free" },
+      { key:"card1_button", label:"Card 1 Button", tagLabel:"Button", type:"text", current:"Claim First Workout Free \u2192" },
+      { key:"card2_label", label:"Card 2 Label", tagLabel:"Text", type:"text", current:"7-Day Starter Pack" },
+      { key:"card2_button", label:"Card 2 Button", tagLabel:"Button", type:"text", current:"Start 7-Day Pack \u2192" }
+    ],
+    readOnly:"Card 2's price ($59.99) uses special styling and isn't editable here yet. The bullet-point perks lists aren't editable here yet either." },
+  { key:"stats", label:"Stats Bar",
+    fields:[
+      { key:"label1", label:"Stat 1 Label", tagLabel:"Text", type:"text", current:"Calories Per Class" },
+      { key:"label2", label:"Stat 2 Label", tagLabel:"Text", type:"text", current:"Class Types" },
+      { key:"label3", label:"Stat 3 Label", tagLabel:"Text", type:"text", current:"Per Session" },
+      { key:"label4", label:"Stat 4 Label", tagLabel:"Text", type:"text", current:"Active Members" },
+      { key:"label5", label:"Stat 5 Label", tagLabel:"Text", type:"text", current:"Google Rating" }
+    ],
+    readOnly:"The numbers themselves (800+, 3, 45\u201355, 200+, 4.9\u2605) use special styling and aren't editable here yet \u2014 only each label below the number is." },
   { key:"reels", label:"Hear It From Them (video reels)",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Hear It From Them." },
@@ -1111,7 +1183,7 @@ var HOME_SECTIONS = [
       { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"See It For Yourself" },
       { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Browse the live schedule below and reserve your spot \u2014 your first workout is on us." }
     ],
-    readOnly:"Live schedule embed: punchpgh.pushpress.com/landing/calendar (day view). Not editable here \u2014 change it in PushPress." },
+    embedField:{ key:"embed_url", label:"Schedule Embed URL", current:"https://punchpgh.pushpress.com/landing/calendar?view=day&type=list" } },
   { key:"punch-experience", label:"The Punch Experience",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"A Workout You'll Actually Look Forward To." },
@@ -1193,17 +1265,24 @@ async function loadHomeSections(){
     textRes = await sb.from("page_text").select("*").eq("page","home");
     mediaRes = await sb.from("page_media").select("*");
   } catch(e) {
-    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Homepage Sections</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
+    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Homepage Sections</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> and <code>migration-13-archive-sections.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
     return;
   }
-  var savedOrder = {};
-  (secRes.data||[]).forEach(function(r){ savedOrder[r.section_key] = r.sort_order; });
+  var savedOrder = {}, archivedKeys = {};
+  (secRes.data||[]).forEach(function(r){
+    savedOrder[r.section_key] = r.sort_order;
+    if (r.active === false) archivedKeys[r.section_key] = true;
+  });
   var textMap = {};
   (textRes.data||[]).forEach(function(r){ textMap[r.section_key+"."+r.field_key] = r.value; });
   var mediaMap = {};
   (mediaRes.data||[]).forEach(function(r){ mediaMap[r.slot] = r; });
 
-  var effectiveOrder = HOME_ORDER_KEYS.map(function(key,i){
+  var liveKeys = HOME_ORDER_KEYS.filter(function(k){ return !archivedKeys[k]; });
+  var archivedList = HOME_ORDER_KEYS.filter(function(k){ return archivedKeys[k]; });
+
+  var effectiveOrder = liveKeys.map(function(key){
+    var i = HOME_ORDER_KEYS.indexOf(key);
     return { key: key, order: (key in savedOrder) ? savedOrder[key] : i*100 };
   }).sort(function(a,b){ return a.order-b.order; }).map(function(x){ return x.key; });
 
@@ -1216,7 +1295,8 @@ async function loadHomeSections(){
 
   function fieldsHtml(cfg){
     var out = "";
-    if (cfg.fields.length){
+    var hasFields = cfg.fields.length || cfg.embedField;
+    if (hasFields){
       out += '<div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">' +
         cfg.fields.map(function(f){
           var saved = textMap[cfg.key+"."+f.key];
@@ -1226,6 +1306,14 @@ async function loadHomeSections(){
             : '<input type="text" data-field="'+f.key+'" value="'+esc(val)+'" style="width:100%">';
           return '<div><label style="margin:0 0 4px">'+esc(f.tagLabel)+' &mdash; '+esc(f.label)+'</label>'+input+'</div>';
         }).join("") +
+        (cfg.embedField ? (function(){
+          var ef = cfg.embedField;
+          var saved = textMap[cfg.key+"."+ef.key];
+          var val = (saved != null) ? saved : ef.current;
+          return '<div><label style="margin:0 0 4px">Embed &mdash; '+esc(ef.label)+'</label>' +
+            '<input type="text" data-field="'+ef.key+'" value="'+esc(val)+'" style="width:100%;font-family:monospace;font-size:12px">' +
+            '<div class="drop-s" style="margin-top:4px">The web address the embed loads. Changing this changes what shows on the live page.</div></div>';
+        })() : "") +
         '<div style="display:flex;align-items:center;gap:10px">' +
           '<button class="pm-save" type="button" data-savetext="'+esc(cfg.key)+'">Save Text</button>' +
           '<span class="pm-hint" data-hint="'+esc(cfg.key)+'"></span>' +
@@ -1260,29 +1348,48 @@ async function loadHomeSections(){
     '</div>';
   }
 
+  function sectionCardHtml(key, i, isFixed, idx){
+    var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+    return '<div class="pm-group home-sec-card" data-section-key="'+esc(key)+'">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between">' +
+        '<div class="home-sec-title">'+(i+1)+'. '+esc(cfg.label)+(isFixed?' <span class="drop-s" style="display:inline">(always first)</span>':'')+'</div>' +
+        (isFixed ? '' :
+          '<span class="pacts" style="display:flex;gap:6px">' +
+            '<button class="icon-btn" data-secup="'+esc(key)+'" '+(idx===0?"disabled":"")+' title="Move earlier">&#8593;</button>' +
+            '<button class="icon-btn" data-secdown="'+esc(key)+'" '+(idx===effectiveOrder.length-1?"disabled":"")+' title="Move later">&#8595;</button>' +
+            '<button class="icon-btn" data-archive="'+esc(key)+'" title="Archive (hide from site, keep everything saved)">&#128451;</button>' +
+          '</span>') +
+      '</div>' +
+      fieldsHtml(cfg) +
+      imagesHtml(cfg) +
+    '</div>';
+  }
+
+  var archivedHtml = archivedList.length
+    ? '<div class="panel" style="margin-top:16px">' +
+        '<div class="panel-h"><h2>Archived (hidden from the site)</h2></div>' +
+        '<div class="drop-s" style="padding:0 20px 12px">Nothing here is deleted \u2014 all its text, images, and order are kept exactly as they were. Restore to bring it back.</div>' +
+        archivedList.map(function(key){
+          var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+          return '<div class="pm-group" style="opacity:.65;display:flex;align-items:center;justify-content:space-between">' +
+            '<div class="home-sec-title" style="margin:0">'+esc(cfg.label)+'</div>' +
+            '<button class="icon-btn" data-restore="'+esc(key)+'" title="Restore to the site">&#8635; Restore</button>' +
+          '</div>';
+        }).join("") +
+      '</div>'
+    : "";
+
   panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
     '<div class="panel-h"><h2>Homepage Sections</h2></div>' +
-    '<div class="drop-s" style="padding:0 20px 12px">Top to bottom, matching the live page. Reorder with the arrows, edit text inline, manage each section\u2019s image right where it belongs. Layout/design changes still happen in code, tested on a branch.</div>' +
+    '<div class="drop-s" style="padding:0 20px 12px">Top to bottom, matching the live page. Reorder with the arrows, edit text inline, manage each section\u2019s image right where it belongs. Archive to hide a section without losing anything. Layout/design changes still happen in code, tested on a branch.</div>' +
     orderedForDisplay.map(function(key, i){
-      var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
-      var isFixed = !!cfg.fixed;
+      var isFixed = key==="hero";
       var idx = isFixed ? -1 : effectiveOrder.indexOf(key);
-      return '<div class="pm-group" data-section-key="'+esc(key)+'" style="border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px">' +
-        '<div style="display:flex;align-items:center;justify-content:space-between">' +
-          '<div class="pm-group-h" style="margin:0">'+(i+1)+'. '+esc(cfg.label)+(isFixed?' <span class="drop-s" style="display:inline">(always first)</span>':'')+'</div>' +
-          (isFixed ? '' :
-            '<span class="pacts" style="display:flex;gap:6px">' +
-              '<button class="icon-btn" data-secup="'+esc(key)+'" '+(idx===0?"disabled":"")+' title="Move earlier">&#8593;</button>' +
-              '<button class="icon-btn" data-secdown="'+esc(key)+'" '+(idx===effectiveOrder.length-1?"disabled":"")+' title="Move later">&#8595;</button>' +
-            '</span>') +
-        '</div>' +
-        fieldsHtml(cfg) +
-        imagesHtml(cfg) +
-      '</div>';
+      return sectionCardHtml(key, i, isFixed, idx);
     }).join("") +
-  '</div>';
+  '</div>' + archivedHtml;
 
-  // wire text saves
+  // wire text saves (fields + embedField together)
   panel.querySelectorAll("[data-savetext]").forEach(function(btn){
     btn.onclick = async function(){
       var key = btn.dataset.savetext;
@@ -1290,9 +1397,11 @@ async function loadHomeSections(){
       var hint = row.querySelector('[data-hint="'+key+'"]');
       hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
       var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+      var allFields = cfg.fields.slice();
+      if (cfg.embedField) allFields.push(cfg.embedField);
       try{
-        for (var fi=0; fi<cfg.fields.length; fi++){
-          var f = cfg.fields[fi];
+        for (var fi=0; fi<allFields.length; fi++){
+          var f = allFields[fi];
           var el = row.querySelector('[data-field="'+f.key+'"]');
           var val = el.value.trim();
           if (val && val !== f.current){
@@ -1303,7 +1412,7 @@ async function loadHomeSections(){
             if (del.error) throw del.error;
           }
         }
-        hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713 (live after next deploy)";
+        hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713 \u2014 click Publish Changes to make it live";
         toast("Text saved");
       }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
     };
@@ -1312,6 +1421,33 @@ async function loadHomeSections(){
   // wire reorder
   panel.querySelectorAll("[data-secup]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secup, -1); }; });
   panel.querySelectorAll("[data-secdown]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secdown, 1); }; });
+
+  // wire archive / restore
+  panel.querySelectorAll("[data-archive]").forEach(function(btn){
+    btn.onclick = async function(){
+      var key = btn.dataset.archive;
+      if (!confirm("Hide this section from the live site? Nothing is deleted \u2014 you can restore it anytime.")) return;
+      var order = (key in savedOrder) ? savedOrder[key] : HOME_ORDER_KEYS.indexOf(key)*100;
+      try{
+        var { error } = await sb.from("page_sections").upsert({ page:"home", section_key:key, sort_order:order, active:false }, { onConflict:"page,section_key" });
+        if (error) throw error;
+        toast("Archived \u2014 click Publish Changes to make it live");
+        loadHomeSections();
+      }catch(e){ toast(e.message||"Archive failed", true); }
+    };
+  });
+  panel.querySelectorAll("[data-restore]").forEach(function(btn){
+    btn.onclick = async function(){
+      var key = btn.dataset.restore;
+      var order = (key in savedOrder) ? savedOrder[key] : HOME_ORDER_KEYS.indexOf(key)*100;
+      try{
+        var { error } = await sb.from("page_sections").upsert({ page:"home", section_key:key, sort_order:order, active:true }, { onConflict:"page,section_key" });
+        if (error) throw error;
+        toast("Restored \u2014 click Publish Changes to make it live");
+        loadHomeSections();
+      }catch(e){ toast(e.message||"Restore failed", true); }
+    };
+  });
 
   // wire inline image upload/save (same pattern as the main Pages slot editor)
   panel.querySelectorAll(".pm-slot").forEach(function(row){
@@ -1356,7 +1492,7 @@ async function moveHomeSection(effectiveOrder, key, dir){
     if (r1.error) throw r1.error;
     var r2 = await sb.from("page_sections").upsert({ page:"home", section_key:b, sort_order:aOrder }, { onConflict:"page,section_key" });
     if (r2.error) throw r2.error;
-    toast("Order saved (live after next deploy)");
+    toast("Order saved \u2014 click Publish Changes to make it live");
     loadHomeSections();
   }catch(e){ toast(e.message||"Reorder failed", true); }
 }
