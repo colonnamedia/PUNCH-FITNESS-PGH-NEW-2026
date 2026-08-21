@@ -1046,8 +1046,9 @@ async function loadPages(){
             '</div>' +
           '</div>' +
         '</div>';
-      }).join("") + '</div>';
+      }).join("") + (g.group==="Homepage" ? '<div id="home-sections-panel"></div>' : '') + '</div>';
   }).join("");
+  if (!PAGES_FILTER || PAGES_FILTER==="Homepage") loadHomeSections();
 
   root.querySelectorAll(".pm-slot").forEach(function(row){
     var slot = row.dataset.slot, type = row.dataset.type;
@@ -1094,6 +1095,176 @@ async function loadPages(){
       toast("Media saved");
     };
   });
+}
+
+/* ---------------- HOMEPAGE SECTIONS (text + reorder) ---------------- */
+// "hero" stays fixed first (foundational, not a movable content section).
+// Order here is the ORIGINAL document order and matches HOME_SECTION_ORDER
+// in build.cjs exactly — keep them in sync if a section is ever added/removed.
+var HOME_SECTIONS = [
+  { key:"hero", label:"Hero (always first)", fixed:true, fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]},
+  { key:"cta", label:"Two Big CTAs", fields:[] },
+  { key:"stats", label:"Stats Bar", fields:[] },
+  { key:"reels", label:"Hear It From Them (Reels)", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]},
+  { key:"schedule", label:"Class Schedule", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]},
+  { key:"punch-experience", label:"The Punch Experience", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"combined-header", label:"Community Intro", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]},
+  { key:"programs", label:"Program Cards (4)", fields:[] },
+  { key:"hero-stmt", label:"\u201CLose Weight\u201D Statement", fields:[] },
+  { key:"big-quote", label:"Big Quote / Testimonial", fields:[
+    { key:"text", label:"Quote", type:"textarea" },
+    { key:"attribution", label:"Attribution", type:"text" }
+  ]},
+  { key:"exp-reverse", label:"\u201CNot a Quick Fix\u201D", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"journey", label:"Your Timeline", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"different", label:"What Makes Us Different", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"fight-train-sweat", label:"Fight. Train. Sweat.", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]},
+  { key:"combo", label:"Boxing + Strength Combo", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"reviews", label:"What People Say (Reviews)", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"lead-form", label:"Claim Your Free Class", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" }
+  ]},
+  { key:"final", label:"Final CTA", fields:[
+    { key:"eyebrow", label:"Eyebrow", type:"text" },
+    { key:"title", label:"Title", type:"text" },
+    { key:"subtext", label:"Subtext", type:"textarea" }
+  ]}
+];
+var HOME_ORDER_KEYS = HOME_SECTIONS.filter(function(s){ return !s.fixed; }).map(function(s){ return s.key; });
+
+async function loadHomeSections(){
+  var panel = $("home-sections-panel");
+  if (!panel) return;
+  var secRes, textRes;
+  try {
+    secRes = await sb.from("page_sections").select("*").eq("page","home");
+    textRes = await sb.from("page_text").select("*").eq("page","home");
+  } catch(e) {
+    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Homepage Sections</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
+    return;
+  }
+  var savedOrder = {};
+  (secRes.data||[]).forEach(function(r){ savedOrder[r.section_key] = r.sort_order; });
+  var textMap = {};
+  (textRes.data||[]).forEach(function(r){ textMap[r.section_key+"."+r.field_key] = r.value; });
+
+  var effectiveOrder = HOME_ORDER_KEYS.map(function(key,i){
+    return { key: key, order: (key in savedOrder) ? savedOrder[key] : i*100 };
+  }).sort(function(a,b){ return a.order-b.order; }).map(function(x){ return x.key; });
+
+  var orderedForDisplay = ["hero"].concat(effectiveOrder);
+
+  function fieldsHtml(cfg){
+    if (!cfg.fields.length) return "";
+    return '<div class="pm-controls" style="flex-direction:column;align-items:stretch;gap:10px">' +
+      cfg.fields.map(function(f){
+        var val = textMap[cfg.key+"."+f.key] || "";
+        var input = f.type==="textarea"
+          ? '<textarea data-field="'+f.key+'" rows="2" placeholder="Default text shows if left blank" style="width:100%;font-family:inherit">'+esc(val)+'</textarea>'
+          : '<input type="text" data-field="'+f.key+'" placeholder="Default text shows if left blank" value="'+esc(val)+'" style="width:100%">';
+        return '<div><label style="margin:0 0 4px">'+esc(f.label)+'</label>'+input+'</div>';
+      }).join("") +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+        '<button class="pm-save" type="button" data-savetext="'+esc(cfg.key)+'">Save Text</button>' +
+        '<span class="pm-hint" data-hint="'+esc(cfg.key)+'"></span>' +
+      '</div>' +
+    '</div>';
+  }
+
+  panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
+    '<div class="panel-h"><h2>Homepage Sections</h2></div>' +
+    '<div class="drop-s" style="padding:0 20px 12px">Reorder sections and edit their text below. The page layout/design itself is still changed in code, tested on a branch.</div>' +
+    orderedForDisplay.map(function(key, i){
+      var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+      var isFixed = !!cfg.fixed;
+      var idx = isFixed ? -1 : effectiveOrder.indexOf(key);
+      return '<div class="pm-slot" data-section-key="'+esc(key)+'">' +
+        '<div class="pm-body" style="width:100%">' +
+          '<div class="pm-name" style="display:flex;align-items:center;justify-content:space-between">' +
+            '<span>'+esc(cfg.label)+'</span>' +
+            (isFixed ? '' :
+              '<span class="pacts" style="display:flex;gap:6px">' +
+                '<button class="icon-btn" data-secup="'+esc(key)+'" '+(idx===0?"disabled":"")+' title="Move earlier">&#8593;</button>' +
+                '<button class="icon-btn" data-secdown="'+esc(key)+'" '+(idx===effectiveOrder.length-1?"disabled":"")+' title="Move later">&#8595;</button>' +
+              '</span>') +
+          '</div>' +
+          fieldsHtml(cfg) +
+        '</div>' +
+      '</div>';
+    }).join("") +
+  '</div>';
+
+  panel.querySelectorAll("[data-savetext]").forEach(function(btn){
+    btn.onclick = async function(){
+      var key = btn.dataset.savetext;
+      var row = btn.closest(".pm-slot");
+      var hint = row.querySelector('[data-hint="'+key+'"]');
+      hint.style.color="var(--mut)"; hint.textContent="Saving…";
+      var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+      try{
+        for (var fi=0; fi<cfg.fields.length; fi++){
+          var f = cfg.fields[fi];
+          var el = row.querySelector('[data-field="'+f.key+'"]');
+          var val = el.value.trim();
+          if (val){
+            var up = await sb.from("page_text").upsert({ page:"home", section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
+            if (up.error) throw up.error;
+          } else {
+            var del = await sb.from("page_text").delete().eq("page","home").eq("section_key",key).eq("field_key",f.key);
+            if (del.error) throw del.error;
+          }
+        }
+        hint.style.color="#8fe3a0"; hint.textContent="Saved ✓ (live after next deploy)";
+        toast("Text saved");
+      }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
+    };
+  });
+
+  panel.querySelectorAll("[data-secup]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secup, -1); }; });
+  panel.querySelectorAll("[data-secdown]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secdown, 1); }; });
+}
+
+async function moveHomeSection(effectiveOrder, key, dir){
+  var i = effectiveOrder.indexOf(key);
+  var j = i+dir;
+  if (i<0 || j<0 || j>=effectiveOrder.length) return;
+  var a = effectiveOrder[i], b = effectiveOrder[j];
+  var aOrder = i*100, bOrder = j*100; // both being written explicitly now, so absolute values are safe
+  try{
+    var r1 = await sb.from("page_sections").upsert({ page:"home", section_key:a, sort_order:bOrder }, { onConflict:"page,section_key" });
+    if (r1.error) throw r1.error;
+    var r2 = await sb.from("page_sections").upsert({ page:"home", section_key:b, sort_order:aOrder }, { onConflict:"page,section_key" });
+    if (r2.error) throw r2.error;
+    toast("Order saved (live after next deploy)");
+    loadHomeSections();
+  }catch(e){ toast(e.message||"Reorder failed", true); }
 }
 
 /* ---------------- BLOG FREQUENCY ---------------- */
