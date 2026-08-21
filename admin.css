@@ -154,6 +154,8 @@ textarea.long{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mon
 .pm-submenu a{display:block;padding:8px 16px 8px 42px;font-size:13px;color:var(--mut2);text-decoration:none;border-radius:8px;cursor:pointer;transition:background .15s,color .15s}
 .pm-submenu a:hover{background:var(--ink3);color:#fff}
 .pm-submenu a.on{color:#fff;background:var(--ink3);border-left:2px solid var(--red)}
+.pm-sub-h{padding:10px 16px 2px 42px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mut)}
+.pm-submenu a.pm-sub-a{padding-left:58px}
 
 /* image placement sliders */
 .pm-slider{display:inline-flex;align-items:center;gap:8px;margin-right:12px}
