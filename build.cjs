@@ -361,15 +361,25 @@ function blogPageHtml(p, ogFallback){
       const before = html;
       html = applyTextOverrides(html, content.text);
       html = applyEmbedOverrides(html, content.text);
+      const beforeOrder = html;
       html = applySectionOrder(html, content.sections, HOME_SECTION_ORDER);
+      const orderActuallyChanged = html !== beforeOrder;
+
       if (html !== before){
         fs.writeFileSync(idxPath, html);
-        console.log("Homepage content: applied", content.text.length, "text override(s),", content.sections.length, "section order row(s)");
+        console.log("Homepage content: found", content.text.length, "text/embed override row(s),", content.sections.length, "section-order row(s)");
+        // Print the DEFINITIVE final order directly from the written file —
+        // provable from this log alone, no need to check the live site.
+        const finalOrder = [...html.matchAll(/data-section="([a-z-]+)"/g)].map(m => m[1]);
+        console.log("Homepage content: final section order ->", finalOrder.join(", "));
+        if (content.sections.length && !orderActuallyChanged){
+          console.log("Homepage content: WARNING — section-order rows exist but the page order did NOT change. applySectionOrder likely aborted safely (a section key didn't match, or wasn't found in strict sequence). Nothing broke, but the reorder did not apply — check that every section_key in the database exactly matches HOME_SECTION_ORDER.");
+        }
       } else {
         console.log("Homepage content: no overrides configured — page unchanged");
       }
     }
   } catch (e) {
-    console.log("Homepage content step skipped (Supabase unavailable) — page unchanged");
+    console.log("Homepage content step skipped —", e && e.message ? e.message : "Supabase unavailable", "— page unchanged");
   }
 })();
