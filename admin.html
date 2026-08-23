@@ -1336,10 +1336,10 @@ async function loadHomeSections(){
         var prev = url
           ? (isVideo ? '<video src="'+esc(url)+'" muted></video>' : '<img src="'+esc(url)+'" alt="">')
           : '<span class="pm-ph">No media</span>';
-        return '<div class="pm-slot" data-slot="'+esc(slot)+'" data-type="'+(isVideo?"video":"image")+'" style="flex-direction:column">' +
+        return '<div class="home-img-card" data-slot="'+esc(slot)+'" data-type="'+(isVideo?"video":"image")+'">' +
           '<div class="pm-prev">'+prev+'</div>' +
           '<div class="pm-body" style="width:100%">' +
-            '<div class="pm-name" style="font-size:12px">'+esc(slotLabel(slot))+'</div>' +
+            '<div class="pm-name">'+esc(slotLabel(slot))+'</div>' +
             '<div class="pm-row"><input type="text" class="pm-url" placeholder="Paste an image or video URL" value="'+esc(url)+'"><button class="pm-up" type="button">Upload</button><input type="file" class="pm-file hide" accept="'+(isVideo?"video/*":"image/*")+'"></div>' +
             '<div class="pm-controls"><button class="pm-save" type="button">Save</button><span class="pm-hint"></span></div>' +
           '</div>' +
@@ -1450,7 +1450,7 @@ async function loadHomeSections(){
   });
 
   // wire inline image upload/save (same pattern as the main Pages slot editor)
-  panel.querySelectorAll(".pm-slot").forEach(function(row){
+  panel.querySelectorAll(".home-img-card").forEach(function(row){
     var slot = row.dataset.slot, type = row.dataset.type;
     var fileEl = row.querySelector(".pm-file");
     var urlEl = row.querySelector(".pm-url");
