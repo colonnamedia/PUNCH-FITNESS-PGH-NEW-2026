@@ -57,10 +57,10 @@
   var footer =
   '<footer class="pf"><div class="pf-grid">' +
     '<div><div class="pf-mark">PUNCH</div>' +
-      '<div class="pf-tag">Boxing &amp; Fitness &middot; South Hills Pittsburgh</div>' +
-      '<p class="pf-addr">2101 Greentree Rd, Suite 119<br>Pittsburgh, PA 15220</p>' +
-      '<a class="pf-tel" href="tel:+14125123261">412-512-3261</a>' +
-      '<a class="pf-mail" href="mailto:punchpgh@gmail.com">punchpgh@gmail.com</a></div>' +
+      '<div class="pf-tag" data-text="footer.tagline">Boxing &amp; Fitness &middot; South Hills Pittsburgh</div>' +
+      '<p class="pf-addr"><span data-text="footer.address_line1">2101 Greentree Rd, Unit 119</span><br><span data-text="footer.address_line2">Pittsburgh, PA 15220</span></p>' +
+      '<a class="pf-tel" data-text="footer.phone" href="tel:+14125123261">412-512-3261</a>' +
+      '<a class="pf-mail" data-text="footer.email" href="mailto:punchpgh@gmail.com">punchpgh@gmail.com</a></div>' +
     '<div class="pf-col"><div class="pf-h">Workouts</div>' +
       '<a href="/classes">Group Fitness</a>' +
       '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
@@ -78,8 +78,8 @@
       '<a href="/careers">Careers</a>' +
       '<a href="/terms-conditions">Terms &amp; Conditions</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
-      '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
-      '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
+      '<p class="pf-hours"><span data-text="footer.hours1_days">Mon &ndash; Fri</span><b data-text="footer.hours1_time">6:00 AM &ndash; 8:00 PM</b></p>' +
+      '<p class="pf-hours"><span data-text="footer.hours2_days">Sat &ndash; Sun</span><b data-text="footer.hours2_time">8:00 AM &ndash; 1:00 PM</b></p>' +
       '<a class="pf-mail" href="' + LOGIN + '" target="_blank" rel="noopener">Member Login &rarr;</a>' +
       '<div class="pf-soc"><a href="https://instagram.com/punchpgh" target="_blank" rel="noopener">Instagram</a>' +
       '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a>' +
@@ -90,7 +90,7 @@
       '<a href="/boxing-gloves-for-fitness-classes">Equipment</a>' +
       '<a href="/superare">Superare</a></div>' +
   '</div>' +
-  '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
+  '<div class="pf-legal"><span>&copy; ' + year + ' <span data-text="footer.copyright_text">Pittsburgh Punch LLC. All rights reserved.</span></span>' +
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
 
 
@@ -436,6 +436,29 @@
     });
   }
 
+  // Site-wide text overrides (footer, and later header nav) — reuses the
+  // same data-text="key" marker convention as the homepage content system,
+  // but applied at RUNTIME after insertion (header/footer are built by this
+  // script on every page, not baked per-page at build time). No config at
+  // all -> every element keeps exactly the default text already in the
+  // template above. Never touches layout, only text content.
+  function applySiteTextOverrides() {
+    var CFG = window.PUNCH_CONFIG || {};
+    if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
+    import("https://esm.sh/@supabase/supabase-js@2").then(function (mod) {
+      var sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+      return sb.from("site_text").select("key,value");
+    }).then(function (res) {
+      var rows = (res && !res.error && res.data) ? res.data : [];
+      if (!rows.length) return;
+      rows.forEach(function (r) {
+        if (!r || !r.key || r.value == null) return;
+        var el = document.querySelector('[data-text="' + r.key + '"]');
+        if (el) el.textContent = r.value;
+      });
+    }).catch(function () { /* leave every default exactly as coded */ });
+  }
+
   function init() {
     if (document.getElementById("pnHeader")) return;
     document.body.insertAdjacentHTML("afterbegin", header);
@@ -444,6 +467,7 @@
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
     initPopups();
     enhance();
+    applySiteTextOverrides();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

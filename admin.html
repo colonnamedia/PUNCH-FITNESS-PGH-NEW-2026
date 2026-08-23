@@ -935,6 +935,10 @@ $("termsSave") && ($("termsSave").onclick = async ()=>{
 
 /* ---------------- PAGES / MEDIA ---------------- */
 var MEDIA_SLOTS = [
+  { group:'Site-Wide', items:[
+    // Header/footer are built by nav.js on every page — no image slots
+    // here, just the site-footer-panel injected below.
+  ]},
   { group:'Homepage', items:[
     // Every image/video here now lives inline with its section below
     // (Hero, Program Cards, Fight/Train/Sweat, etc.) — not listed here to
@@ -1024,6 +1028,7 @@ let PAGES_FILTER = null;
 // hierarchy — does NOT change what content renders (loadPages() still
 // iterates every individual MEDIA_SLOTS group as its own separate section).
 var PAGES_NAV_TREE = [
+  { top: 'Site-Wide' },
   { top: 'Homepage' },
   { header: 'Workouts', children: ['Classes', "Senior & Parkinson's", 'Youth Boxing', 'Personal Training', 'Trainers'] },
   { top: 'Schedule' },
@@ -1090,9 +1095,10 @@ async function loadPages(){
             '</div>' +
           '</div>' +
         '</div>';
-      }).join("") + (g.group==="Homepage" ? '<div id="home-sections-panel"></div>' : '') + '</div>';
+      }).join("") + (g.group==="Homepage" ? '<div id="home-sections-panel"></div>' : '') + (g.group==="Site-Wide" ? '<div id="site-footer-panel"></div>' : '') + '</div>';
   }).join("");
   if (!PAGES_FILTER || PAGES_FILTER==="Homepage") loadHomeSections();
+  if (!PAGES_FILTER || PAGES_FILTER==="Site-Wide") loadSiteFooter();
 
   root.querySelectorAll(".pm-slot").forEach(function(row){
     var slot = row.dataset.slot, type = row.dataset.type;
@@ -1150,7 +1156,10 @@ var HOME_SECTIONS = [
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H1", type:"text", current:"Your Cardio Just Got A Whole Lot More Fun." },
       { key:"eyebrow", label:"Eyebrow (small line above headline)", tagLabel:"Label", type:"text", current:"South Hills Pittsburgh · Boxing + Strength" },
-      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Meet your new treadmill. Our punching bags are our cardio. No fighting. No experience needed. Just a full-body workout that makes you feel amazing." }
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Meet your new treadmill. Our punching bags are our cardio. No fighting. No experience needed. Just a full-body workout that makes you feel amazing." },
+      { key:"button1", label:"Primary Button", tagLabel:"Button", type:"text", current:"Claim Your Free Class", indent:true },
+      { key:"button2", label:"Secondary Button", tagLabel:"Button", type:"text", current:"7-Day Pack + Gloves & Wraps \u2014 $59.99", indent:true },
+      { key:"note", label:"Trust Line (stars/rating)", tagLabel:"Text", type:"text", current:"\u2605\u2605\u2605\u2605\u2605 4.9 on Google \u00B7 200+ members \u00B7 No card required" }
     ],
     imageSlots:["home.hero_video"] },
   { key:"cta", label:"Two CTAs — Free Class + 7-Day Starter Pack",
@@ -1163,7 +1172,7 @@ var HOME_SECTIONS = [
       { key:"card1_perk2", label:"Card 1 Perk 2", tagLabel:"Text", type:"text", current:"Fight, Train, or Sweat Format", indent:true },
       { key:"card1_perk3", label:"Card 1 Perk 3", tagLabel:"Text", type:"text", current:"Meet Your Coaches & the Gym", indent:true },
       { key:"card1_perk4", label:"Card 1 Perk 4", tagLabel:"Text", type:"text", current:"No Credit Card Required", indent:true },
-      { key:"card1_button", label:"Card 1 Button", tagLabel:"Button", type:"text", current:"Claim First Workout Free \u2192" },
+      { key:"card1_button", label:"Card 1 Button", tagLabel:"Button", type:"text", current:"Claim First Workout Free \u2192", indent:true },
       { key:"card1_note", label:"Card 1 Note", tagLabel:"Text", type:"text", current:"Zero cost \u00B7 zero commitment" },
       { key:"card2_ribbon", label:"Card 2 Ribbon (top ⚡ banner)", tagLabel:"Text", type:"text", current:"\u26A1 Best Value" },
       { key:"card2_label", label:"Card 2 Label", tagLabel:"Text", type:"text", current:"7-Day Starter Pack" },
@@ -1174,7 +1183,7 @@ var HOME_SECTIONS = [
       { key:"card2_perk2", label:"Card 2 Perk 2", tagLabel:"Text", type:"text", current:"Free Boxing Gloves to Keep", indent:true },
       { key:"card2_perk3", label:"Card 2 Perk 3", tagLabel:"Text", type:"text", current:"Free Hand Wraps to Keep", indent:true },
       { key:"card2_perk4", label:"Card 2 Perk 4", tagLabel:"Text", type:"text", current:"Personal Intro & Coaching Plan", indent:true },
-      { key:"card2_button", label:"Card 2 Button", tagLabel:"Button", type:"text", current:"Start 7-Day Pack \u2192" },
+      { key:"card2_button", label:"Card 2 Button", tagLabel:"Button", type:"text", current:"Start 7-Day Pack \u2192", indent:true },
       { key:"card2_note", label:"Card 2 Note", tagLabel:"Text", type:"text", current:"One-time payment \u00B7 no auto-renew" }
     ] },
   { key:"stats", label:"Stats Bar",
@@ -1206,7 +1215,8 @@ var HOME_SECTIONS = [
   { key:"punch-experience", label:"The Punch Experience",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"A Workout You'll Actually Look Forward To." },
-      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Experience" }
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Experience" },
+      { key:"button1", label:"Button", tagLabel:"Button", type:"text", current:"Experience It Free →", indent:true }
     ],
     imageSlots:["home.exp1"] },
   { key:"combined-header", label:"Community Intro",
@@ -1219,7 +1229,9 @@ var HOME_SECTIONS = [
     imageSlots:["home.prog_adult","home.prog_youth","home.prog_senior","home.prog_pt"] },
   { key:"hero-stmt", label:"\u201CLose Weight\u201D Statement",
     fields:[
-      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Lose Weight. Tone Up. Train Like a Fighter." }
+      { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Lose Weight. Tone Up. Train Like a Fighter." },
+      { key:"button1", label:"Primary Button", tagLabel:"Button", type:"text", current:"Claim Free Workout →", indent:true },
+      { key:"button2", label:"Secondary Button", tagLabel:"Button", type:"text", current:"7-Day Pack + Gloves & Wraps — $59.99", indent:true }
     ],
     imageSlots:["home.hero_stmt"] },
   { key:"big-quote", label:"Big Quote / Testimonial",
@@ -1230,7 +1242,8 @@ var HOME_SECTIONS = [
   { key:"exp-reverse", label:"\u201CNot a Quick Fix\u201D",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"This Isn't a Quick Fix. It's a Real Transformation." },
-      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Journey" }
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Punch Journey" },
+      { key:"button1", label:"Button", tagLabel:"Button", type:"text", current:"Start Your Journey — $59.99 →", indent:true }
     ],
     imageSlots:["home.exp2"] },
   { key:"journey", label:"Your Timeline",
@@ -1253,7 +1266,8 @@ var HOME_SECTIONS = [
   { key:"combo", label:"Boxing + Strength Combo",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Boxing + Strength. The Combination That Changes Everything." },
-      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Secret Formula" }
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Secret Formula" },
+      { key:"button1", label:"Button", tagLabel:"Button", type:"text", current:"Try It Free →", indent:true }
     ],
     imageSlots:["home.combo"] },
   { key:"reviews", label:"What People Say (Reviews)",
@@ -1270,7 +1284,10 @@ var HOME_SECTIONS = [
     fields:[
       { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"No Risk. No Commitment." },
       { key:"title", label:"Title", tagLabel:"Title", type:"text", current:"Your First Step Costs Nothing." },
-      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Start with a free workout or get the 7-Day Starter Pack for $59.99. Either way, you'll know within one session why Punch members don't quit." }
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Start with a free workout or get the 7-Day Starter Pack for $59.99. Either way, you'll know within one session why Punch members don't quit." },
+      { key:"button1", label:"Primary Button", tagLabel:"Button", type:"text", current:"⚡ Start 7-Day Pack + Gloves & Wraps — $59.99", indent:true },
+      { key:"button2", label:"Secondary Button", tagLabel:"Button", type:"text", current:"Claim My Free Workout", indent:true },
+      { key:"note", label:"Contact Line", tagLabel:"Text", type:"text", current:"South Hills Pittsburgh · 412-512-3261 · Local residents w/ID · All levels welcome" }
     ] }
 ];
 var HOME_ORDER_KEYS = HOME_SECTIONS.filter(function(s){ return !s.fixed; }).map(function(s){ return s.key; });
@@ -1516,7 +1533,69 @@ async function moveHomeSection(effectiveOrder, key, dir){
   }catch(e){ toast(e.message||"Reorder failed", true); }
 }
 
-/* ---------------- BLOG FREQUENCY ---------------- */
+/* ---------------- SITE-WIDE FOOTER ---------------- */
+// Applied at RUNTIME by nav.js on every page (header/footer aren't baked
+// per-page like homepage sections are) — see applySiteTextOverrides() in
+// nav.js. Same "0 rows = untouched default" safety guarantee throughout.
+var SITE_FOOTER_FIELDS = [
+  { key:"footer.tagline", label:"Tagline (under the PUNCH mark)", current:"Boxing & Fitness \u00B7 South Hills Pittsburgh" },
+  { key:"footer.address_line1", label:"Address Line 1", current:"2101 Greentree Rd, Unit 119" },
+  { key:"footer.address_line2", label:"Address Line 2", current:"Pittsburgh, PA 15220" },
+  { key:"footer.phone", label:"Phone", current:"412-512-3261" },
+  { key:"footer.email", label:"Email", current:"punchpgh@gmail.com" },
+  { key:"footer.hours1_days", label:"Hours Row 1 \u2014 Days", current:"Mon \u2013 Fri" },
+  { key:"footer.hours1_time", label:"Hours Row 1 \u2014 Time", current:"6:00 AM \u2013 8:00 PM" },
+  { key:"footer.hours2_days", label:"Hours Row 2 \u2014 Days", current:"Sat \u2013 Sun" },
+  { key:"footer.hours2_time", label:"Hours Row 2 \u2014 Time", current:"8:00 AM \u2013 1:00 PM" },
+  { key:"footer.copyright_text", label:"Copyright Line (year is automatic)", current:"Pittsburgh Punch LLC. All rights reserved." }
+];
+
+async function loadSiteFooter(){
+  var panel = $("site-footer-panel");
+  if (!panel) return;
+  var res;
+  try { res = await sb.from("site_text").select("key,value"); }
+  catch(e){
+    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Site Footer</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-14-site-text.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
+    return;
+  }
+  var map = {};
+  (res.data||[]).forEach(function(r){ map[r.key] = r.value; });
+
+  panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
+    '<div class="panel-h"><h2>Site Footer</h2></div>' +
+    '<div class="drop-s" style="padding:0 20px 12px">Shown on every page. Applies as soon as you Save \u2014 no separate Publish needed, since the footer isn\u2019t baked into each page file like homepage sections are.</div>' +
+    '<div class="home-sec-card" style="border-left-color:var(--red)">' +
+      '<div class="home-sec-title" style="margin-bottom:10px">Footer</div>' +
+      '<div style="display:flex;flex-direction:column;gap:10px">' +
+        SITE_FOOTER_FIELDS.map(function(f){
+          var val = (map[f.key] != null) ? map[f.key] : f.current;
+          return '<div><label style="margin:0 0 4px">'+esc(f.label)+'</label>' +
+            '<input type="text" data-sfkey="'+esc(f.key)+'" value="'+esc(val)+'" style="width:100%"></div>';
+        }).join("") +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-top:14px">' +
+        '<button class="pm-save" type="button" id="saveFooter">Save Footer</button>' +
+        '<span class="pm-hint" id="footerHint"></span>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+
+  $("saveFooter").onclick = async function(){
+    var hint = $("footerHint");
+    hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
+    try{
+      var rows = SITE_FOOTER_FIELDS.map(function(f){
+        var el = panel.querySelector('[data-sfkey="'+f.key+'"]');
+        return { key: f.key, value: el.value.trim() || f.current };
+      });
+      var { error } = await sb.from("site_text").upsert(rows, { onConflict:"key" });
+      if (error) throw error;
+      hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713 \u2014 live now on every page";
+      toast("Footer saved");
+    }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
+  };
+}
 async function loadFreq(){
   const { data } = await sb.from("site_settings").select("value").eq("key","blog").maybeSingle();
   const n = data && data.value && Number(data.value.posts_per_week) ? Number(data.value.posts_per_week) : 1;
