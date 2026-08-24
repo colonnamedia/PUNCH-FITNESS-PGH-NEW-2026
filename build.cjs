@@ -294,6 +294,51 @@ function blogPageHtml(p, ogFallback){
     fs.writeFileSync("dist/nav.js", clean(fs.readFileSync("dist/nav.js","utf8")));
   }
 
+  // 2.5) apply per-page text overrides + section reorder, BEFORE the
+  //      directory-URL copy step below — so dist/<page>/index.html (what the
+  //      live site actually serves) inherits these changes automatically,
+  //      instead of getting silently skipped because it was already copied.
+  //      Each entry is one page: its Supabase page key, its flat dist file,
+  //      and (if that page has data-section wrappers tagged) the section
+  //      order for reordering. A page with no data-section tags yet still
+  //      gets full text/embed overrides — reordering has nothing to do until
+  //      that page is tagged too. No config at all for a page -> untouched.
+  const PAGE_CONTENT_CONFIGS = [
+    { page: "home", file: "dist/index.html", sectionOrder: ["cta","stats","reels","schedule",
+      "punch-experience","combined-header","programs","hero-stmt","big-quote","exp-reverse",
+      "journey","different","fight-train-sweat","combo","reviews","lead-form","final"] },
+    { page: "classes", file: "dist/classes.html", sectionOrder: [] },
+  ];
+  for (const cfg of PAGE_CONTENT_CONFIGS) {
+    try {
+      const content = await getPageContent(cfg.page);
+      if (!fs.existsSync(cfg.file)) continue;
+      let html = fs.readFileSync(cfg.file, "utf8");
+      const before = html;
+      html = applyTextOverrides(html, content.text);
+      html = applyEmbedOverrides(html, content.text);
+      const beforeOrder = html;
+      if (cfg.sectionOrder.length) html = applySectionOrder(html, content.sections, cfg.sectionOrder);
+      const orderActuallyChanged = html !== beforeOrder;
+
+      if (html !== before){
+        fs.writeFileSync(cfg.file, html);
+        console.log(`Page content [${cfg.page}]: found`, content.text.length, "text/embed override row(s),", content.sections.length, "section-order row(s)");
+        if (cfg.sectionOrder.length){
+          const finalOrder = [...html.matchAll(/data-section="([a-z-]+)"/g)].map(m => m[1]);
+          console.log(`Page content [${cfg.page}]: final section order ->`, finalOrder.join(", "));
+          if (content.sections.length && !orderActuallyChanged){
+            console.log(`Page content [${cfg.page}]: WARNING — section-order rows exist but the page order did NOT change. applySectionOrder likely aborted safely (a section key didn't match, or wasn't found in strict sequence). Nothing broke, but the reorder did not apply.`);
+          }
+        }
+      } else {
+        console.log(`Page content [${cfg.page}]: no overrides configured — page unchanged`);
+      }
+    } catch (e) {
+      console.log(`Page content [${cfg.page}] step skipped —`, e && e.message ? e.message : "Supabase unavailable", "— page unchanged");
+    }
+  }
+
   // 3) write <page>/index.html for every page -> clean directory URLs
   for (const f of fs.readdirSync("dist")){
     if (f.endsWith(".html") && !CLEAN_SKIP.has(f)){
@@ -347,39 +392,4 @@ function blogPageHtml(p, ogFallback){
   }
 
   console.log("Built ./dist — all internal links clean, directory URLs generated");
-
-  // 7) apply homepage text overrides + section reorder (dist/index.html only,
-  //    page='home'). No config at all -> file is untouched.
-  try {
-    const content = await getPageContent("home");
-    const HOME_SECTION_ORDER = ["cta","stats","reels","schedule","punch-experience","combined-header",
-      "programs","hero-stmt","big-quote","exp-reverse","journey","different","fight-train-sweat",
-      "combo","reviews","lead-form","final"];
-    const idxPath = "dist/index.html";
-    if (fs.existsSync(idxPath)){
-      let html = fs.readFileSync(idxPath, "utf8");
-      const before = html;
-      html = applyTextOverrides(html, content.text);
-      html = applyEmbedOverrides(html, content.text);
-      const beforeOrder = html;
-      html = applySectionOrder(html, content.sections, HOME_SECTION_ORDER);
-      const orderActuallyChanged = html !== beforeOrder;
-
-      if (html !== before){
-        fs.writeFileSync(idxPath, html);
-        console.log("Homepage content: found", content.text.length, "text/embed override row(s),", content.sections.length, "section-order row(s)");
-        // Print the DEFINITIVE final order directly from the written file —
-        // provable from this log alone, no need to check the live site.
-        const finalOrder = [...html.matchAll(/data-section="([a-z-]+)"/g)].map(m => m[1]);
-        console.log("Homepage content: final section order ->", finalOrder.join(", "));
-        if (content.sections.length && !orderActuallyChanged){
-          console.log("Homepage content: WARNING — section-order rows exist but the page order did NOT change. applySectionOrder likely aborted safely (a section key didn't match, or wasn't found in strict sequence). Nothing broke, but the reorder did not apply — check that every section_key in the database exactly matches HOME_SECTION_ORDER.");
-        }
-      } else {
-        console.log("Homepage content: no overrides configured — page unchanged");
-      }
-    }
-  } catch (e) {
-    console.log("Homepage content step skipped —", e && e.message ? e.message : "Supabase unavailable", "— page unchanged");
-  }
 })();
