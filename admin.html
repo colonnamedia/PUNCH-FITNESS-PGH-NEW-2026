@@ -1203,7 +1203,11 @@ var HOME_SECTIONS = [
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Hear It From Them." },
       { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Stories." },
-      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Real Punch members in their own words." }
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Real Punch members in their own words." },
+      { key:"cap1", label:"Reel 1 Caption", tagLabel:"Text", type:"text", current:"Nicole", indent:true },
+      { key:"cap2", label:"Reel 2 Caption", tagLabel:"Text", type:"text", current:"Real Results", indent:true },
+      { key:"cap3", label:"Reel 3 Caption", tagLabel:"Text", type:"text", current:"Suzie", indent:true },
+      { key:"cap4", label:"Reel 4 Caption", tagLabel:"Text", type:"text", current:"Jasmine", indent:true }
     ] },
   { key:"schedule", label:"Class Schedule",
     fields:[
@@ -1260,7 +1264,22 @@ var HOME_SECTIONS = [
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Fight. Train. Sweat." },
       { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Workouts" },
-      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Three distinct class formats. Every one a complete full-body workout. Mix and match \u2014 all included." }
+      { key:"subtext", label:"Paragraph", tagLabel:"Paragraph", type:"textarea", current:"Three distinct class formats. Every one a complete full-body workout. Mix and match \u2014 all included." },
+      { key:"card1_tag", label:"Card 1 (Fight) \u2014 Category", tagLabel:"Text", type:"text", current:"Boxing Cardio \u00B7 45\u201355 Min", indent:true },
+      { key:"card1_name", label:"Card 1 (Fight) \u2014 Name", tagLabel:"Text", type:"text", current:"Fight", indent:true },
+      { key:"card1_desc", label:"Card 1 (Fight) \u2014 Description", tagLabel:"Text", type:"text", current:"Heavy bag combinations, real technique, serious cardio. Intense, skill-driven, addictive.", indent:true },
+      { key:"card1_stat", label:"Card 1 (Fight) \u2014 Stat", tagLabel:"Text", type:"text", current:"600\u2013800", indent:true },
+      { key:"card1_statlbl", label:"Card 1 (Fight) \u2014 Stat Label", tagLabel:"Text", type:"text", current:"Calories Burned", indent:true },
+      { key:"card2_tag", label:"Card 2 (Train) \u2014 Category", tagLabel:"Text", type:"text", current:"Strength \u00B7 45\u201355 Min", indent:true },
+      { key:"card2_name", label:"Card 2 (Train) \u2014 Name", tagLabel:"Text", type:"text", current:"Train", indent:true },
+      { key:"card2_desc", label:"Card 2 (Train) \u2014 Description", tagLabel:"Text", type:"text", current:"Functional resistance training with barbells, dumbbells, and cables. Fresh programming every session.", indent:true },
+      { key:"card2_stat", label:"Card 2 (Train) \u2014 Stat", tagLabel:"Text", type:"text", current:"New Daily", indent:true },
+      { key:"card2_statlbl", label:"Card 2 (Train) \u2014 Stat Label", tagLabel:"Text", type:"text", current:"Programming", indent:true },
+      { key:"card3_tag", label:"Card 3 (Sweat) \u2014 Category", tagLabel:"Text", type:"text", current:"HIIT Circuit \u00B7 45\u201355 Min", indent:true },
+      { key:"card3_name", label:"Card 3 (Sweat) \u2014 Name", tagLabel:"Text", type:"text", current:"Sweat", indent:true },
+      { key:"card3_desc", label:"Card 3 (Sweat) \u2014 Description", tagLabel:"Text", type:"text", current:"Air bikes, rowers, circuits, boxing stations. Max calorie torch with 24-hour afterburn.", indent:true },
+      { key:"card3_stat", label:"Card 3 (Sweat) \u2014 Stat", tagLabel:"Text", type:"text", current:"24HR", indent:true },
+      { key:"card3_statlbl", label:"Card 3 (Sweat) \u2014 Stat Label", tagLabel:"Text", type:"text", current:"Afterburn Effect", indent:true }
     ],
     imageSlots:["home.fight","home.train","home.sweat","home.strip1","home.strip2","home.strip3","home.strip4","home.strip5"] },
   { key:"combo", label:"Boxing + Strength Combo",
@@ -1270,10 +1289,28 @@ var HOME_SECTIONS = [
       { key:"button1", label:"Button", tagLabel:"Button", type:"text", current:"Try It Free →", indent:true }
     ],
     imageSlots:["home.combo"] },
-  { key:"reviews", label:"What People Say (Reviews)",
+  { key:"reviews", label:"What People Say (Reviews / Social Proof)",
     fields:[
       { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"What People Say After Their First Week." },
-      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Results." }
+      { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Results." },
+      { key:"r1_text", label:"Review 1 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"Signed up for the free trial just to try it. That was 6 months ago. I've lost 22 lbs and genuinely love coming to the gym.\"", indent:true },
+      { key:"r1_name", label:"Review 1 \u2014 Name", tagLabel:"Text", type:"text", current:"Jessica M.", indent:true },
+      { key:"r1_meta", label:"Review 1 \u2014 Meta", tagLabel:"Text", type:"text", current:"Member \u00B7 6 months", indent:true },
+      { key:"r2_text", label:"Review 2 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"Zero boxing experience. Within the first class the coaches had me throwing combos and I felt incredible. The community is unlike anywhere I've been.\"", indent:true },
+      { key:"r2_name", label:"Review 2 \u2014 Name", tagLabel:"Text", type:"text", current:"Marcus T.", indent:true },
+      { key:"r2_meta", label:"Review 2 \u2014 Meta", tagLabel:"Text", type:"text", current:"Member \u00B7 7 months", indent:true },
+      { key:"r3_text", label:"Review 3 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best $59.99 I've ever spent.\"", indent:true },
+      { key:"r3_name", label:"Review 3 \u2014 Name", tagLabel:"Text", type:"text", current:"Ashley R.", indent:true },
+      { key:"r3_meta", label:"Review 3 \u2014 Meta", tagLabel:"Text", type:"text", current:"Member \u00B7 5 months", indent:true },
+      { key:"r4_text", label:"Review 4 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"My son loves youth boxing. The coaches are amazing with the kids \u2014 patient, encouraging, and he's learned so much discipline.\"", indent:true },
+      { key:"r4_name", label:"Review 4 \u2014 Name", tagLabel:"Text", type:"text", current:"Jennifer K.", indent:true },
+      { key:"r4_meta", label:"Review 4 \u2014 Meta", tagLabel:"Text", type:"text", current:"Youth Boxing Parent", indent:true },
+      { key:"r5_text", label:"Review 5 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"The Parkinson's class has genuinely improved my balance and coordination. I feel stronger every week. The coaches are exceptional.\"", indent:true },
+      { key:"r5_name", label:"Review 5 \u2014 Name", tagLabel:"Text", type:"text", current:"Robert D.", indent:true },
+      { key:"r5_meta", label:"Review 5 \u2014 Meta", tagLabel:"Text", type:"text", current:"Parkinson's Program", indent:true },
+      { key:"r6_text", label:"Review 6 \u2014 Quote", tagLabel:"Text", type:"textarea", current:"\"I've tried every gym in Pittsburgh. Nothing comes close to the energy, the coaching, and the community at Punch.\"", indent:true },
+      { key:"r6_name", label:"Review 6 \u2014 Name", tagLabel:"Text", type:"text", current:"Rachel K.", indent:true },
+      { key:"r6_meta", label:"Review 6 \u2014 Meta", tagLabel:"Text", type:"text", current:"Member since 2023", indent:true }
     ] },
   { key:"lead-form", label:"Claim Your Free Class (lead form)",
     fields:[
@@ -1375,9 +1412,9 @@ async function loadHomeSections(){
         return '<div class="home-img-card" data-slot="'+esc(slot)+'" data-type="'+(isVideo?"video":"image")+'">' +
           '<div class="pm-prev">'+prev+'</div>' +
           '<div class="pm-body" style="width:100%">' +
-            '<div class="pm-name">'+esc(slotLabel(slot))+'</div>' +
+            '<div class="pm-name">'+esc(slotLabel(slot))+(url?'':' <span style="color:var(--mut);font-weight:400">(using page default)</span>')+'</div>' +
             '<div class="pm-row"><input type="text" class="pm-url" placeholder="Paste an image or video URL" value="'+esc(url)+'"><button class="pm-up" type="button">Upload</button><input type="file" class="pm-file hide" accept="'+(isVideo?"video/*":"image/*")+'"></div>' +
-            '<div class="pm-controls"><button class="pm-save" type="button">Save</button><span class="pm-hint"></span></div>' +
+            '<div class="pm-controls"><button class="pm-save" type="button">Save</button>'+(url?'<button class="pm-clear" type="button" title="Remove this image and revert to the page\'s original default">&#128465; Clear</button>':'')+'<span class="pm-hint"></span></div>' +
           '</div>' +
         '</div>';
       }).join("") +
@@ -1513,6 +1550,16 @@ async function loadHomeSections(){
       if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
       hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713";
       toast("Media saved");
+      loadHomeSections();
+    };
+    var clearBtn = row.querySelector(".pm-clear");
+    if (clearBtn) clearBtn.onclick = async function(){
+      if (!confirm("Remove this custom image and revert to the page's original default?")) return;
+      hint.style.color="var(--mut)"; hint.textContent="Clearing\u2026";
+      var { error } = await sb.from("page_media").delete().eq("slot", slot);
+      if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
+      toast("Cleared \u2014 back to default");
+      loadHomeSections();
     };
   });
 }

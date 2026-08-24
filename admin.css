@@ -152,6 +152,8 @@ textarea.long{min-height:280px;font-family:ui-monospace,SFMono-Regular,Menlo,mon
 .pm-up{background:var(--ink);border:1px solid var(--line);color:#fff;padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer;white-space:nowrap}
 .pm-up:hover{border-color:var(--red)}
 .pm-save{background:var(--red);color:#fff;border:0;padding:9px 18px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer}
+.pm-clear{background:transparent;color:var(--mut2);border:1px solid var(--line);padding:9px 14px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer}
+.pm-clear:hover{color:#ff8a80;border-color:#ff8a80}
 .pm-hint{font-size:11px;color:var(--mut)}
 @media(max-width:640px){.pm-slot{grid-template-columns:1fr}.pm-prev{width:100%;height:150px}}
 
