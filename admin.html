@@ -1096,11 +1096,12 @@ async function loadPages(){
             '</div>' +
           '</div>' +
         '</div>';
-      }).join("") + (g.group==="Homepage" ? '<div id="home-sections-panel"></div>' : '') + (g.group==="Site-Wide" ? '<div id="site-footer-panel"></div>' : '') + (g.group==="Classes" ? '<div id="classes-sections-panel"></div>' : '') + '</div>';
+      }).join("") + (g.group==="Homepage" ? '<div id="home-sections-panel"></div>' : '') + (g.group==="Site-Wide" ? '<div id="site-footer-panel"></div>' : '') + (g.group==="Classes" ? '<div id="classes-sections-panel"></div>' : '') + (g.group==="Ad Landing (punch-ad-trials)" ? '<div id="adtrials-sections-panel"></div>' : '') + '</div>';
   }).join("");
   if (!PAGES_FILTER || PAGES_FILTER==="Homepage") loadHomeSections();
   if (!PAGES_FILTER || PAGES_FILTER==="Site-Wide") loadSiteFooter();
   if (!PAGES_FILTER || PAGES_FILTER==="Classes") loadClassesSections();
+  if (!PAGES_FILTER || PAGES_FILTER==="Ad Landing (punch-ad-trials)") loadAdTrialsSections();
 
   root.querySelectorAll(".pm-slot").forEach(function(row){
     var slot = row.dataset.slot, type = row.dataset.type;
@@ -1658,13 +1659,13 @@ var CLASSES_SECTIONS = [
   ]}
 ];
 
-async function loadClassesSections(){
-  var panel = $("classes-sections-panel");
+async function loadTextOnlyPage(panelId, pageKey, sectionsConfig, pageLabel){
+  var panel = $(panelId);
   if (!panel) return;
   var textRes;
-  try { textRes = await sb.from("page_text").select("*").eq("page","classes"); }
+  try { textRes = await sb.from("page_text").select("*").eq("page",pageKey); }
   catch(e){
-    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Classes Page</h2></div><div class="empty"><b>Not set up yet</b>Run the page_text migration in Supabase, then reload.</div></div>';
+    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>'+esc(pageLabel)+'</h2></div><div class="empty"><b>Not set up yet</b>Run the page_text migration in Supabase, then reload.</div></div>';
     return;
   }
   var textMap = {};
@@ -1676,45 +1677,45 @@ async function loadClassesSections(){
         var saved = textMap[cfg.key+"."+f.key];
         var val = (saved != null) ? saved : f.current;
         var input = f.type==="textarea"
-          ? '<textarea data-cfield="'+f.key+'" rows="2" style="width:100%;font-family:inherit">'+esc(val)+'</textarea>'
-          : '<input type="text" data-cfield="'+f.key+'" value="'+esc(val)+'" style="width:100%">';
+          ? '<textarea data-tfield="'+f.key+'" rows="2" style="width:100%;font-family:inherit">'+esc(val)+'</textarea>'
+          : '<input type="text" data-tfield="'+f.key+'" value="'+esc(val)+'" style="width:100%">';
         return '<div class="'+(f.indent?"home-field-indent":"")+'"><label style="margin:0 0 4px">'+esc(f.tagLabel)+' &mdash; '+esc(f.label)+'</label>'+input+'</div>';
       }).join("") +
       '<div style="display:flex;align-items:center;gap:10px">' +
-        '<button class="pm-save" type="button" data-csavetext="'+esc(cfg.key)+'">Save Text</button>' +
-        '<span class="pm-hint" data-chint="'+esc(cfg.key)+'"></span>' +
+        '<button class="pm-save" type="button" data-tsavetext="'+esc(cfg.key)+'">Save Text</button>' +
+        '<span class="pm-hint" data-thint="'+esc(cfg.key)+'"></span>' +
       '</div>' +
     '</div>';
   }
 
   panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
-    '<div class="panel-h"><h2>Classes Page \u2014 Text</h2></div>' +
+    '<div class="panel-h"><h2>'+esc(pageLabel)+' \u2014 Text</h2></div>' +
     '<div class="drop-s" style="padding:0 20px 12px">Every headline, paragraph, and button on this page, top to bottom. Section reordering isn\u2019t wired up for this page yet \u2014 that\u2019s a separate step, same as it was for the homepage.</div>' +
-    CLASSES_SECTIONS.map(function(cfg, i){
-      return '<div class="pm-group home-sec-card" data-csection-key="'+esc(cfg.key)+'">' +
+    sectionsConfig.map(function(cfg, i){
+      return '<div class="pm-group home-sec-card" data-tsection-key="'+esc(cfg.key)+'">' +
         '<div class="home-sec-title">'+(i+1)+'. '+esc(cfg.label)+'</div>' +
         fieldsHtmlFor(cfg) +
       '</div>';
     }).join("") +
   '</div>';
 
-  panel.querySelectorAll("[data-csavetext]").forEach(function(btn){
+  panel.querySelectorAll("[data-tsavetext]").forEach(function(btn){
     btn.onclick = async function(){
-      var key = btn.dataset.csavetext;
+      var key = btn.dataset.tsavetext;
       var row = btn.closest(".pm-group");
-      var hint = row.querySelector('[data-chint="'+key+'"]');
+      var hint = row.querySelector('[data-thint="'+key+'"]');
       hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
-      var cfg = CLASSES_SECTIONS.filter(function(s){ return s.key===key; })[0];
+      var cfg = sectionsConfig.filter(function(s){ return s.key===key; })[0];
       try{
         for (var fi=0; fi<cfg.fields.length; fi++){
           var f = cfg.fields[fi];
-          var el = row.querySelector('[data-cfield="'+f.key+'"]');
+          var el = row.querySelector('[data-tfield="'+f.key+'"]');
           var val = el.value.trim();
           if (val && val !== f.current){
-            var up = await sb.from("page_text").upsert({ page:"classes", section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
+            var up = await sb.from("page_text").upsert({ page:pageKey, section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
             if (up.error) throw up.error;
           } else {
-            var del = await sb.from("page_text").delete().eq("page","classes").eq("section_key",key).eq("field_key",f.key);
+            var del = await sb.from("page_text").delete().eq("page",pageKey).eq("section_key",key).eq("field_key",f.key);
             if (del.error) throw del.error;
           }
         }
@@ -1724,6 +1725,170 @@ async function loadClassesSections(){
     };
   });
 }
+function loadClassesSections(){ return loadTextOnlyPage("classes-sections-panel", "classes", CLASSES_SECTIONS, "Classes Page"); }
+
+var AD_TRIALS_SECTIONS = [
+  { key:"hero", label:"Hero", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Text", type:"text", current:"South Hills Pittsburgh — Trial Offer" },
+    { key:"title1", label:"Title1", tagLabel:"Label", type:"text", current:"Your Cardio Just Got" },
+    { key:"title2", label:"Title2", tagLabel:"Label", type:"text", current:"A Whole Lot More Fun." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Meet your new treadmill. Our punching bags are our cardio. No fighting. No experience needed. Just a full-body workout that makes you feel amazing." },
+    { key:"button1", label:"Button1", tagLabel:"Button", type:"text", current:"Claim My Free Class →", indent:true },
+    { key:"button2", label:"Button2", tagLabel:"Button", type:"text", current:"7-Day Pack + Gloves & Wraps — $59.99", indent:true }
+  ]},
+  { key:"schedule", label:"Class Schedule", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"See It For Yourself" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Class Schedule. Book Your First Class." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Browse the live schedule below and reserve your spot — your first workout is on us." }
+  ]},
+  { key:"consistency", label:"Weight Loss Consistency Intro", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Show Up. Stay Consistent." },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Weight Loss Is Built on Consistency." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"The scale moves for the people who keep coming back — not the ones who go all-out for a week and quit. Pick a program you’ll actually stick with, and let consistency do the rest." }
+  ]},
+  { key:"programs", label:"Programs (4 cards)", fields:[
+    { key:"card1_tag", label:"Card1 Tag", tagLabel:"Text", type:"text", current:"All Levels" },
+    { key:"card1_name", label:"Card1 Name", tagLabel:"Text", type:"text", current:"Adult Boxing & Fitness" },
+    { key:"card1_desc", label:"Card1 Desc", tagLabel:"Paragraph", type:"textarea", current:"Boxing, strength, and HIIT classes for every fitness level. No experience needed — just show up." },
+    { key:"card2_tag", label:"Card2 Tag", tagLabel:"Text", type:"text", current:"1-on-1" },
+    { key:"card2_name", label:"Card2 Name", tagLabel:"Text", type:"text", current:"Personal Training" },
+    { key:"card2_desc", label:"Card2 Desc", tagLabel:"Paragraph", type:"textarea", current:"New programming every day. Join the community that keeps coming back because the results speak for themselves." },
+    { key:"card3_tag", label:"Card3 Tag", tagLabel:"Text", type:"text", current:"Ages 65+" },
+    { key:"card3_name", label:"Card3 Name", tagLabel:"Text", type:"text", current:"Senior & Parkinson's Boxing" },
+    { key:"card3_desc", label:"Card3 Desc", tagLabel:"Paragraph", type:"textarea", current:"Low-impact boxing proven to improve balance, coordination, and quality of life." },
+    { key:"card4_tag", label:"Card4 Tag", tagLabel:"Text", type:"text", current:"Ages 7–13" },
+    { key:"card4_name", label:"Card4 Name", tagLabel:"Text", type:"text", current:"Youth Boxing" },
+    { key:"card4_desc", label:"Card4 Desc", tagLabel:"Paragraph", type:"textarea", current:"Build confidence, discipline, and fitness through coach-led youth boxing. Fun, safe, structured." }
+  ]},
+  { key:"leadform", label:"Lead Form Intro", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Get Started" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Ready to Try Boxing for Fitness?" },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Drop your info and a coach will reach out to get you booked for your first class." }
+  ]},
+  { key:"trialcta", label:"Pick Your Trial (2 CTA cards)", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Two Ways to Start" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Pick Your Trial." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Available to local residents with valid ID. One trial offer per person." },
+    { key:"card1_label", label:"Card1 Label", tagLabel:"Text", type:"text", current:"First Workout" },
+    { key:"card1_price", label:"Card1 Price", tagLabel:"Text", type:"text", current:"Free" },
+    { key:"card1_desc", label:"Card1 Desc", tagLabel:"Text", type:"textarea", current:"Local Residents w/ID · Use Within 7 Days" },
+    { key:"card1_chip", label:"Card1 Chip", tagLabel:"Label", type:"text", current:"Best Way to Start" },
+    { key:"card1_button", label:"Card1 Button", tagLabel:"Button", type:"text", current:"Claim First Workout Free →", indent:true },
+    { key:"card1_note", label:"Card1 Note", tagLabel:"Paragraph", type:"textarea", current:"Zero cost · zero commitment" },
+    { key:"card2_ribbon", label:"Card2 Ribbon", tagLabel:"Text", type:"text", current:"⚡ Best Value" },
+    { key:"card2_label", label:"Card2 Label", tagLabel:"Text", type:"text", current:"7-Day Starter Pack" },
+    { key:"card2_price", label:"Card2 Price", tagLabel:"Text", type:"text", current:"$59.99" },
+    { key:"card2_desc", label:"Card2 Desc", tagLabel:"Text", type:"textarea", current:"Local Residents w/ID · One Time" },
+    { key:"card2_chip", label:"Card2 Chip", tagLabel:"Label", type:"text", current:"Unlimited Classes · 7 Days" },
+    { key:"card2_button", label:"Card2 Button", tagLabel:"Button", type:"text", current:"Start 7-Day Pack →", indent:true },
+    { key:"card2_note", label:"Card2 Note", tagLabel:"Paragraph", type:"textarea", current:"One-time payment · no auto-renew" }
+  ]},
+  { key:"reels", label:"Hear It From Them (reels)", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Stories." },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Hear It From Them." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Real Punch members in their own words." },
+    { key:"cap1", label:"Cap1", tagLabel:"Text", type:"text", current:"Nicole" },
+    { key:"cap2", label:"Cap2", tagLabel:"Text", type:"text", current:"Real Results" },
+    { key:"cap3", label:"Cap3", tagLabel:"Text", type:"text", current:"Suzie" },
+    { key:"cap4", label:"Cap4", tagLabel:"Text", type:"text", current:"Jasmine" }
+  ]},
+  { key:"journey", label:"Weight Loss Journey (3 cards)", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"The Weight Loss Journey" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Fast Weight Loss. Start Building Strength." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Boxing-based fitness burns more calories per session than almost any other workout format — and the results compound week after week." },
+    { key:"card1_title", label:"Card1 Title", tagLabel:"Text", type:"text", current:"Up to 800 Calories Per Class" },
+    { key:"card1_desc", label:"Card1 Desc", tagLabel:"Paragraph", type:"textarea", current:"A single session burns more than most hour-long gym workouts. High-intensity intervals keep your metabolism elevated after class ends." },
+    { key:"card2_title", label:"Card2 Title", tagLabel:"Text", type:"text", current:"Hours of Afterburn" },
+    { key:"card2_desc", label:"Card2 Desc", tagLabel:"Paragraph", type:"textarea", current:"EPOC means your body keeps burning calories long after you leave the gym — not just during class." },
+    { key:"card3_title", label:"Card3 Title", tagLabel:"Text", type:"text", current:"Visible Results in 30 Days" },
+    { key:"card3_desc", label:"Card3 Desc", tagLabel:"Paragraph", type:"textarea", current:"Members who train 2–3x per week consistently report visible changes in body composition within their first month." }
+  ]},
+  { key:"stats", label:"Stats Bar", fields:[
+    { key:"num1", label:"Num1", tagLabel:"Text", type:"text", current:"800+" },
+    { key:"label1", label:"Label1", tagLabel:"Text", type:"text", current:"Calories Per Class" },
+    { key:"num2", label:"Num2", tagLabel:"Text", type:"text", current:"3" },
+    { key:"label2", label:"Label2", tagLabel:"Text", type:"text", current:"Class Types" },
+    { key:"num3", label:"Num3", tagLabel:"Text", type:"text", current:"45–55 min" },
+    { key:"label3", label:"Label3", tagLabel:"Text", type:"text", current:"Per Session" },
+    { key:"num4", label:"Num4", tagLabel:"Text", type:"text", current:"200+" },
+    { key:"label4", label:"Label4", tagLabel:"Text", type:"text", current:"Active Members" },
+    { key:"num5", label:"Num5", tagLabel:"Text", type:"text", current:"4.9★" },
+    { key:"label5", label:"Label5", tagLabel:"Text", type:"text", current:"Google Rating" }
+  ]},
+  { key:"threeclasses", label:"3 Classes (3 cards)", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"What You Get Access To" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"3 Classes. All Included." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"Your trial unlocks all three class formats from day one — no restrictions." },
+    { key:"card1_tag", label:"Card1 Tag", tagLabel:"Text", type:"text", current:"Boxing Cardio · 45 Min" },
+    { key:"card1_name", label:"Card1 Name", tagLabel:"Text", type:"text", current:"Fight" },
+    { key:"card1_desc", label:"Card1 Desc", tagLabel:"Paragraph", type:"textarea", current:"Heavy bag combinations, real boxing technique, serious cardio. Intense, skill-driven, addictive." },
+    { key:"card1_stat", label:"Card1 Stat", tagLabel:"Text", type:"text", current:"600–800" },
+    { key:"card1_statlbl", label:"Card1 Statlbl", tagLabel:"Text", type:"text", current:"Calories Burned" },
+    { key:"card2_tag", label:"Card2 Tag", tagLabel:"Text", type:"text", current:"Strength Training · 45 Min" },
+    { key:"card2_name", label:"Card2 Name", tagLabel:"Text", type:"text", current:"Train" },
+    { key:"card2_desc", label:"Card2 Desc", tagLabel:"Paragraph", type:"textarea", current:"Functional resistance training with barbells, dumbbells, and cables. Fresh programming every session." },
+    { key:"card2_stat", label:"Card2 Stat", tagLabel:"Text", type:"text", current:"New Daily" },
+    { key:"card2_statlbl", label:"Card2 Statlbl", tagLabel:"Text", type:"text", current:"Programming" },
+    { key:"card3_tag", label:"Card3 Tag", tagLabel:"Text", type:"text", current:"HIIT Circuit · 45 Min" },
+    { key:"card3_name", label:"Card3 Name", tagLabel:"Text", type:"text", current:"Sweat" },
+    { key:"card3_desc", label:"Card3 Desc", tagLabel:"Paragraph", type:"textarea", current:"Air bikes, rowers, circuits, boxing stations. Max calorie torch with 24-hour afterburn every session." },
+    { key:"card3_stat", label:"Card3 Stat", tagLabel:"Text", type:"text", current:"24HR" },
+    { key:"card3_statlbl", label:"Card3 Statlbl", tagLabel:"Text", type:"text", current:"Afterburn Effect" }
+  ]},
+  { key:"faq", label:"FAQ", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Common Questions" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Everything You Need to Know." }
+  ]},
+  { key:"faq1", label:"FAQ 1", fields:[
+    { key:"question", label:"Question", tagLabel:"Question", type:"text", current:"Do I need boxing experience?" },
+    { key:"answer", label:"Answer", tagLabel:"Text", type:"textarea", current:"Absolutely not. All class formats are built to welcome complete beginners. Coaches walk you through technique from minute one." }
+  ]},
+  { key:"faq2", label:"FAQ 2", fields:[
+    { key:"question", label:"Question", tagLabel:"Question", type:"text", current:"What do I need to bring?" },
+    { key:"answer", label:"Answer", tagLabel:"Text", type:"textarea", current:"Just yourself and athletic wear. For the free workout, boxing gloves are provided. The 7-Day Starter Pack includes free boxing gloves and hand wraps to keep." }
+  ]},
+  { key:"faq3", label:"FAQ 3", fields:[
+    { key:"question", label:"Question", tagLabel:"Question", type:"text", current:"Does the 7-Day Starter Pack auto-renew?" },
+    { key:"answer", label:"Answer", tagLabel:"Text", type:"textarea", current:"No. It is a one-time purchase with no auto-renew. When your 7 days are up, you decide what is next." }
+  ]},
+  { key:"faq4", label:"FAQ 4", fields:[
+    { key:"question", label:"Question", tagLabel:"Question", type:"text", current:"How do I book classes during my trial?" },
+    { key:"answer", label:"Answer", tagLabel:"Text", type:"textarea", current:"Book through the schedule page or the PushPress member portal. Reserve ahead — evening slots fill up fast." }
+  ]},
+  { key:"faq5", label:"FAQ 5", fields:[
+    { key:"question", label:"Question", tagLabel:"Question", type:"text", current:"What happens after my trial ends?" },
+    { key:"answer", label:"Answer", tagLabel:"Text", type:"textarea", current:"Nothing automatically. You will have options to continue with a monthly membership or class pack." }
+  ]},
+  { key:"reviews", label:"Reviews (Social Proof)", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Real Members. Real Results." },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"What People Say After Their First Week." },
+    { key:"r1_text", label:"R1 Text", tagLabel:"Paragraph", type:"textarea", current:"\"I signed up for the free trial just to try it. That was 6 months ago. I've lost 22 lbs and genuinely love coming to the gym.\"", indent:true },
+    { key:"r1_name", label:"R1 Name", tagLabel:"Text", type:"text", current:"Jessica M.", indent:true },
+    { key:"r1_meta", label:"R1 Meta", tagLabel:"Text", type:"text", current:"Member · 6 months", indent:true },
+    { key:"r2_text", label:"R2 Text", tagLabel:"Paragraph", type:"textarea", current:"\"Zero boxing experience. Within the first class the coaches had me throwing combos and I felt incredible.\"", indent:true },
+    { key:"r2_name", label:"R2 Name", tagLabel:"Text", type:"text", current:"Marcus T.", indent:true },
+    { key:"r2_meta", label:"R2 Meta", tagLabel:"Text", type:"text", current:"Member · 7 months", indent:true },
+    { key:"r3_text", label:"R3 Text", tagLabel:"Paragraph", type:"textarea", current:"\"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best $59.99 I've ever spent.\"", indent:true },
+    { key:"r3_name", label:"R3 Name", tagLabel:"Text", type:"text", current:"Ashley R.", indent:true },
+    { key:"r3_meta", label:"R3 Meta", tagLabel:"Text", type:"text", current:"Member · 5 months", indent:true }
+  ]},
+  { key:"refer", label:"Refer a Friend", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"Bring a Friend" },
+    { key:"headline", label:"Headline", tagLabel:"H2", type:"text", current:"Better Together. Get Rewarded." },
+    { key:"subtext", label:"Subtext", tagLabel:"Paragraph", type:"textarea", current:"The best workouts happen with someone in your corner. Bring a friend and you both win." },
+    { key:"card_title", label:"Card Title", tagLabel:"Text", type:"text", current:"Refer a Friend, Earn Rewards" },
+    { key:"card_desc", label:"Card Desc", tagLabel:"Paragraph", type:"textarea", current:"When your friend joins Punch using your referral, you both get rewarded. They get a great first experience, and you get credit toward your membership. Tap below to send a referral." }
+  ]},
+  { key:"final", label:"Final CTA", fields:[
+    { key:"eyebrow", label:"Eyebrow", tagLabel:"Label", type:"text", current:"No Risk · No Commitment" },
+    { key:"title", label:"Title", tagLabel:"Text", type:"text", current:"Your First Step Costs Nothing." },
+    { key:"subtext", label:"Subtext", tagLabel:"Text", type:"text", current:"Start with a free workout or the 7-Day Starter Pack. Either way, you will know within one session why Punch members do not quit." },
+    { key:"button1", label:"Button1", tagLabel:"Button", type:"text", current:"Claim My Free Class", indent:true },
+    { key:"button2", label:"Button2", tagLabel:"Button", type:"text", current:"7-Day Pack + Gloves & Wraps — $59.99", indent:true },
+    { key:"note", label:"Note", tagLabel:"Text", type:"text", current:"South Hills Pittsburgh · Local residents w/ID · All levels welcome", indent:true }
+  ]}
+];
+function loadAdTrialsSections(){ return loadTextOnlyPage("adtrials-sections-panel", "punch-ad-trials", AD_TRIALS_SECTIONS, "Punch Ad Trials Page"); }
 
 /* ---------------- SITE-WIDE FOOTER ---------------- */
 // Applied at RUNTIME by nav.js on every page (header/footer aren't baked
