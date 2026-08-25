@@ -96,7 +96,7 @@
 
   // ---- Trial-offer popup -------------------------------------------------
   var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b";
-  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43";
+  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40";
   var POP_KEY = "punch_popup_seen_v2";
   var POP_DELAY = 12000;
 
@@ -112,7 +112,7 @@
         '<div class="ps-top">' +
           '<div class="ps-eyebrow">South Hills Pittsburgh &middot; All Levels Welcome</div>' +
           '<div class="ps-h">Your First Class<br>Is On Us.</div>' +
-          '<p class="ps-p">No experience needed. Pick how you want to start &mdash; free first workout, or a full week with gloves and wraps to keep.</p>' +
+          '<p class="ps-p">No experience needed. Pick how you want to start &mdash; one free class, or a full week of unlimited classes.</p>' +
         '</div>' +
         '<div class="ps-body"><div class="ps-cards">' +
 
@@ -132,16 +132,16 @@
 
           '<div class="ps-card feat">' +
             '<div class="ps-flag">&#9889; Best Value</div>' +
-            '<div class="ps-lbl">7-Day Starter Pack</div>' +
-            '<div class="ps-price"><sup>$</sup>59.99</div>' +
+            '<div class="ps-lbl">7 Days Unlimited</div>' +
+            '<div class="ps-price"><sup>$</sup>19.99</div>' +
             '<div class="ps-meta">Unlimited classes &middot; 7 days</div>' +
             '<ul class="ps-perks">' +
               '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Free boxing gloves to keep</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Free hand wraps to keep</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Try Fight, Train &amp; Sweat formats</li>' +
+              '<li><span class="ps-tick">&#10003;</span> No long-term commitment</li>' +
               '<li><span class="ps-tick">&#10003;</span> Personal intro tour &amp; coaching</li>' +
             '</ul>' +
-            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7-Day Pack &rarr;</a>' +
+            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7 Days Unlimited &rarr;</a>' +
             '<p class="ps-fine">One-time payment &middot; no auto-renew</p>' +
           '</div>' +
 
