@@ -379,15 +379,20 @@
       : (window.innerWidth || 0) >= 761;
     var onLanding = /^\/(index(\.html)?)?$/.test(location.pathname);
 
-    function fallback() { if (isDesktop) buildPopup(); }
+    // The trial-choice popup is a core, always-on feature — it should never
+    // depend on whether anything has been configured in admin > Popups.
+    // Try it first, on both desktop and mobile. buildPopup() already handles
+    // its own session/page exclusions and returns false when it skips, so
+    // this always leaves room to fall through to admin-configured popups.
+    if (buildPopup()) return;
 
-    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) { fallback(); return; }
+    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) return;
 
     fetch(cfg.SUPABASE_URL + "/rest/v1/popups?select=*&order=sort.asc",
       { headers: { apikey: cfg.SUPABASE_ANON_KEY, Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY } })
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .then(function (rows) {
-        if (!rows || !rows.length) { fallback(); return; }
+        if (!rows || !rows.length) return;
         function matches(p) {
           if (!p.active) return false;
           if (isDesktop && p.show_desktop === false) return false;
@@ -395,14 +400,12 @@
           if (p.pages === "landing" && !onLanding) return false;
           return true;
         }
-        var trial = rows.filter(function (p) { return p.type === "trial"; })[0];
-        if (trial && matches(trial) && buildPopup()) return;
         var forms = rows.filter(function (p) { return p.type === "form" && matches(p) && p.embed_html; });
         for (var i = 0; i < forms.length; i++) { if (buildFormPopup(forms[i])) return; }
         var customs = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; });
         for (var j = 0; j < customs.length; j++) { if (buildCustomPopup(customs[j])) return; }
       })
-      .catch(fallback);
+      .catch(function () {});
   }
 
 
