@@ -308,6 +308,8 @@ function blogPageHtml(p, ogFallback){
       "punch-experience","combined-header","programs","hero-stmt","big-quote","exp-reverse",
       "journey","different","fight-train-sweat","combo","reviews","lead-form","final"] },
     { page: "classes", file: "dist/classes.html", sectionOrder: [] },
+    { page: "punch-ad-trials", file: "dist/punch-ad-trials.html", sectionOrder: ["schedule","consistency",
+      "programs","lead-form","trialcta","reels","journey","stats","threeclasses","faq","reviews","refer","final"] },
   ];
   for (const cfg of PAGE_CONTENT_CONFIGS) {
     try {

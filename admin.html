@@ -1341,16 +1341,19 @@ var HOME_SECTIONS = [
 ];
 var HOME_ORDER_KEYS = HOME_SECTIONS.filter(function(s){ return !s.fixed; }).map(function(s){ return s.key; });
 
-async function loadHomeSections(){
-  var panel = $("home-sections-panel");
+async function loadFullPageSections(panelId, pageKey, sectionsConfig, pageLabel){
+  var panel = $(panelId);
   if (!panel) return;
+  var orderKeys = sectionsConfig.filter(function(s){ return !s.fixed; }).map(function(s){ return s.key; });
+  var fixedKey = (sectionsConfig.filter(function(s){ return s.fixed; })[0] || {}).key;
+
   var secRes, textRes, mediaRes;
   try {
-    secRes = await sb.from("page_sections").select("*").eq("page","home");
-    textRes = await sb.from("page_text").select("*").eq("page","home");
+    secRes = await sb.from("page_sections").select("*").eq("page",pageKey);
+    textRes = await sb.from("page_text").select("*").eq("page",pageKey);
     mediaRes = await sb.from("page_media").select("*");
   } catch(e) {
-    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>Homepage Sections</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> and <code>migration-13-archive-sections.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
+    panel.innerHTML = '<div class="panel" style="margin-top:16px"><div class="panel-h"><h2>'+esc(pageLabel)+'</h2></div><div class="empty"><b>Not set up yet</b>Run <code>supabase/migration-12-page-content.sql</code> and <code>migration-13-archive-sections.sql</code> in the Supabase SQL Editor, then reload.</div></div>';
     return;
   }
   var savedOrder = {}, archivedKeys = {};
@@ -1363,15 +1366,15 @@ async function loadHomeSections(){
   var mediaMap = {};
   (mediaRes.data||[]).forEach(function(r){ mediaMap[r.slot] = r; });
 
-  var liveKeys = HOME_ORDER_KEYS.filter(function(k){ return !archivedKeys[k]; });
-  var archivedList = HOME_ORDER_KEYS.filter(function(k){ return archivedKeys[k]; });
+  var liveKeys = orderKeys.filter(function(k){ return !archivedKeys[k]; });
+  var archivedList = orderKeys.filter(function(k){ return archivedKeys[k]; });
 
   var effectiveOrder = liveKeys.map(function(key){
-    var i = HOME_ORDER_KEYS.indexOf(key);
+    var i = orderKeys.indexOf(key);
     return { key: key, order: (key in savedOrder) ? savedOrder[key] : i*100 };
   }).sort(function(a,b){ return a.order-b.order; }).map(function(x){ return x.key; });
 
-  var orderedForDisplay = ["hero"].concat(effectiveOrder);
+  var orderedForDisplay = fixedKey ? [fixedKey].concat(effectiveOrder) : effectiveOrder.slice();
 
   function slotLabel(slot){
     var suffix = slot.split(".").pop() || slot;
@@ -1417,7 +1420,7 @@ async function loadHomeSections(){
       cfg.imageSlots.map(function(slot){
         var r = mediaMap[slot] || {};
         var url = r.url || "";
-        var isVideo = slot.indexOf("video") !== -1 || slot==="home.hero_video";
+        var isVideo = slot.indexOf("video") !== -1;
         var prev = url
           ? (isVideo ? '<video src="'+esc(url)+'" muted></video>' : '<img src="'+esc(url)+'" alt="">')
           : '<span class="pm-ph">No media</span>';
@@ -1434,7 +1437,7 @@ async function loadHomeSections(){
   }
 
   function sectionCardHtml(key, i, isFixed, idx){
-    var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+    var cfg = sectionsConfig.filter(function(s){ return s.key===key; })[0];
     return '<div class="pm-group home-sec-card" data-section-key="'+esc(key)+'">' +
       '<div style="display:flex;align-items:center;justify-content:space-between">' +
         '<div class="home-sec-title">'+(i+1)+'. '+esc(cfg.label)+(isFixed?' <span class="drop-s" style="display:inline">(always first)</span>':'')+'</div>' +
@@ -1455,7 +1458,7 @@ async function loadHomeSections(){
         '<div class="panel-h"><h2>Archived (hidden from the site)</h2></div>' +
         '<div class="drop-s" style="padding:0 20px 12px">Nothing here is deleted \u2014 all its text, images, and order are kept exactly as they were. Restore to bring it back.</div>' +
         archivedList.map(function(key){
-          var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+          var cfg = sectionsConfig.filter(function(s){ return s.key===key; })[0];
           return '<div class="pm-group" style="opacity:.65;display:flex;align-items:center;justify-content:space-between">' +
             '<div class="home-sec-title" style="margin:0">'+esc(cfg.label)+'</div>' +
             '<button class="icon-btn" data-restore="'+esc(key)+'" title="Restore to the site">&#8635; Restore</button>' +
@@ -1465,23 +1468,24 @@ async function loadHomeSections(){
     : "";
 
   panel.innerHTML = '<div class="panel" style="margin-top:16px">' +
-    '<div class="panel-h"><h2>Homepage Sections</h2></div>' +
+    '<div class="panel-h"><h2>'+esc(pageLabel)+'</h2></div>' +
     '<div class="drop-s" style="padding:0 20px 12px">Top to bottom, matching the live page. Reorder with the arrows, edit text inline, manage each section\u2019s image right where it belongs. Archive to hide a section without losing anything. Layout/design changes still happen in code, tested on a branch.</div>' +
     orderedForDisplay.map(function(key, i){
-      var isFixed = key==="hero";
+      var isFixed = key===fixedKey;
       var idx = isFixed ? -1 : effectiveOrder.indexOf(key);
       return sectionCardHtml(key, i, isFixed, idx);
     }).join("") +
   '</div>' + archivedHtml;
 
-  // wire text saves (fields + embedField together)
+  function reload(){ loadFullPageSections(panelId, pageKey, sectionsConfig, pageLabel); }
+
   panel.querySelectorAll("[data-savetext]").forEach(function(btn){
     btn.onclick = async function(){
       var key = btn.dataset.savetext;
       var row = btn.closest(".pm-group");
       var hint = row.querySelector('[data-hint="'+key+'"]');
       hint.style.color="var(--mut)"; hint.textContent="Saving\u2026";
-      var cfg = HOME_SECTIONS.filter(function(s){ return s.key===key; })[0];
+      var cfg = sectionsConfig.filter(function(s){ return s.key===key; })[0];
       var allFields = cfg.fields.slice();
       if (cfg.embedField) allFields.push(cfg.embedField);
       try{
@@ -1490,10 +1494,10 @@ async function loadHomeSections(){
           var el = row.querySelector('[data-field="'+f.key+'"]');
           var val = el.value.trim();
           if (val && val !== f.current){
-            var up = await sb.from("page_text").upsert({ page:"home", section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
+            var up = await sb.from("page_text").upsert({ page:pageKey, section_key:key, field_key:f.key, value:val }, { onConflict:"page,section_key,field_key" });
             if (up.error) throw up.error;
           } else {
-            var del = await sb.from("page_text").delete().eq("page","home").eq("section_key",key).eq("field_key",f.key);
+            var del = await sb.from("page_text").delete().eq("page",pageKey).eq("section_key",key).eq("field_key",f.key);
             if (del.error) throw del.error;
           }
         }
@@ -1503,38 +1507,35 @@ async function loadHomeSections(){
     };
   });
 
-  // wire reorder
-  panel.querySelectorAll("[data-secup]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secup, -1); }; });
-  panel.querySelectorAll("[data-secdown]").forEach(function(btn){ btn.onclick=function(){ moveHomeSection(effectiveOrder, btn.dataset.secdown, 1); }; });
+  panel.querySelectorAll("[data-secup]").forEach(function(btn){ btn.onclick=function(){ moveSectionInPage(pageKey, effectiveOrder, btn.dataset.secup, -1, reload); }; });
+  panel.querySelectorAll("[data-secdown]").forEach(function(btn){ btn.onclick=function(){ moveSectionInPage(pageKey, effectiveOrder, btn.dataset.secdown, 1, reload); }; });
 
-  // wire archive / restore
   panel.querySelectorAll("[data-archive]").forEach(function(btn){
     btn.onclick = async function(){
       var key = btn.dataset.archive;
       if (!confirm("Hide this section from the live site? Nothing is deleted \u2014 you can restore it anytime.")) return;
-      var order = (key in savedOrder) ? savedOrder[key] : HOME_ORDER_KEYS.indexOf(key)*100;
+      var order = (key in savedOrder) ? savedOrder[key] : orderKeys.indexOf(key)*100;
       try{
-        var { error } = await sb.from("page_sections").upsert({ page:"home", section_key:key, sort_order:order, active:false }, { onConflict:"page,section_key" });
+        var { error } = await sb.from("page_sections").upsert({ page:pageKey, section_key:key, sort_order:order, active:false }, { onConflict:"page,section_key" });
         if (error) throw error;
         toast("Archived \u2014 click Publish Changes to make it live");
-        loadHomeSections();
+        reload();
       }catch(e){ toast(e.message||"Archive failed", true); }
     };
   });
   panel.querySelectorAll("[data-restore]").forEach(function(btn){
     btn.onclick = async function(){
       var key = btn.dataset.restore;
-      var order = (key in savedOrder) ? savedOrder[key] : HOME_ORDER_KEYS.indexOf(key)*100;
+      var order = (key in savedOrder) ? savedOrder[key] : orderKeys.indexOf(key)*100;
       try{
-        var { error } = await sb.from("page_sections").upsert({ page:"home", section_key:key, sort_order:order, active:true }, { onConflict:"page,section_key" });
+        var { error } = await sb.from("page_sections").upsert({ page:pageKey, section_key:key, sort_order:order, active:true }, { onConflict:"page,section_key" });
         if (error) throw error;
         toast("Restored \u2014 click Publish Changes to make it live");
-        loadHomeSections();
+        reload();
       }catch(e){ toast(e.message||"Restore failed", true); }
     };
   });
 
-  // wire inline image upload/save (same pattern as the main Pages slot editor)
   panel.querySelectorAll(".home-img-card").forEach(function(row){
     var slot = row.dataset.slot, type = row.dataset.type;
     var fileEl = row.querySelector(".pm-file");
@@ -1562,7 +1563,7 @@ async function loadHomeSections(){
       if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
       hint.style.color="#8fe3a0"; hint.textContent="Saved \u2713";
       toast("Media saved");
-      loadHomeSections();
+      reload();
     };
     var clearBtn = row.querySelector(".pm-clear");
     if (clearBtn) clearBtn.onclick = async function(){
@@ -1571,26 +1572,29 @@ async function loadHomeSections(){
       var { error } = await sb.from("page_media").delete().eq("slot", slot);
       if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
       toast("Cleared \u2014 back to default");
-      loadHomeSections();
+      reload();
     };
   });
 }
 
-async function moveHomeSection(effectiveOrder, key, dir){
+async function moveSectionInPage(pageKey, effectiveOrder, key, dir, reloadFn){
   var i = effectiveOrder.indexOf(key);
   var j = i+dir;
   if (i<0 || j<0 || j>=effectiveOrder.length) return;
   var a = effectiveOrder[i], b = effectiveOrder[j];
   var aOrder = i*100, bOrder = j*100;
   try{
-    var r1 = await sb.from("page_sections").upsert({ page:"home", section_key:a, sort_order:bOrder }, { onConflict:"page,section_key" });
+    var r1 = await sb.from("page_sections").upsert({ page:pageKey, section_key:a, sort_order:bOrder }, { onConflict:"page,section_key" });
     if (r1.error) throw r1.error;
-    var r2 = await sb.from("page_sections").upsert({ page:"home", section_key:b, sort_order:aOrder }, { onConflict:"page,section_key" });
+    var r2 = await sb.from("page_sections").upsert({ page:pageKey, section_key:b, sort_order:aOrder }, { onConflict:"page,section_key" });
     if (r2.error) throw r2.error;
     toast("Order saved \u2014 click Publish Changes to make it live");
-    loadHomeSections();
+    reloadFn();
   }catch(e){ toast(e.message||"Reorder failed", true); }
 }
+
+function loadHomeSections(){ return loadFullPageSections("home-sections-panel", "home", HOME_SECTIONS, "Homepage Sections"); }
+
 
 /* ---------------- CLASSES PAGE (text only for now) ----------------
    Same pattern as Homepage Sections, minus reorder/archive — classes.html
@@ -1728,7 +1732,7 @@ async function loadTextOnlyPage(panelId, pageKey, sectionsConfig, pageLabel){
 function loadClassesSections(){ return loadTextOnlyPage("classes-sections-panel", "classes", CLASSES_SECTIONS, "Classes Page"); }
 
 var AD_TRIALS_SECTIONS = [
-  { key:"hero", label:"Hero", fields:[
+  { key:"hero", label:"Hero", fixed:true, fields:[
     { key:"eyebrow", label:"Eyebrow", tagLabel:"Text", type:"text", current:"South Hills Pittsburgh — Trial Offer" },
     { key:"title1", label:"Title1", tagLabel:"Label", type:"text", current:"Your Cardio Just Got" },
     { key:"title2", label:"Title2", tagLabel:"Label", type:"text", current:"A Whole Lot More Fun." },
@@ -1888,7 +1892,7 @@ var AD_TRIALS_SECTIONS = [
     { key:"note", label:"Note", tagLabel:"Text", type:"text", current:"South Hills Pittsburgh · Local residents w/ID · All levels welcome", indent:true }
   ]}
 ];
-function loadAdTrialsSections(){ return loadTextOnlyPage("adtrials-sections-panel", "punch-ad-trials", AD_TRIALS_SECTIONS, "Punch Ad Trials Page"); }
+function loadAdTrialsSections(){ return loadFullPageSections("adtrials-sections-panel", "punch-ad-trials", AD_TRIALS_SECTIONS, "Punch Ad Trials Page"); }
 
 /* ---------------- SITE-WIDE FOOTER ---------------- */
 // Applied at RUNTIME by nav.js on every page (header/footer aren't baked
