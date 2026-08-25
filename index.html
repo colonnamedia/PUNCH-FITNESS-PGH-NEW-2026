@@ -111,19 +111,6 @@
   <div class="stat"><div class="stat-num" data-text="stats.num4">All</div><div class="stat-lbl" data-text="stats.label4">Fitness Levels</div></div>
 </div></div>
 
-<div class="s off" id="landing-schedule" data-section="schedule">
- <div class="si" style="text-align:center;max-width:760px">
-  <span class="lbl" data-text="schedule.eyebrow">See It For Yourself</span>
-  <h2 class="h2" data-text="schedule.headline">Find A Class<br><span>That Works For You.</span></h2>
-  <p class="sub" data-text="schedule.subtext" style="margin:0 auto">See what's coming up and choose when you'd like to start.</p>
- </div>
- <div class="si">
-  <div style="background:#fff;border:1px solid #e6e2d9;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.06)">
-   <iframe data-embed="schedule.embed_url" src="https://punchpgh.pushpress.com/landing/calendar?view=day&amp;type=list" style="width:100%;min-height:840px;border:none;display:block" title="Punch class schedule" loading="lazy"></iframe>
-  </div>
- </div>
-</div>
-
 <div class="s off" data-section="combined-header" style="text-align:center;padding-top:56px;padding-bottom:28px">
   <div class="si" style="max-width:760px">
     <span class="lbl" data-text="combined-header.eyebrow">South Hills Pittsburgh</span>
@@ -142,6 +129,19 @@
   <div class="class-photo-card"><img data-slot="home.train" src="/assets/punch-pittsburgh-44.jpg" alt="Train Class" /><div class="class-photo-ov"><div class="class-photo-tag" data-text="fight-train-sweat.card2_tag">Strength &middot; 45&ndash;55 Min</div><div class="class-photo-name" data-text="fight-train-sweat.card2_name">Boxing + Strength</div><p class="class-photo-desc" data-text="fight-train-sweat.card2_desc">Functional resistance training with barbells, dumbbells, and cables. Fresh programming every session.</p><div class="class-photo-stat" data-text="fight-train-sweat.card2_stat">New Daily</div><div class="class-photo-stat-lbl" data-text="fight-train-sweat.card2_statlbl">Programming</div></div></div>
   <div class="class-photo-card"><img data-slot="home.sweat" src="/assets/punch-pittsburgh-1.jpg" alt="Sweat Class" /><div class="class-photo-ov"><div class="class-photo-tag" data-text="fight-train-sweat.card3_tag">HIIT Circuit &middot; 45&ndash;55 Min</div><div class="class-photo-name" data-text="fight-train-sweat.card3_name">Circuit Training</div><p class="class-photo-desc" data-text="fight-train-sweat.card3_desc">Air bikes, rowers, circuits, boxing stations. High-intensity intervals that keep you moving the whole class.</p><div class="class-photo-stat" data-text="fight-train-sweat.card3_stat">High Intensity</div><div class="class-photo-stat-lbl" data-text="fight-train-sweat.card3_statlbl">Max Effort</div></div></div>
 </div></div>
+
+<div class="s off" id="landing-schedule" data-section="schedule">
+ <div class="si" style="text-align:center;max-width:760px">
+  <span class="lbl" data-text="schedule.eyebrow">See It For Yourself</span>
+  <h2 class="h2" data-text="schedule.headline">Find A Class<br><span>That Works For You.</span></h2>
+  <p class="sub" data-text="schedule.subtext" style="margin:0 auto">See what's coming up and choose when you'd like to start.</p>
+ </div>
+ <div class="si">
+  <div style="background:#fff;border:1px solid #e6e2d9;border-radius:16px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.06)">
+   <iframe data-embed="schedule.embed_url" src="https://punchpgh.pushpress.com/landing/calendar?view=day&amp;type=list" style="width:100%;min-height:840px;border:none;display:block" title="Punch class schedule" loading="lazy"></iframe>
+  </div>
+ </div>
+</div>
 
 <div class="s off" data-section="reviews"><div class="si">
   <span class="lbl" data-text="reviews.eyebrow">Real Members. Real Results.</span>
@@ -200,8 +200,15 @@
 
 <div class="s prog-sec" data-section="programs" style="padding-top:44px;padding-bottom:56px">
   <div class="si" style="max-width:1280px">
-    <div style="text-align:center;margin-bottom:36px"><span class="lbl" data-text="programs.eyebrow">Beyond Adult Boxing</span><h2 class="h2" data-text="programs.headline">More Ways to<br><span>Train at Punch.</span></h2></div>
+    <div class="si" style="text-align:center;max-width:760px;margin:0 auto 36px">
+      <span class="lbl" data-text="programs.eyebrow">Every Way to Train</span>
+      <h2 class="h2" data-text="programs.headline">More Ways to<br><span>Train at Punch.</span></h2>
+    </div>
     <div class="prog-grid">
+      <div class="prog-card">
+        <img data-slot="home.prog_adult" src="/assets/punch-pittsburgh-6.jpg" alt="Adult Boxing & Fitness" />
+        <div class="prog-ov"><div class="prog-tag">Adults &middot; All Levels</div><div class="prog-name">Adult Boxing &amp; Fitness</div><p class="prog-desc">Boxing, strength, and HIIT classes for every fitness level. No experience needed &mdash; just show up.</p><a href="#" onclick="return PunchOpenTrialPopup(event)" class="prog-lnk">Start Your Trial &rarr;</a></div>
+      </div>
       <div class="prog-card">
         <img data-slot="home.prog_youth" src="/assets/punch-youth-1.jpg" alt="Youth Boxing" />
         <div class="prog-ov"><div class="prog-tag">Ages 7&ndash;13</div><div class="prog-name">Youth Boxing</div><p class="prog-desc">Build confidence, discipline, and fitness through coach-led youth boxing. Fun, safe, structured.</p><a href="/youth-boxing-camp.html" class="prog-lnk">Learn About Youth Boxing &rarr;</a></div>

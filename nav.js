@@ -116,7 +116,12 @@
           '<div class="ps-card">' +
             '<div class="ps-lbl">Quick First Experience</div>' +
             '<div class="ps-h2">One Free Class</div>' +
-            '<p class="ps-desc">Try one Punch class on us and experience the workout for yourself.</p>' +
+            '<ul class="ps-perks">' +
+              '<li><span class="ps-tick">&#10003;</span> 1 free workout of your choice</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Cardio Boxing, Strength, or Circuit</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Meet your coaches &amp; the gym</li>' +
+              '<li><span class="ps-tick">&#10003;</span> No credit card required</li>' +
+            '</ul>' +
             '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Choose Free Class &rarr;</a>' +
             '<p class="ps-fine">No experience needed.</p>' +
           '</div>' +
@@ -126,7 +131,12 @@
             '<div class="ps-lbl">Full Punch Experience</div>' +
             '<div class="ps-h2">7 Days Unlimited</div>' +
             '<div class="ps-price"><sup>$</sup>19.99</div>' +
-            '<p class="ps-desc">Get a full week to experience Punch and try multiple workouts.</p>' +
+            '<ul class="ps-perks">' +
+              '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Try every class format</li>' +
+              '<li><span class="ps-tick">&#10003;</span> No long-term commitment</li>' +
+              '<li><span class="ps-tick">&#10003;</span> One-time payment, no auto-renew</li>' +
+            '</ul>' +
             '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7 Days &mdash; $19.99 &rarr;</a>' +
             '<p class="ps-fine">Unlimited classes for 7 days.</p>' +
           '</div>' +
