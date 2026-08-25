@@ -554,7 +554,22 @@ html,body{margin:0;padding:0;background:#fff}
 .ps-card.feat .ps-btn{background:#D92B2B}
 .ps-card.feat .ps-btn:hover{background:#ff3333}
 .ps-fine{text-align:center;font-size:10.5px;color:#bbb;margin-top:8px;font-style:italic}
+.ps-h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:23px;line-height:1.05;text-transform:uppercase;color:#1a1a1a;margin:2px 0 10px}
+.ps-card.feat .ps-h2{color:#D92B2B}
+.ps-desc{font-size:13px;line-height:1.5;color:#555;flex:1;margin:0 0 16px}
 @media(max-width:700px){.ps-cards{grid-template-columns:1fr}.ps-body{max-height:60vh}.ps-h{font-size:26px}}
+/* Mobile: bottom sheet / slide-up card, not a centered modal squeezed onto
+   a phone. The page stays visible above it — this only covers the lower
+   portion of the screen, matching "still on the Punch website" not
+   "blocked from the website". */
+@media(max-width:640px){
+  .ps-ov{align-items:flex-end;padding:0}
+  .ps-box{max-width:100%;width:100%;border-radius:20px 20px 0 0;max-height:88vh;display:flex;flex-direction:column;transform:translateY(40px)}
+  .ps-ov.on .ps-box{transform:translateY(0)}
+  .ps-box::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:3px;background:rgba(255,255,255,.6);z-index:3}
+  .ps-body{overflow-y:auto;max-height:none}
+  .ps-x{top:14px}
+}
 
 /* ==========================  LEAD FUNNEL  ================================ */
 .lf-steps{display:flex;justify-content:center;gap:0;max-width:760px;margin:0 auto 6px;padding:0 20px}

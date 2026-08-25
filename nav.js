@@ -100,49 +100,35 @@
   var POP_KEY = "punch_popup_seen_v2";
   var POP_DELAY = 12000;
 
-  function buildPopup() {
-    try { if (localStorage.getItem(POP_KEY)) return false; } catch (e) {}
-    if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return false;
-
+  function renderPopup() {
     var ov = document.createElement("div");
     ov.className = "ps-ov";
     ov.innerHTML =
-      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Start your trial">' +
+      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Choose how you want to start">' +
         '<button class="ps-x" id="psX" aria-label="Close">&times;</button>' +
         '<div class="ps-top">' +
-          '<div class="ps-eyebrow">South Hills Pittsburgh &middot; All Levels Welcome</div>' +
-          '<div class="ps-h">Your First Class<br>Is On Us.</div>' +
-          '<p class="ps-p">No experience needed. Pick how you want to start &mdash; one free class, or a full week of unlimited classes.</p>' +
+          '<div class="ps-eyebrow">Ready to Try Punch?</div>' +
+          '<div class="ps-h">Choose How You<br>Want to Start.</div>' +
+          '<p class="ps-p">Two simple ways to experience Punch. Pick what works for you.</p>' +
         '</div>' +
         '<div class="ps-body"><div class="ps-cards">' +
 
           '<div class="ps-card">' +
-            '<div class="ps-lbl">First Workout</div>' +
-            '<div class="ps-price">Free</div>' +
-            '<div class="ps-meta">Single class &middot; No credit card</div>' +
-            '<ul class="ps-perks">' +
-              '<li><span class="ps-tick">&#10003;</span> 1 free workout of your choice</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Fight, Train, or Sweat format</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Gloves provided</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Meet your coaches &amp; the gym</li>' +
-            '</ul>' +
-            '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Claim Free Class &rarr;</a>' +
-            '<p class="ps-fine">Local residents w/ID &middot; use within 7 days</p>' +
+            '<div class="ps-lbl">Quick First Experience</div>' +
+            '<div class="ps-h2">One Free Class</div>' +
+            '<p class="ps-desc">Try one Punch class on us and experience the workout for yourself.</p>' +
+            '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Choose Free Class &rarr;</a>' +
+            '<p class="ps-fine">No experience needed.</p>' +
           '</div>' +
 
           '<div class="ps-card feat">' +
             '<div class="ps-flag">&#9889; Best Value</div>' +
-            '<div class="ps-lbl">7 Days Unlimited</div>' +
+            '<div class="ps-lbl">Full Punch Experience</div>' +
+            '<div class="ps-h2">7 Days Unlimited</div>' +
             '<div class="ps-price"><sup>$</sup>19.99</div>' +
-            '<div class="ps-meta">Unlimited classes &middot; 7 days</div>' +
-            '<ul class="ps-perks">' +
-              '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Try Fight, Train &amp; Sweat formats</li>' +
-              '<li><span class="ps-tick">&#10003;</span> No long-term commitment</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Personal intro tour &amp; coaching</li>' +
-            '</ul>' +
-            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7 Days Unlimited &rarr;</a>' +
-            '<p class="ps-fine">One-time payment &middot; no auto-renew</p>' +
+            '<p class="ps-desc">Get a full week to experience Punch and try multiple workouts.</p>' +
+            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7 Days &mdash; $19.99 &rarr;</a>' +
+            '<p class="ps-fine">Unlimited classes for 7 days.</p>' +
           '</div>' +
 
         '</div></div>' +
@@ -161,9 +147,36 @@
       b.addEventListener("click", function () { try { localStorage.setItem(POP_KEY, "1"); } catch (e) {} });
     });
 
+    return ov;
+  }
+
+  // Auto-show once per session, after a delay, on general browsing pages.
+  // Skipped on admin and on pages with an active form/checkout in progress
+  // (see the "protect an active conversion" rule — never interrupt someone
+  // who has already chosen and is entering information).
+  function buildPopup() {
+    try { if (localStorage.getItem(POP_KEY)) return false; } catch (e) {}
+    // Skip auto-fire on admin, the unrelated 24-hour-special page, and the
+    // three dedicated trial pages — someone already on their chosen page's
+    // registration flow shouldn't be immediately asked to reselect. The
+    // popup itself stays available on all of these via window.PunchOpenTrialPopup.
+    if (/\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b/.test(location.pathname)) return false;
+    var ov = renderPopup();
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
     return true;
   }
+
+  // Manual re-open, for every "START YOUR TRIAL" CTA. Always works, even if
+  // the visitor already dismissed the auto-popup this session — closing it
+  // once shouldn't block them from deliberately asking to see it again.
+  window.PunchOpenTrialPopup = function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var existing = document.querySelector(".ps-ov");
+    if (existing) { existing.classList.add("on"); return false; }
+    var ov = renderPopup();
+    requestAnimationFrame(function () { ov.classList.add("on"); });
+    return false;
+  };
 
   // ---- Custom image popup (admin-managed, /admin > Popups) -----------------
   function buildCustomPopup(p) {
@@ -390,7 +403,7 @@
       var bar = document.createElement("div");
       bar.className = "mcta";
       bar.innerHTML =
-        '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>';
+        '<a class="m-red" href="' + FREE + '" onclick="return PunchOpenTrialPopup(event)">Start Your Trial</a>';
       document.body.appendChild(bar);
 
       // Keep the bar pinned to the TRUE visible area on iOS/Android — env(safe-area-inset-bottom)
