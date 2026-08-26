@@ -14,15 +14,12 @@
       'onerror="this.onerror=null;this.style.display=\'none\';var t=this.parentNode;t.querySelector(\'b\').style.display=\'block\';t.querySelector(\'span\').style.display=\'block\'">' +
       '<b>PUNCH</b><span>Boxing &amp; Fitness</span></a>' +
     '<nav class="pn-nav">' +
-      '<div class="pn-item"><button class="pn-link">Workouts<span class="pn-caret">&#9660;</span></button>' +
+      '<div class="pn-item"><button class="pn-link">Classes<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
-          '<div class="pn-sub-h">Classes</div>' +
-          '<a class="pn-sub-a" href="/classes">Group Fitness</a>' +
-          '<a class="pn-sub-a" href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-          '<a class="pn-sub-a" href="/youth-boxing-camp">Youth Boxing</a>' +
-          '<div class="pn-menu-div"></div>' +
-          '<a href="/personal-training">Personal Training</a>' +
-          '<a href="/trainers">Meet the Trainers</a></div></div>' +
+          '<a class="pn-sub-feat" href="/classes">Core Program<span class="pn-sub-desc">Cardio Boxing &middot; Boxing + Strength &middot; Circuit Training</span></a>' +
+          '<a href="/youth-boxing-camp">Youth Boxing</a>' +
+          '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a></div></div>' +
+      '<a class="pn-link" href="/personal-training">Personal Training</a>' +
       '<a class="pn-link" href="/schedule">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
@@ -36,13 +33,11 @@
     '<button class="pn-burger" id="pnBurger" aria-label="Menu"><span></span><span></span><span></span></button>' +
   '</div>' +
   '<div class="pn-drawer" id="pnDrawer">' +
-    '<details><summary>Workouts</summary>' +
-      '<div class="pn-sub-h">Classes</div>' +
-      '<a class="pn-sub-a" href="/classes">Group Fitness</a>' +
-      '<a class="pn-sub-a" href="/senior-fitness-and-boxing-pittsburgh">Parkinson\'s &amp; Senior Fit</a>' +
-      '<a class="pn-sub-a" href="/youth-boxing-camp">Youth Boxing</a>' +
-      '<div class="pn-menu-div"></div>' +
-      '<a href="/personal-training">Personal Training</a></details>' +
+    '<details><summary>Classes</summary>' +
+      '<a href="/classes">Core Program</a>' +
+      '<a href="/youth-boxing-camp">Youth Boxing</a>' +
+      '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a></details>' +
+    '<a href="/personal-training">Personal Training</a>' +
     '<a href="/schedule">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
       '<a href="/membership-options">Membership Options</a>' +
