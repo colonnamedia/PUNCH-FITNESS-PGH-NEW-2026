@@ -790,6 +790,18 @@ body.has-mcta{padding-bottom:0}
 #plp .s.dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--brass-soft),transparent);opacity:.5}
 #plp .si{max-width:1180px;margin:0 auto}
 
+/* Community + trial cards: wide side-by-side on desktop, stacked on mobile */
+#plp .community-cta-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;max-width:1520px;margin:0 auto;padding:0 40px}
+#plp .community-cta-text{text-align:left}
+#plp .community-cta-text .lbl::before{margin-right:12px}
+#plp .community-cta-cards .trial-cards{gap:20px}
+#plp .community-cta-cards .trial-card{max-width:440px;width:100%}
+@media(max-width:960px){
+  #plp .community-cta-grid{grid-template-columns:1fr;gap:40px;padding:0 24px;max-width:640px}
+  #plp .community-cta-text{text-align:center}
+  #plp .community-cta-cards .trial-card{max-width:100%}
+}
+
 /* ————————————————————— BUTTONS ————————————————————— */
 #plp .btn-red,#plp .btn-dark,#plp .btn-wht,#plp .btn-ghost-w,#plp .trial-btn,#plp .prog-lnk{
   font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
