@@ -3,42 +3,64 @@
    - strips ".html" from internal links in the dist copies
    - writes <page>/index.html for every page so /schedule serves cleanly
    - bakes the admin-set Default Share Image (og:image) into every page
+   - PRE-RENDERS each published blog post to /blog/<slug>/index.html (static HTML)
    Publish Directory = dist, Build Command = npm run build. */
 const fs = require("fs"), path = require("path"), https = require("https");
 const SKIP = new Set(["dist","node_modules",".git",".github","build.cjs","package.json","package-lock.json","render.yaml","README.md","SUPABASE-SETUP.md","ANALYTICS-SEO.md",".DS_Store","scripts","api","supabase"]);
 const CLEAN_SKIP = new Set(["index.html","404.html","post.html"]); // keep these flat
 
 /* Public anon key — read-only via RLS (same values as config.js). Used ONLY to
-   read the admin-set default share image at build time. Never put secrets here. */
+   read the default share image + published blog posts at build time. No secrets. */
 const SB_URL = "https://uyzvmrbjlzafpwpamjwa.supabase.co";
 const SB_KEY = "sb_publishable_HPXuZiYMaOHhuXiZ6SONBg_hy6X3_ce";
+const OG_FALLBACK = "https://punchpgh.com/assets/punch-pittsburgh-41.jpg";
 
-/* Fetch the admin-set default share image. NEVER throws — on any failure it
-   resolves null and the build continues with the per-page og:image untouched,
-   so a Supabase hiccup can never take down the deploy. */
-function getDefaultOgImage(){
+/* Generic defensive GET against Supabase REST. NEVER throws — resolves null on
+   any failure so a Supabase hiccup can never take down the deploy. */
+function sbGet(pathAndQuery){
   return new Promise(resolve => {
     let done = false;
     const finish = v => { if(!done){ done = true; resolve(v); } };
     try{
-      const url = SB_URL + "/rest/v1/site_settings?key=eq.og_image_url&select=value";
-      const req = https.get(url, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY } }, res => {
+      const req = https.get(SB_URL + pathAndQuery, { headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY } }, res => {
         let body = "";
         res.on("data", c => body += c);
-        res.on("end", () => {
-          try{
-            const j = JSON.parse(body);
-            const u = j && j[0] && j[0].value && j[0].value.url;
-            finish(typeof u === "string" && /^https?:\/\//.test(u) ? u : null);
-          }catch{ finish(null); }
-        });
+        res.on("end", () => { try{ finish(JSON.parse(body)); }catch{ finish(null); } });
       });
       req.on("error", () => finish(null));
-      req.setTimeout(8000, () => { req.destroy(); finish(null); });
+      req.setTimeout(10000, () => { req.destroy(); finish(null); });
     }catch{ finish(null); }
   });
 }
+async function getDefaultOgImage(){
+  const j = await sbGet("/rest/v1/site_settings?key=eq.og_image_url&select=value");
+  const u = j && j[0] && j[0].value && j[0].value.url;
+  return (typeof u === "string" && /^https?:\/\//.test(u)) ? u : null;
+}
+async function getPublishedPosts(){
+  const j = await sbGet("/rest/v1/blog_posts?published=eq.true&select=slug,title,topic,excerpt,body,image_url,created_at&order=created_at.desc&limit=200");
+  return Array.isArray(j) ? j.filter(p => p && p.slug) : [];
+}
 
+/* ---- render helpers (ported to match post.html exactly) ---- */
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const when = d => { try{ return new Date(d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }catch{ return ""; } };
+function md(src){
+  let t = esc(src);
+  t = t.replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>");
+  t = t.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");
+  const lines = t.split(/\n/); let out=[], inList=false, para=[];
+  const flush=()=>{ if(para.length){ out.push("<p>"+para.join(" ")+"</p>"); para=[]; } };
+  for (const ln of lines){
+    const s = ln.trim();
+    if (/^<h[23]>/.test(s)){ flush(); if(inList){out.push("</ul>");inList=false;} out.push(s); }
+    else if (/^[-*] /.test(s)){ flush(); if(!inList){out.push("<ul>");inList=true;} out.push("<li>"+s.slice(2)+"</li>"); }
+    else if (!s){ flush(); if(inList){out.push("</ul>");inList=false;} }
+    else para.push(s);
+  }
+  flush(); if(inList) out.push("</ul>");
+  return out.join("");
+}
 function bakeOg(html, url){
   if(!url) return html;
   const v = url.replace(/"/g, "&quot;");
@@ -47,8 +69,81 @@ function bakeOg(html, url){
     .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*(")/g, "$1" + v + "$2");
 }
 
+
+/* full static page for a single blog post */
+function blogPageHtml(p, ogFallback){
+  const title = esc(p.title) + " | Punch Boxing &amp; Fitness";
+  const desc = esc(p.excerpt || (p.title + " — Punch Boxing & Fitness, South Hills Pittsburgh."));
+  const url = "https://punchpgh.com/blog/" + encodeURIComponent(p.slug);
+  const img = (p.image_url && /^https?:\/\//.test(p.image_url)) ? p.image_url : (ogFallback || OG_FALLBACK);
+  const imgEsc = esc(img);
+  const ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":p.title,
+    "datePublished":p.created_at,"description":p.excerpt||"","image":img,"url":url,
+    "mainEntityOfPage":url,"author":{"@type":"Organization","name":"Punch Boxing & Fitness"},
+    "publisher":{"@type":"Organization","name":"Punch Boxing & Fitness","logo":{"@type":"ImageObject","url":"https://punchpgh.com/assets/punch-logo-1.png"}}};
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/favicon.svg" />
+<title>${title}</title>
+<meta name="description" content="${desc}" />
+<link rel="canonical" href="${url}" />
+<meta name="robots" content="index, follow" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="${title}" />
+<meta property="og:description" content="${desc}" />
+<meta property="og:image" content="${imgEsc}" />
+<meta property="og:url" content="${url}" />
+<meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${title}" />
+<meta name="twitter:description" content="${desc}" />
+<meta name="twitter:image" content="${imgEsc}" />
+<script type="application/ld+json">${JSON.stringify(ld)}</script>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+<link rel="stylesheet" href="/punch.css" />
+<script src="/nav.js" defer></script>
+<script src="/config.js"></script>
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div id="plp">
+  <div class="s" style="padding-top:60px">
+    <div class="si">
+      <div id="post-root" style="max-width:760px;margin:0 auto">
+        <div class="bpost-topic" style="margin-bottom:12px">${esc(p.topic)}</div>
+        <h1 class="h2" style="font-size:clamp(34px,5vw,54px);margin-bottom:10px">${esc(p.title)}</h1>
+        <div class="bpost-date" style="margin-bottom:26px">${when(p.created_at)}</div>
+        ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
+        <div class="article">${md(p.body)}</div>
+      </div>
+      <div style="max-width:760px;margin:44px auto 0;text-align:center">
+        <a href="/blog-events" class="btn-dark">&larr; All Posts</a>
+      </div>
+    </div>
+  </div>
+  <div class="final">
+    <span class="lbl" style="color:rgba(255,255,255,.6)">Ready to Train?</span>
+    <div class="final-title">Your First Class Is Free.</div>
+    <div class="final-sub">Come try it in person — no experience needed, all levels welcome.</div>
+    <div class="final-btns">
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" class="btn-wht" target="_blank" rel="noopener">Claim My Free Class</a>
+      <a href="/membership-options" class="btn-ghost-w">See Memberships</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>`;
+}
+
 (async function main(){
   const ogUrl = await getDefaultOgImage();
+  const posts = await getPublishedPosts();
 
   fs.rmSync("dist", { recursive: true, force: true });
   fs.mkdirSync("dist", { recursive: true });
@@ -75,7 +170,6 @@ function bakeOg(html, url){
       fs.writeFileSync(p, clean(fs.readFileSync(p, "utf8")));
     }
   }
-  // also clean nav.js in dist (belt & suspenders)
   if (fs.existsSync("dist/nav.js")){
     fs.writeFileSync("dist/nav.js", clean(fs.readFileSync("dist/nav.js","utf8")));
   }
@@ -89,7 +183,7 @@ function bakeOg(html, url){
     }
   }
 
-  // 4) bake the admin-set default share image into EVERY page (non-destructive; skipped if unset)
+  // 4) bake the admin-set default share image into EVERY existing page (skipped if unset)
   if (ogUrl){
     (function walk(dir){
       for (const e of fs.readdirSync(dir, { withFileTypes: true })){
@@ -101,6 +195,35 @@ function bakeOg(html, url){
     console.log("Default share image applied to all pages:", ogUrl);
   } else {
     console.log("No default share image set — kept per-page og:image.");
+  }
+
+  // 5) PRE-RENDER each published blog post -> /blog/<slug>/index.html (after step 4 so
+  //    posts keep their own image as og:image, not the global default)
+  const blogSlugs = [];
+  for (const p of posts){
+    try{
+      const dir = path.join("dist", "blog", String(p.slug));
+      fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, "index.html"), blogPageHtml(p, ogUrl));
+      blogSlugs.push(p.slug);
+    }catch(e){ /* skip a bad post, never fail the build */ }
+  }
+  console.log("Pre-rendered blog posts:", blogSlugs.length);
+
+  // 6) add blog posts to sitemap.xml (if present)
+  const smPath = "dist/sitemap.xml";
+  if (blogSlugs.length && fs.existsSync(smPath)){
+    let sm = fs.readFileSync(smPath, "utf8");
+    const today = new Date().toISOString().slice(0,10);
+    const entries = posts.filter(p => blogSlugs.includes(p.slug)).map(p => {
+      const lm = (p.created_at ? new Date(p.created_at).toISOString().slice(0,10) : today);
+      return `  <url><loc>https://punchpgh.com/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${lm}</lastmod></url>`;
+    }).join("\n");
+    if (sm.includes("</urlset>")){
+      sm = sm.replace("</urlset>", entries + "\n</urlset>");
+      fs.writeFileSync(smPath, sm);
+      console.log("Added", blogSlugs.length, "blog URLs to sitemap.xml");
+    }
   }
 
   console.log("Built ./dist — all internal links clean, directory URLs generated");

@@ -271,17 +271,24 @@ html,body{margin:0;padding:0;background:#fff}
 @media(max-width:600px){#plp .journey-grid{grid-template-columns:1fr}}
 
 /* class photo cards */
-#plp .class-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:48px}
-#plp .class-photo-card{position:relative;overflow:hidden;border-radius:12px}
-#plp .class-photo-card img{width:100%;height:380px;object-fit:cover;display:block;transition:transform .5s}
-#plp .class-photo-card:hover img{transform:scale(1.05)}
-#plp .class-photo-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px}
-#plp .class-photo-tag{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ff5555;margin-bottom:6px}
-#plp .class-photo-name{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1;margin-bottom:8px}
-#plp .class-photo-desc{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:12px}
-#plp .class-photo-stat{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#D92B2B}
-#plp .class-photo-stat-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
-@media(max-width:960px){#plp .class-photo-grid{grid-template-columns:1fr}#plp .class-photo-card img{height:300px}}
+#plp .workout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:94vw;margin:52px auto 0}
+#plp .workout-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.08);border:1px solid #ececec;position:relative;transition:transform .3s,box-shadow .3s}
+#plp .workout-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.14)}
+#plp .workout-num{position:absolute;top:16px;left:16px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;letter-spacing:.02em}
+#plp .workout-img{position:relative;overflow:hidden;height:260px}
+#plp .workout-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+#plp .workout-card:hover .workout-img img{transform:scale(1.06)}
+#plp .workout-body{padding:24px 24px 26px}
+#plp .workout-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#D92B2B;margin-bottom:8px}
+#plp .workout-name{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;color:#111;line-height:1;margin-bottom:12px}
+#plp .workout-desc{font-size:13.5px;color:#666;line-height:1.6;margin-bottom:16px}
+#plp .workout-stat{padding-top:14px;border-top:1px solid #eee;font-size:13px;color:#111}
+#plp .workout-stat span{font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#D92B2B;margin-right:6px}
+#plp .workout-stat b{font-weight:600;color:#888;text-transform:uppercase;font-size:11px;letter-spacing:1px}
+@media(max-width:960px){
+  #plp .workout-grid{grid-template-columns:1fr;max-width:520px;gap:24px}
+  #plp .workout-img{height:220px}
+}
 
 /* photo strip */
 #plp .photo-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
@@ -444,7 +451,7 @@ html,body{margin:0;padding:0;background:#fff}
 @media(max-width:1000px){.pn-bar{height:78px}.pn-logo img{height:46px}}
 
 /* ========================  SMS / LEAD POPUP  ============================== */
-.ps-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s}
+.ps-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s;font-family:'Barlow',sans-serif}
 .ps-ov.on{opacity:1;visibility:visible}
 .ps-box{position:relative;width:100%;max-width:520px;background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.5);transform:translateY(14px);transition:transform .25s}
 .ps-ov.on .ps-box{transform:translateY(0)}
@@ -554,7 +561,22 @@ html,body{margin:0;padding:0;background:#fff}
 .ps-card.feat .ps-btn{background:#D92B2B}
 .ps-card.feat .ps-btn:hover{background:#ff3333}
 .ps-fine{text-align:center;font-size:10.5px;color:#bbb;margin-top:8px;font-style:italic}
+.ps-h2{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:23px;line-height:1.05;text-transform:uppercase;color:#1a1a1a;margin:2px 0 10px}
+.ps-card.feat .ps-h2{color:#D92B2B}
+.ps-desc{font-size:13px;line-height:1.5;color:#555;flex:1;margin:0 0 16px}
 @media(max-width:700px){.ps-cards{grid-template-columns:1fr}.ps-body{max-height:60vh}.ps-h{font-size:26px}}
+/* Mobile: bottom sheet / slide-up card, not a centered modal squeezed onto
+   a phone. The page stays visible above it — this only covers the lower
+   portion of the screen, matching "still on the Punch website" not
+   "blocked from the website". */
+@media(max-width:640px){
+  .ps-ov{align-items:flex-end;padding:0}
+  .ps-box{max-width:100%;width:100%;border-radius:20px 20px 0 0;max-height:88vh;display:flex;flex-direction:column;transform:translateY(40px)}
+  .ps-ov.on .ps-box{transform:translateY(0)}
+  .ps-box::before{content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);width:36px;height:4px;border-radius:3px;background:rgba(255,255,255,.6);z-index:3}
+  .ps-body{overflow-y:auto;max-height:none}
+  .ps-x{top:14px}
+}
 
 /* ==========================  LEAD FUNNEL  ================================ */
 .lf-steps{display:flex;justify-content:center;gap:0;max-width:760px;margin:0 auto 6px;padding:0 20px}
@@ -774,6 +796,28 @@ body.has-mcta{padding-bottom:0}
 #plp .s.dark{background:var(--ink);position:relative}
 #plp .s.dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--brass-soft),transparent);opacity:.5}
 #plp .si{max-width:1180px;margin:0 auto}
+
+/* Community text + both trial cards: one row, three columns, on desktop.
+   Stacked and centered on mobile. */
+#plp .community-cta-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:28px;align-items:start;max-width:1900px;margin:0 auto;padding:0 40px}
+#plp .community-cta-grid .trial-card.compact{align-self:stretch;display:flex;flex-direction:column}
+#plp .community-cta-grid .trial-card.compact .trial-btn{margin-top:auto}
+#plp .community-cta-text{text-align:left}
+#plp .community-cta-text .lbl::before{margin-right:12px}
+#plp .community-cta-grid .trial-card.compact{max-width:100%;width:100%;padding:22px 20px}
+#plp .community-cta-grid .trial-card.compact .trial-lbl{font-size:12px}
+#plp .community-cta-grid .trial-card.compact .trial-price{font-size:34px}
+#plp .community-cta-grid .trial-card.compact .trial-perks li{font-size:12px;padding:4px 0}
+#plp .community-cta-grid .trial-card.compact .trial-btn{font-size:12px;padding:12px 16px}
+@media(max-width:1100px){
+  #plp .community-cta-grid{grid-template-columns:1fr;gap:32px;padding:0 24px;max-width:520px}
+  #plp .community-cta-text{text-align:center}
+  #plp .community-cta-grid .trial-card.compact{padding:32px 28px}
+  #plp .community-cta-grid .trial-card.compact .trial-lbl{font-size:14px}
+  #plp .community-cta-grid .trial-card.compact .trial-price{font-size:44px}
+  #plp .community-cta-grid .trial-card.compact .trial-perks li{font-size:13px;padding:5px 0}
+  #plp .community-cta-grid .trial-card.compact .trial-btn{font-size:14px;padding:16px 24px}
+}
 
 /* ————————————————————— BUTTONS ————————————————————— */
 #plp .btn-red,#plp .btn-dark,#plp .btn-wht,#plp .btn-ghost-w,#plp .trial-btn,#plp .prog-lnk{

@@ -57,10 +57,10 @@
   var footer =
   '<footer class="pf"><div class="pf-grid">' +
     '<div><div class="pf-mark">PUNCH</div>' +
-      '<div class="pf-tag">Boxing &amp; Fitness &middot; South Hills Pittsburgh</div>' +
-      '<p class="pf-addr">2101 Greentree Rd, Suite 119<br>Pittsburgh, PA 15220</p>' +
-      '<a class="pf-tel" href="tel:+14125123261">412-512-3261</a>' +
-      '<a class="pf-mail" href="mailto:punchpgh@gmail.com">punchpgh@gmail.com</a></div>' +
+      '<div class="pf-tag" data-text="footer.tagline">Boxing &amp; Fitness &middot; South Hills Pittsburgh</div>' +
+      '<p class="pf-addr"><span data-text="footer.address_line1">2101 Greentree Rd, Unit 119</span><br><span data-text="footer.address_line2">Pittsburgh, PA 15220</span></p>' +
+      '<a class="pf-tel" data-text="footer.phone" href="tel:+14125123261">412-512-3261</a>' +
+      '<a class="pf-mail" data-text="footer.email" href="mailto:punchpgh@gmail.com">punchpgh@gmail.com</a></div>' +
     '<div class="pf-col"><div class="pf-h">Workouts</div>' +
       '<a href="/classes">Group Fitness</a>' +
       '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
@@ -78,8 +78,8 @@
       '<a href="/careers">Careers</a>' +
       '<a href="/terms-conditions">Terms &amp; Conditions</a></div>' +
     '<div class="pf-col"><div class="pf-h">Hours</div>' +
-      '<p class="pf-hours">Mon &ndash; Fri<b>6:00 AM &ndash; 8:00 PM</b></p>' +
-      '<p class="pf-hours">Sat &ndash; Sun<b>8:00 AM &ndash; 1:00 PM</b></p>' +
+      '<p class="pf-hours"><span data-text="footer.hours1_days">Mon &ndash; Fri</span><b data-text="footer.hours1_time">6:00 AM &ndash; 8:00 PM</b></p>' +
+      '<p class="pf-hours"><span data-text="footer.hours2_days">Sat &ndash; Sun</span><b data-text="footer.hours2_time">8:00 AM &ndash; 1:00 PM</b></p>' +
       '<a class="pf-mail" href="' + LOGIN + '" target="_blank" rel="noopener">Member Login &rarr;</a>' +
       '<div class="pf-soc"><a href="https://instagram.com/punchpgh" target="_blank" rel="noopener">Instagram</a>' +
       '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a>' +
@@ -90,59 +90,55 @@
       '<a href="/boxing-gloves-for-fitness-classes">Equipment</a>' +
       '<a href="/superare">Superare</a></div>' +
   '</div>' +
-  '<div class="pf-legal"><span>&copy; ' + year + ' Pittsburgh Punch LLC. All rights reserved.</span>' +
+  '<div class="pf-legal"><span>&copy; ' + year + ' <span data-text="footer.copyright_text">Pittsburgh Punch LLC. All rights reserved.</span></span>' +
   '<span><a href="/terms-conditions">Terms &amp; Conditions</a></span></div></footer>';
 
 
   // ---- Trial-offer popup -------------------------------------------------
   var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b";
-  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_a3c4e40deebc43";
+  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40";
   var POP_KEY = "punch_popup_seen_v2";
-  var POP_DELAY = 12000;
+  var POP_DELAY = 4000;
 
-  function buildPopup() {
-    try { if (localStorage.getItem(POP_KEY)) return false; } catch (e) {}
-    if (/\/admin|\/24-hour-special|\/trial\b/.test(location.pathname)) return false;
-
+  function renderPopup() {
     var ov = document.createElement("div");
     ov.className = "ps-ov";
     ov.innerHTML =
-      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Start your trial">' +
+      '<div class="ps-box" role="dialog" aria-modal="true" aria-label="Choose how you want to start">' +
         '<button class="ps-x" id="psX" aria-label="Close">&times;</button>' +
         '<div class="ps-top">' +
-          '<div class="ps-eyebrow">South Hills Pittsburgh &middot; All Levels Welcome</div>' +
-          '<div class="ps-h">Your First Class<br>Is On Us.</div>' +
-          '<p class="ps-p">No experience needed. Pick how you want to start &mdash; free first workout, or a full week with gloves and wraps to keep.</p>' +
+          '<div class="ps-eyebrow">Ready to Try Punch?</div>' +
+          '<div class="ps-h">Choose How You<br>Want to Start.</div>' +
+          '<p class="ps-p">Two simple ways to experience Punch. Pick what works for you.</p>' +
         '</div>' +
         '<div class="ps-body"><div class="ps-cards">' +
 
           '<div class="ps-card">' +
-            '<div class="ps-lbl">First Workout</div>' +
-            '<div class="ps-price">Free</div>' +
-            '<div class="ps-meta">Single class &middot; No credit card</div>' +
+            '<div class="ps-lbl">Quick First Experience</div>' +
+            '<div class="ps-h2">One Free Class</div>' +
             '<ul class="ps-perks">' +
               '<li><span class="ps-tick">&#10003;</span> 1 free workout of your choice</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Fight, Train, or Sweat format</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Gloves provided</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Cardio Boxing, Strength, or Circuit</li>' +
               '<li><span class="ps-tick">&#10003;</span> Meet your coaches &amp; the gym</li>' +
+              '<li><span class="ps-tick">&#10003;</span> No credit card required</li>' +
             '</ul>' +
-            '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Claim Free Class &rarr;</a>' +
-            '<p class="ps-fine">Local residents w/ID &middot; use within 7 days</p>' +
+            '<a class="ps-btn" href="' + FREE + '" target="_blank" rel="noopener">Choose Free Class &rarr;</a>' +
+            '<p class="ps-fine">No experience needed.</p>' +
           '</div>' +
 
           '<div class="ps-card feat">' +
             '<div class="ps-flag">&#9889; Best Value</div>' +
-            '<div class="ps-lbl">7-Day Starter Pack</div>' +
-            '<div class="ps-price"><sup>$</sup>59.99</div>' +
-            '<div class="ps-meta">Unlimited classes &middot; 7 days</div>' +
+            '<div class="ps-lbl">Full Punch Experience</div>' +
+            '<div class="ps-h2">7 Days Unlimited</div>' +
+            '<div class="ps-price"><sup>$</sup>19.99</div>' +
             '<ul class="ps-perks">' +
               '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Free boxing gloves to keep</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Free hand wraps to keep</li>' +
-              '<li><span class="ps-tick">&#10003;</span> Personal intro tour &amp; coaching</li>' +
+              '<li><span class="ps-tick">&#10003;</span> Try every class format</li>' +
+              '<li><span class="ps-tick">&#10003;</span> No long-term commitment</li>' +
+              '<li><span class="ps-tick">&#10003;</span> One-time payment, no auto-renew</li>' +
             '</ul>' +
-            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7-Day Pack &rarr;</a>' +
-            '<p class="ps-fine">One-time payment &middot; no auto-renew</p>' +
+            '<a class="ps-btn" href="' + PACK + '" target="_blank" rel="noopener">Start 7 Days &mdash; $19.99 &rarr;</a>' +
+            '<p class="ps-fine">Unlimited classes for 7 days.</p>' +
           '</div>' +
 
         '</div></div>' +
@@ -161,9 +157,36 @@
       b.addEventListener("click", function () { try { localStorage.setItem(POP_KEY, "1"); } catch (e) {} });
     });
 
+    return ov;
+  }
+
+  // Auto-show once per session, after a delay, on general browsing pages.
+  // Skipped on admin and on pages with an active form/checkout in progress
+  // (see the "protect an active conversion" rule — never interrupt someone
+  // who has already chosen and is entering information).
+  function buildPopup() {
+    try { if (localStorage.getItem(POP_KEY)) return false; } catch (e) {}
+    // Skip auto-fire on admin, the unrelated 24-hour-special page, and the
+    // three dedicated trial pages — someone already on their chosen page's
+    // registration flow shouldn't be immediately asked to reselect. The
+    // popup itself stays available on all of these via window.PunchOpenTrialPopup.
+    if (/\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b/.test(location.pathname)) return false;
+    var ov = renderPopup();
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
     return true;
   }
+
+  // Manual re-open, for every "START YOUR TRIAL" CTA. Always works, even if
+  // the visitor already dismissed the auto-popup this session — closing it
+  // once shouldn't block them from deliberately asking to see it again.
+  window.PunchOpenTrialPopup = function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var existing = document.querySelector(".ps-ov");
+    if (existing) { existing.classList.add("on"); return false; }
+    var ov = renderPopup();
+    requestAnimationFrame(function () { ov.classList.add("on"); });
+    return false;
+  };
 
   // ---- Custom image popup (admin-managed, /admin > Popups) -----------------
   function buildCustomPopup(p) {
@@ -356,15 +379,20 @@
       : (window.innerWidth || 0) >= 761;
     var onLanding = /^\/(index(\.html)?)?$/.test(location.pathname);
 
-    function fallback() { if (isDesktop) buildPopup(); }
+    // The trial-choice popup is a core, always-on feature — it should never
+    // depend on whether anything has been configured in admin > Popups.
+    // Try it first, on both desktop and mobile. buildPopup() already handles
+    // its own session/page exclusions and returns false when it skips, so
+    // this always leaves room to fall through to admin-configured popups.
+    if (buildPopup()) return;
 
-    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) { fallback(); return; }
+    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) return;
 
     fetch(cfg.SUPABASE_URL + "/rest/v1/popups?select=*&order=sort.asc",
       { headers: { apikey: cfg.SUPABASE_ANON_KEY, Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY } })
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .then(function (rows) {
-        if (!rows || !rows.length) { fallback(); return; }
+        if (!rows || !rows.length) return;
         function matches(p) {
           if (!p.active) return false;
           if (isDesktop && p.show_desktop === false) return false;
@@ -372,14 +400,12 @@
           if (p.pages === "landing" && !onLanding) return false;
           return true;
         }
-        var trial = rows.filter(function (p) { return p.type === "trial"; })[0];
-        if (trial && matches(trial) && buildPopup()) return;
         var forms = rows.filter(function (p) { return p.type === "form" && matches(p) && p.embed_html; });
         for (var i = 0; i < forms.length; i++) { if (buildFormPopup(forms[i])) return; }
         var customs = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; });
         for (var j = 0; j < customs.length; j++) { if (buildCustomPopup(customs[j])) return; }
       })
-      .catch(fallback);
+      .catch(function () {});
   }
 
 
@@ -390,7 +416,7 @@
       var bar = document.createElement("div");
       bar.className = "mcta";
       bar.innerHTML =
-        '<a class="m-red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim Free Class</a>';
+        '<a class="m-red" href="' + FREE + '" onclick="return PunchOpenTrialPopup(event)">Start Your Trial</a>';
       document.body.appendChild(bar);
 
       // Keep the bar pinned to the TRUE visible area on iOS/Android — env(safe-area-inset-bottom)
@@ -436,6 +462,29 @@
     });
   }
 
+  // Site-wide text overrides (footer, and later header nav) — reuses the
+  // same data-text="key" marker convention as the homepage content system,
+  // but applied at RUNTIME after insertion (header/footer are built by this
+  // script on every page, not baked per-page at build time). No config at
+  // all -> every element keeps exactly the default text already in the
+  // template above. Never touches layout, only text content.
+  function applySiteTextOverrides() {
+    var CFG = window.PUNCH_CONFIG || {};
+    if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
+    import("https://esm.sh/@supabase/supabase-js@2").then(function (mod) {
+      var sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+      return sb.from("site_text").select("key,value");
+    }).then(function (res) {
+      var rows = (res && !res.error && res.data) ? res.data : [];
+      if (!rows.length) return;
+      rows.forEach(function (r) {
+        if (!r || !r.key || r.value == null) return;
+        var el = document.querySelector('[data-text="' + r.key + '"]');
+        if (el) el.textContent = r.value;
+      });
+    }).catch(function () { /* leave every default exactly as coded */ });
+  }
+
   function init() {
     if (document.getElementById("pnHeader")) return;
     document.body.insertAdjacentHTML("afterbegin", header);
@@ -444,6 +493,7 @@
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
     initPopups();
     enhance();
+    applySiteTextOverrides();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();

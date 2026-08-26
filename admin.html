@@ -37,12 +37,12 @@
 <div class="app hide" id="appView">
   <aside class="side">
     <div class="side-mark">PUN<span>CH</span></div>
+    <button class="btn btn-red btn-block" id="publishBtn" style="margin:0 14px 14px;width:calc(100% - 28px)">&#128640; Publish Changes</button>
+    <div class="drop-s" id="publishHint" style="margin:-8px 14px 14px;font-size:11px"></div>
     <nav class="nav">
       <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
       <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
       <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
-      <a data-tab="pages" id="nav-pages"><span class="i">&#128444;</span> Pages <span class="pm-caret" id="pm-caret">&#9656;</span></a>
-      <div class="pm-submenu" id="pages-sub"></div>
       <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
       <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
       <a data-tab="branding"><span class="i">&#127912;</span> Branding</a>
@@ -104,12 +104,6 @@
     </section>
 
     <!-- ============ PAGES / MEDIA ============ -->
-    <section class="sect" id="sect-pages">
-      <div class="top">
-        <div><h1 class="mono-h">Pages &amp; Media</h1><div class="sub">Swap the hero image or video on any page. Upload a file or paste a link, then set how it fits.</div></div>
-      </div>
-      <div id="pages-root"><div class="empty"><b>Loading&hellip;</b></div></div>
-    </section>
 
     <!-- ============ TRAINERS ============ -->
     <section class="sect" id="sect-trainers">
@@ -164,6 +158,13 @@
             <div class="drop-s">Shown when your site link is shared (Facebook, iMessage, texts, etc.). Wide 1200&times;630 JPG/PNG works best. Applies on your next site deploy.</div>
             <input type="file" id="ogFile" accept="image/*" class="hide" />
           </div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <label for="deployHookUrl">Publish Button &mdash; Render Deploy Hook URL</label>
+          <input type="text" id="deployHookUrl" placeholder="https://api.render.com/deploy/srv-...." />
+          <div class="drop-s" style="margin-top:6px">Powers the &ldquo;Publish Changes&rdquo; button in the sidebar. Find this in Render &rarr; your service &rarr; Settings &rarr; Deploy Hook &rarr; copy the URL, paste it here, Save. One-time setup.</div>
+          <button class="btn" type="button" id="saveDeployHook" style="margin-top:8px">Save</button>
+          <span class="pm-hint" id="deployHookHint" style="margin-left:8px"></span>
         </div>
       </div>
       <div class="err" id="brandErr" style="margin:0 20px 18px"></div>
@@ -463,7 +464,6 @@ document.querySelectorAll("[data-tab]").forEach(a=>{
     document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x===a));
     document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
     $("sect-"+TAB).classList.add("on");
-    if(TAB==="pages"){ buildPagesSubmenu(); const sub=$("pages-sub"); if(sub) sub.classList.toggle("open"); const c=$("pm-caret"); if(c) c.innerHTML = sub && sub.classList.contains("open") ? "&#9662;" : "&#9656;"; loadPages(); }
     if(TAB==="trainers") loadTrainers();
     if(TAB==="terms") loadTerms();
     if(TAB==="branding") loadBrandingAdmin();
@@ -831,11 +831,12 @@ wireDrop && wireDrop("favDrop","favFile", f=>{ favFileSel=f; paint($("favDrop"),
 wireDrop && wireDrop("ogDrop","ogFile", f=>{ ogFileSel=f; paint($("ogDrop"), URL.createObjectURL(f)); });
 async function loadBrandingAdmin(){
   try{
-    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url"]);
+    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url","deploy_hook_url"]);
     (data||[]).forEach(r=>{
       if(r.key==="logo_url" && r.value && r.value.url){ logoCur=r.value.url; paint($("logoDrop"), r.value.url); }
       if(r.key==="favicon_url" && r.value && r.value.url){ favCur=r.value.url; paint($("favDrop"), r.value.url); }
       if(r.key==="og_image_url" && r.value && r.value.url){ ogCur=r.value.url; paint($("ogDrop"), r.value.url); }
+      if(r.key==="deploy_hook_url" && r.value && r.value.url){ $("deployHookUrl").value = r.value.url; }
     });
   }catch(e){ $("brandErr").textContent=e.message||""; }
 }
@@ -854,6 +855,54 @@ $("brandSave") && ($("brandSave").onclick = async ()=>{
     toast("Branding saved. Logo & favicon are live; the share image applies on your next deploy.");
   }catch(e){ $("brandErr").textContent=e.message||"Save failed."; }
   finally{ $("brandSave").disabled=false; $("brandSave").textContent="Save Branding"; }
+});
+
+$("saveDeployHook") && ($("saveDeployHook").onclick = async ()=>{
+  const url = $("deployHookUrl").value.trim();
+  const hint = $("deployHookHint");
+  hint.style.color="var(--mut)"; hint.textContent="Saving…";
+  try{
+    const { error } = await sb.from("site_settings").upsert({ key:"deploy_hook_url", value:{ url } }, { onConflict:"key" });
+    if(error) throw error;
+    hint.style.color="#8fe3a0"; hint.textContent="Saved ✓";
+  }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
+});
+
+/* ---------------- PUBLISH (Render Deploy Hook) ----------------
+   Note on security: the hook URL is stored in site_settings, which (like
+   logo_url/og_image_url) is readable via the public anon key — so it's not
+   a true secret once saved here. Worst case if someone finds it: they can
+   trigger extra rebuilds (wastes build minutes), not access data or change
+   content. If that's ever a concern, don't use this field — trigger deploys
+   manually from Render instead. */
+$("publishBtn") && ($("publishBtn").onclick = async ()=>{
+  const hint = $("publishHint");
+  $("publishBtn").disabled = true;
+  const original = $("publishBtn").innerHTML;
+  $("publishBtn").innerHTML = "&#128640; Publishing…";
+  hint.style.color = "var(--mut)"; hint.textContent = "";
+  try{
+    const { data, error } = await sb.from("site_settings").select("value").eq("key","deploy_hook_url").maybeSingle();
+    if (error) throw error;
+    const url = data && data.value && data.value.url;
+    if (!url){
+      hint.style.color = "#ff8a80";
+      hint.textContent = "No deploy hook set yet — add one under Branding.";
+      return;
+    }
+    // no-cors: the request is sent either way, we just can't read the
+    // response cross-origin, so we report this as a best-effort trigger
+    // rather than a confirmed success.
+    await fetch(url, { method: "POST", mode: "no-cors" });
+    hint.style.color = "#8fe3a0";
+    hint.textContent = "Publish requested — usually live in 2\u20133 min. Check Render for status.";
+  }catch(e){
+    hint.style.color = "#ff8a80";
+    hint.textContent = "Couldn't reach the hook. Trigger the deploy directly in Render instead.";
+  }finally{
+    $("publishBtn").disabled = false;
+    $("publishBtn").innerHTML = original;
+  }
 });
 
 /* ---------------- TERMS & CONDITIONS ---------------- */
@@ -875,228 +924,6 @@ $("termsSave") && ($("termsSave").onclick = async ()=>{
   finally{ $("termsSave").disabled=false; $("termsSave").textContent="Save Terms"; }
 });
 
-/* ---------------- PAGES / MEDIA ---------------- */
-var MEDIA_SLOTS = [
-  { group:'Homepage', items:[
-    { slot:"home.hero_video", label:"Hero Video", type:"video" },
-    { slot:"home.prog_adult", label:"Prog Adult", type:"image" },
-    { slot:"home.prog_youth", label:"Prog Youth", type:"image" },
-    { slot:"home.prog_senior", label:"Prog Senior", type:"image" },
-    { slot:"home.prog_pt", label:"Prog Pt", type:"image" },
-    { slot:"home.hero_stmt", label:"Hero Stmt", type:"image" },
-    { slot:"home.exp1", label:"Exp 1", type:"image" },
-    { slot:"home.exp2", label:"Exp 2", type:"image" },
-    { slot:"home.fight", label:"Fight", type:"image" },
-    { slot:"home.train", label:"Train", type:"image" },
-    { slot:"home.sweat", label:"Sweat", type:"image" },
-    { slot:"home.strip1", label:"Strip 1", type:"image" },
-    { slot:"home.strip2", label:"Strip 2", type:"image" },
-    { slot:"home.strip3", label:"Strip 3", type:"image" },
-    { slot:"home.strip4", label:"Strip 4", type:"image" },
-    { slot:"home.strip5", label:"Strip 5", type:"image" },
-    { slot:"home.combo", label:"Combo", type:"image" }
-  ]},
-  // Order below mirrors the "Workouts" nav dropdown (Classes, Senior &
-  // Parkinson's, Youth Boxing, Personal Training, Trainers) — each is its
-  // own separate page/group, just sequenced to match the header menu.
-  { group:'Classes', items:[
-    { slot:"classes.hero", label:"Hero", type:"image" },
-    { slot:"classes.fight", label:"Fight", type:"image" },
-    { slot:"classes.train", label:"Train", type:"image" },
-    { slot:"classes.sweat", label:"Sweat", type:"image" },
-    { slot:"classes.youth", label:"Youth", type:"image" },
-    { slot:"classes.senior", label:"Senior", type:"image" }
-  ]},
-  { group:"Senior & Parkinson's", items:[
-    { slot:"senior.hero_video", label:"Hero Video", type:"video" }
-  ]},
-  { group:'Youth Boxing', items:[
-    { slot:"youth.hero", label:"Hero", type:"image" },
-    { slot:"youth.secondary", label:"Secondary", type:"image" }
-  ]},
-  { group:'Personal Training', items:[
-    { slot:"pt.hero", label:"Hero", type:"image" },
-    { slot:"pt.photo1", label:"Photo 1", type:"image" }
-  ]},
-  { group:'Trainers', items:[
-    { slot:"trainers.hero", label:"Hero", type:"image" }
-  ]},
-  { group:'Schedule', items:[
-    { slot:"schedule.hero", label:"Hero", type:"image" },
-    { slot:"schedule.photo1", label:"Photo 1", type:"image" },
-    { slot:"schedule.photo2", label:"Photo 2", type:"image" },
-    { slot:"schedule.photo3", label:"Photo 3", type:"image" }
-  ]},
-  // Order below mirrors the "Pricing & Plans" nav dropdown (Membership
-  // Options, Free Trial Class, Boxing Gloves, Apparel).
-  { group:'Memberships', items:[
-    { slot:"membership.hero_video", label:"Hero Video", type:"video" }
-  ]},
-  { group:'Free Trial', items:[
-    { slot:"free-trial.hero_video", label:"Hero Video", type:"video" },
-    { slot:"freetrial.photo1", label:"Photo 1", type:"image" },
-    { slot:"freetrial.photo2", label:"Photo 2", type:"image" },
-    { slot:"freetrial.photo3", label:"Photo 3", type:"image" }
-  ]},
-  { group:'Equipment / Boxing Gloves', items:[
-    { slot:"equipment.photo1", label:"Photo 1", type:"image" },
-    { slot:"equipment.photo2", label:"Photo 2", type:"image" },
-    { slot:"equipment.photo3", label:"Photo 3", type:"image" },
-    { slot:"equipment.photo4", label:"Photo 4", type:"image" }
-  ]},
-  { group:'Apparel', items:[
-    { slot:"apparel.hero", label:"Hero", type:"image" }
-  ]},
-  { group:'Contact', items:[
-    { slot:"contact.hero", label:"Hero", type:"image" }
-  ]},
-  // Not in the header nav — ad landing page + footer-only pages.
-  { group:'Ad Landing (punch-ad-trials)', items:[
-    { slot:"ad-trials.hero_video", label:"Hero Video", type:"video" },
-    { slot:"adtrials.photo1", label:"Photo 1", type:"image" },
-    { slot:"adtrials.photo2", label:"Photo 2", type:"image" },
-    { slot:"adtrials.photo3", label:"Photo 3", type:"image" }
-  ]},
-  { group:'About', items:[
-    { slot:"about.hero", label:"Hero", type:"image" }
-  ]},
-  { group:'Superare', items:[
-    { slot:'superare.hero', label:'Hero Image', type:'image' }
-  ]},
-];
-function posToXY(pos){
-  if(!pos) return {x:50,y:50};
-  var m=String(pos).match(/(\d+(?:\.\d+)?)%\s+(\d+(?:\.\d+)?)%/);
-  if(m) return {x:Math.round(+m[1]),y:Math.round(+m[2])};
-  var map={center:[50,50],left:[0,50],right:[100,50],top:[50,0],bottom:[50,100],"center top":[50,0],"center bottom":[50,100],"left top":[0,0],"right top":[100,0],"left bottom":[0,100],"right bottom":[100,100]};
-  return map[pos]?{x:map[pos][0],y:map[pos][1]}:{x:50,y:50};
-}
-var POSITIONS = ["center","center top","center bottom","left","right","left top","right top","left bottom","right bottom"];
-var MAX_IMG = 5*1024*1024;      // 5 MB images
-var MAX_VID = 40*1024*1024;     // 40 MB video (link recommended for bigger)
-
-let PAGES_FILTER = null;
-// Purely a SIDEBAR NAVIGATION layout, matching the site's own header nav
-// hierarchy — does NOT change what content renders (loadPages() still
-// iterates every individual MEDIA_SLOTS group as its own separate section).
-var PAGES_NAV_TREE = [
-  { top: 'Homepage' },
-  { header: 'Workouts', children: ['Classes', "Senior & Parkinson's", 'Youth Boxing', 'Personal Training', 'Trainers'] },
-  { top: 'Schedule' },
-  { header: 'Pricing & Plans', children: ['Memberships', 'Free Trial', 'Equipment / Boxing Gloves', 'Apparel'] },
-  { top: 'Contact' },
-  { header: 'More Pages', children: ['Ad Landing (punch-ad-trials)', 'About', 'Superare'] }
-];
-function buildPagesSubmenu(){
-  const sub = $("pages-sub"); if(!sub || sub.dataset.built) return;
-  sub.dataset.built = "1";
-  sub.innerHTML = '<a data-pg="__all">All Pages</a>' + PAGES_NAV_TREE.map(function(entry){
-    if(entry.top) return '<a data-pg="'+esc(entry.top)+'">'+esc(entry.top)+'</a>';
-    return '<div class="pm-sub-h">'+esc(entry.header)+'</div>' +
-      entry.children.map(function(g){ return '<a class="pm-sub-a" data-pg="'+esc(g)+'">'+esc(g)+'</a>'; }).join("");
-  }).join("");
-  sub.querySelectorAll("a").forEach(a=>a.onclick=(e)=>{
-    e.stopPropagation();
-    PAGES_FILTER = a.dataset.pg==="__all" ? null : a.dataset.pg;
-    sub.querySelectorAll("a").forEach(x=>x.classList.toggle("on", x===a));
-    // ensure Pages tab is open
-    document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x.dataset.tab==="pages"));
-    document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
-    $("sect-pages").classList.add("on");
-    loadPages();
-  });
-}
-async function loadPages(){
-  var root = $("pages-root");
-  var current = {};
-  try {
-    var { data } = await sb.from("page_media").select("*");
-    (data||[]).forEach(function(r){ current[r.slot]=r; });
-  } catch(e){}
-  const _groups = PAGES_FILTER ? MEDIA_SLOTS.filter(g=>g.group===PAGES_FILTER) : MEDIA_SLOTS;
-  root.innerHTML = _groups.map(function(g){
-    return '<div class="pm-group"><div class="pm-group-h">'+esc(g.group)+'</div>' +
-      g.items.map(function(it){
-        var r = current[it.slot] || {};
-        var url = r.url || "";
-        var fit = r.fit || "cover";
-        var pos = r.position || "center";
-        var prev = url
-          ? (it.type==="video"
-              ? '<video src="'+esc(url)+'" muted></video>'
-              : '<img src="'+esc(url)+'" alt="">')
-          : '<span class="pm-ph">No media</span>';
-        var xy = posToXY(pos);
-        return '<div class="pm-slot" data-slot="'+esc(it.slot)+'" data-type="'+it.type+'">' +
-          '<div class="pm-prev"><span class="pm-badge">'+it.type+'</span>'+prev+'</div>' +
-          '<div class="pm-body">' +
-            '<div class="pm-name">'+esc(it.label)+'</div>' +
-            '<div class="pm-row">' +
-              '<input type="text" class="pm-url" placeholder="Paste an image or video URL" value="'+esc(url)+'">' +
-              '<button class="pm-up" type="button">Upload</button>' +
-              '<input type="file" class="pm-file hide" accept="'+(it.type==="video"?"video/*":"image/*")+'">' +
-            '</div>' +
-            '<div class="pm-controls">' +
-              '<label style="margin:0">Fit</label>' +
-              '<select class="pm-fit"><option value="cover"'+(fit==="cover"?" selected":"")+'>Cover (fill)</option><option value="contain"'+(fit==="contain"?" selected":"")+'>Contain (whole image)</option></select>' +
-              '<div class="pm-slider"><label>Horizontal &#8596;</label><input type="range" class="pm-x" min="0" max="100" value="'+xy.x+'"><input type="number" class="pm-xv pm-num" min="0" max="100" step="1" value="'+xy.x+'"><span class="pm-pct">%</span></div>' +
-              '<div class="pm-slider"><label>Vertical &#8597;</label><input type="range" class="pm-y" min="0" max="100" value="'+xy.y+'"><input type="number" class="pm-yv pm-num" min="0" max="100" step="1" value="'+xy.y+'"><span class="pm-pct">%</span></div>' +
-              '<button class="pm-save" type="button">Save</button>' +
-              '<span class="pm-hint"></span>' +
-            '</div>' +
-          '</div>' +
-        '</div>';
-      }).join("") + '</div>';
-  }).join("");
-
-  root.querySelectorAll(".pm-slot").forEach(function(row){
-    var slot = row.dataset.slot, type = row.dataset.type;
-    var fileEl = row.querySelector(".pm-file");
-    var urlEl = row.querySelector(".pm-url");
-    var hint = row.querySelector(".pm-hint");
-    var xEl=row.querySelector(".pm-x"), yEl=row.querySelector(".pm-y");
-    var xNum=row.querySelector(".pm-xv"), yNum=row.querySelector(".pm-yv");
-    function pmClamp(v){ v=parseInt(v,10); if(isNaN(v))v=50; return Math.max(0,Math.min(100,v)); }
-    function pmUpd(src){
-      if(src==="num"){ xNum.value=pmClamp(xNum.value); yNum.value=pmClamp(yNum.value); xEl.value=xNum.value; yEl.value=yNum.value; }
-      else { xNum.value=xEl.value; yNum.value=yEl.value; }
-      var im=row.querySelector(".pm-prev img,.pm-prev video"); if(im) im.style.objectPosition=xEl.value+"% "+yEl.value+"%";
-    }
-    if(xEl) xEl.oninput=function(){pmUpd("slider")}; if(yEl) yEl.oninput=function(){pmUpd("slider")};
-    if(xNum) xNum.oninput=function(){pmUpd("num")}; if(yNum) yNum.oninput=function(){pmUpd("num")};
-    row.querySelector(".pm-up").onclick = function(){ fileEl.click(); };
-    fileEl.onchange = async function(){
-      var f = fileEl.files[0]; if(!f) return;
-      var limit = type==="video"?MAX_VID:MAX_IMG;
-      if(f.size>limit){ hint.textContent = "Too big — max "+(limit/1024/1024)+"MB. Use a link for large files."; hint.style.color="#ff8a80"; return; }
-      hint.style.color="var(--mut)"; hint.textContent="Uploading…";
-      try{
-        var ext=(f.name.split(".").pop()||"bin").toLowerCase();
-        var path=slot.replace(/[^a-z0-9]/gi,"_")+"-"+Date.now()+"."+ext;
-        var up=await sb.storage.from("site-media").upload(path,f,{cacheControl:"3600",upsert:true});
-        if(up.error) throw up.error;
-        var pub=sb.storage.from("site-media").getPublicUrl(path).data.publicUrl;
-        urlEl.value=pub; hint.textContent="Uploaded — click Save";
-      }catch(e){ hint.style.color="#ff8a80"; hint.textContent=e.message||"Upload failed"; }
-    };
-    row.querySelector(".pm-save").onclick = async function(){
-      var payload={ slot:slot, url:urlEl.value.trim()||null,
-        fit:row.querySelector(".pm-fit").value, position:row.querySelector(".pm-x").value+"% "+row.querySelector(".pm-y").value+"%",
-        updated_at:new Date().toISOString() };
-      hint.style.color="var(--mut)"; hint.textContent="Saving…";
-      var { error } = await sb.from("page_media").upsert(payload,{onConflict:"slot"});
-      if(error){ hint.style.color="#ff8a80"; hint.textContent=error.message; return; }
-      hint.style.color="#8fe3a0"; hint.textContent="Saved ✓";
-      var prev=row.querySelector(".pm-prev");
-      if(urlEl.value.trim()){
-        prev.innerHTML='<span class="pm-badge">'+type+'</span>'+(type==="video"?'<video src="'+esc(urlEl.value.trim())+'" muted></video>':'<img src="'+esc(urlEl.value.trim())+'">');
-      }
-      toast("Media saved");
-    };
-  });
-}
-
-/* ---------------- BLOG FREQUENCY ---------------- */
 async function loadFreq(){
   const { data } = await sb.from("site_settings").select("value").eq("key","blog").maybeSingle();
   const n = data && data.value && Number(data.value.posts_per_week) ? Number(data.value.posts_per_week) : 1;
