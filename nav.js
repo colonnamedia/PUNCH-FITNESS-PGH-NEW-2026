@@ -18,7 +18,9 @@
         '<div class="pn-menu">' +
           '<a class="pn-sub-feat" href="/classes">Core Program<span class="pn-sub-desc">Cardio Boxing &middot; Boxing + Strength &middot; Circuit Training</span></a>' +
           '<a href="/youth-boxing-camp">Youth Boxing</a>' +
-          '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a></div></div>' +
+          '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
+          '<div class="pn-menu-div"></div>' +
+          '<a href="/trainers">Meet the Trainers</a></div></div>' +
       '<a class="pn-link" href="/personal-training">Personal Training</a>' +
       '<a class="pn-link" href="/schedule">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
@@ -36,7 +38,9 @@
     '<details><summary>Classes</summary>' +
       '<a href="/classes">Core Program</a>' +
       '<a href="/youth-boxing-camp">Youth Boxing</a>' +
-      '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a></details>' +
+      '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
+      '<div class="pn-menu-div"></div>' +
+      '<a href="/trainers">Meet the Trainers</a></details>' +
     '<a href="/personal-training">Personal Training</a>' +
     '<a href="/schedule">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
