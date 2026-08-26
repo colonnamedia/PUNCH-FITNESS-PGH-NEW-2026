@@ -791,7 +791,7 @@ body.has-mcta{padding-bottom:0}
 #plp .si{max-width:1180px;margin:0 auto}
 
 /* Community + trial cards: wide side-by-side on desktop, stacked on mobile */
-#plp .community-cta-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:center;max-width:1520px;margin:0 auto;padding:0 40px}
+#plp .community-cta-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start;max-width:1520px;margin:0 auto;padding:0 40px}
 #plp .community-cta-text{text-align:left}
 #plp .community-cta-text .lbl::before{margin-right:12px}
 #plp .community-cta-cards .trial-cards{gap:20px}
