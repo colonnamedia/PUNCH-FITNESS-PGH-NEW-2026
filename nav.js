@@ -129,10 +129,10 @@
           '<div class="ps-card feat">' +
             '<div class="ps-flag">&#9889; Best Value</div>' +
             '<div class="ps-lbl">Full Punch Experience</div>' +
-            '<div class="ps-h2">7 Days Unlimited</div>' +
+            '<div class="ps-h2">One Week Unlimited</div>' +
             '<div class="ps-price"><sup>$</sup>19.99</div>' +
             '<ul class="ps-perks">' +
-              '<li><span class="ps-tick">&#10003;</span> 7 days unlimited classes</li>' +
+              '<li><span class="ps-tick">&#10003;</span> 1 week unlimited classes</li>' +
               '<li><span class="ps-tick">&#10003;</span> Try every class format</li>' +
               '<li><span class="ps-tick">&#10003;</span> No long-term commitment</li>' +
               '<li><span class="ps-tick">&#10003;</span> One-time payment, no auto-renew</li>' +
