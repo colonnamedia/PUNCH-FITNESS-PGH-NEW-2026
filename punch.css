@@ -792,7 +792,9 @@ body.has-mcta{padding-bottom:0}
 
 /* Community text + both trial cards: one row, three columns, on desktop.
    Stacked and centered on mobile. */
-#plp .community-cta-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:28px;align-items:start;max-width:1600px;margin:0 auto;padding:0 40px}
+#plp .community-cta-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:28px;align-items:start;max-width:1900px;margin:0 auto;padding:0 40px}
+#plp .community-cta-grid .trial-card.compact{align-self:stretch;display:flex;flex-direction:column}
+#plp .community-cta-grid .trial-card.compact .trial-btn{margin-top:auto}
 #plp .community-cta-text{text-align:left}
 #plp .community-cta-text .lbl::before{margin-right:12px}
 #plp .community-cta-grid .trial-card.compact{max-width:100%;width:100%;padding:22px 20px}
