@@ -271,17 +271,24 @@ html,body{margin:0;padding:0;background:#fff}
 @media(max-width:600px){#plp .journey-grid{grid-template-columns:1fr}}
 
 /* class photo cards */
-#plp .class-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:48px}
-#plp .class-photo-card{position:relative;overflow:hidden;border-radius:12px}
-#plp .class-photo-card img{width:100%;height:380px;object-fit:cover;display:block;transition:transform .5s}
-#plp .class-photo-card:hover img{transform:scale(1.05)}
-#plp .class-photo-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.2) 60%,transparent 100%);display:flex;flex-direction:column;justify-content:flex-end;padding:28px}
-#plp .class-photo-tag{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#ff5555;margin-bottom:6px}
-#plp .class-photo-name{font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;text-transform:uppercase;color:#fff;line-height:1;margin-bottom:8px}
-#plp .class-photo-desc{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;margin-bottom:12px}
-#plp .class-photo-stat{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#D92B2B}
-#plp .class-photo-stat-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4)}
-@media(max-width:960px){#plp .class-photo-grid{grid-template-columns:1fr}#plp .class-photo-card img{height:300px}}
+#plp .workout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;max-width:94vw;margin:52px auto 0}
+#plp .workout-card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 28px rgba(0,0,0,.08);border:1px solid #ececec;position:relative;transition:transform .3s,box-shadow .3s}
+#plp .workout-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.14)}
+#plp .workout-num{position:absolute;top:16px;left:16px;z-index:2;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:800;color:#fff;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;letter-spacing:.02em}
+#plp .workout-img{position:relative;overflow:hidden;height:260px}
+#plp .workout-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+#plp .workout-card:hover .workout-img img{transform:scale(1.06)}
+#plp .workout-body{padding:24px 24px 26px}
+#plp .workout-tag{font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#D92B2B;margin-bottom:8px}
+#plp .workout-name{font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;text-transform:uppercase;color:#111;line-height:1;margin-bottom:12px}
+#plp .workout-desc{font-size:13.5px;color:#666;line-height:1.6;margin-bottom:16px}
+#plp .workout-stat{padding-top:14px;border-top:1px solid #eee;font-size:13px;color:#111}
+#plp .workout-stat span{font-family:'Barlow Condensed',sans-serif;font-weight:800;color:#D92B2B;margin-right:6px}
+#plp .workout-stat b{font-weight:600;color:#888;text-transform:uppercase;font-size:11px;letter-spacing:1px}
+@media(max-width:960px){
+  #plp .workout-grid{grid-template-columns:1fr;max-width:520px;gap:24px}
+  #plp .workout-img{height:220px}
+}
 
 /* photo strip */
 #plp .photo-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
