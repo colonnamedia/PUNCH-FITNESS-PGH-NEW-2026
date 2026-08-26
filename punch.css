@@ -790,16 +790,24 @@ body.has-mcta{padding-bottom:0}
 #plp .s.dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--brass-soft),transparent);opacity:.5}
 #plp .si{max-width:1180px;margin:0 auto}
 
-/* Community + trial cards: wide side-by-side on desktop, stacked on mobile */
-#plp .community-cta-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:start;max-width:1520px;margin:0 auto;padding:0 40px}
+/* Community text + both trial cards: one row, three columns, on desktop.
+   Stacked and centered on mobile. */
+#plp .community-cta-grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:28px;align-items:start;max-width:1600px;margin:0 auto;padding:0 40px}
 #plp .community-cta-text{text-align:left}
 #plp .community-cta-text .lbl::before{margin-right:12px}
-#plp .community-cta-cards .trial-cards{gap:20px}
-#plp .community-cta-cards .trial-card{max-width:440px;width:100%}
-@media(max-width:960px){
-  #plp .community-cta-grid{grid-template-columns:1fr;gap:40px;padding:0 24px;max-width:640px}
+#plp .community-cta-grid .trial-card.compact{max-width:100%;width:100%;padding:22px 20px}
+#plp .community-cta-grid .trial-card.compact .trial-lbl{font-size:12px}
+#plp .community-cta-grid .trial-card.compact .trial-price{font-size:34px}
+#plp .community-cta-grid .trial-card.compact .trial-perks li{font-size:12px;padding:4px 0}
+#plp .community-cta-grid .trial-card.compact .trial-btn{font-size:12px;padding:12px 16px}
+@media(max-width:1100px){
+  #plp .community-cta-grid{grid-template-columns:1fr;gap:32px;padding:0 24px;max-width:520px}
   #plp .community-cta-text{text-align:center}
-  #plp .community-cta-cards .trial-card{max-width:100%}
+  #plp .community-cta-grid .trial-card.compact{padding:32px 28px}
+  #plp .community-cta-grid .trial-card.compact .trial-lbl{font-size:14px}
+  #plp .community-cta-grid .trial-card.compact .trial-price{font-size:44px}
+  #plp .community-cta-grid .trial-card.compact .trial-perks li{font-size:13px;padding:5px 0}
+  #plp .community-cta-grid .trial-card.compact .trial-btn{font-size:14px;padding:16px 24px}
 }
 
 /* ————————————————————— BUTTONS ————————————————————— */
