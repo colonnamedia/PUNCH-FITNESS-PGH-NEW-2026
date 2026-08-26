@@ -98,7 +98,7 @@
   var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b";
   var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40";
   var POP_KEY = "punch_popup_seen_v2";
-  var POP_DELAY = 12000;
+  var POP_DELAY = 4000;
 
   function renderPopup() {
     var ov = document.createElement("div");
