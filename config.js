@@ -268,3 +268,35 @@ window.PUNCH_CONFIG = {
     applyAll();
   }
 })();
+
+// Lock the three top image slots to the intended visual order on every primary
+// training-system section: boxing first, then strength, then circuit/strength.
+(function () {
+  function forceTrainingSlotImages() {
+    document.querySelectorAll("#plp .training-top-slots").forEach(function (slots) {
+      var imgs = slots.querySelectorAll("img");
+      if (imgs.length < 3) return;
+
+      imgs[0].src = "/assets/punch-pittsburgh-6.jpg";
+      imgs[0].alt = "Cardio Boxing";
+      imgs[0].removeAttribute("srcset");
+      imgs[0].style.objectPosition = "42% center";
+
+      imgs[1].src = "/assets/punch-pittsburgh-44.jpg";
+      imgs[1].alt = "Boxing + Strength";
+      imgs[1].removeAttribute("srcset");
+      imgs[1].style.objectPosition = "center center";
+
+      imgs[2].src = "/assets/punch-pittsburgh-1.jpg";
+      imgs[2].alt = "Circuit Training";
+      imgs[2].removeAttribute("srcset");
+      imgs[2].style.objectPosition = "center center";
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", forceTrainingSlotImages, { once:true });
+  } else {
+    forceTrainingSlotImages();
+  }
+})();
