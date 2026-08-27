@@ -1,13 +1,7 @@
 @import url('/membership-base.css');
 
 /* 24-hour special desktop refinements */
-@media(min-width:1200px){
-  .pn-bar{max-width:1560px!important;height:116px!important;padding:0 40px!important;gap:34px!important}
-  .pn-logo img{height:78px!important;width:auto!important}
-  .pn-nav{gap:10px!important}
-  .pn-link{font-size:22px!important;padding:16px 18px!important;letter-spacing:.045em!important}
-  .pn-cta{font-size:16px!important;padding:17px 28px!important}
-}
+@media(min-width:1200px){.pn-bar{max-width:1560px!important;height:116px!important;padding:0 40px!important;gap:34px!important}.pn-logo img{height:78px!important;width:auto!important}.pn-nav{gap:10px!important}.pn-link{font-size:22px!important;padding:16px 18px!important;letter-spacing:.045em!important}.pn-cta{font-size:16px!important;padding:17px 28px!important}}
 body:has(#offer) #punch-body{padding-bottom:88px!important}
 body:has(#offer) #offer{padding-top:76px!important;padding-bottom:92px!important}
 body:has(#offer) #offer .trial-cta{max-width:1520px!important;width:calc(100% - 80px)!important;padding:0!important}
