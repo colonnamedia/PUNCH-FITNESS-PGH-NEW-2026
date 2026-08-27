@@ -14,7 +14,7 @@ window.PUNCH_CONFIG = {
 // Punch Training System presentation
 // Primary desktop treatment = message/description on the left + three image
 // slots on the right, then the three core class cards below. On mobile the
-// whole system stacks. Schedule uses the secondary light-card treatment.
+// thin three-image strip is hidden and the class cards stack.
 // ============================================================================
 (function () {
   var allowed = {
@@ -73,7 +73,7 @@ window.PUNCH_CONFIG = {
       clone.removeAttribute("loading");
       clone.removeAttribute("data-slot");
       if (i === 0) {
-        clone.src = "/assets/punch-pittsburgh-6.jpg";
+        clone.src = "/assets/training-top-boxing.jpg";
         clone.removeAttribute("srcset");
       }
       slot.appendChild(clone);
@@ -172,7 +172,6 @@ window.PUNCH_CONFIG = {
     var style = document.createElement("style");
     style.id = "punch-training-system-styles";
     style.textContent = `
-      /* shared system header */
       #plp .workout-photo-section{background:#fff !important}
       #plp .workout-photo-section .h2{color:#111 !important;max-width:900px}
       #plp .workout-photo-section .sub{color:#666 !important;max-width:680px}
@@ -185,7 +184,6 @@ window.PUNCH_CONFIG = {
       .training-benefits b{font-family:'Barlow Condensed',sans-serif;font-size:16px;text-transform:uppercase;color:#111;line-height:1}
       .training-benefits small{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 
-      /* PRIMARY TOP treatment — text left, three image slots right */
       #plp .training-top{padding-top:72px !important;padding-bottom:72px !important}
       #plp .training-top-lead{display:grid;grid-template-columns:minmax(420px,.95fr) minmax(560px,1.15fr);gap:42px;align-items:stretch;max-width:1380px;margin:0 auto 34px}
       #plp .training-top-lead>.si{max-width:none !important;margin:0 !important;text-align:left !important;display:flex;flex-direction:column;justify-content:center;padding:8px 0}
@@ -198,7 +196,6 @@ window.PUNCH_CONFIG = {
       #plp .training-top-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block;transition:transform .5s ease}
       #plp .training-top-slot:hover img{transform:scale(1.03)}
 
-      /* full-image cards below primary lead */
       #plp .training-top .workout-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:1380px;margin:0 auto}
       #plp .workout-photo-card{position:relative;min-height:clamp(360px,26vw,470px);background:#111 !important;border:0 !important;border-radius:14px !important;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.10) !important}
       #plp .workout-photo-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.70) 30%,rgba(0,0,0,.18) 62%,transparent 84%)}
@@ -214,7 +211,6 @@ window.PUNCH_CONFIG = {
       #plp .workout-photo-card .workout-stat span{color:#ff4b46 !important;font-weight:800}
       #plp .workout-photo-card .workout-stat b{color:rgba(255,255,255,.6) !important}
 
-      /* SECONDARY BOTTOM treatment — schedule: light editorial cards */
       #plp .training-bottom>.si{text-align:left;max-width:1180px}
       #plp .training-bottom .workout-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:1180px;margin-top:40px}
       #plp .workout-bottom-card{background:#fff !important;border:1px solid #ece7df !important;border-radius:14px !important;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.06) !important}
@@ -226,7 +222,6 @@ window.PUNCH_CONFIG = {
       #plp .workout-bottom-card .workout-stat{color:#111 !important;border-top-color:#ece7df !important}
       #plp .workout-bottom-card .workout-stat b{color:#777 !important}
 
-      /* CLASSES page — primary top treatment, then detailed class breakdowns */
       #plp .classes-training-system{background:#fff;padding-top:72px;padding-bottom:72px}
       #plp .classes-training-system .training-top-lead{margin-bottom:0}
       #plp .classes-training-system .training-top-lead>.si{max-width:none !important;text-align:left !important}
@@ -243,9 +238,8 @@ window.PUNCH_CONFIG = {
 
       @media(max-width:700px){
         #plp .training-top{padding-top:56px !important;padding-bottom:56px !important}
-        #plp .training-top-lead{gap:24px;margin-bottom:26px}
-        #plp .training-top-slots{grid-template-columns:1fr;gap:12px;min-height:0;overflow:visible}
-        #plp .training-top-slot{height:230px;border-radius:14px !important}
+        #plp .training-top-lead{display:block;max-width:680px;margin-bottom:26px}
+        #plp .training-top-slots{display:none !important}
         .training-benefits{gap:16px;display:grid;grid-template-columns:1fr}
         #plp .workout-photo-card{min-height:390px;border-radius:14px !important}
         #plp .workout-photo-card .workout-body{padding:24px 20px 22px}
@@ -269,7 +263,7 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Homepage-only test using Anthony's approved uploaded images.
+// Homepage-only approved top strip images.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
   if (path !== "/" && path !== "/index.html") return;
