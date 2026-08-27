@@ -264,18 +264,24 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Homepage-only approved top strip images.
+// Homepage-only approved top strip images and section placement.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
   if (path !== "/" && path !== "/index.html") return;
 
   function setHomepageTrainingStrip() {
+    var trainingSection = document.querySelector('#plp [data-section="fight-train-sweat"]');
+    var heroStmt = document.querySelector('#plp [data-section="hero-stmt"]');
+    if (trainingSection && heroStmt) {
+      heroStmt.parentNode.insertBefore(trainingSection, heroStmt);
+    }
+
     var slots = document.querySelector("#plp .training-top-slots");
     if (!slots) return;
     var imgs = slots.querySelectorAll("img");
     if (imgs.length < 3) return;
 
-    imgs[0].src = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3.jpg";
+    imgs[0].src = "/assets/punch-pittsburgh-22.jpg";
     imgs[0].alt = "Cardio Boxing";
     imgs[0].removeAttribute("srcset");
     imgs[0].style.objectPosition = "center center";
