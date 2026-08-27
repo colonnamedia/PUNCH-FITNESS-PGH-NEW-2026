@@ -2,15 +2,15 @@
 
 /* 24-hour special desktop refinements */
 @media(min-width:1200px){
-  body:has(#offer) .pn-bar{max-width:1720px!important;height:112px!important;padding:0 48px!important;gap:38px!important}
-  body:has(#offer) .pn-logo{min-width:270px!important}
-  body:has(#offer) .pn-logo img{height:64px!important;width:auto!important;max-width:none!important}
-  body:has(#offer) .pn-logo b{font-size:34px!important;line-height:.9!important}
-  body:has(#offer) .pn-logo span{font-size:10px!important;letter-spacing:.24em!important;margin-top:5px!important}
+  body:has(#offer) .pn-bar{max-width:1720px!important;height:104px!important;padding:0 48px!important;gap:38px!important}
+  body:has(#offer) .pn-logo{min-width:230px!important}
+  body:has(#offer) .pn-logo img{height:52px!important;width:auto!important;max-width:none!important}
+  body:has(#offer) .pn-logo b{font-size:28px!important;line-height:.9!important}
+  body:has(#offer) .pn-logo span{font-size:8px!important;letter-spacing:.22em!important;margin-top:4px!important}
   body:has(#offer) .pn-nav{gap:14px!important}
   body:has(#offer) .pn-link{font-size:24px!important;padding:18px 20px!important;letter-spacing:.035em!important}
   body:has(#offer) .pn-caret{font-size:12px!important;margin-left:7px!important}
-  body:has(#offer) .pn-cta{font-size:15px!important;padding:15px 24px!important;min-height:52px!important}
+  body:has(#offer) .pn-cta{font-size:14px!important;padding:0 22px!important;height:48px!important;min-height:48px!important;border-radius:7px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
   body:has(#offer) .pn-menu{min-width:280px!important}
   body:has(#offer) .pn-menu a{font-size:17px!important;line-height:1.35!important;padding:14px 17px!important}
   body:has(#offer) .pn-menu .pn-sub-desc{font-size:13px!important;line-height:1.35!important;margin-top:4px!important}
