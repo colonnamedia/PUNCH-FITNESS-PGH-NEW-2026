@@ -6,7 +6,6 @@
 <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
 <link rel="icon" href="/assets/favicon.svg" />
 <link rel="apple-touch-icon" href="/assets/favicon.svg" />
-
 <title>24-Hour Special | Punch Boxing &amp; Fitness Pittsburgh</title>
 <meta name="description" content="Exclusive 24-hour membership pricing for members who attended a class today at Punch Boxing &amp; Fitness Pittsburgh." />
 <link rel="canonical" href="https://punchpgh.com/24-hour-special" />
@@ -17,11 +16,35 @@
 <meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-41.jpg" />
 <meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="preconnect" href="https://images.squarespace-cdn.com" />
 <link rel="stylesheet" href="/punch.css" />
+<link rel="stylesheet" href="/membership.css" />
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
+<script src="/nav.js" defer></script>
+<script src="/config.js"></script>
+<style>
+#offer .trial-cta{max-width:1240px!important}
+#offer .trial-cards{gap:22px!important;align-items:stretch}
+#offer .trial-card{padding:34px 30px 30px!important;border-radius:16px!important;display:flex;flex-direction:column}
+#offer .trial-card>.trial-btn{margin-top:auto}
+.special-starter{margin-top:24px;border-top:2px dashed #e5e5e5;padding-top:22px}
+.special-starter-label{font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#888;text-align:center;margin:0 0 12px}
+.special-starter-box{background:#fff7f7;border:2px solid rgba(217,43,43,.25);border-radius:14px;padding:22px;text-align:left}
+.special-starter-title{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;font-size:24px;line-height:1.05;margin:0 0 10px;color:#111}
+.special-starter-price{color:#D92B2B;white-space:nowrap;font-size:28px}
+.special-starter-sub{font-size:15px;color:#555;line-height:1.55;margin:0 0 14px;font-weight:600}
+.special-starter-list{list-style:none;padding:0;margin:0 0 18px;display:grid;gap:9px}
+.special-starter-list li{font-size:15px;line-height:1.4;font-weight:800;color:#222;display:flex;gap:9px;align-items:flex-start}
+.special-starter-list li:before{content:'✓';color:#D92B2B;font-weight:900}
+.special-starter-box .trial-btn{min-height:54px;display:flex;align-items:center;justify-content:center;font-size:14px!important}
+.special-more-btn{display:inline-flex;align-items:center;justify-content:center;margin:28px auto 0;background:#111;color:#fff!important;text-decoration:none;border-radius:8px;padding:17px 30px;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;letter-spacing:.1em;text-transform:uppercase}
+#more-memberships{scroll-margin-top:90px}
+#more-memberships .pm-sec{padding-top:84px;padding-bottom:90px}
+#more-memberships .pm-sec-desc{max-width:760px}
+@media(min-width:900px){#offer .trial-card{min-height:760px}.special-starter-box{min-height:300px}.special-starter-box .trial-btn{margin-top:14px}}
+@media(max-width:760px){#offer .trial-card{padding:28px 20px!important}.special-starter-title{font-size:21px;flex-direction:column;gap:4px}.special-starter-price{font-size:25px}#more-memberships .pm-grid{grid-template-columns:1fr!important}}
+</style>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -35,7 +58,7 @@
     <div class="ph-eyebrow">South Hills Pittsburgh &mdash; 24-Hour Special</div>
     <h1 class="ph-title">24 Hour<br><span class="ph-red">Special.</span><br><span class="ph-out">Today Only.</span></h1>
     <p class="ph-sub">You showed up &middot; Now lock in the rate we only offer once &mdash; right after class</p>
-    <a href="#offer" class="ph-btn" target="_blank" rel="noopener">See the Offer &darr;</a>
+    <a href="#offer" class="ph-btn">See the Offer &darr;</a>
   </div></div>
   <a href="#punch-body" class="ph-scroll"><span>Scroll</span><div class="ph-scroll-line"></div></a>
 </div>
@@ -51,7 +74,6 @@
   <h2 class="h2">Lock In Your Rate<br><span>Before the Timer Hits Zero.</span></h2>
   <p class="sub" style="margin:0 auto">Exclusively for members who attended a class today. If you purchase outside the 24 hours from your first trial class, standard monthly rates apply.</p>
  </div>
-
  <div class="si" style="margin-top:34px">
   <div style="background:#fafafa;border:1.5px solid #ececec;border-radius:16px;padding:30px 20px;text-align:center;max-width:640px;margin:0 auto">
    <p style="font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#bbb;margin-bottom:18px">&#9201; This Offer Expires In</p>
@@ -67,7 +89,7 @@
 </div>
 
 <div class="s off" id="offer" style="padding-top:0">
- <div class="trial-cta" style="max-width:920px">
+ <div class="trial-cta">
   <div class="trial-cards">
    <div class="trial-card feat">
     <div class="trial-best">&#127942; Best Deal</div>
@@ -81,14 +103,16 @@
      <li><span class="trial-check">&#10003;</span> VIP Scheduling Priority</li>
      <li><span class="trial-check">&#10003;</span> All Formats: Cardio Boxing, Strength &amp; Circuit</li>
      <li><span class="trial-check">&#10003;</span> Specialty Workshop Access</li>
-     <li><span class="trial-check">&#10003;</span> 3-Month Commitment</li></ul>
+     <li><span class="trial-check">&#10003;</span> 3-Month Commitment</li>
+    </ul>
     <a href="https://punchpgh.pushpress.com/landing/plans/plan_8a43fb2cdf7345" class="trial-btn" target="_blank" rel="noopener">Claim This Deal &mdash; $99.99/mo &rarr;</a>
     <p class="trial-note">3-month commitment &middot; cancel anytime after</p>
-    <div style="margin-top:16px;border-top:1.5px dashed #e8e8e8;padding-top:16px">
-     <p style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#bbb;text-align:center;margin-bottom:12px">Or Add the Starter Pack</p>
-     <div style="background:#FFF0F0;border:1.5px solid rgba(217,43,43,.2);border-radius:10px;padding:16px">
-      <p style="font-size:13px;font-weight:800;text-transform:uppercase;margin-bottom:6px">8-Class Plan + Starter Pack <span style="color:#D92B2B;float:right">+$49.99</span></p>
-      <p style="font-size:12px;color:#666;line-height:1.6;margin-bottom:12px">Same monthly rate, plus Knockout gloves and hand wraps to keep. One-time gear fee, no recurring charge.</p>
+    <div class="special-starter">
+     <p class="special-starter-label">Add the Starter Pack</p>
+     <div class="special-starter-box">
+      <p class="special-starter-title"><span>8-Class Plan + Starter Pack</span><span class="special-starter-price">+$49.99</span></p>
+      <p class="special-starter-sub">Keep the exact same $99.99 monthly membership rate. The starter pack is a <strong>one-time $49.99 gear fee</strong>.</p>
+      <ul class="special-starter-list"><li>Boxing gloves to keep</li><li>Hand wraps to keep</li><li>Your own gear from day one</li><li>No recurring starter-pack charge</li></ul>
       <a href="https://punchpgh.pushpress.com/landing/plans/plan_e8e4b42ef3d842" class="trial-btn" target="_blank" rel="noopener">Get Plan + Starter Pack &rarr;</a>
      </div>
     </div>
@@ -105,23 +129,24 @@
      <li><span class="trial-check">&#10003;</span> VIP Scheduling Priority</li>
      <li><span class="trial-check">&#10003;</span> All Formats: Cardio Boxing, Strength &amp; Circuit</li>
      <li><span class="trial-check">&#10003;</span> Specialty Workshop Access</li>
-     <li><span class="trial-check">&#10003;</span> 3-Month Commitment</li></ul>
+     <li><span class="trial-check">&#10003;</span> 3-Month Commitment</li>
+    </ul>
     <a href="https://punchpgh.pushpress.com/landing/plans/plan_9357735eea6340" class="trial-btn" target="_blank" rel="noopener">Go Unlimited &mdash; $119.99/mo &rarr;</a>
     <p class="trial-note">3-month commitment &middot; cancel anytime after</p>
-    <div style="margin-top:16px;border-top:1.5px dashed #e8e8e8;padding-top:16px">
-     <p style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#bbb;text-align:center;margin-bottom:12px">Or Add the Starter Pack</p>
-     <div style="background:#f8f8f8;border:1.5px solid #e8e8e8;border-radius:10px;padding:16px">
-      <p style="font-size:13px;font-weight:800;text-transform:uppercase;margin-bottom:6px">Unlimited + Starter Pack <span style="color:#D92B2B;float:right">+$49.99</span></p>
-      <p style="font-size:12px;color:#666;line-height:1.6;margin-bottom:12px">Same unlimited membership, plus gloves and wraps so you are ready from session one.</p>
+    <div class="special-starter">
+     <p class="special-starter-label">Add the Starter Pack</p>
+     <div class="special-starter-box">
+      <p class="special-starter-title"><span>Unlimited + Starter Pack</span><span class="special-starter-price">+$49.99</span></p>
+      <p class="special-starter-sub">Keep the exact same $119.99 monthly unlimited rate. The starter pack is a <strong>one-time $49.99 gear fee</strong>.</p>
+      <ul class="special-starter-list"><li>Boxing gloves to keep</li><li>Hand wraps to keep</li><li>Your own gear from day one</li><li>No recurring starter-pack charge</li></ul>
       <a href="https://punchpgh.pushpress.com/landing/plans/plan_377078ea42134c" class="trial-btn" target="_blank" rel="noopener">Get Unlimited + Starter Pack &rarr;</a>
      </div>
     </div>
    </div>
   </div>
-  <p class="trial-note" style="margin-top:18px">Not the right fit? <a href="/membership-options" style="color:#D92B2B;font-weight:700">See all membership options &rarr;</a></p>
+  <div style="text-align:center"><a href="#more-memberships" class="special-more-btn">See More Memberships &darr;</a></div>
  </div>
 </div>
-
 
 <div class="stats-bar"><div class="stats-grid">
   <div class="stat"><div class="stat-num">800<sup>+</sup></div><div class="stat-lbl">Calories Per Class</div></div>
@@ -139,6 +164,39 @@
  <div class="review"><div class="r-badge">Google &#9733;</div><div class="r-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p class="r-text">"Tried the 7-day trial on a whim. Did 5 classes in 7 days and signed up on day 6. Best money I've ever spent."</p><div class="r-who"><div class="r-av" style="background:#1a7a3a">A</div><div><div class="r-name">Ashley R.</div><div class="r-meta">Member &middot; 5 months</div></div></div></div>
 </div>
 </div></div>
+
+<div class="pm-page-rest" id="more-memberships">
+<section class="pm-sec">
+ <p class="pm-sec-label">More Ways to Join</p>
+ <h2 class="pm-sec-title">STANDARD<br>MEMBERSHIP OPTIONS</h2>
+ <p class="pm-sec-desc">The 24-hour special above is the strongest short-term offer. If you need a different class frequency or agreement length, these are the regular membership choices currently available.</p>
+
+ <div class="pm-tier-header"><span class="pm-tier-label">4 Classes / Month</span><div class="pm-tier-line"></div><span class="pm-tier-tag">1x / Week</span></div>
+ <div class="pm-grid">
+  <div class="pm-card"><p class="pm-card-term">Month to Month</p><div class="pm-card-price"><sup>$</sup>109<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month · No Contract</p><div class="pm-divider"></div><ul class="pm-perks"><li>4 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>No Contract — Cancel Anytime</li></ul><a href="https://punchpgh.pushpress.com/landing/plans/plan_200959a83d7e45" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">3 Month Agreement</p><div class="pm-card-price"><sup>$</sup>99<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>4 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $10/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_69b9aba765c74a" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card pm-card-best"><span class="pm-best-badge">Best Value</span><p class="pm-card-term">6 Month Agreement</p><div class="pm-card-price"><sup>$</sup>89<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>4 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $20/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_41cea58759de42" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">12 Month Agreement</p><div class="pm-card-price"><sup>$</sup>79<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>4 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $30/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_3bc38c0eee2945" class="pm-btn-card">Select Plan</a></div>
+ </div>
+
+ <div class="pm-tier-header"><span class="pm-tier-label">8 Classes / Month</span><div class="pm-tier-line"></div><span class="pm-tier-tag">2x / Week</span></div>
+ <div class="pm-grid">
+  <div class="pm-card"><p class="pm-card-term">Month to Month</p><div class="pm-card-price"><sup>$</sup>129<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month · No Contract</p><div class="pm-divider"></div><ul class="pm-perks"><li>8 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Unused credits do not roll over</li><li>No Contract — Cancel Anytime</li></ul><a href="https://punchpgh.pushpress.com/landing/plans/plan_07c13b7d5acc46" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">3 Month Agreement</p><div class="pm-card-price"><sup>$</sup>119<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>8 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $10/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_f6f9197077ed4f" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card pm-card-best"><span class="pm-best-badge">Best Value</span><p class="pm-card-term">6 Month Agreement</p><div class="pm-card-price"><sup>$</sup>109<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>8 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $20/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_1fb2df5128c14a" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">12 Month Agreement</p><div class="pm-card-price"><sup>$</sup>99<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>8 reserved sessions per month</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Credit loss for late cancel/no-show</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $30/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_c27469d93bd340" class="pm-btn-card">Select Plan</a></div>
+ </div>
+
+ <div class="pm-tier-header"><span class="pm-tier-label">Unlimited</span><div class="pm-tier-line"></div><span class="pm-tier-tag">Full Access</span></div>
+ <div class="pm-grid">
+  <div class="pm-card"><p class="pm-card-term">Month to Month</p><div class="pm-card-price"><sup>$</sup>149<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month · No Contract</p><div class="pm-divider"></div><ul class="pm-perks"><li>Unlimited all-inclusive access</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Advance booking required</li><li>No Contract — Cancel Anytime</li></ul><a href="https://punchpgh.pushpress.com/landing/plans/plan_fd36a7205bb048" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">3 Month Agreement</p><div class="pm-card-price"><sup>$</sup>139<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>Unlimited all-inclusive access</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Advance booking required</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $10/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_b90a8bfa280d4a" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card pm-card-best"><span class="pm-best-badge">Most Popular</span><p class="pm-card-term">6 Month Agreement</p><div class="pm-card-price"><sup>$</sup>129<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>Unlimited all-inclusive access</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Advance booking required</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $20/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_1f84558c8f5740" class="pm-btn-card">Select Plan</a></div>
+  <div class="pm-card"><p class="pm-card-term">12 Month Agreement</p><div class="pm-card-price"><sup>$</sup>114<span style="font-size:32px">.99</span></div><p class="pm-card-price-label">/ month</p><div class="pm-divider"></div><ul class="pm-perks"><li>Unlimited all-inclusive access</li><li>Adult classes and Fight-Train-Sweat</li><li>Senior Fit 65+ and Self-Guided Workout</li><li>Advance booking required</li><li>1 Month Cancellation Notice</li></ul><p class="pm-card-savings">Save $35/mo vs. Flex</p><a href="https://punchpgh.pushpress.com/landing/plans/plan_14d3eaddb27441" class="pm-btn-card">Select Plan</a></div>
+ </div>
+ <div style="text-align:center;margin-top:40px"><a href="/membership-options" class="special-more-btn">View Full Pricing Page &rarr;</a></div>
+</section>
+</div>
 
 <div class="final">
  <span class="lbl" style="color:rgba(255,255,255,.6)">Offer Expires Tonight</span>
