@@ -407,7 +407,7 @@ window.PUNCH_CONFIG = {
       if (section && section !== cursor) cursor = moveAfter(section, cursor);
     });
 
-    var schedule = topLevelByText(plp, "schedule");
+    var schedule = plp.querySelector('[data-section="schedule"]');
     if (schedule && schedule !== cursor) cursor = moveAfter(schedule, cursor);
 
     var finalStep = topLevelByText(plp, "your first step");
