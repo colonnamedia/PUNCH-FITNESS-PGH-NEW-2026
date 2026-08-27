@@ -264,42 +264,155 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Homepage-only approved top strip images and section placement.
+// Homepage-only approved top strip images and funnel section order.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
   if (path !== "/" && path !== "/index.html") return;
 
-  function setHomepageTrainingStrip() {
-    var trainingSection = document.querySelector('#plp [data-section="fight-train-sweat"]');
-    var heroStmt = document.querySelector('#plp [data-section="hero-stmt"]');
+  function topLevelByText(plp, phrase) {
+    phrase = phrase.toLowerCase();
+    return Array.prototype.find.call(plp.children, function (el) {
+      return (el.textContent || "").toLowerCase().indexOf(phrase) !== -1;
+    }) || null;
+  }
+
+  function moveAfter(node, afterNode) {
+    if (!node || !afterNode || node === afterNode) return afterNode;
+    afterNode.parentNode.insertBefore(node, afterNode.nextSibling);
+    return node;
+  }
+
+  function makeTrialSteps() {
+    var section = document.createElement("section");
+    section.id = "home-trial-steps";
+    section.className = "s home-trial-steps";
+    section.innerHTML = '<div class="si home-trial-steps-inner">' +
+      '<span class="lbl">Your First Punch Visit</span>' +
+      '<h2 class="h2">THREE SIMPLE STEPS.<br><span>THEN JUST SHOW UP.</span></h2>' +
+      '<div class="home-step-grid">' +
+        '<div class="home-step-card"><span class="home-step-num">01</span><h3>Choose Your Trial</h3><p>Pick one free class or One Week Unlimited for $19.99. Fill out the form below and we’ll help you choose the right class to start.</p></div>' +
+        '<div class="home-step-card"><span class="home-step-num">02</span><h3>Arrive 10 Minutes Early</h3><p>Your coach gives you a quick private intro before class — stance, basic punches, and how to use the heavy bag.</p></div>' +
+        '<div class="home-step-card"><span class="home-step-num">03</span><h3>Learn. Punch. Feel Amazing.</h3><p>No boxing experience needed. Learn the punches, get a full-body workout, and walk out feeling like you actually did something.</p></div>' +
+      '</div>' +
+    '</div>';
+    return section;
+  }
+
+  function makeLeadForm() {
+    var section = document.createElement("section");
+    section.id = "home-lead-form";
+    section.className = "s off home-lead-form";
+    section.innerHTML = '<div class="si" style="text-align:center;max-width:640px">' +
+      '<span class="lbl">Get Started</span>' +
+      '<h2 class="h2">READY TO TRY BOXING <span>FOR FITNESS?</span></h2>' +
+      '<p class="sub" style="margin:0 auto 6px">Drop your info and a coach will reach out to get you booked for your first class.</p>' +
+      '</div>' +
+      '<div class="si" style="max-width:600px">' +
+      '<iframe src="https://api.grow.pushpress.com/widget/form/ImN6zXT4qKiHOZHPOvXz" style="width:100%;min-height:640px;border:none;border-radius:8px;display:block" id="inline-home-ImN6zXT4qKiHOZHPOvXz" data-layout="{\'id\':\'INLINE\'}" data-trigger-type="alwaysShow" data-activation-type="alwaysActivated" data-deactivation-type="neverDeactivate" data-form-name="WEBSITE - AD LEAD FORM - Connect to Prospect and Trial Workflow - High-Touch Lead Capture v1.0" data-form-id="ImN6zXT4qKiHOZHPOvXz" title="Punch Boxing & Fitness Trial Lead Form"></iframe>' +
+      '</div>';
+    return section;
+  }
+
+  function installHomepageFunnelStyles() {
+    if (document.getElementById("home-funnel-styles")) return;
+    var style = document.createElement("style");
+    style.id = "home-funnel-styles";
+    style.textContent = `
+      #plp .home-trial-steps{background:#17171a !important;padding-top:78px !important;padding-bottom:78px !important;color:#fff}
+      #plp .home-trial-steps .lbl{color:#ff5b55 !important}
+      #plp .home-trial-steps .lbl::before{background:#ff5b55 !important}
+      #plp .home-trial-steps .h2{color:#fff !important;max-width:900px;margin-bottom:32px}
+      #plp .home-trial-steps .h2 span{color:#D92B2B}
+      #plp .home-trial-steps-inner{max-width:1240px}
+      #plp .home-step-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+      #plp .home-step-card{position:relative;background:#232327;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:30px 28px 28px;min-height:250px;overflow:hidden}
+      #plp .home-step-num{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:58px;line-height:.85;color:#D92B2B;margin-bottom:28px}
+      #plp .home-step-card h3{font-family:'Barlow Condensed',sans-serif;font-size:30px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:#fff}
+      #plp .home-step-card p{font-size:15px;line-height:1.65;color:#c9c7c2;margin:0}
+      #plp .home-lead-form{background:#f4f0e8 !important;padding-top:78px !important;padding-bottom:62px !important}
+      #plp .home-lead-form .h2{color:#111 !important}
+      #plp .home-lead-form .sub{color:#666 !important}
+      @media(max-width:800px){#plp .home-step-grid{grid-template-columns:1fr}#plp .home-step-card{min-height:0}#plp .home-trial-steps,#plp .home-lead-form{padding-top:58px !important;padding-bottom:58px !important}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function arrangeHomepage() {
+    var plp = document.getElementById("plp");
+    if (!plp) return;
+
+    installHomepageFunnelStyles();
+
+    var trainingSection = plp.querySelector('[data-section="fight-train-sweat"]');
+    var heroStmt = plp.querySelector('[data-section="hero-stmt"]');
+
     if (trainingSection && heroStmt) {
-      heroStmt.parentNode.insertBefore(trainingSection, heroStmt);
+      moveAfter(trainingSection, heroStmt);
     }
 
-    var slots = document.querySelector("#plp .training-top-slots");
-    if (!slots) return;
-    var imgs = slots.querySelectorAll("img");
-    if (imgs.length < 3) return;
+    var slots = plp.querySelector(".training-top-slots");
+    if (slots) {
+      var imgs = slots.querySelectorAll("img");
+      if (imgs.length >= 3) {
+        imgs[0].src = "/assets/punch-pittsburgh-22.jpg";
+        imgs[0].alt = "Cardio Boxing";
+        imgs[0].removeAttribute("srcset");
+        imgs[0].style.objectPosition = "center center";
 
-    imgs[0].src = "/assets/punch-pittsburgh-22.jpg";
-    imgs[0].alt = "Cardio Boxing";
-    imgs[0].removeAttribute("srcset");
-    imgs[0].style.objectPosition = "center center";
+        imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
+        imgs[1].alt = "Strength Training";
+        imgs[1].removeAttribute("srcset");
+        imgs[1].style.objectPosition = "center center";
 
-    imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
-    imgs[1].alt = "Strength Training";
-    imgs[1].removeAttribute("srcset");
-    imgs[1].style.objectPosition = "center center";
+        imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
+        imgs[2].alt = "Circuit and Conditioning Training";
+        imgs[2].removeAttribute("srcset");
+        imgs[2].style.objectPosition = "center center";
+      }
+    }
 
-    imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
-    imgs[2].alt = "Circuit and Conditioning Training";
-    imgs[2].removeAttribute("srcset");
-    imgs[2].style.objectPosition = "center center";
+    var oldSteps = document.getElementById("home-trial-steps");
+    if (oldSteps) oldSteps.remove();
+    var oldLead = document.getElementById("home-lead-form");
+    if (oldLead) oldLead.remove();
+
+    var anchor = trainingSection || heroStmt;
+    if (!anchor) return;
+
+    var steps = makeTrialSteps();
+    var lead = makeLeadForm();
+    anchor.parentNode.insertBefore(steps, anchor.nextSibling);
+    steps.parentNode.insertBefore(lead, steps.nextSibling);
+
+    var formScript = document.querySelector('script[src="https://api.grow.pushpress.com/js/form_embed.js"]');
+    if (!formScript) {
+      formScript = document.createElement("script");
+      formScript.src = "https://api.grow.pushpress.com/js/form_embed.js";
+      formScript.async = true;
+      document.body.appendChild(formScript);
+    }
+
+    var cursor = lead;
+    [
+      "hear it from them",
+      "what people are saying after their first week",
+      "a workout you'll actually look forward to",
+      "what makes us different",
+      "more ways to train"
+    ].forEach(function (phrase) {
+      var section = topLevelByText(plp, phrase);
+      if (section && section !== cursor) cursor = moveAfter(section, cursor);
+    });
+
+    var schedule = topLevelByText(plp, "schedule");
+    var finalStep = topLevelByText(plp, "your first step");
+    if (schedule) cursor = moveAfter(schedule, cursor);
+    if (finalStep) moveAfter(finalStep, cursor);
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", setHomepageTrainingStrip, { once:true });
+    document.addEventListener("DOMContentLoaded", arrangeHomepage, { once:true });
   } else {
-    setHomepageTrainingStrip();
+    arrangeHomepage();
   }
 })();
