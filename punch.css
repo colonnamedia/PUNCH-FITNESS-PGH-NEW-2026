@@ -289,6 +289,12 @@ html,body{margin:0;padding:0;background:#fff}
   #plp .workout-grid{grid-template-columns:1fr;max-width:520px;gap:24px}
   #plp .workout-img{height:220px}
 }
+/* dark variant — for use when the section itself is on a dark background */
+#plp .workout-card.dark{background:#1c1c1e;border-color:#2c2c2e;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+#plp .workout-card.dark .workout-name{color:#fff}
+#plp .workout-card.dark .workout-desc{color:#aaa}
+#plp .workout-card.dark .workout-stat{border-top-color:#333;color:#fff}
+#plp .workout-card.dark .workout-stat b{color:#888}
 
 /* photo strip */
 #plp .photo-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:3px}
