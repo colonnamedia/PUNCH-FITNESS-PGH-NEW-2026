@@ -12,8 +12,9 @@ window.PUNCH_CONFIG = {
 
 // ============================================================================
 // Punch Training System presentation
-// Keeps the three core programs consistent in message while intentionally
-// varying the visual treatment by page: top / middle / bottom / detail.
+// Primary desktop treatment = message/description on the left + three image
+// slots on the right, then the three core class cards below. On mobile the
+// whole system stacks. Schedule uses the secondary light-card treatment.
 // ============================================================================
 (function () {
   var allowed = {
@@ -54,9 +55,35 @@ window.PUNCH_CONFIG = {
     intro.appendChild(benefits);
   }
 
+  function buildTopSlots(section, imageEls) {
+    if (!section || section.querySelector(".training-top-lead")) return;
+    var intro = section.querySelector(":scope > .si");
+    if (!intro || !imageEls || imageEls.length < 3) return;
+
+    var lead = document.createElement("div");
+    lead.className = "training-top-lead";
+
+    var slots = document.createElement("div");
+    slots.className = "training-top-slots";
+
+    Array.prototype.slice.call(imageEls, 0, 3).forEach(function (img, i) {
+      var slot = document.createElement("div");
+      slot.className = "training-top-slot slot-" + (i + 1);
+      var clone = img.cloneNode(true);
+      clone.removeAttribute("loading");
+      clone.removeAttribute("data-slot");
+      slot.appendChild(clone);
+      slots.appendChild(slot);
+    });
+
+    section.insertBefore(lead, intro);
+    lead.appendChild(intro);
+    lead.appendChild(slots);
+  }
+
   function rewriteWorkoutSection(section, variant, scheduleCopy) {
     if (!section) return;
-    section.classList.remove("dark");
+    section.classList.remove("dark", "training-top", "training-middle", "training-bottom");
     section.classList.add("workout-photo-section", "training-" + variant);
 
     var label = section.querySelector(".lbl");
@@ -77,10 +104,7 @@ window.PUNCH_CONFIG = {
 
     grids.forEach(function (grid) {
       var section = grid.closest(".s");
-      var variant = "middle";
-
-      if (path === "/" || path === "/index.html") variant = "top";
-      if (isSchedule) variant = "bottom";
+      var variant = isSchedule ? "bottom" : "top";
 
       rewriteWorkoutSection(
         section,
@@ -88,10 +112,16 @@ window.PUNCH_CONFIG = {
         isSchedule ? "Choose the class format that fits your day. Cardio Boxing, Boxing + Strength, and Circuit Training are all part of the same Punch system." : null
       );
 
-      grid.querySelectorAll(".workout-card").forEach(function (card) {
+      var cards = grid.querySelectorAll(".workout-card");
+      cards.forEach(function (card) {
         card.classList.remove("dark", "workout-photo-card", "workout-bottom-card");
         card.classList.add(isSchedule ? "workout-bottom-card" : "workout-photo-card");
       });
+
+      if (!isSchedule) {
+        var imgs = grid.querySelectorAll(".workout-img img");
+        buildTopSlots(section, imgs);
+      }
     });
   }
 
@@ -112,6 +142,9 @@ window.PUNCH_CONFIG = {
       setHTML(intro.querySelector('[data-text="intro.headline"]'), 'BOXING IS THE CARDIO.<br>STRENGTH COMPLETES IT.<br><span>THREE CLASS FORMATS. ALL INCLUDED.</span>');
       setText(intro.querySelector('[data-text="intro.subtext"]'), "Your membership includes all three Punch class formats. Mix Cardio Boxing, Boxing + Strength, and Circuit Training throughout the week — no restrictions.");
       addBenefits(intro);
+
+      var classImgs = document.querySelectorAll(".cls-style .cls-img img");
+      buildTopSlots(intro, classImgs);
     }
 
     setText(document.querySelector('[data-text="fight.tag"]'), "Cardio / Conditioning · 45–55 min");
@@ -142,36 +175,42 @@ window.PUNCH_CONFIG = {
       #plp .workout-photo-section .lbl{color:#D92B2B !important}
       #plp .workout-photo-section .lbl::before{background:#D92B2B !important}
 
-      .training-benefits{display:flex;gap:30px;flex-wrap:wrap;margin-top:30px}
+      .training-benefits{display:flex;gap:26px;flex-wrap:wrap;margin-top:28px}
       .training-benefits>div{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:10px;align-items:center}
       .training-benefit-icon{grid-row:1/3;width:34px;height:34px;border:1.5px solid #D92B2B;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#D92B2B;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:12px}
       .training-benefits b{font-family:'Barlow Condensed',sans-serif;font-size:16px;text-transform:uppercase;color:#111;line-height:1}
       .training-benefits small{font-size:11px;color:#666;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
 
-      /* TOP treatment — homepage: strong left-led system statement + full-photo cards */
-      #plp .training-top>.si{max-width:1180px;margin-left:auto;margin-right:auto;text-align:left !important}
-      #plp .training-top .h2{font-size:clamp(42px,5.5vw,76px);line-height:.92}
-      #plp .training-top .sub{font-size:17px}
+      /* PRIMARY TOP treatment — text left, three image slots right */
+      #plp .training-top{padding-top:72px !important;padding-bottom:72px !important}
+      #plp .training-top-lead{display:grid;grid-template-columns:minmax(420px,.95fr) minmax(560px,1.15fr);gap:42px;align-items:stretch;max-width:1380px;margin:0 auto 34px}
+      #plp .training-top-lead>.si{max-width:none !important;margin:0 !important;text-align:left !important;display:flex;flex-direction:column;justify-content:center;padding:8px 0}
+      #plp .training-top .h2,#plp .classes-training-system .h2{font-size:clamp(42px,4.8vw,70px);line-height:.92;margin-bottom:18px}
+      #plp .training-top .sub,#plp .classes-training-system .sub{font-size:17px;line-height:1.6}
+      #plp .training-top-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;min-height:360px;overflow:hidden}
+      #plp .training-top-slot{position:relative;overflow:hidden;background:#111;min-width:0}
+      #plp .training-top-slot:first-child{border-radius:16px 0 0 16px}
+      #plp .training-top-slot:last-child{border-radius:0 16px 16px 0}
+      #plp .training-top-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block;transition:transform .5s ease}
+      #plp .training-top-slot:hover img{transform:scale(1.03)}
 
-      /* MIDDLE treatment — trial pages: centered intro + image-overlay program cards */
-      #plp .training-middle>.si{text-align:center;max-width:860px}
-      #plp .training-middle .sub{margin-left:auto;margin-right:auto}
-      #plp .training-middle .workout-grid,#plp .training-top .workout-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:100%;margin-top:48px}
-      #plp .workout-photo-card{position:relative;min-height:clamp(390px,31vw,520px);background:#111 !important;border:0 !important;border-radius:16px !important;overflow:hidden;box-shadow:0 10px 28px rgba(0,0,0,.12) !important}
-      #plp .workout-photo-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.74) 28%,rgba(0,0,0,.24) 58%,rgba(0,0,0,.04) 78%,transparent 100%)}
+      /* full-image cards below primary lead */
+      #plp .training-top .workout-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-width:1380px;margin:0 auto}
+      #plp .workout-photo-card{position:relative;min-height:clamp(360px,26vw,470px);background:#111 !important;border:0 !important;border-radius:14px !important;overflow:hidden;box-shadow:0 8px 22px rgba(0,0,0,.10) !important}
+      #plp .workout-photo-card::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to top,rgba(0,0,0,.94) 0%,rgba(0,0,0,.70) 30%,rgba(0,0,0,.18) 62%,transparent 84%)}
       #plp .workout-photo-card .workout-img{position:absolute;inset:0;width:100%;height:100% !important;overflow:hidden}
       #plp .workout-photo-card .workout-img img{width:100%;height:100%;object-fit:cover;object-position:center center;display:block;transform:none;transition:transform .55s ease}
       #plp .workout-photo-card:hover .workout-img img{transform:scale(1.025)}
       #plp .workout-photo-card .workout-num{z-index:3;top:16px;left:16px}
-      #plp .workout-photo-card .workout-body{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:30px 28px 26px;background:transparent !important}
-      #plp .workout-photo-card .workout-tag{color:#ff4b46 !important;margin-bottom:8px}
-      #plp .workout-photo-card .workout-name{color:#fff !important;font-size:clamp(28px,2.4vw,38px);text-shadow:0 2px 14px rgba(0,0,0,.45)}
-      #plp .workout-photo-card .workout-desc{color:rgba(255,255,255,.82) !important;max-width:95%;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+      #plp .workout-photo-card .workout-body{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:26px 24px 22px;background:transparent !important}
+      #plp .workout-photo-card .workout-tag{color:#ff4b46 !important;margin-bottom:7px}
+      #plp .workout-photo-card .workout-name{color:#fff !important;font-size:clamp(27px,2.2vw,36px);text-shadow:0 2px 14px rgba(0,0,0,.45)}
+      #plp .workout-photo-card .workout-desc{color:rgba(255,255,255,.84) !important;max-width:96%;text-shadow:0 1px 8px rgba(0,0,0,.5)}
       #plp .workout-photo-card .workout-stat{color:#fff !important;border-top:1px solid rgba(255,255,255,.18) !important}
       #plp .workout-photo-card .workout-stat span{color:#ff4b46 !important;font-weight:800}
-      #plp .workout-photo-card .workout-stat b{color:rgba(255,255,255,.58) !important}
+      #plp .workout-photo-card .workout-stat b{color:rgba(255,255,255,.6) !important}
 
-      /* BOTTOM treatment — schedule: lighter, editorial cards for quick scanning */
+      /* SECONDARY BOTTOM treatment — schedule: light editorial cards */
       #plp .training-bottom>.si{text-align:left;max-width:1180px}
       #plp .training-bottom .workout-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;max-width:1180px;margin-top:40px}
       #plp .workout-bottom-card{background:#fff !important;border:1px solid #ece7df !important;border-radius:14px !important;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.06) !important}
@@ -183,20 +222,27 @@ window.PUNCH_CONFIG = {
       #plp .workout-bottom-card .workout-stat{color:#111 !important;border-top-color:#ece7df !important}
       #plp .workout-bottom-card .workout-stat b{color:#777 !important}
 
-      /* CLASSES page — the detailed version of the same system */
-      #plp .classes-training-system{background:#fff;padding-top:84px;padding-bottom:72px}
-      #plp .classes-training-system>.si{text-align:left !important;max-width:1180px !important}
-      #plp .classes-training-system .h2{font-size:clamp(44px,5.8vw,78px);line-height:.92;max-width:930px}
+      /* CLASSES page — primary top treatment, then detailed class breakdowns */
+      #plp .classes-training-system{background:#fff;padding-top:72px;padding-bottom:72px}
+      #plp .classes-training-system .training-top-lead{margin-bottom:0}
+      #plp .classes-training-system .training-top-lead>.si{max-width:none !important;text-align:left !important}
       #plp .classes-training-system .sub{margin:0 !important;max-width:700px}
       #plp .cls-n{font-size:clamp(48px,6vw,82px)}
 
-      @media(max-width:960px){
-        #plp .training-middle .workout-grid,#plp .training-top .workout-grid,#plp .training-bottom .workout-grid{grid-template-columns:1fr;max-width:680px;gap:18px}
+      @media(max-width:1100px){
+        #plp .training-top-lead{grid-template-columns:1fr;gap:28px;max-width:760px}
+        #plp .training-top-slots{min-height:300px}
+        #plp .training-top .workout-grid,#plp .training-bottom .workout-grid{grid-template-columns:1fr;max-width:680px;gap:18px}
         #plp .workout-photo-card{min-height:440px}
         #plp .workout-bottom-card .workout-img{height:300px !important}
       }
-      @media(max-width:600px){
-        .training-benefits{gap:18px;display:grid;grid-template-columns:1fr}
+
+      @media(max-width:700px){
+        #plp .training-top{padding-top:56px !important;padding-bottom:56px !important}
+        #plp .training-top-lead{gap:24px;margin-bottom:26px}
+        #plp .training-top-slots{grid-template-columns:1fr;gap:12px;min-height:0;overflow:visible}
+        #plp .training-top-slot{height:230px;border-radius:14px !important}
+        .training-benefits{gap:16px;display:grid;grid-template-columns:1fr}
         #plp .workout-photo-card{min-height:390px;border-radius:14px !important}
         #plp .workout-photo-card .workout-body{padding:24px 20px 22px}
         #plp .workout-photo-card .workout-desc{font-size:13px;line-height:1.5}
