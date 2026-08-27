@@ -73,8 +73,9 @@ window.PUNCH_CONFIG = {
       clone.removeAttribute("loading");
       clone.removeAttribute("data-slot");
       if (i === 0) {
-        clone.src = "/assets/training-top-boxing.jpg";
+        clone.src = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3.jpg";
         clone.removeAttribute("srcset");
+        clone.style.objectPosition = "center center";
       }
       slot.appendChild(clone);
       slots.appendChild(slot);
@@ -274,7 +275,7 @@ window.PUNCH_CONFIG = {
     var imgs = slots.querySelectorAll("img");
     if (imgs.length < 3) return;
 
-    imgs[0].src = "/assets/training-top-boxing.jpg";
+    imgs[0].src = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3.jpg";
     imgs[0].alt = "Cardio Boxing";
     imgs[0].removeAttribute("srcset");
     imgs[0].style.objectPosition = "center center";
