@@ -280,19 +280,16 @@ window.PUNCH_CONFIG = {
     var imgs = slots.querySelectorAll("img");
     if (imgs.length < 3) return;
 
-    // Left: uploaded boxing image (IMG_0698)
     imgs[0].src = "/assets/training-top-boxing.jpg";
     imgs[0].alt = "Cardio Boxing";
     imgs[0].removeAttribute("srcset");
     imgs[0].style.objectPosition = "center center";
 
-    // Middle: uploaded deadlift / strength image
     imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
     imgs[1].alt = "Strength Training";
     imgs[1].removeAttribute("srcset");
     imgs[1].style.objectPosition = "center center";
 
-    // Right: uploaded rower / conditioning image
     imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
     imgs[2].alt = "Circuit and Conditioning Training";
     imgs[2].removeAttribute("srcset");
