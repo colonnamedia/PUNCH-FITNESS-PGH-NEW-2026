@@ -8,47 +8,12 @@
   .pn-link{font-size:22px!important;padding:16px 18px!important;letter-spacing:.045em!important}
   .pn-cta{font-size:16px!important;padding:17px 28px!important}
 }
-
-body:has(#offer) #offer{padding-top:76px!important;padding-bottom:92px!important}
 body:has(#offer) #punch-body{padding-bottom:88px!important}
+body:has(#offer) #offer{padding-top:76px!important;padding-bottom:92px!important}
 body:has(#offer) #offer .trial-cta{max-width:1520px!important;width:calc(100% - 80px)!important;padding:0!important}
 body:has(#offer) #offer .trial-cards{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:42px!important;align-items:stretch!important}
 body:has(#offer) #offer .trial-card{max-width:none!important;width:100%!important;min-width:0!important;padding:48px 44px 40px!important}
-body:has(#offer) #offer .trial-card .trial-price{font-size:70px!important}
-body:has(#offer) #offer .trial-card .trial-perks li{font-size:15px!important;padding:9px 0!important}
-body:has(#offer) #offer .special-starter{margin-top:34px!important;padding-top:30px!important}
-body:has(#offer) #offer .special-starter-box{padding:30px!important}
-
-body:has(#offer) #more-memberships{padding-top:34px!important}
-body:has(#offer) #more-memberships .pm-sec{max-width:1560px!important;width:100%!important;margin:0 auto!important;padding:110px 48px 118px!important}
-body:has(#offer) #more-memberships .pm-sec-title{font-size:clamp(64px,6vw,108px)!important}
-body:has(#offer) #more-memberships .pm-sec-desc{max-width:900px!important;font-size:18px!important;margin:0 auto 64px!important}
-body:has(#offer) #more-memberships .pm-tier-header{max-width:1420px!important;margin:0 auto 30px!important}
-body:has(#offer) #more-memberships .pm-tier-label{font-size:42px!important}
+body:has(#offer) #more-memberships .pm-sec{max-width:1560px!important;margin:0 auto!important;padding:110px 48px 118px!important}
 body:has(#offer) #more-memberships .pm-grid{max-width:1420px!important;width:100%!important;margin:0 auto 82px!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:22px!important}
-body:has(#offer) #more-memberships .pm-card{min-width:0!important;padding:36px 30px 32px!important;border-radius:12px!important}
-body:has(#offer) #more-memberships .pm-card-price{font-size:66px!important}
-body:has(#offer) #more-memberships .pm-perks li{font-size:14px!important;padding:8px 0!important}
-
-@media(max-width:1199px){
-  body:has(#offer) #offer{padding-top:56px!important}
-  body:has(#offer) #offer .trial-cta{width:calc(100% - 40px)!important}
-  body:has(#offer) #more-memberships .pm-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:980px!important}
-  body:has(#offer) #more-memberships .pm-tier-header{max-width:980px!important}
-}
-
-@media(max-width:800px){
-  body:has(#offer) #punch-body{padding-bottom:60px!important}
-  body:has(#offer) #offer{padding-top:42px!important;padding-bottom:64px!important}
-  body:has(#offer) #offer .trial-cta{width:100%!important;padding:0 18px!important}
-  body:has(#offer) #offer .trial-cards{grid-template-columns:1fr!important;gap:24px!important}
-  body:has(#offer) #offer .trial-card{padding:30px 22px 26px!important}
-  body:has(#offer) #more-memberships{padding-top:18px!important}
-  body:has(#offer) #more-memberships .pm-sec{padding:72px 18px 82px!important}
-  body:has(#offer) #more-memberships .pm-sec-title{font-size:clamp(46px,14vw,72px)!important}
-  body:has(#offer) #more-memberships .pm-sec-desc{font-size:16px!important;margin-bottom:44px!important}
-  body:has(#offer) #more-memberships .pm-grid{grid-template-columns:1fr!important;max-width:620px!important;gap:20px!important;margin-bottom:56px!important}
-  body:has(#offer) #more-memberships .pm-tier-header{max-width:620px!important;align-items:flex-start!important;flex-direction:column!important;gap:8px!important}
-  body:has(#offer) #more-memberships .pm-tier-label{font-size:34px!important}
-  body:has(#offer) #more-memberships .pm-tier-line{width:100%!important}
-}
+@media(max-width:1199px){body:has(#offer) #offer{padding-top:56px!important}body:has(#offer) #more-memberships .pm-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:980px!important}}
+@media(max-width:800px){body:has(#offer) #offer{padding-top:42px!important}body:has(#offer) #offer .trial-cards{grid-template-columns:1fr!important;gap:24px!important}body:has(#offer) #more-memberships .pm-grid{grid-template-columns:1fr!important;max-width:620px!important}}
