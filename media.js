@@ -48,10 +48,10 @@
   })();
 })();
 
-// Punch Ad Trials — larger swipeable member reel showcase.
+// Punch Ad Trials / Free Trial — larger swipeable member reel showcase.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
-  if (path !== "/punch-ad-trials" && path !== "/punch-ad-trials.html") return;
+  if (path !== "/punch-ad-trials" && path !== "/punch-ad-trials.html" && path !== "/free-trial" && path !== "/free-trial.html") return;
 
   function enhanceAdReels(){
     var section = document.querySelector('#plp [data-section="reels"]');
