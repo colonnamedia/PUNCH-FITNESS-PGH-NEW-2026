@@ -72,6 +72,10 @@ window.PUNCH_CONFIG = {
       var clone = img.cloneNode(true);
       clone.removeAttribute("loading");
       clone.removeAttribute("data-slot");
+      if (i === 0) {
+        clone.src = "/assets/punch-pittsburgh-6.jpg";
+        clone.removeAttribute("srcset");
+      }
       slot.appendChild(clone);
       slots.appendChild(slot);
     });
