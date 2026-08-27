@@ -264,7 +264,7 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Homepage-only approved top strip images and funnel section order.
+// Homepage-only approved top strip images and corrected funnel order.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
   if (path !== "/" && path !== "/index.html") return;
@@ -301,7 +301,7 @@ window.PUNCH_CONFIG = {
   function makeLeadForm() {
     var section = document.createElement("section");
     section.id = "home-lead-form";
-    section.className = "s off home-lead-form";
+    section.className = "s home-lead-form";
     section.innerHTML = '<div class="si" style="text-align:center;max-width:640px">' +
       '<span class="lbl">Get Started</span>' +
       '<h2 class="h2">READY TO TRY BOXING <span>FOR FITNESS?</span></h2>' +
@@ -329,7 +329,7 @@ window.PUNCH_CONFIG = {
       #plp .home-step-num{display:block;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:58px;line-height:.85;color:#D92B2B;margin-bottom:28px}
       #plp .home-step-card h3{font-family:'Barlow Condensed',sans-serif;font-size:30px;line-height:1;text-transform:uppercase;margin:0 0 12px;color:#fff}
       #plp .home-step-card p{font-size:15px;line-height:1.65;color:#c9c7c2;margin:0}
-      #plp .home-lead-form{background:#f4f0e8 !important;padding-top:78px !important;padding-bottom:62px !important}
+      #plp .home-lead-form{background:#fff !important;padding-top:80px !important;padding-bottom:80px !important}
       #plp .home-lead-form .h2{color:#111 !important}
       #plp .home-lead-form .sub{color:#666 !important}
       @media(max-width:800px){#plp .home-step-grid{grid-template-columns:1fr}#plp .home-step-card{min-height:0}#plp .home-trial-steps,#plp .home-lead-form{padding-top:58px !important;padding-bottom:58px !important}}
@@ -343,12 +343,17 @@ window.PUNCH_CONFIG = {
 
     installHomepageFunnelStyles();
 
-    var trainingSection = plp.querySelector('[data-section="fight-train-sweat"]');
+    var hero = plp.querySelector(".vhero");
+    var stats = plp.querySelector('[data-section="stats"]');
+    var community = plp.querySelector('[data-section="combined-header"]');
     var heroStmt = plp.querySelector('[data-section="hero-stmt"]');
+    var trainingSection = plp.querySelector('[data-section="fight-train-sweat"]');
 
-    if (trainingSection && heroStmt) {
-      moveAfter(trainingSection, heroStmt);
-    }
+    var cursor = hero;
+    if (cursor && stats) cursor = moveAfter(stats, cursor);
+    if (cursor && community) cursor = moveAfter(community, cursor);
+    if (cursor && heroStmt) cursor = moveAfter(heroStmt, cursor);
+    if (cursor && trainingSection) cursor = moveAfter(trainingSection, cursor);
 
     var slots = plp.querySelector(".training-top-slots");
     if (slots) {
@@ -358,12 +363,10 @@ window.PUNCH_CONFIG = {
         imgs[0].alt = "Cardio Boxing";
         imgs[0].removeAttribute("srcset");
         imgs[0].style.objectPosition = "center center";
-
         imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
         imgs[1].alt = "Strength Training";
         imgs[1].removeAttribute("srcset");
         imgs[1].style.objectPosition = "center center";
-
         imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
         imgs[2].alt = "Circuit and Conditioning Training";
         imgs[2].removeAttribute("srcset");
@@ -376,13 +379,14 @@ window.PUNCH_CONFIG = {
     var oldLead = document.getElementById("home-lead-form");
     if (oldLead) oldLead.remove();
 
-    var anchor = trainingSection || heroStmt;
-    if (!anchor) return;
-
     var steps = makeTrialSteps();
     var lead = makeLeadForm();
-    anchor.parentNode.insertBefore(steps, anchor.nextSibling);
-    steps.parentNode.insertBefore(lead, steps.nextSibling);
+    if (cursor) {
+      cursor.parentNode.insertBefore(steps, cursor.nextSibling);
+      cursor = steps;
+      cursor.parentNode.insertBefore(lead, cursor.nextSibling);
+      cursor = lead;
+    }
 
     var formScript = document.querySelector('script[src="https://api.grow.pushpress.com/js/form_embed.js"]');
     if (!formScript) {
@@ -392,22 +396,22 @@ window.PUNCH_CONFIG = {
       document.body.appendChild(formScript);
     }
 
-    var cursor = lead;
     [
       "hear it from them",
       "what people are saying after their first week",
-      "a workout you'll actually look forward to",
       "what makes us different",
-      "more ways to train"
+      "more ways to train",
+      "a workout you'll actually look forward to"
     ].forEach(function (phrase) {
       var section = topLevelByText(plp, phrase);
       if (section && section !== cursor) cursor = moveAfter(section, cursor);
     });
 
     var schedule = topLevelByText(plp, "schedule");
+    if (schedule && schedule !== cursor) cursor = moveAfter(schedule, cursor);
+
     var finalStep = topLevelByText(plp, "your first step");
-    if (schedule) cursor = moveAfter(schedule, cursor);
-    if (finalStep) moveAfter(finalStep, cursor);
+    if (finalStep && finalStep !== cursor) moveAfter(finalStep, cursor);
   }
 
   if (document.readyState === "loading") {
