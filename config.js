@@ -269,8 +269,7 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Homepage-only test: use three DIFFERENT images in the top strip so it reads
-// as a visual summary, not a duplicate of the three class cards below.
+// Homepage-only test using Anthony's approved uploaded images.
 (function () {
   var path = window.location.pathname.replace(/\/$/, "") || "/";
   if (path !== "/" && path !== "/index.html") return;
@@ -281,21 +280,21 @@ window.PUNCH_CONFIG = {
     var imgs = slots.querySelectorAll("img");
     if (imgs.length < 3) return;
 
-    // 1: alternate boxing image — one boxer / boxing-led visual
-    imgs[0].src = "/assets/punch-pittsburgh-41.jpg";
+    // Left: uploaded boxing image (IMG_0698)
+    imgs[0].src = "/assets/training-top-boxing.jpg";
     imgs[0].alt = "Cardio Boxing";
     imgs[0].removeAttribute("srcset");
     imgs[0].style.objectPosition = "center center";
 
-    // 2: alternate strength image — intentionally different from the large card below
-    imgs[1].src = "/assets/punch-pittsburgh-44.jpg";
+    // Middle: uploaded deadlift / strength image
+    imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
     imgs[1].alt = "Strength Training";
     imgs[1].removeAttribute("srcset");
     imgs[1].style.objectPosition = "center center";
 
-    // 3: alternate circuit / strength image — intentionally different from the large card below
-    imgs[2].src = "/assets/punch-pittsburgh-14.jpg";
-    imgs[2].alt = "Circuit and Strength Training";
+    // Right: uploaded rower / conditioning image
+    imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
+    imgs[2].alt = "Circuit and Conditioning Training";
     imgs[2].removeAttribute("srcset");
     imgs[2].style.objectPosition = "center center";
   }
