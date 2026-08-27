@@ -7,6 +7,28 @@
   var TRIAL = "https://punchpgh.pushpress.com/landing/plans?category=plcat_2j49r5iagc21ll";
   var LOGIN = "https://members.pushpress.com/";
 
+  // Unified desktop navigation treatment used across the full site.
+  // This mirrors the approved 24-hour-special header proportions.
+  var navStyle = document.createElement("style");
+  navStyle.id = "punch-global-nav-style";
+  navStyle.textContent = `
+    @media(min-width:1200px){
+      .pn-bar{max-width:1720px!important;height:104px!important;padding:0 48px!important;gap:38px!important}
+      .pn-logo{min-width:230px!important}
+      .pn-logo img{height:52px!important;width:auto!important;max-width:none!important}
+      .pn-logo b{font-size:28px!important;line-height:.9!important}
+      .pn-logo span{font-size:8px!important;letter-spacing:.22em!important;margin-top:4px!important}
+      .pn-nav{gap:14px!important}
+      .pn-link{font-size:24px!important;padding:18px 20px!important;letter-spacing:.035em!important}
+      .pn-caret{font-size:12px!important;margin-left:7px!important}
+      .pn-cta{font-size:14px!important;padding:0 22px!important;height:48px!important;min-height:48px!important;border-radius:7px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important}
+      .pn-menu{min-width:280px!important}
+      .pn-menu a{font-size:17px!important;line-height:1.35!important;padding:14px 17px!important}
+      .pn-menu .pn-sub-desc{font-size:13px!important;line-height:1.35!important;margin-top:4px!important}
+    }
+  `;
+  document.head.appendChild(navStyle);
+
   var header =
   '<header class="pn" id="pnHeader"><div class="pn-bar">' +
     '<a class="pn-logo" href="/" aria-label="Punch Boxing and Fitness home">' +
@@ -222,16 +244,6 @@
   }
 
   // ---- Form / embed popup (admin-managed, /admin > Popups > Form/Embed) ----
-  // Two kinds of "embed code" behave very differently:
-  //  1) A self-managing widget (contains a <script> tag — e.g. PushPress Grow,
-  //     GoHighLevel, etc.) that builds and controls ITS OWN popup UI. These
-  //     must be dropped directly into the page, NOT nested inside another
-  //     popup box — nesting them breaks their own show/hide logic (the
-  //     classic symptom: a blurred backdrop with nothing visible inside it,
-  //     because the widget's own iframe never gets revealed).
-  //  2) A plain iframe/HTML snippet with no script — this has no popup
-  //     behavior of its own, so it's wrapped in the site's own popup shell
-  //     (dark backdrop + close button) same as the trial/custom popups.
   var FORM_POP_DELAY = 3000;
 
   function runScripts(root) {
@@ -251,24 +263,9 @@
     if (/\/admin/.test(location.pathname)) return false;
     if (!p.embed_html) return false;
 
-    // Detect a true self-managed popup (e.g. PushPress Grow with Embed
-    // Layout Type = "Popup", which builds and controls its own overlay UI).
-    // We specifically look for that layout marker rather than just "has a
-    // <script> tag" — Inline/Sticky/Slide-in embeds from the same platforms
-    // also ship a script tag, but don't manage their own popup lifecycle,
-    // so they're safe (and more reliable) to show in OUR OWN popup shell
-    // below instead of trying to coordinate with a black-box widget.
     var isSelfManaged = /data-layout[^>]*POPUP/i.test(p.embed_html);
 
     if (isSelfManaged) {
-      // The widget owns its own trigger timing and popup display (e.g.
-      // PushPress Grow's "Show after N seconds" / Popup layout, configured
-      // in its own dashboard) — but it has no idea it's being dropped into
-      // OUR page, so it doesn't reliably center or size itself on every
-      // screen. Give it a centered, generously-sized frame from the outside
-      // WITHOUT constraining or hiding its own content (that's what broke it
-      // last time) — just position + a scroll fallback if it's still taller
-      // than the viewport.
       try { localStorage.setItem(key, "1"); } catch (e) {}
 
       var wrap = document.createElement("div");
@@ -278,9 +275,6 @@
         "justify-content:center;padding:20px;background:rgba(0,0,0,.72);" +
         "backdrop-filter:blur(3px)";
 
-      // "frame" hugs the box's actual rendered size (a flex child shrinks to
-      // its content) so the close button below can pin to its corner —
-      // regardless of the widget's own internal size/scroll.
       var frame = document.createElement("div");
       frame.style.cssText = "position:relative;max-width:100%;max-height:100%";
 
@@ -291,10 +285,6 @@
         "overflow:auto;border-radius:14px;background:#fff;" +
         "box-shadow:0 30px 90px rgba(0,0,0,.5)";
 
-      // A close button we fully control — do NOT rely on detecting the
-      // widget's own close action (it may hide/remove its own content in
-      // ways we can't reliably observe, leaving our backdrop stuck on
-      // screen). This guarantees a way out no matter what the widget does.
       var xbtn = document.createElement("button");
       xbtn.setAttribute("aria-label", "Close");
       xbtn.innerHTML = "&times;";
@@ -318,12 +308,6 @@
         if (e.key === "Escape") { removeWrap(); document.removeEventListener("keydown", esc); }
       });
 
-      // Auto-close when the WIDGET'S OWN close button is used. We can't see
-      // inside the iframe (cross-origin) to know it was clicked, but when it
-      // is, the widget hides/removes its own content and the box collapses
-      // down to near-nothing — leaving just our little X floating alone on
-      // the backdrop. Watch for that specific shrink and auto-remove
-      // everything together, so people never have to close it twice.
       if (window.ResizeObserver) {
         var everSized = false;
         var ro = new ResizeObserver(function (entries) {
@@ -337,8 +321,6 @@
       return true;
     }
 
-    // Plain iframe/HTML with no self-popup behavior — use our own shell,
-    // with our own delay since nothing else is controlling the timing.
     setTimeout(function () {
       try { localStorage.setItem(key, "1"); } catch (e) {}
 
@@ -368,9 +350,6 @@
     return true;
   }
 
-  // ---- Popup dispatcher — reads /admin > Popups criteria, falls back to the
-  // original hardcoded behavior (trial popup, desktop only) if the "popups"
-  // table hasn't been migrated yet or the fetch fails. -----------------------
   function initPopups() {
     var cfg = window.PUNCH_CONFIG || {};
     var isDesktop = window.matchMedia
@@ -378,11 +357,6 @@
       : (window.innerWidth || 0) >= 761;
     var onLanding = /^\/(index(\.html)?)?$/.test(location.pathname);
 
-    // The trial-choice popup is a core, always-on feature — it should never
-    // depend on whether anything has been configured in admin > Popups.
-    // Try it first, on both desktop and mobile. buildPopup() already handles
-    // its own session/page exclusions and returns false when it skips, so
-    // this always leaves room to fall through to admin-configured popups.
     if (buildPopup()) return;
 
     if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) return;
@@ -407,10 +381,7 @@
       .catch(function () {});
   }
 
-
-  // ---- Scroll reveal + sticky mobile CTA (added by refinement layer) -------
   function enhance() {
-    // sticky mobile CTA (skip on funnel/ad/admin pages)
     if (!/\/admin|\/claim|\/trial\b|\/24-hour-special/.test(location.pathname)) {
       var bar = document.createElement("div");
       bar.className = "mcta";
@@ -418,10 +389,6 @@
         '<a class="m-red" href="' + FREE + '" onclick="return PunchOpenTrialPopup(event)">Start Your Trial</a>';
       document.body.appendChild(bar);
 
-      // Keep the bar pinned to the TRUE visible area on iOS/Android — env(safe-area-inset-bottom)
-      // only accounts for the home-indicator notch, not the browser's own address/toolbar, which
-      // shrinks and grows the visual viewport as the person scrolls. Track it directly so the bar
-      // never ends up tucked underneath that browser chrome.
       if (window.visualViewport) {
         var pinBar = function () {
           var vv = window.visualViewport;
@@ -437,7 +404,6 @@
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || !("IntersectionObserver" in window)) return;
 
-    // auto-tag reveal targets inside #plp without touching markup
     var scope = document.getElementById("plp");
     if (!scope) return;
     var sel = ".si > *, .prog-card, .trial-card, .diff-card, .review, .bpost, .freq-card, .journey-step, .class-photo-card, .stat, .shop-card";
@@ -449,11 +415,9 @@
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
 
     els.forEach(function (el, i) {
-      // skip if already visible on load (above the fold) to avoid a flash
       var r = el.getBoundingClientRect();
       if (r.top < window.innerHeight * 0.92) return;
       el.classList.add("reveal");
-      // gentle stagger among siblings
       var sibIndex = 0, p = el.previousElementSibling;
       while (p) { if (p.classList && p.classList.contains("reveal")) sibIndex++; p = p.previousElementSibling; }
       el.style.transitionDelay = Math.min(sibIndex * 70, 280) + "ms";
@@ -461,12 +425,6 @@
     });
   }
 
-  // Site-wide text overrides (footer, and later header nav) — reuses the
-  // same data-text="key" marker convention as the homepage content system,
-  // but applied at RUNTIME after insertion (header/footer are built by this
-  // script on every page, not baked per-page at build time). No config at
-  // all -> every element keeps exactly the default text already in the
-  // template above. Never touches layout, only text content.
   function applySiteTextOverrides() {
     var CFG = window.PUNCH_CONFIG || {};
     if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
@@ -481,7 +439,7 @@
         var el = document.querySelector('[data-text="' + r.key + '"]');
         if (el) el.textContent = r.value;
       });
-    }).catch(function () { /* leave every default exactly as coded */ });
+    }).catch(function () {});
   }
 
   function init() {
