@@ -269,34 +269,40 @@ window.PUNCH_CONFIG = {
   }
 })();
 
-// Lock the three top image slots to the intended visual order on every primary
-// training-system section: boxing first, then strength, then circuit/strength.
+// Homepage-only test: use three DIFFERENT images in the top strip so it reads
+// as a visual summary, not a duplicate of the three class cards below.
 (function () {
-  function forceTrainingSlotImages() {
-    document.querySelectorAll("#plp .training-top-slots").forEach(function (slots) {
-      var imgs = slots.querySelectorAll("img");
-      if (imgs.length < 3) return;
+  var path = window.location.pathname.replace(/\/$/, "") || "/";
+  if (path !== "/" && path !== "/index.html") return;
 
-      imgs[0].src = "/assets/punch-pittsburgh-6.jpg";
-      imgs[0].alt = "Cardio Boxing";
-      imgs[0].removeAttribute("srcset");
-      imgs[0].style.objectPosition = "42% center";
+  function setHomepageTrainingStrip() {
+    var slots = document.querySelector("#plp .training-top-slots");
+    if (!slots) return;
+    var imgs = slots.querySelectorAll("img");
+    if (imgs.length < 3) return;
 
-      imgs[1].src = "/assets/punch-pittsburgh-44.jpg";
-      imgs[1].alt = "Boxing + Strength";
-      imgs[1].removeAttribute("srcset");
-      imgs[1].style.objectPosition = "center center";
+    // 1: alternate boxing image — one boxer / boxing-led visual
+    imgs[0].src = "/assets/punch-pittsburgh-41.jpg";
+    imgs[0].alt = "Cardio Boxing";
+    imgs[0].removeAttribute("srcset");
+    imgs[0].style.objectPosition = "center center";
 
-      imgs[2].src = "/assets/punch-pittsburgh-1.jpg";
-      imgs[2].alt = "Circuit Training";
-      imgs[2].removeAttribute("srcset");
-      imgs[2].style.objectPosition = "center center";
-    });
+    // 2: alternate strength image — intentionally different from the large card below
+    imgs[1].src = "/assets/punch-pittsburgh-44.jpg";
+    imgs[1].alt = "Strength Training";
+    imgs[1].removeAttribute("srcset");
+    imgs[1].style.objectPosition = "center center";
+
+    // 3: alternate circuit / strength image — intentionally different from the large card below
+    imgs[2].src = "/assets/punch-pittsburgh-14.jpg";
+    imgs[2].alt = "Circuit and Strength Training";
+    imgs[2].removeAttribute("srcset");
+    imgs[2].style.objectPosition = "center center";
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", forceTrainingSlotImages, { once:true });
+    document.addEventListener("DOMContentLoaded", setHomepageTrainingStrip, { once:true });
   } else {
-    forceTrainingSlotImages();
+    setHomepageTrainingStrip();
   }
 })();
