@@ -423,6 +423,22 @@ const esc = (v) => String(v==null?"":v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"
 const money = (p) => "$" + Number(p||0).toFixed(2);
 const when = (d) => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
 const slugify = (t) => String(t).toLowerCase().trim().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,80);
+const posToXY = (pos) => {
+  const raw = String(pos || "center").trim().toLowerCase();
+  let x = 50, y = 50;
+  const pct = raw.match(/(-?\d+(?:\.\d+)?)%\s+(-?\d+(?:\.\d+)?)%/);
+  if (pct) {
+    x = Number(pct[1]); y = Number(pct[2]);
+  } else {
+    if (/\bleft\b/.test(raw)) x = 0;
+    else if (/\bright\b/.test(raw)) x = 100;
+    if (/\btop\b/.test(raw)) y = 0;
+    else if (/\bbottom\b/.test(raw)) y = 100;
+  }
+  x = Math.max(0, Math.min(100, isFinite(x) ? x : 50));
+  y = Math.max(0, Math.min(100, isFinite(y) ? y : 50));
+  return { x, y };
+};
 const toast = (m,bad=false)=>{const t=$("toast");t.textContent=m;t.className="toast show"+(bad?" bad":"");setTimeout(()=>t.className="toast",2600);};
 
 let sb, TAB="apparel";
@@ -701,7 +717,6 @@ $("tSave") && ($("tSave").onclick=async ()=>{
     const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tX").value+"% "+$("tY").value+"%" };
     let { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
     if(error && /image_fit|image_position|schema cache|column/i.test(error.message||"")){
-      // DB not migrated for fit/position yet — save the rest so it still works
       const basic={ name:row.name, role:row.role, active:row.active, image_url:row.image_url };
       ({ error } = tEdit ? await sb.from("trainers").update(basic).eq("id",tEdit) : await sb.from("trainers").insert(basic));
     }
@@ -727,7 +742,6 @@ $("pmodal") && $("pmodal").addEventListener("click", e=>{ if(e.target===$("pmoda
 async function loadPopups(){
   const { data, error } = await sb.from("popups").select("*").order("type",{ascending:false}).order("sort",{ascending:true}).order("created_at",{ascending:true});
   if(error){
-    // table not migrated yet
     $("list-popups").innerHTML = `<div class="empty"><b>Popups aren&#39;t set up yet</b>Run <code>supabase/migration-8.sql</code> in the Supabase SQL Editor, then reload this page. Until then the site uses the original trial popup (desktop only).</div>`;
     return;
   }
@@ -761,7 +775,7 @@ function openPopup(p){
   pFileSel = null; pImgCur = p ? p.image_url : null;
   $("pTitle").textContent = p ? (pEditType==="trial" ? "Edit Trial Popup" : "Edit Popup") : "Add Popup";
   $("pTrialNote").classList.toggle("hide", pEditType!=="trial");
-  $("pTypeRow").classList.toggle("hide", !!p); // only show the type picker when ADDING a new popup
+  $("pTypeRow").classList.toggle("hide", !!p);
   $("pNewType").value = pEditType==="form" ? "form" : "custom";
   $("pCustomFields").classList.toggle("hide", pEditType==="trial" || pEditType==="form");
   $("pFormFields").classList.toggle("hide", pEditType!=="form");
@@ -778,7 +792,7 @@ function openPopup(p){
   $("pmodal").classList.remove("hide");
 }
 $("pNewType") && ($("pNewType").onchange = ()=>{
-  pEditType = $("pNewType").value; // only relevant while adding (row hidden when editing)
+  pEditType = $("pNewType").value;
   $("pCustomFields").classList.toggle("hide", pEditType==="form");
   $("pFormFields").classList.toggle("hide", pEditType!=="form");
 });
@@ -868,13 +882,7 @@ $("saveDeployHook") && ($("saveDeployHook").onclick = async ()=>{
   }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
 });
 
-/* ---------------- PUBLISH (Render Deploy Hook) ----------------
-   Note on security: the hook URL is stored in site_settings, which (like
-   logo_url/og_image_url) is readable via the public anon key — so it's not
-   a true secret once saved here. Worst case if someone finds it: they can
-   trigger extra rebuilds (wastes build minutes), not access data or change
-   content. If that's ever a concern, don't use this field — trigger deploys
-   manually from Render instead. */
+/* ---------------- PUBLISH (Render Deploy Hook) ---------------- */
 $("publishBtn") && ($("publishBtn").onclick = async ()=>{
   const hint = $("publishHint");
   $("publishBtn").disabled = true;
@@ -890,9 +898,6 @@ $("publishBtn") && ($("publishBtn").onclick = async ()=>{
       hint.textContent = "No deploy hook set yet — add one under Branding.";
       return;
     }
-    // no-cors: the request is sent either way, we just can't read the
-    // response cross-origin, so we report this as a best-effort trigger
-    // rather than a confirmed success.
     await fetch(url, { method: "POST", mode: "no-cors" });
     hint.style.color = "#8fe3a0";
     hint.textContent = "Publish requested — usually live in 2\u20133 min. Check Render for status.";
@@ -911,7 +916,7 @@ async function loadTerms(){
     const { data } = await sb.from("site_settings").select("value").eq("key","terms_html").maybeSingle();
     const html = data && data.value && (data.value.html || data.value.text) || "";
     $("termsText").value = html;
-  }catch(e){ $("termsErr").textContent = e.message||"Could not load."; }
+  }catch(e){ $("termsErr").textContent=e.message||"Could not load."; }
 }
 $("termsSave") && ($("termsSave").onclick = async ()=>{
   $("termsSave").disabled=true; $("termsSave").textContent="Saving…"; $("termsErr").textContent="";
@@ -920,7 +925,7 @@ $("termsSave") && ($("termsSave").onclick = async ()=>{
     const { error } = await sb.from("site_settings").upsert({ key:"terms_html", value:{ html } }, { onConflict:"key" });
     if(error) throw error;
     toast("Terms updated — live on the site");
-  }catch(e){ $("termsErr").textContent = e.message||"Save failed."; }
+  }catch(e){ $("termsErr").textContent=e.message||"Save failed."; }
   finally{ $("termsSave").disabled=false; $("termsSave").textContent="Save Terms"; }
 });
 
@@ -995,7 +1000,6 @@ $("mfaOff").onclick = async () => {
   refreshMfa();
 };
 
-/* login-time MFA challenge */
 async function mfaGate(){
   try{
     const { data, error } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
