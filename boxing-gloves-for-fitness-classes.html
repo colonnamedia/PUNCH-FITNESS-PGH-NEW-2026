@@ -32,7 +32,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="ph-wrap" style="min-height:64vh">
-  <img data-slot="equipment.photo1" class="ph-video" src="assets/pittsburgh-punch-boxing-and-fitness-punchpgh-apparel-1.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
+  <img data-slot="equipment.photo1" class="ph-video" src="/assets/punch-pittsburgh-6.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
   <div class="ph-overlay"></div>
   <div class="ph-content"><div class="ph-left">
     <div class="ph-eyebrow">South Hills Pittsburgh &mdash; Equipment</div>
@@ -168,7 +168,7 @@ else {
       const groups=[], idx={};
       for(const p of data){ const c=p.category||"Equipment";
         if(idx[c]===undefined){ idx[c]=groups.length; groups.push({c,items:[]}); }
-        groups[idx[c]].items.push(p);
+        groups[idx[c]].items.push(p); }
       root.innerHTML = groups.map(g=>`
         <div class="shop-cat-h">${esc(g.c)}</div>
         <div class="shop-grid">${g.items.map(p=>`
