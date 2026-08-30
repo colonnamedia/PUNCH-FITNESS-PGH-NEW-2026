@@ -84,7 +84,7 @@ async function load(sb){
   const ld = {"@context":"https://schema.org","@type":"Blog","name":"Punch Boxing & Fitness Blog",
     "url":"https://punchpgh.com/blog-events",
     "blogPost":data.slice(0,10).map(p=>({"@type":"BlogPosting","headline":p.title,
-      "url":"https://punchpgh.com/post.html?slug="+encodeURIComponent(p.slug),
+      "url":"https://punchpgh.com/blog/"+encodeURIComponent(p.slug),
       "datePublished":p.created_at,"description":p.excerpt||"",
       "author":{"@type":"Organization","name":"Punch Boxing & Fitness"}}))};
   const s=document.createElement("script"); s.type="application/ld+json";
@@ -94,7 +94,7 @@ function card(p){
   const media = p.image_url
     ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
     : `<span>Punch</span>`;
-  return `<a class="bpost" href="/post.html?slug=${encodeURIComponent(p.slug)}" style="text-decoration:none">
+  return `<a class="bpost" href="/blog/${encodeURIComponent(p.slug)}" style="text-decoration:none">
     <div class="bpost-media">${media}</div>
     <div class="bpost-body">
       <div class="bpost-topic">${esc(p.topic)}</div>
