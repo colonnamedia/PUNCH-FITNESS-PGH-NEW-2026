@@ -80,6 +80,14 @@
 
 <div class="s off">
  <div class="si" style="text-align:center;margin-bottom:6px">
+  <span class="lbl">More Options</span><h2 class="h2">Shop More <span>Gear.</span></h2>
+  <p class="sub" style="margin:0 auto">More gloves, wraps, and bags by category &mdash; all gear we've actually used.</p>
+ </div>
+ <div class="si" id="equip-root"></div>
+</div>
+
+<div class="s off">
+ <div class="si" style="text-align:center;margin-bottom:6px">
   <span class="lbl">Gear Included</span><h2 class="h2">The Easiest Way<br><span>to Get Your Gloves.</span></h2>
   <p class="sub" style="margin:0 auto">One Week Unlimited gives you a full week of unlimited classes to try Punch for yourself.</p></div>
  
@@ -153,7 +161,7 @@ const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&l
 if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) { root.innerHTML=""; }
 else {
   const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-  sb.from("products").select("*").eq("active",true).eq("kind","equipment")
+  sb.from("products").select("*").eq("active",true).eq("kind","equipment").eq("featured",false)
     .order("sort",{ascending:true}).then(({data,error})=>{
       if(error || !data || !data.length){ root.innerHTML=""; return; }
       const groups=[], idx={};
