@@ -3,7 +3,7 @@
    - strips ".html" from internal links in the dist copies
    - writes <page>/index.html for every page so /schedule serves cleanly
    - bakes the admin-set Default Share Image (og:image) into every page
-   - PRE-RENDERS each published blog post to /blog/<slug>/index.html (static HTML)
+   - PRE-RENDERS the blog index and each published blog post as static HTML
    Publish Directory = dist, Build Command = npm run build. */
 const fs = require("fs"), path = require("path"), https = require("https");
 const SKIP = new Set(["dist","node_modules",".git",".github","build.cjs","package.json","package-lock.json","render.yaml","README.md","SUPABASE-SETUP.md","ANALYTICS-SEO.md",".DS_Store","scripts","api","supabase"]);
@@ -45,6 +45,7 @@ async function getPublishedPosts(){
 /* ---- render helpers (ported to match post.html exactly) ---- */
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const when = d => { try{ return new Date(d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }catch{ return ""; } };
+const whenShort = d => { try{ return new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }catch{ return ""; } };
 function md(src){
   let t = esc(src);
   t = t.replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>");
@@ -68,7 +69,33 @@ function bakeOg(html, url){
     .replace(/(<meta\s+property="og:image"\s+content=")[^"]*(")/g, "$1" + v + "$2")
     .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*(")/g, "$1" + v + "$2");
 }
-
+function blogCardHtml(p){
+  const media = p.image_url
+    ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
+    : `<span>Punch</span>`;
+  return `<a class="bpost" href="/blog/${encodeURIComponent(p.slug)}" style="text-decoration:none">
+    <div class="bpost-media">${media}</div>
+    <div class="bpost-body">
+      <div class="bpost-topic">${esc(p.topic)}</div>
+      <div class="bpost-title">${esc(p.title)}</div>
+      <p class="bpost-ex">${esc(p.excerpt||"")}</p>
+      <div class="bpost-date">${whenShort(p.created_at)}</div>
+      <div class="bpost-link">Read More →</div>
+    </div></a>`;
+}
+function prerenderBlogIndex(html, posts){
+  if(!posts.length) return html;
+  const cards = '<div class="blog-grid">' + posts.slice(0,30).map(blogCardHtml).join("") + '</div>';
+  const ld = {"@context":"https://schema.org","@type":"Blog","name":"Punch Boxing & Fitness Blog",
+    "url":"https://punchpgh.com/blog-events",
+    "blogPost":posts.slice(0,10).map(p=>({"@type":"BlogPosting","headline":p.title,
+      "url":"https://punchpgh.com/blog/"+encodeURIComponent(p.slug),"datePublished":p.created_at,
+      "description":p.excerpt||"","author":{"@type":"Organization","name":"Punch Boxing & Fitness"}}))};
+  return html
+    .replace(/<div id="blog-root">[\s\S]*?<\/div><\/div>\s*<\/div>/,
+      `<div id="blog-root">${cards}</div></div>\n  </div>`)
+    .replace("</head>", `<script type="application/ld+json">${JSON.stringify(ld)}</script>\n</head>`);
+}
 
 /* full static page for a single blog post */
 function blogPageHtml(p, ogFallback){
@@ -97,7 +124,7 @@ function blogPageHtml(p, ogFallback){
 <meta property="og:description" content="${desc}" />
 <meta property="og:image" content="${imgEsc}" />
 <meta property="og:url" content="${url}" />
-<meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
+<meta property="og:site_name" content="Punch Boxing & Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="${title}" />
 <meta name="twitter:description" content="${desc}" />
@@ -197,8 +224,18 @@ function blogPageHtml(p, ogFallback){
     console.log("No default share image set — kept per-page og:image.");
   }
 
-  // 5) PRE-RENDER each published blog post -> /blog/<slug>/index.html (after step 4 so
-  //    posts keep their own image as og:image, not the global default)
+  // 5) PRE-RENDER blog listing into both flat and clean URL copies.
+  if (posts.length){
+    for (const blogIndex of ["dist/blog-events.html", "dist/blog-events/index.html"]){
+      if (fs.existsSync(blogIndex)){
+        const html = fs.readFileSync(blogIndex, "utf8");
+        fs.writeFileSync(blogIndex, prerenderBlogIndex(html, posts));
+      }
+    }
+    console.log("Pre-rendered blog index with", Math.min(posts.length,30), "posts");
+  }
+
+  // 6) PRE-RENDER each published blog post -> /blog/<slug>/index.html
   const blogSlugs = [];
   for (const p of posts){
     try{
@@ -210,7 +247,7 @@ function blogPageHtml(p, ogFallback){
   }
   console.log("Pre-rendered blog posts:", blogSlugs.length);
 
-  // 6) add blog posts to sitemap.xml (if present)
+  // 7) add blog posts to sitemap.xml (if present)
   const smPath = "dist/sitemap.xml";
   if (blogSlugs.length && fs.existsSync(smPath)){
     let sm = fs.readFileSync(smPath, "utf8");
@@ -226,5 +263,5 @@ function blogPageHtml(p, ogFallback){
     }
   }
 
-  console.log("Built ./dist — all internal links clean, directory URLs generated");
+  console.log("Built ./dist — all internal links clean, blog prerendered, directory URLs generated");
 })();
