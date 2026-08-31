@@ -35,7 +35,6 @@ services:
       - { type: rewrite, source: /blog-events, destination: /blog-events.html }
       - { type: rewrite, source: /post, destination: /post.html }
       - { type: rewrite, source: /contact, destination: /contact.html }
-      - { type: rewrite, source: /about, destination: /about.html }
       - { type: rewrite, source: /terms-conditions, destination: /terms-conditions.html }
       - { type: rewrite, source: /admin, destination: /admin.html }
 
