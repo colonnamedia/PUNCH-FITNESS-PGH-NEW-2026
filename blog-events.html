@@ -8,15 +8,15 @@
 <link rel="apple-touch-icon" href="/assets/favicon.svg" />
 
 <title>Blog &amp; Events | Punch Boxing &amp; Fitness Pittsburgh</title>
-<meta name="description" content="Boxing for fitness, nutrition, and Parkinson's boxing benefits — training tips and gym news from Punch Boxing &amp; Fitness in Pittsburgh's South Hills." />
+<meta name="description" content="Boxing for fitness, nutrition, Parkinson's boxing benefits, and fitness comparisons — training tips and gym news from Punch Boxing &amp; Fitness in Pittsburgh's South Hills." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://punchpgh.com/blog-events" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://punchpgh.com/blog-events" />
 <meta property="og:title" content="Blog &amp; Events | Punch Boxing &amp; Fitness" />
-<meta property="og:description" content="Training tips, nutrition, and Parkinson's boxing insight from Punch Boxing &amp; Fitness Pittsburgh." />
+<meta property="og:description" content="Training tips, nutrition, Parkinson's boxing insight and fitness comparisons from Punch Boxing &amp; Fitness Pittsburgh." />
 <meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-11.jpg" />
-<meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
+<meta property="og:site_name" content="Punch Boxing & Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="stylesheet" href="/punch.css" />
 <script src="/config.js"></script>
@@ -27,6 +27,11 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":["SportsActivityLocation","LocalBusiness"],"@id":"https://punchpgh.com/#business","name":"Punch Boxing and Fitness","url":"https://punchpgh.com","telephone":"+14125123261","email":"punchpgh@gmail.com","address":{"@type":"PostalAddress","streetAddress":"2101 Greentree Rd, Unit 119","addressLocality":"Pittsburgh","addressRegion":"PA","postalCode":"15220","addressCountry":"US"},"geo":{"@type":"GeoCoordinates","latitude":"40.4106","longitude":"-80.0834"},"areaServed":["South Hills","Mt. Lebanon","Greentree","Scott Township","Upper St. Clair","Bridgeville","Carnegie","Heidelberg","Collier"],"priceRange":"$$","aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","reviewCount":"80"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"08:00","closes":"20:00"}],"sameAs":["https://www.facebook.com/punchpgh","https://www.instagram.com/punchpgh","https://www.youtube.com/@punchpgh","https://www.tiktok.com/@punchpgh","https://maps.app.goo.gl/igusWGW9KZnr984J6"]}
 </script>
+<style>
+.bpost-media.blog-title-panel{display:flex;align-items:flex-end;min-height:220px;padding:24px;background:linear-gradient(135deg,#111 0%,#292929 70%,#b31217 140%);position:relative;overflow:hidden}
+.bpost-media.blog-title-panel:before{content:"PUNCH JOURNAL";position:absolute;top:20px;left:24px;font-size:11px;font-weight:900;letter-spacing:.18em;color:rgba(255,255,255,.55)}
+.blog-cover-title{color:#fff;font-size:clamp(22px,2.2vw,31px);font-weight:900;line-height:1.03;letter-spacing:-.035em;text-transform:uppercase;max-width:95%;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+</style>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -37,7 +42,7 @@
   <div class="ph-content"><div class="ph-left">
     <div class="ph-eyebrow">South Hills Pittsburgh &mdash; Blog &amp; Events</div>
     <h1 class="ph-title">The<br><span class="ph-red">Punch</span><br><span class="ph-out">Blog.</span></h1>
-    <p class="ph-sub">Boxing for fitness &middot; Nutrition &middot; Parkinson's boxing benefits</p>
+    <p class="ph-sub">Boxing for fitness &middot; Nutrition &middot; Parkinson's boxing benefits &middot; Fitness comparisons</p>
   </div></div>
 </div>
 
@@ -66,7 +71,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const CFG = window.PUNCH_CONFIG || {};
 const root = document.getElementById("blog-root");
-const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const esc = s => String(s==null?"":s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;"}[c]));
 const when = d => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
 
 if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
@@ -91,11 +96,9 @@ async function load(sb){
   s.textContent=JSON.stringify(ld); document.head.appendChild(s);
 }
 function card(p){
-  const media = p.image_url
-    ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
-    : `<span>Punch</span>`;
+  const media = `<div class="bpost-media blog-title-panel"><div class="blog-cover-title">${esc(p.title)}</div></div>`;
   return `<a class="bpost" href="/blog/${encodeURIComponent(p.slug)}" style="text-decoration:none">
-    <div class="bpost-media">${media}</div>
+    ${media}
     <div class="bpost-body">
       <div class="bpost-topic">${esc(p.topic)}</div>
       <div class="bpost-title">${esc(p.title)}</div>
