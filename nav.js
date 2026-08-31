@@ -76,6 +76,55 @@
     document.head.appendChild(style);
   }
 
+  function applyMobileTrialPopupFix(){
+    if (document.getElementById("punch-mobile-trial-popup-fix")) return;
+    var style = document.createElement("style");
+    style.id = "punch-mobile-trial-popup-fix";
+    style.textContent = `
+      /* Mobile trial chooser: show BOTH offers without requiring an inner scroll. */
+      @media (max-width:640px){
+        .ps-ov{align-items:center!important;padding:10px!important;overflow:hidden!important}
+        .ps-box{width:100%!important;max-width:430px!important;max-height:calc(100dvh - 20px)!important;border-radius:16px!important;display:block!important;overflow:hidden!important;transform:translateY(18px)!important}
+        .ps-ov.on .ps-box{transform:translateY(0)!important}
+        .ps-box::before{display:none!important}
+        .ps-x{top:8px!important;right:9px!important;width:32px!important;height:32px!important;background:rgba(0,0,0,.38)!important}
+        .ps-top{padding:15px 46px 12px 16px!important}
+        .ps-eyebrow{font-size:8px!important;letter-spacing:2.5px!important;margin-bottom:4px!important}
+        .ps-h{font-size:22px!important;line-height:.98!important;margin:0!important}
+        .ps-top .ps-p{display:none!important}
+        .ps-body{padding:10px 12px 12px!important;max-height:none!important;overflow:visible!important}
+        .ps-cards{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}
+        .ps-card{padding:10px 12px 11px!important;border-radius:11px!important;min-height:0!important}
+        .ps-card.feat{padding-top:28px!important}
+        .ps-flag{font-size:8px!important;letter-spacing:1.8px!important;padding:5px 0!important;border-radius:10px 10px 0 0!important}
+        .ps-card.feat .ps-lbl{margin-top:0!important}
+        .ps-lbl{font-size:8px!important;letter-spacing:1.8px!important;margin-bottom:2px!important}
+        .ps-h2{font-size:20px!important;line-height:1!important;margin:0 0 5px!important}
+        .ps-price{font-size:31px!important;line-height:1!important;margin:0 0 4px!important}
+        .ps-perks{margin:0 0 7px!important;padding:0!important}
+        .ps-perks li{display:none!important}
+        .ps-perks li:first-child{display:flex!important;font-size:11px!important;line-height:1.25!important;padding:2px 0!important;border:0!important;gap:6px!important}
+        .ps-tick{width:16px!important;height:16px!important;font-size:8px!important;margin-top:0!important}
+        .ps-btn{padding:10px 8px!important;border-radius:8px!important;font-size:10px!important;letter-spacing:1.2px!important;line-height:1.05!important}
+        .ps-fine{display:none!important}
+      }
+
+      /* Extra-short phones get an even tighter header/card treatment. */
+      @media (max-width:640px) and (max-height:680px){
+        .ps-top{padding-top:11px!important;padding-bottom:9px!important}
+        .ps-h{font-size:19px!important}
+        .ps-body{padding-top:7px!important;padding-bottom:8px!important}
+        .ps-card{padding-top:8px!important;padding-bottom:8px!important}
+        .ps-card.feat{padding-top:25px!important}
+        .ps-h2{font-size:18px!important}
+        .ps-price{font-size:27px!important}
+        .ps-perks{margin-bottom:5px!important}
+        .ps-btn{padding:8px 7px!important;font-size:9px!important}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function loadPageEnhancements(){
     if (/^\/classes\/?$/.test(location.pathname) && !document.querySelector('script[data-punch-classes-experiences]')) {
       var extra = document.createElement('script');
@@ -88,6 +137,7 @@
 
   function stabilizeLaunchCleanup() {
     applyResponsiveNavFix();
+    applyMobileTrialPopupFix();
     loadPageEnhancements();
     launchCleanup();
     var passes = 0;
