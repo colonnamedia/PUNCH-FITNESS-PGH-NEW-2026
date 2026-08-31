@@ -94,24 +94,26 @@
       #plp .ad-reels-showcase .reels-strip>div{flex:0 0 clamp(310px,21vw,350px)!important;width:clamp(310px,21vw,350px)!important;scroll-snap-align:center;background:#111;border-radius:18px;overflow:hidden;box-shadow:0 10px 26px rgba(0,0,0,.14)}
       #plp .ad-reels-showcase .reel-v{display:block!important;width:100%!important;height:auto!important;aspect-ratio:9/16!important;object-fit:cover!important;background:#111!important;border-radius:0!important}
       #plp .ad-reels-showcase .reel-cap{background:#111!important;color:#fff!important;text-align:left!important;padding:13px 16px 15px!important;font-family:'Barlow Condensed',sans-serif!important;font-size:18px!important;font-weight:800!important;letter-spacing:.06em!important;text-transform:uppercase!important}
-      @media(min-width:1200px){
-        #plp .ad-reels-showcase .reels-strip{justify-content:center!important;scroll-snap-type:none!important}
-      }
-      @media(max-width:760px){
-        #plp .ad-reels-showcase{padding:52px 0!important}
-        #plp .ad-reels-panel{width:100%;border-radius:0;border-left:0;border-right:0;padding:38px 0 24px}
-        #plp .ad-reels-panel>.si:first-child{padding:0 20px!important;margin-bottom:24px!important}
-        #plp .ad-reels-showcase .reels-strip{justify-content:flex-start!important;gap:14px!important;padding:4px 20px 16px!important;scroll-padding-left:20px!important;scroll-snap-type:x mandatory!important}
-        #plp .ad-reels-showcase .reels-strip>div{flex-basis:min(82vw,370px)!important;width:min(82vw,370px)!important;scroll-snap-align:start!important}
-        #plp .ad-reels-cta{width:100%;max-width:320px;text-align:center}
-      }
+      @media(min-width:1200px){#plp .ad-reels-showcase .reels-strip{justify-content:center!important;scroll-snap-type:none!important}}
+      @media(max-width:760px){#plp .ad-reels-showcase{padding:52px 0!important}#plp .ad-reels-panel{width:100%;border-radius:0;border-left:0;border-right:0;padding:38px 0 24px}#plp .ad-reels-panel>.si:first-child{padding:0 20px!important;margin-bottom:24px!important}#plp .ad-reels-showcase .reels-strip{justify-content:flex-start!important;gap:14px!important;padding:4px 20px 16px!important;scroll-padding-left:20px!important;scroll-snap-type:x mandatory!important}#plp .ad-reels-showcase .reels-strip>div{flex-basis:min(82vw,370px)!important;width:min(82vw,370px)!important;scroll-snap-align:start!important}#plp .ad-reels-cta{width:100%;max-width:320px;text-align:center}}
     `;
     document.head.appendChild(style);
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", enhanceAdReels, { once:true });
-  } else {
-    enhanceAdReels();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", enhanceAdReels, { once:true });
+  else enhanceAdReels();
+})();
+
+// Senior / Parkinson's page — give the medical disclaimer clear separation from the trainer section.
+(function(){
+  var path = window.location.pathname.replace(/\/$/, "") || "/";
+  if (path !== "/senior-fitness-and-boxing-pittsburgh" && path !== "/senior-fitness-and-boxing-pittsburgh.html") return;
+  function addDisclaimerSpace(){
+    var disclaimer = document.querySelector("#plp .disclaimer");
+    if (!disclaimer) return;
+    var wrap = disclaimer.parentElement;
+    if (wrap) wrap.style.paddingTop = "52px";
   }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", addDisclaimerSpace, {once:true});
+  else addDisclaimerSpace();
 })();
