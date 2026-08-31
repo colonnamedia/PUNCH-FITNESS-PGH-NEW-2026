@@ -76,8 +76,19 @@
     document.head.appendChild(style);
   }
 
+  function loadPageEnhancements(){
+    if (/^\/classes\/?$/.test(location.pathname) && !document.querySelector('script[data-punch-classes-experiences]')) {
+      var extra = document.createElement('script');
+      extra.src = '/classes-experiences.js';
+      extra.defer = true;
+      extra.setAttribute('data-punch-classes-experiences','1');
+      document.head.appendChild(extra);
+    }
+  }
+
   function stabilizeLaunchCleanup() {
     applyResponsiveNavFix();
+    loadPageEnhancements();
     launchCleanup();
     var passes = 0;
     var timer = setInterval(function () {
