@@ -37,4 +37,5 @@ body:has(#offer) #more-memberships .pm-grid{max-width:1420px!important;width:100
   body:has(#offer) #offer .trial-cards{grid-template-columns:1fr!important;gap:24px!important}
   body:has(#offer) #more-memberships{padding-top:18px!important}
   body:has(#offer) #more-memberships .pm-grid{grid-template-columns:1fr!important;max-width:620px!important}
+  body:has(#offer) .special-more-btn{min-height:54px!important;padding:16px 24px!important;font-size:18px!important;line-height:1.05!important;border-radius:10px!important;min-width:min(88vw,360px)!important;box-sizing:border-box!important}
 }
