@@ -1246,6 +1246,28 @@ img[data-slot].slot-ready,video[data-slot].slot-ready{opacity:1}
   #plp .cls-style:hover{transform:none}
 }
 
+/* ---------- primary hero message hierarchy ---------- */
+#plp .vhero-title.hero-one-color,
+#plp .vhero-title.hero-one-color em,
+#punch-trial-hero h1.hero-one-color,
+#punch-trial-hero h1.hero-one-color span{color:#fff}
+#plp .vhero-sub.hero-support-title,
+#punch-trial-hero .pth-sub.hero-support-title{
+  max-width:720px;
+  margin:0 0 28px;
+  color:#fff;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(24px,2.25vw,34px);
+  font-weight:800;
+  line-height:1.15;
+  letter-spacing:-.01em;
+  text-wrap:balance;
+}
+@media(max-width:420px){
+  #plp .vhero-sub.hero-support-title,
+  #punch-trial-hero .pth-sub.hero-support-title{font-size:clamp(22px,6.4vw,25px);margin-bottom:24px}
+}
+
 
 /* force consistent hero content padding regardless of #plp nesting (fixes left cut-off) */
 @media(min-width:761px){

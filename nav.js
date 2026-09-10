@@ -19,31 +19,35 @@
     var path = window.location.pathname.replace(/\/$/, "") || "/";
     var support = "Boxing for cardio. Strength training for results.";
 
+    function setHeroMessage(title, sub, headline){
+      if (title) {
+        title.innerHTML = headline;
+        title.classList.add("hero-one-color");
+        title.removeAttribute("data-text");
+      }
+      if (sub) {
+        sub.textContent = support;
+        sub.classList.add("hero-support-title");
+        sub.removeAttribute("data-text");
+      }
+    }
+
     if (path === "/" || path === "/index.html") {
       var homeTitle = document.querySelector('.vhero-title[data-text="hero.headline"], .vhero-title');
       var homeSub = document.querySelector('.vhero-sub[data-text="hero.subtext"], .vhero-sub');
-      if (homeTitle) {
-        homeTitle.innerHTML = 'A Better Way to<br><em>Work Out.</em>';
-        homeTitle.removeAttribute('data-text');
-      }
-      if (homeSub) {
-        homeSub.textContent = support;
-        homeSub.removeAttribute('data-text');
-      }
+      setHeroMessage(homeTitle, homeSub, 'A Better Way to<br>Work Out.');
     }
 
     if (path === "/punch-ad-trials" || path === "/punch-ad-trials.html") {
       var adTitle = document.querySelector('#punch-trial-hero h1');
       var adSub = document.querySelector('#punch-trial-hero .pth-sub');
-      if (adTitle) adTitle.innerHTML = '<span>Your New Favorite</span><span class="red">Workout Starts Here.</span>';
-      if (adSub) adSub.textContent = support;
+      setHeroMessage(adTitle, adSub, '<span>Your New Favorite</span><span>Workout Starts Here.</span>');
     }
 
     if (path === "/free-trial" || path === "/free-trial.html") {
       var freeTitle = document.querySelector('#punch-trial-hero h1');
       var freeSub = document.querySelector('#punch-trial-hero .pth-sub');
-      if (freeTitle) freeTitle.innerHTML = '<span>Come Experience</span><span class="red">PUNCH.</span>';
-      if (freeSub) freeSub.textContent = support;
+      setHeroMessage(freeTitle, freeSub, '<span>Come Experience</span><span>PUNCH.</span>');
     }
   }
 
