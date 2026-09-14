@@ -44,9 +44,13 @@
 #more-memberships .pm-sec-desc{max-width:760px}
 @media(min-width:900px){#offer .trial-card{min-height:760px}.special-starter-box{min-height:300px}.special-starter-box .trial-btn{margin-top:14px}}
 @media(max-width:760px){
-#offer .trial-card{padding:28px 20px!important}
-.special-starter-title{font-size:21px;flex-direction:column;gap:4px}
-.special-starter-price{font-size:25px}
+body:has(#offer) #offer{padding-left:12px!important;padding-right:12px!important}
+body:has(#offer) #offer .trial-cta{width:100%!important;max-width:none!important;padding:0!important}
+body:has(#offer) #offer .trial-card{padding:28px 18px 24px!important}
+body:has(#offer) #offer .special-starter{margin-left:-8px!important;margin-right:-8px!important}
+body:has(#offer) #offer .special-starter-box{padding:22px 16px!important}
+body:has(#offer) #offer .special-starter-title{font-size:24px!important;flex-direction:column;gap:4px}
+body:has(#offer) #offer .special-starter-price{font-size:28px!important}
 #more-memberships .pm-grid{grid-template-columns:1fr!important}
 #more-memberships .pm-btn-card{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;min-height:58px!important;padding:16px 18px!important;border-radius:9px!important;font-size:17px!important;line-height:1!important;letter-spacing:.12em!important;box-sizing:border-box!important}
 }
