@@ -44,6 +44,7 @@
           '<div class="pn-menu-div"></div>' +
           '<a href="/trainers">Meet the Trainers</a></div></div>' +
       '<a class="pn-link" href="/personal-training">Personal Training</a>' +
+      '<a class="pn-link" href="/nutrition-coaching">Nutrition Coaching</a>' +
       '<a class="pn-link" href="/schedule">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
@@ -64,6 +65,7 @@
       '<div class="pn-menu-div"></div>' +
       '<a href="/trainers">Meet the Trainers</a></details>' +
     '<a href="/personal-training">Personal Training</a>' +
+    '<a href="/nutrition-coaching">Nutrition Coaching</a>' +
     '<a href="/schedule">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
       '<a href="/membership-options">Membership Options</a>' +
@@ -87,6 +89,7 @@
       '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
       '<a href="/youth-boxing-camp">Youth Boxing</a>' +
       '<a href="/personal-training">Personal Training</a>' +
+      '<a href="/nutrition-coaching">Nutrition Coaching</a>' +
       '<a href="/schedule">Schedule</a></div>' +
     '<div class="pf-col"><div class="pf-h">Get Started</div>' +
       '<a href="/free-trial">Free Trial Class</a>' +
