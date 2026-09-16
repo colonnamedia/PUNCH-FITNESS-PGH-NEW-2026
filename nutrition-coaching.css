@@ -59,6 +59,31 @@
 #nutrition-page .nc-split-light{background:#fff7f7;color:#111}
 #nutrition-page .nc-split-light .nc-split-copy>p:not(.nc-label){color:#656565}
 #nutrition-page .nc-split-light li{border-color:#eadede;color:#2b2b2b}
+#nutrition-page .nc-success-split{min-height:900px}
+#nutrition-page .nc-success-split .nc-split-copy{padding-top:74px;padding-bottom:74px}
+#nutrition-page .nc-success-split .nc-split-copy>p:not(.nc-label){font-size:16px}
+#nutrition-page .nc-success-points{display:grid;gap:0;margin-top:28px}
+#nutrition-page .nc-success-points article{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:18px 0;border-top:1px solid #eadede}
+#nutrition-page .nc-success-points article:last-child{border-bottom:1px solid #eadede}
+#nutrition-page .nc-success-points b{display:flex;width:36px;height:36px;align-items:center;justify-content:center;border-radius:50%;background:var(--red);color:#fff;font:900 17px 'Barlow Condensed',Arial,sans-serif}
+#nutrition-page .nc-success-points h3{font:900 22px 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#nutrition-page .nc-success-points p{margin-top:6px;color:#666;font-size:13px;line-height:1.55}
+#nutrition-page .nc-epoc-box{margin-top:24px;padding:22px;border-left:5px solid var(--red);background:#fff}
+#nutrition-page .nc-epoc-box strong{font:900 22px 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#nutrition-page .nc-epoc-box p{margin-top:7px;color:#666;font-size:13px;line-height:1.6}
+#nutrition-page .nc-nutrition-basics{background:#fff}
+#nutrition-page .nc-truth-layout{display:grid;grid-template-columns:.9fr 1.4fr;gap:20px;align-items:stretch;margin-top:52px}
+#nutrition-page .nc-truth-featured{display:flex;flex-direction:column;justify-content:center;padding:42px;border-radius:14px;background:var(--red);color:#fff}
+#nutrition-page .nc-truth-featured .nc-option-tag{color:rgba(255,255,255,.72)}
+#nutrition-page .nc-truth-featured h3{margin-top:12px;font:900 clamp(38px,4vw,55px)/.95 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#nutrition-page .nc-truth-featured>p:not(.nc-option-tag){margin-top:20px;color:rgba(255,255,255,.82);font-size:15px;line-height:1.65}
+#nutrition-page .nc-truth-featured strong{margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.35);font:800 18px/1.35 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#nutrition-page .nc-truth-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+#nutrition-page .nc-truth-grid article{position:relative;min-height:210px;padding:28px;border:1px solid #ddd;border-radius:12px;background:#f6f6f4;overflow:hidden}
+#nutrition-page .nc-truth-grid b{position:absolute;top:16px;right:18px;color:rgba(0,0,0,.07);font:900 58px/1 'Barlow Condensed',Arial,sans-serif}
+#nutrition-page .nc-truth-grid h3{position:relative;margin-top:56px;font:900 25px 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#nutrition-page .nc-truth-grid p{position:relative;margin-top:9px;color:#666;font-size:13px;line-height:1.55}
+#nutrition-page .nc-nutrition-note{max-width:900px;margin:22px auto 0;color:#777;font-size:12px;line-height:1.55;text-align:center}
 #nutrition-page .nc-rhythm{background:#f6f6f4}
 #nutrition-page .nc-rhythm-copy{text-align:center}
 #nutrition-page .nc-frequency-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:52px;text-align:left}
@@ -162,8 +187,11 @@
 #nutrition-page .nc-plan-featured{grid-column:1/-1;grid-row:auto;min-height:450px}
 #nutrition-page .nc-option-grid{grid-template-columns:1fr}
 #nutrition-page .nc-split{grid-template-columns:1fr;min-height:0}
+#nutrition-page .nc-success-split{min-height:0}
 #nutrition-page .nc-split-image{height:min(72vw,620px)}
 #nutrition-page .nc-split-light .nc-split-image{order:-1}
+#nutrition-page .nc-truth-layout{grid-template-columns:1fr}
+#nutrition-page .nc-truth-featured{min-height:430px}
 #nutrition-page .nc-frequency-grid{grid-template-columns:repeat(2,1fr)}
 #nutrition-page .nc-frequency-card,#nutrition-page .nc-frequency-four{grid-column:span 1}
 #nutrition-page .nc-frequency-featured{grid-column:1/-1}
@@ -192,6 +220,13 @@
 #nutrition-page .nc-plan-card{min-height:210px;padding:26px 22px}
 #nutrition-page .nc-split-image{height:82vw;min-height:320px}
 #nutrition-page .nc-split-copy{padding:58px 24px}
+#nutrition-page .nc-success-split .nc-split-copy{padding-top:58px;padding-bottom:58px}
+#nutrition-page .nc-success-points article{grid-template-columns:36px 1fr;gap:12px}
+#nutrition-page .nc-epoc-box{padding:18px}
+#nutrition-page .nc-truth-layout{margin-top:36px}
+#nutrition-page .nc-truth-featured{min-height:0;padding:34px 24px}
+#nutrition-page .nc-truth-grid{grid-template-columns:1fr}
+#nutrition-page .nc-truth-grid article{min-height:190px;padding:24px 22px}
 #nutrition-page .nc-frequency-grid{grid-template-columns:1fr;margin-top:36px}
 #nutrition-page .nc-frequency-card,#nutrition-page .nc-frequency-four,#nutrition-page .nc-frequency-featured{grid-column:auto;min-height:0;padding:26px 22px}
 #nutrition-page .nc-frequency-card h3{margin-top:44px;padding-top:0}
