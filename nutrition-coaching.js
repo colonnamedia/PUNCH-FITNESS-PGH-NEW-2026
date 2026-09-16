@@ -57,11 +57,11 @@
     return '<div class="nc-tracker-title"><div><span>Six-Day Meal Tracker</span><h3>Day '+day+'</h3></div>'+copy+'</div>' +
       '<div class="nc-day-basics">' +
         '<label><span>What time did you wake up?</span><input type="time" data-field="wakeTime"></label>' +
-        '<label><span>Water / Hydration Today</span><input type="text" data-field="water" placeholder="Example: 6 glasses or 64 oz"></label>' +
       '</div>' +
       '<div class="nc-meals-heading"><h4>Meals &amp; Snacks</h4><p>Start with three meals and three snacks. Change any entry to match your day.</p></div>' +
       '<div class="nc-meal-list">'+mealDefaults.map(function(_,index){return mealRow(day,index);}).join('')+'</div>' +
       '<fieldset class="nc-activity"><legend>Activity Level Today</legend><p>Choose the number that best describes your overall activity today.</p><div class="nc-activity-grid">'+activityOptions(day)+'</div></fieldset>' +
+      '<label class="nc-hydration"><span>Water / Hydration Today</span><input type="text" data-field="water" placeholder="Example: 6 glasses or 64 oz"></label>' +
       '<label class="nc-notes"><span>Notes / Patterns</span><textarea data-field="notes" placeholder="Meal prep, schedule changes, wins, challenges, or anything you noticed..."></textarea></label>';
   }
 
@@ -111,6 +111,30 @@
     bind(panel,Number(day));
   });
   write(saved);
+
+  var activeDay='1';
+  function selectDay(day){
+    activeDay=day;
+    document.querySelectorAll('[data-day-tab]').forEach(function(tab){
+      var active=tab.getAttribute('data-day-tab')===day;
+      tab.classList.toggle('is-active',active);
+      tab.setAttribute('aria-selected',active?'true':'false');
+    });
+    document.querySelectorAll('[data-day-panel]').forEach(function(panel){
+      var active=panel.getAttribute('data-day-panel')===day;
+      panel.classList.toggle('is-active',active);
+      panel.hidden=!active;
+    });
+  }
+
+  document.querySelectorAll('[data-day-tab]').forEach(function(tab){
+    tab.addEventListener('click',function(){selectDay(tab.getAttribute('data-day-tab'));});
+  });
+
+  window.addEventListener('beforeprint',function(){
+    document.querySelectorAll('[data-day-panel]').forEach(function(panel){panel.hidden=false;});
+  });
+  window.addEventListener('afterprint',function(){selectDay(activeDay);});
 
   var printButton=document.getElementById('printTracker');
   if(printButton) printButton.addEventListener('click',function(){window.print();});
