@@ -3,11 +3,11 @@
   var oldKey='punch_nutrition_tracker_v1';
   var mealDefaults=['Meal','Snack','Meal','Snack','Meal','Snack'];
   var activities=[
-    {value:'1',title:'1 — Light',desc:'Easy day or a walk'},
-    {value:'2',title:'2 — Some Activity',desc:'Light movement or errands'},
+    {value:'1',title:'1 — No Exercise',desc:'Normal daily routine only'},
+    {value:'2',title:'2 — Light',desc:'A walk or light movement'},
     {value:'3',title:'3 — Moderate',desc:'A normal workout or active day'},
     {value:'4',title:'4 — Hard',desc:'A hard class or training session'},
-    {value:'5',title:'5 — Very Hard',desc:'One of your hardest classes or sessions'}
+    {value:'5',title:'5 — Most Strenuous',desc:'One of your most strenuous workouts or training sessions ever'}
   ];
 
   function safeParse(raw){try{return JSON.parse(raw)||{};}catch(e){return {};}}
