@@ -67,13 +67,17 @@
 </div>
 </section>
 
-<section class="nc-section nc-rhythm">
+<section class="nc-section nc-tracker-section" id="tracker">
 <div class="nc-wrap">
-<div class="nc-rhythm-copy"><p class="nc-label">Consistency Over Perfection</p><h2>A Flexible <span>6 + 1 Rhythm.</span></h2><p class="nc-lead">Think in weeks, not single meals. Six days give you room to practice the habits that support your goals. One flexible day leaves space for real life—without turning it into a free-for-all or labeling food as punishment or reward.</p></div>
-<div class="nc-week" aria-label="Six consistent days and one flexible day">
-<div class="nc-day"><span>Day 1</span><b>Practice</b></div><div class="nc-day"><span>Day 2</span><b>Practice</b></div><div class="nc-day"><span>Day 3</span><b>Practice</b></div><div class="nc-day"><span>Day 4</span><b>Practice</b></div><div class="nc-day"><span>Day 5</span><b>Practice</b></div><div class="nc-day"><span>Day 6</span><b>Practice</b></div><div class="nc-day nc-day-flex"><span>Day 7</span><b>Flexible</b></div>
+<div class="nc-tracker-head">
+<div><p class="nc-label">Free Tool</p><h2>Your 6-Day <span>Meal Tracker.</span></h2><p class="nc-lead">Record your normal routine before trying to fix it. All six days stay together below, and every change saves on this device—even if your internet connection drops.</p></div>
+<div class="nc-tracker-actions"><button class="nc-btn nc-btn-dark" type="button" id="printTracker">Print / Save PDF</button><button class="nc-clear" type="button" id="clearTracker">Clear Tracker</button></div>
 </div>
-<p class="nc-small">This is a consistency framework, not a prescribed meal plan. Your coach helps you adapt it to your schedule and goals.</p>
+<p class="nc-save-status" id="trackerSaveStatus" aria-live="polite">Saved on this device as you type.</p>
+<div class="nc-tracker-days">
+<section class="nc-tracker-day" data-day-panel="1" aria-label="Day 1 meal tracker"></section><section class="nc-tracker-day" data-day-panel="2" aria-label="Day 2 meal tracker"></section><section class="nc-tracker-day" data-day-panel="3" aria-label="Day 3 meal tracker"></section><section class="nc-tracker-day" data-day-panel="4" aria-label="Day 4 meal tracker"></section><section class="nc-tracker-day" data-day-panel="5" aria-label="Day 5 meal tracker"></section><section class="nc-tracker-day" data-day-panel="6" aria-label="Day 6 meal tracker"></section>
+</div>
+<p class="nc-tracker-note"><strong>Start with honesty, not judgment.</strong> Record the amount in a way that is easy for you to recognize later—for example, “2 eggs,” “1 bowl,” “6 oz,” or “1 handful.”</p>
 </div>
 </section>
 
@@ -82,26 +86,20 @@
 <p class="nc-label">The PUNCH Playbook Process</p><h2>Track It. Review It. <span>Build From It.</span></h2>
 <div class="nc-steps">
 <article><i>1</i><h3>Track</h3><p>Log six normal days. Be honest and do not change everything just because you are writing it down.</p></article>
-<article><i>2</i><h3>Review</h3><p>Meet with a coach to look for patterns across food, hydration, training, sleep, and energy.</p></article>
+<article><i>2</i><h3>Review</h3><p>Meet with a coach to look for patterns across wake time, meal timing, food, hydration, and daily activity.</p></article>
 <article><i>3</i><h3>Build</h3><p>Leave with a practical PUNCH Playbook: a few clear habits and next steps, not an overwhelming rulebook.</p></article>
 <article><i>4</i><h3>Keep Going</h3><p>Add ongoing check-ins for adjustments, accountability, and encouragement when you want more support.</p></article>
 </div>
 </div>
 </section>
 
-<section class="nc-section nc-tracker-section" id="tracker">
+<section class="nc-section nc-rhythm">
 <div class="nc-wrap">
-<div class="nc-tracker-head">
-<div><p class="nc-label">Free Tool</p><h2>Your 6-Day <span>Food &amp; Habit Tracker.</span></h2><p class="nc-lead">Record your normal routine before trying to fix it. Your entries stay only in this browser unless you print or save them yourself.</p></div>
-<div class="nc-tracker-actions"><button class="nc-btn nc-btn-dark" type="button" id="printTracker">Print / Save PDF</button><button class="nc-clear" type="button" id="clearTracker">Clear Tracker</button></div>
+<div class="nc-rhythm-copy"><p class="nc-label">Consistency Over Perfection</p><h2>A Flexible <span>6 + 1 Rhythm.</span></h2><p class="nc-lead">Think in weeks, not single meals. Six days give you room to practice the habits that support your goals. One flexible day leaves space for real life—without turning it into a free-for-all or labeling food as punishment or reward.</p></div>
+<div class="nc-week" aria-label="Six consistent days and one flexible day">
+<div class="nc-day"><span>Day 1</span><b>Practice</b></div><div class="nc-day"><span>Day 2</span><b>Practice</b></div><div class="nc-day"><span>Day 3</span><b>Practice</b></div><div class="nc-day"><span>Day 4</span><b>Practice</b></div><div class="nc-day"><span>Day 5</span><b>Practice</b></div><div class="nc-day"><span>Day 6</span><b>Practice</b></div><div class="nc-day nc-day-flex"><span>Day 7</span><b>Flexible</b></div>
 </div>
-<div class="nc-day-tabs" role="tablist" aria-label="Tracker day">
-<button class="is-active" type="button" data-day-tab="1" role="tab" aria-selected="true">Day 1</button><button type="button" data-day-tab="2" role="tab" aria-selected="false">Day 2</button><button type="button" data-day-tab="3" role="tab" aria-selected="false">Day 3</button><button type="button" data-day-tab="4" role="tab" aria-selected="false">Day 4</button><button type="button" data-day-tab="5" role="tab" aria-selected="false">Day 5</button><button type="button" data-day-tab="6" role="tab" aria-selected="false">Day 6</button>
-</div>
-<div class="nc-tracker-days">
-<section class="nc-tracker-day is-active" data-day-panel="1" aria-label="Day 1 tracker"></section><section class="nc-tracker-day" data-day-panel="2" aria-label="Day 2 tracker"></section><section class="nc-tracker-day" data-day-panel="3" aria-label="Day 3 tracker"></section><section class="nc-tracker-day" data-day-panel="4" aria-label="Day 4 tracker"></section><section class="nc-tracker-day" data-day-panel="5" aria-label="Day 5 tracker"></section><section class="nc-tracker-day" data-day-panel="6" aria-label="Day 6 tracker"></section>
-</div>
-<p class="nc-tracker-note"><strong>Start with honesty, not judgment.</strong> This tracker records observations; it does not score foods as good or bad.</p>
+<p class="nc-small">This is a consistency framework, not a prescribed meal plan. Your coach helps you adapt it to your schedule and goals.</p>
 </div>
 </section>
 
