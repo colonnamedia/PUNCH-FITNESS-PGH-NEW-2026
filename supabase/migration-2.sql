@@ -34,13 +34,13 @@ on conflict do nothing;
 
 -- 4) Give the three starter blog posts a header image ------------------------
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-6.jpg'
+  '/assets/punch-pittsburgh-6.webp'
   where topic = 'Boxing for Fitness' and image_url is null;
 
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-31.jpg'
+  '/assets/punch-pittsburgh-31.webp'
   where topic = 'Nutrition' and image_url is null;
 
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-40.jpg'
+  '/assets/punch-pittsburgh-40.webp'
   where topic like 'Parkinson%' and image_url is null;

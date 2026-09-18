@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://punchpgh.com/boxing-gloves-for-fitness-classes" />
 <meta property="og:title" content="Boxing Gloves for Fitness Classes | Punch Pittsburgh" />
 <meta property="og:description" content="What boxing gloves and hand wraps you need for fitness classes at Punch Boxing &amp; Fitness Pittsburgh. Gloves provided for your first class." />
-<meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-6.jpg" />
+<meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-6.webp" />
 <meta property="og:site_name" content="Punch Boxing &amp; Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://images.squarespace-cdn.com" />
@@ -32,7 +32,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="ph-wrap" style="min-height:64vh">
-  <img data-slot="equipment.photo1" class="ph-video" src="assets/pittsburgh-punch-boxing-and-fitness-punchpgh-apparel-1.jpg" alt="Punch Boxing &amp; Fitness Pittsburgh" />
+  <img data-slot="equipment.photo1" class="ph-video" src="/assets/pittsburgh-punch-boxing-and-fitness-punchpgh-apparel-1.webp" alt="Punch Boxing &amp; Fitness Pittsburgh" srcset="/assets/pittsburgh-punch-boxing-and-fitness-punchpgh-apparel-1-mobile.webp 768w, /assets/pittsburgh-punch-boxing-and-fitness-punchpgh-apparel-1.webp 1600w" sizes="100vw" loading="eager" fetchpriority="high" decoding="async" />
   <div class="ph-overlay"></div>
   <div class="ph-content"><div class="ph-left">
     <div class="ph-eyebrow">South Hills Pittsburgh &mdash; Equipment</div>
@@ -51,7 +51,7 @@
  </div>
  <div class="si"><div class="shop-grid" style="grid-template-columns:repeat(3,1fr)">
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Top Pick</span><img data-slot="equipment.photo2" src="/assets/equipment/gloves-pro-mex.jpg" alt="Pro Boxing Gloves — 14oz" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Top Pick</span><img data-slot="equipment.photo2" src="/assets/equipment/gloves-pro-mex.webp" alt="Pro Boxing Gloves — 14oz" srcset="/assets/equipment/gloves-pro-mex-mobile.webp 768w, /assets/equipment/gloves-pro-mex.webp 1600w" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" decoding="async"></div>
         <div class="shop-body">
           <div class="shop-name">Pro Boxing Gloves — 14oz</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Our top pick for members training several times a week. Premium leather, holds up to daily bag and pad work.</p>
@@ -59,7 +59,7 @@
         </div>
       </div>
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo3" src="/assets/equipment/gloves-rdx.jpg" alt="Mid-Range Gloves — 14oz" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo3" src="/assets/equipment/gloves-rdx.webp" alt="Mid-Range Gloves — 14oz" srcset="/assets/equipment/gloves-rdx-mobile.webp 768w, /assets/equipment/gloves-rdx.webp 1600w" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" decoding="async"></div>
         <div class="shop-body">
           <div class="shop-name">Mid-Range Gloves — 14oz</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Great value if you're newer or training once or twice a week. Same 14oz weight we recommend for class.</p>
@@ -67,7 +67,7 @@
         </div>
       </div>
   <div class="shop-card">
-        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo4" src="/assets/equipment/quick-wraps-rdx.jpg" alt="Quick Wraps — Med / Large" loading="lazy"></div>
+        <div class="shop-media"><span class="pick">Coach Pick</span><img data-slot="equipment.photo4" src="/assets/equipment/quick-wraps-rdx.webp" alt="Quick Wraps — Med / Large" srcset="/assets/equipment/quick-wraps-rdx-mobile.webp 768w, /assets/equipment/quick-wraps-rdx.webp 1600w" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" decoding="async"></div>
         <div class="shop-body">
           <div class="shop-name">Quick Wraps — Med / Large</div>
           <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">Slip-on wraps that protect your hands and wrists without the learning curve. Grab your size and go.</p>
@@ -159,6 +159,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const CFG = window.PUNCH_CONFIG || {};
 const root = document.getElementById("equip-root");
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const optimizedAsset = url => String(url||"").replace(/^(\/assets\/equipment\/[^?#]+)\.(?:png|jpe?g)([?#].*)?$/i,"$1.webp$2");
+const responsiveAsset = url => {
+  const optimized = optimizedAsset(url);
+  if (!/^\/assets\/equipment\/[^?#]+\.webp$/i.test(optimized)) return "";
+  return optimized.replace(/\.webp$/i,"-mobile.webp") + " 768w, " + optimized + " 1600w";
+};
 if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) { root.innerHTML=""; }
 else {
   const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
@@ -173,7 +179,7 @@ else {
         <div class="shop-cat-h">${esc(g.c)}</div>
         <div class="shop-grid">${g.items.map(p=>`
           <div class="shop-card">
-            <div class="shop-media">${(p.amazon_url||p.partner_url)?`<span class="pick">Coach Pick</span>`:""}${p.image_url?`<img src="${esc(p.image_url)}" alt="${esc(p.name)}" loading="lazy">`:`<span class="shop-ph">Punch</span>`}</div>
+            <div class="shop-media">${(p.amazon_url||p.partner_url)?`<span class="pick">Coach Pick</span>`:""}${p.image_url?`<img src="${esc(optimizedAsset(p.image_url))}"${responsiveAsset(p.image_url)?` srcset="${esc(responsiveAsset(p.image_url))}" sizes="(max-width: 768px) 100vw, 33vw"`:""} alt="${esc(p.name)}" loading="lazy" decoding="async">`:`<span class="shop-ph">Punch</span>`}</div>
             <div class="shop-body">
               <div class="shop-name">${esc(p.name)}</div>
               <p style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;flex:1">${esc(p.description||"")}</p>

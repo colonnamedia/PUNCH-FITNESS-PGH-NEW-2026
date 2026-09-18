@@ -35,15 +35,15 @@ on conflict do nothing;
 
 -- 4) Give the three starter blog posts a header image ------------------------
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-6.jpg'
+  '/assets/punch-pittsburgh-6.webp'
   where topic = 'Boxing for Fitness' and image_url is null;
 
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-31.jpg'
+  '/assets/punch-pittsburgh-31.webp'
   where topic = 'Nutrition' and image_url is null;
 
 update public.blog_posts set image_url =
-  '/assets/punch-pittsburgh-40.jpg'
+  '/assets/punch-pittsburgh-40.webp'
   where topic like 'Parkinson%' and image_url is null;
 
 -- ===== migration-3 =====
@@ -55,46 +55,46 @@ update public.blog_posts set image_url =
 -- ============================================================================
 
 -- Apparel placeholders --------------------------------------------------------
-update public.products set image_url='/assets/apparel/placeholder-tee.jpg'
+update public.products set image_url='/assets/apparel/placeholder-tee.webp'
   where kind='apparel' and image_url is null and name ilike '%tee%';
-update public.products set image_url='/assets/apparel/placeholder-tank.jpg'
+update public.products set image_url='/assets/apparel/placeholder-tank.webp'
   where kind='apparel' and image_url is null and name ilike '%tank%';
-update public.products set image_url='/assets/apparel/placeholder-hoodie.jpg'
+update public.products set image_url='/assets/apparel/placeholder-hoodie.webp'
   where kind='apparel' and image_url is null and name ilike '%hoodie%';
-update public.products set image_url='/assets/apparel/placeholder-leggings.jpg'
+update public.products set image_url='/assets/apparel/placeholder-leggings.webp'
   where kind='apparel' and image_url is null and name ilike '%legging%';
-update public.products set image_url='/assets/apparel/placeholder-joggers.jpg'
+update public.products set image_url='/assets/apparel/placeholder-joggers.webp'
   where kind='apparel' and image_url is null and name ilike '%jogger%';
-update public.products set image_url='/assets/apparel/placeholder-bra.jpg'
+update public.products set image_url='/assets/apparel/placeholder-bra.webp'
   where kind='apparel' and image_url is null and name ilike '%bra%';
 -- anything else still without a photo
-update public.products set image_url='/assets/apparel/placeholder-tee.jpg'
+update public.products set image_url='/assets/apparel/placeholder-tee.webp'
   where kind='apparel' and image_url is null;
 
 -- Equipment photos ------------------------------------------------------------
-update public.products set image_url='/assets/punch-pittsburgh-22.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-22.webp'
   where kind='equipment' and image_url is null and name ilike '%glove%';
-update public.products set image_url='/assets/punch-pittsburgh-19.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-19.webp'
   where kind='equipment' and image_url is null and name ilike '%wrap%';
-update public.products set image_url='/assets/punch-pittsburgh-29.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-29.webp'
   where kind='equipment' and image_url is null and name ilike '%bag%';
-update public.products set image_url='/assets/punch-pittsburgh-42.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-42.webp'
   where kind='equipment' and image_url is null and (name ilike '%rower%' or name ilike '%bike%');
-update public.products set image_url='/assets/punch-pittsburgh-44.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-44.webp'
   where kind='equipment' and image_url is null and (name ilike '%barbell%' or name ilike '%plate%');
-update public.products set image_url='/assets/punch-pittsburgh-27.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-27.webp'
   where kind='equipment' and image_url is null and (name ilike '%dumbbell%' or name ilike '%kettlebell%');
-update public.products set image_url='/assets/punch-pittsburgh-25.jpg'
+update public.products set image_url='/assets/punch-pittsburgh-25.webp'
   where kind='equipment' and image_url is null;
 
 -- Blog posts still missing a header image ------------------------------------
-update public.blog_posts set image_url='/assets/punch-pittsburgh-6.jpg'
+update public.blog_posts set image_url='/assets/punch-pittsburgh-6.webp'
   where image_url is null and topic='Boxing for Fitness';
-update public.blog_posts set image_url='/assets/punch-pittsburgh-31.jpg'
+update public.blog_posts set image_url='/assets/punch-pittsburgh-31.webp'
   where image_url is null and topic='Nutrition';
-update public.blog_posts set image_url='/assets/punch-pittsburgh-40.jpg'
+update public.blog_posts set image_url='/assets/punch-pittsburgh-40.webp'
   where image_url is null and topic like 'Parkinson%';
-update public.blog_posts set image_url='/assets/punch-pittsburgh-41.jpg'
+update public.blog_posts set image_url='/assets/punch-pittsburgh-41.webp'
   where image_url is null;
 
 -- ===== migration-4 =====
@@ -158,26 +158,26 @@ on conflict do nothing;
 -- ============================================================================
 
 -- ---------- EQUIPMENT: real product shots -----------------------------------
-update public.products set image_url = '/assets/equipment/gloves-pro-mex.jpg'
+update public.products set image_url = '/assets/equipment/gloves-pro-mex.webp'
   where kind = 'equipment' and name ilike '%pro boxing glove%';
 
-update public.products set image_url = '/assets/equipment/gloves-rdx.jpg'
+update public.products set image_url = '/assets/equipment/gloves-rdx.webp'
   where kind = 'equipment' and name ilike '%mid-range%';
 
-update public.products set image_url = '/assets/equipment/quick-wraps-rdx.jpg'
+update public.products set image_url = '/assets/equipment/quick-wraps-rdx.webp'
   where kind = 'equipment' and name ilike '%quick wrap%';
 
 -- ---------- APPAREL: pieces we now have photos for --------------------------
 -- Update in place if the placeholder rows already exist...
 update public.products
-   set image_url = '/assets/apparel/tank-grey.jpg',
+   set image_url = '/assets/apparel/tank-grey.webp',
        name = 'Punch Muscle Tank — Grey',
        description = 'Soft, relaxed-fit muscle tank with the Punch Results System mark. Built for Fight, Train, and Sweat.',
        category = 'Tops', sort = 10
  where kind = 'apparel' and name ilike '%tank%';
 
 update public.products
-   set image_url = '/assets/apparel/hoodie-black.jpg',
+   set image_url = '/assets/apparel/hoodie-black.webp',
        name = 'Punch Cropped Hoodie — Black',
        description = 'Lightweight cropped hoodie with drawstring hood and the vintage Punch badge across the chest.',
        category = 'Outerwear', sort = 20
@@ -187,7 +187,7 @@ update public.products
 insert into public.products (name, price, price_from, category, description, kind, sort, active, image_url)
 select 'Punch Sleeveless Hoodie — Grey', 54.00, false, 'Outerwear',
        'Sleeveless pullover hoodie with front pocket and the Punch badge. Perfect layer before and after class.',
-       'apparel', 30, true, '/assets/apparel/hoodie-grey.jpg'
+       'apparel', 30, true, '/assets/apparel/hoodie-grey.webp'
 where not exists (
   select 1 from public.products where kind='apparel' and name ilike '%sleeveless hoodie%'
 );

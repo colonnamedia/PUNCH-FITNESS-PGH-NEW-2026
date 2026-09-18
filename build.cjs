@@ -13,7 +13,7 @@ const CLEAN_SKIP = new Set(["index.html","404.html","post.html"]); // keep these
    read the default share image + published blog posts at build time. No secrets. */
 const SB_URL = "https://uyzvmrbjlzafpwpamjwa.supabase.co";
 const SB_KEY = "sb_publishable_HPXuZiYMaOHhuXiZ6SONBg_hy6X3_ce";
-const OG_FALLBACK = "https://punchpgh.com/assets/punch-pittsburgh-41.jpg";
+const OG_FALLBACK = "https://punchpgh.com/assets/punch-pittsburgh-41.webp";
 
 /* Generic defensive GET against Supabase REST. NEVER throws — resolves null on
    any failure so a Supabase hiccup can never take down the deploy. */
@@ -46,6 +46,7 @@ async function getPublishedPosts(){
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const when = d => { try{ return new Date(d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"}); }catch{ return ""; } };
 const whenShort = d => { try{ return new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}); }catch{ return ""; } };
+const optimizedLocalImage = url => String(url||"").replace(/^(\/assets\/[^?#]+)\.(?:png|jpe?g)([?#].*)?$/i,"$1.webp$2");
 function md(src){
   let t = esc(src);
   t = t.replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>");
@@ -70,8 +71,9 @@ function bakeOg(html, url){
     .replace(/(<meta\s+name="twitter:image"\s+content=")[^"]*(")/g, "$1" + v + "$2");
 }
 function blogCardHtml(p){
-  const media = p.image_url
-    ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" loading="lazy">`
+  const imageUrl = optimizedLocalImage(p.image_url);
+  const media = imageUrl
+    ? `<img src="${esc(imageUrl)}" alt="${esc(p.title)}" loading="lazy">`
     : `<span>Punch</span>`;
   return `<a class="bpost" href="/blog/${encodeURIComponent(p.slug)}" style="text-decoration:none">
     <div class="bpost-media">${media}</div>
@@ -102,7 +104,7 @@ function blogPageHtml(p, ogFallback){
   const title = esc(p.title) + " | Punch Boxing &amp; Fitness";
   const desc = esc(p.excerpt || (p.title + " — Punch Boxing & Fitness, South Hills Pittsburgh."));
   const url = "https://punchpgh.com/blog/" + encodeURIComponent(p.slug);
-  const img = (p.image_url && /^https?:\/\//.test(p.image_url)) ? p.image_url : (ogFallback || OG_FALLBACK);
+  const img = optimizedLocalImage(p.image_url || ogFallback || OG_FALLBACK);
   const imgEsc = esc(img);
   const ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":p.title,
     "datePublished":p.created_at,"description":p.excerpt||"","image":img,"url":url,
@@ -135,7 +137,6 @@ function blogPageHtml(p, ogFallback){
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
 <link rel="stylesheet" href="/punch.css" />
 <script src="/nav.js" defer></script>
-<script src="/config.js"></script>
 </head>
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -146,7 +147,7 @@ function blogPageHtml(p, ogFallback){
         <div class="bpost-topic" style="margin-bottom:12px">${esc(p.topic)}</div>
         <h1 class="h2" style="font-size:clamp(34px,5vw,54px);margin-bottom:10px">${esc(p.title)}</h1>
         <div class="bpost-date" style="margin-bottom:26px">${when(p.created_at)}</div>
-        ${p.image_url ? `<img src="${esc(p.image_url)}" alt="${esc(p.title)}" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
+        ${p.image_url ? `<img src="${esc(optimizedLocalImage(p.image_url))}" alt="${esc(p.title)}" loading="lazy" decoding="async" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
         <div class="article">${md(p.body)}</div>
       </div>
       <div style="max-width:760px;margin:44px auto 0;text-align:center">

@@ -70,11 +70,13 @@ window.PUNCH_CONFIG = {
       var slot = document.createElement("div");
       slot.className = "training-top-slot slot-" + (i + 1);
       var clone = img.cloneNode(true);
-      clone.removeAttribute("loading");
+      clone.loading = "lazy";
+      clone.decoding = "async";
       clone.removeAttribute("data-slot");
       if (i === 0) {
-        clone.src = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3.jpg";
-        clone.removeAttribute("srcset");
+        clone.src = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3.webp";
+        clone.srcset = "/assets/punch-fitness-personal-training-4-vanessa-anthony-3-mobile.webp 768w, /assets/punch-fitness-personal-training-4-vanessa-anthony-3.webp 1600w";
+        clone.sizes = "(max-width: 768px) 100vw, 33vw";
         clone.style.objectPosition = "center center";
       }
       slot.appendChild(clone);
@@ -359,17 +361,20 @@ window.PUNCH_CONFIG = {
     if (slots) {
       var imgs = slots.querySelectorAll("img");
       if (imgs.length >= 3) {
-        imgs[0].src = "/assets/punch-pittsburgh-22.jpg";
+        imgs[0].src = "/assets/punch-pittsburgh-22.webp";
         imgs[0].alt = "Cardio Boxing";
-        imgs[0].removeAttribute("srcset");
+        imgs[0].srcset = "/assets/punch-pittsburgh-22-mobile.webp 768w, /assets/punch-pittsburgh-22.webp 1600w";
+        imgs[0].sizes = "(max-width: 768px) 100vw, 33vw";
         imgs[0].style.objectPosition = "center center";
-        imgs[1].src = "/assets/punch-pittsburgh-2.jpg";
+        imgs[1].src = "/assets/punch-pittsburgh-2.webp";
         imgs[1].alt = "Strength Training";
-        imgs[1].removeAttribute("srcset");
+        imgs[1].srcset = "/assets/punch-pittsburgh-2-mobile.webp 768w, /assets/punch-pittsburgh-2.webp 1600w";
+        imgs[1].sizes = "(max-width: 768px) 100vw, 33vw";
         imgs[1].style.objectPosition = "center center";
-        imgs[2].src = "/assets/punch-pittsburgh-53.jpg";
+        imgs[2].src = "/assets/punch-pittsburgh-53.webp";
         imgs[2].alt = "Circuit and Conditioning Training";
-        imgs[2].removeAttribute("srcset");
+        imgs[2].srcset = "/assets/punch-pittsburgh-53-mobile.webp 768w, /assets/punch-pittsburgh-53.webp 1600w";
+        imgs[2].sizes = "(max-width: 768px) 100vw, 33vw";
         imgs[2].style.objectPosition = "center center";
       }
     }
