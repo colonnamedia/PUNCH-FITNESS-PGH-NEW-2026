@@ -15,11 +15,10 @@
 <meta property="og:url" content="https://punchpgh.com/blog-events" />
 <meta property="og:title" content="Blog &amp; Events | Punch Boxing &amp; Fitness" />
 <meta property="og:description" content="Training tips, nutrition, Parkinson's boxing insight and fitness comparisons from Punch Boxing &amp; Fitness Pittsburgh." />
-<meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-11.jpg" />
+<meta property="og:image" content="https://punchpgh.com/assets/punch-pittsburgh-11.webp" />
 <meta property="og:site_name" content="Punch Boxing & Fitness" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="stylesheet" href="/punch.css" />
-<script src="/config.js"></script>
 <script src="/nav.js" defer></script>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
@@ -37,7 +36,7 @@
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K4PVZXT" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="ph-wrap" style="min-height:52vh">
-  <img class="ph-video" src="/assets/punch-pittsburgh-11.jpg" alt="Punch Boxing &amp; Fitness studio" />
+  <img class="ph-video" src="/assets/punch-pittsburgh-11.webp" alt="Punch Boxing &amp; Fitness studio" srcset="/assets/punch-pittsburgh-11-mobile.webp 768w, /assets/punch-pittsburgh-11.webp 1600w" sizes="100vw" loading="eager" fetchpriority="high" decoding="async" />
   <div class="ph-overlay"></div>
   <div class="ph-content"><div class="ph-left">
     <div class="ph-eyebrow">South Hills Pittsburgh &mdash; Blog &amp; Events</div>
@@ -67,46 +66,5 @@
   </div>
 </div>
 
-<script type="module">
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-const CFG = window.PUNCH_CONFIG || {};
-const root = document.getElementById("blog-root");
-const esc = s => String(s==null?"":s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'\"':"&quot;"}[c]));
-const when = d => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
-
-if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
-  root.innerHTML = '<p class="trial-note" style="margin-top:34px">Blog is being set up. Check back soon.</p>';
-} else {
-  const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-  load(sb);
-}
-async function load(sb){
-  const { data, error } = await sb.from("blog_posts").select("*")
-    .eq("published", true).order("created_at",{ascending:false}).limit(30);
-  if (error){ root.innerHTML = '<p class="trial-note" style="margin-top:34px">Couldn\'t load posts right now.</p>'; return; }
-  if (!data || !data.length){ root.innerHTML = '<p class="trial-note" style="margin-top:34px">First posts coming soon.</p>'; return; }
-  root.innerHTML = '<div class="blog-grid">' + data.map(card).join("") + '</div>';
-  const ld = {"@context":"https://schema.org","@type":"Blog","name":"Punch Boxing & Fitness Blog",
-    "url":"https://punchpgh.com/blog-events",
-    "blogPost":data.slice(0,10).map(p=>({"@type":"BlogPosting","headline":p.title,
-      "url":"https://punchpgh.com/blog/"+encodeURIComponent(p.slug),
-      "datePublished":p.created_at,"description":p.excerpt||"",
-      "author":{"@type":"Organization","name":"Punch Boxing & Fitness"}}))};
-  const s=document.createElement("script"); s.type="application/ld+json";
-  s.textContent=JSON.stringify(ld); document.head.appendChild(s);
-}
-function card(p){
-  const media = `<div class="bpost-media blog-title-panel"><div class="blog-cover-title">${esc(p.title)}</div></div>`;
-  return `<a class="bpost" href="/blog/${encodeURIComponent(p.slug)}" style="text-decoration:none">
-    ${media}
-    <div class="bpost-body">
-      <div class="bpost-topic">${esc(p.topic)}</div>
-      <div class="bpost-title">${esc(p.title)}</div>
-      <p class="bpost-ex">${esc(p.excerpt||"")}</p>
-      <div class="bpost-date">${when(p.created_at)}</div>
-      <div class="bpost-link">Read More →</div>
-    </div></a>`;
-}
-</script>
 </body>
 </html>

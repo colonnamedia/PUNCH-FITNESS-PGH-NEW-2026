@@ -212,176 +212,10 @@
     return false;
   };
 
-  // ---- Custom image popup (admin-managed, /admin > Popups) -----------------
-  function buildCustomPopup(p) {
-    var key = "punch_popup_seen_" + p.id;
-    try { if (localStorage.getItem(key)) return false; } catch (e) {}
-    if (/\/admin/.test(location.pathname)) return false;
-    if (!p.image_url) return false;
-
-    var ov = document.createElement("div");
-    ov.className = "ps-ov";
-    var safeTitle = (p.title || "Special offer").replace(/"/g, "&quot;");
-    ov.innerHTML =
-      '<div class="ps-imgbox" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
-        '<button class="ps-x" id="psxImg" aria-label="Close">&times;</button>' +
-        (p.link_url ? ('<a href="' + p.link_url + '" target="_blank" rel="noopener">') : '') +
-          '<img src="' + p.image_url + '" alt="' + safeTitle + '">' +
-        (p.link_url ? '</a>' : '') +
-      '</div>';
-    document.body.appendChild(ov);
-
-    function close() {
-      ov.classList.remove("on");
-      try { localStorage.setItem(key, "1"); } catch (e) {}
-      setTimeout(function () { ov.remove(); }, 300);
-    }
-    document.getElementById("psxImg").addEventListener("click", close);
-    ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-    var link = ov.querySelector("a");
-    if (link) link.addEventListener("click", function () { try { localStorage.setItem(key, "1"); } catch (e) {} });
-
-    setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
-    return true;
-  }
-
-  // ---- Form / embed popup (admin-managed, /admin > Popups > Form/Embed) ----
-  var FORM_POP_DELAY = 3000;
-
-  function runScripts(root) {
-    root.querySelectorAll("script").forEach(function (old) {
-      var s = document.createElement("script");
-      for (var i = 0; i < old.attributes.length; i++) {
-        s.setAttribute(old.attributes[i].name, old.attributes[i].value);
-      }
-      s.text = old.textContent || "";
-      old.parentNode.replaceChild(s, old);
-    });
-  }
-
-  function buildFormPopup(p) {
-    var key = "punch_popup_seen_" + p.id;
-    try { if (localStorage.getItem(key)) return false; } catch (e) {}
-    if (/\/admin/.test(location.pathname)) return false;
-    if (!p.embed_html) return false;
-
-    var isSelfManaged = /data-layout[^>]*POPUP/i.test(p.embed_html);
-
-    if (isSelfManaged) {
-      try { localStorage.setItem(key, "1"); } catch (e) {}
-
-      var wrap = document.createElement("div");
-      wrap.id = "psFormWrap-" + p.id;
-      wrap.style.cssText =
-        "position:fixed;inset:0;z-index:2000;display:flex;align-items:center;" +
-        "justify-content:center;padding:20px;background:rgba(0,0,0,.72);" +
-        "backdrop-filter:blur(3px)";
-
-      var frame = document.createElement("div");
-      frame.style.cssText = "position:relative;max-width:100%;max-height:100%";
-
-      var host = document.createElement("div");
-      host.id = "psFormHost-" + p.id;
-      host.style.cssText =
-        "width:min(94vw,640px);max-height:min(90vh,720px);" +
-        "overflow:auto;border-radius:14px;background:#fff;" +
-        "box-shadow:0 30px 90px rgba(0,0,0,.5)";
-
-      var xbtn = document.createElement("button");
-      xbtn.setAttribute("aria-label", "Close");
-      xbtn.innerHTML = "&times;";
-      xbtn.style.cssText =
-        "position:absolute;top:-14px;right:-14px;width:34px;height:34px;" +
-        "border-radius:50%;background:#111;color:#fff;border:2px solid #fff;" +
-        "font-size:20px;line-height:30px;text-align:center;padding:0;" +
-        "cursor:pointer;z-index:2001;box-shadow:0 4px 14px rgba(0,0,0,.35)";
-
-      frame.appendChild(host);
-      frame.appendChild(xbtn);
-      wrap.appendChild(frame);
-      document.body.appendChild(wrap);
-      host.innerHTML = p.embed_html;
-      runScripts(host);
-
-      function removeWrap() { if (wrap.parentNode) wrap.remove(); }
-      xbtn.addEventListener("click", removeWrap);
-      wrap.addEventListener("click", function (e) { if (e.target === wrap) removeWrap(); });
-      document.addEventListener("keydown", function esc(e) {
-        if (e.key === "Escape") { removeWrap(); document.removeEventListener("keydown", esc); }
-      });
-
-      if (window.ResizeObserver) {
-        var everSized = false;
-        var ro = new ResizeObserver(function (entries) {
-          var r = entries[0].contentRect;
-          if (r.height > 40 && r.width > 40) { everSized = true; return; }
-          if (everSized) { removeWrap(); ro.disconnect(); }
-        });
-        ro.observe(host);
-      }
-
-      return true;
-    }
-
-    setTimeout(function () {
-      try { localStorage.setItem(key, "1"); } catch (e) {}
-
-      var ov = document.createElement("div");
-      ov.className = "ps-ov";
-      var safeTitle = (p.title || "Get started").replace(/"/g, "&quot;");
-      ov.innerHTML =
-        '<div class="ps-box" role="dialog" aria-modal="true" aria-label="' + safeTitle + '">' +
-          '<button class="ps-x" id="psxForm" aria-label="Close">&times;</button>' +
-          '<div class="ps-body" id="psFormMount" style="padding:0;max-height:88vh"></div>' +
-        '</div>';
-      document.body.appendChild(ov);
-      var mount = document.getElementById("psFormMount");
-      mount.innerHTML = p.embed_html;
-      runScripts(mount);
-
-      function close() {
-        ov.classList.remove("on");
-        setTimeout(function () { ov.remove(); }, 300);
-      }
-      document.getElementById("psxForm").addEventListener("click", close);
-      ov.addEventListener("click", function (e) { if (e.target === ov) close(); });
-      document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
-      setTimeout(function () { ov.classList.add("on"); }, 10);
-    }, FORM_POP_DELAY);
-
-    return true;
-  }
-
+  // The abandoned admin dashboard used to inject additional popups here.
+  // Keep the approved, code-owned trial popup and avoid a sitewide API request.
   function initPopups() {
-    var cfg = window.PUNCH_CONFIG || {};
-    var isDesktop = window.matchMedia
-      ? window.matchMedia("(min-width: 761px)").matches
-      : (window.innerWidth || 0) >= 761;
-    var onLanding = /^\/(index(\.html)?)?$/.test(location.pathname);
-
-    if (buildPopup()) return;
-
-    if (!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) return;
-
-    fetch(cfg.SUPABASE_URL + "/rest/v1/popups?select=*&order=sort.asc",
-      { headers: { apikey: cfg.SUPABASE_ANON_KEY, Authorization: "Bearer " + cfg.SUPABASE_ANON_KEY } })
-      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .then(function (rows) {
-        if (!rows || !rows.length) return;
-        function matches(p) {
-          if (!p.active) return false;
-          if (isDesktop && p.show_desktop === false) return false;
-          if (!isDesktop && p.show_mobile === false) return false;
-          if (p.pages === "landing" && !onLanding) return false;
-          return true;
-        }
-        var forms = rows.filter(function (p) { return p.type === "form" && matches(p) && p.embed_html; });
-        for (var i = 0; i < forms.length; i++) { if (buildFormPopup(forms[i])) return; }
-        var customs = rows.filter(function (p) { return p.type === "custom" && matches(p) && p.image_url; });
-        for (var j = 0; j < customs.length; j++) { if (buildCustomPopup(customs[j])) return; }
-      })
-      .catch(function () {});
+    buildPopup();
   }
 
   function enhance() {
@@ -428,23 +262,6 @@
     });
   }
 
-  function applySiteTextOverrides() {
-    var CFG = window.PUNCH_CONFIG || {};
-    if (!CFG.SUPABASE_URL || String(CFG.SUPABASE_URL).indexOf("YOUR-PROJECT") !== -1) return;
-    import("https://esm.sh/@supabase/supabase-js@2").then(function (mod) {
-      var sb = mod.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
-      return sb.from("site_text").select("key,value");
-    }).then(function (res) {
-      var rows = (res && !res.error && res.data) ? res.data : [];
-      if (!rows.length) return;
-      rows.forEach(function (r) {
-        if (!r || !r.key || r.value == null) return;
-        var el = document.querySelector('[data-text="' + r.key + '"]');
-        if (el) el.textContent = r.value;
-      });
-    }).catch(function () {});
-  }
-
   function init() {
     if (document.getElementById("pnHeader")) return;
     document.body.insertAdjacentHTML("afterbegin", header);
@@ -453,7 +270,6 @@
     if (b && d) b.addEventListener("click", function () { d.classList.toggle("open"); });
     initPopups();
     enhance();
-    applySiteTextOverrides();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
@@ -484,22 +300,3 @@
     document.body.appendChild(rs);
   }
   window.PunchRefer = function(e){ if(e) e.preventDefault(); document.getElementById("punch-refer-wrap").style.display="flex"; return false; };
-
-  // Load custom logo + favicon set in the admin (Branding tab)
-  (function loadBranding(){
-    var cfg = window.PUNCH_CONFIG||{};
-    if(!cfg.SUPABASE_URL || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT")!==-1) return;
-    fetch(cfg.SUPABASE_URL+"/rest/v1/site_settings?select=key,value&key=in.(logo_url,favicon_url)",
-      { headers:{ apikey:cfg.SUPABASE_ANON_KEY, Authorization:"Bearer "+cfg.SUPABASE_ANON_KEY } })
-      .then(function(r){ return r.json(); })
-      .then(function(rows){
-        (rows||[]).forEach(function(row){
-          var v = row.value && row.value.url;
-          if(!v) return;
-          if(row.key==="logo_url"){ var img=document.getElementById("pnLogoImg"); if(img){ img.onerror=null; img.src=v; } }
-          if(row.key==="favicon_url"){
-            document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(function(l){ l.href=v; });
-          }
-        });
-      }).catch(function(){});
-  })();

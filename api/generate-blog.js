@@ -23,16 +23,16 @@ const GUIDE = {
 };
 
 const TOPIC_IMAGE = {
-  "Boxing for Fitness": "/assets/punch-pittsburgh-6.jpg",
-  "Nutrition": "/assets/punch-pittsburgh-31.jpg",
-  "Parkinson's Boxing Benefits": "/assets/punch-pittsburgh-40.jpg",
-  "Boxing vs Popular Fitness Classes": "/assets/punch-pittsburgh-14.jpg",
+  "Boxing for Fitness": "/assets/punch-pittsburgh-6.webp",
+  "Nutrition": "/assets/punch-pittsburgh-31.webp",
+  "Parkinson's Boxing Benefits": "/assets/punch-pittsburgh-40.webp",
+  "Boxing vs Popular Fitness Classes": "/assets/punch-pittsburgh-14.webp",
 };
 const IMAGE_POOL = [
-  "punch-pittsburgh-6.jpg","punch-pittsburgh-1.jpg","punch-pittsburgh-11.jpg",
-  "punch-pittsburgh-14.jpg","punch-pittsburgh-21.jpg","punch-pittsburgh-22.jpg",
-  "punch-pittsburgh-31.jpg","punch-pittsburgh-40.jpg","punch-pittsburgh-41.jpg",
-  "punch-pittsburgh-43.jpg","punch-pittsburgh-44.jpg"
+  "punch-pittsburgh-6.webp","punch-pittsburgh-1.webp","punch-pittsburgh-11.webp",
+  "punch-pittsburgh-14.webp","punch-pittsburgh-21.webp","punch-pittsburgh-22.webp",
+  "punch-pittsburgh-31.webp","punch-pittsburgh-40.webp","punch-pittsburgh-41.webp",
+  "punch-pittsburgh-43.webp","punch-pittsburgh-44.webp"
 ].map(f => "/assets/" + f);
 function pickImage(topic, title){
   if (TOPIC_IMAGE[topic]) return TOPIC_IMAGE[topic];

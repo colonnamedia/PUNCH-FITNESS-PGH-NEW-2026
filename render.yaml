@@ -1,6 +1,4 @@
-# Render config: publishes this folder as a STATIC SITE (no build step).
-# Note: the weekly auto-blog (api/generate-blog.js) is a serverless function and
-# runs on Vercel. On Render it would need a separate Cron Job service.
+# Render config: builds and publishes the static site from ./dist.
 services:
   - type: web
     name: punchpgh
@@ -36,8 +34,6 @@ services:
       - { type: rewrite, source: /post, destination: /post.html }
       - { type: rewrite, source: /contact, destination: /contact.html }
       - { type: rewrite, source: /terms-conditions, destination: /terms-conditions.html }
-      - { type: rewrite, source: /admin, destination: /admin.html }
-
   - type: cron
     name: punchpgh-autoblog
     runtime: node

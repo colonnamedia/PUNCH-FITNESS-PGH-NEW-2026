@@ -24,7 +24,7 @@ function replaceCardImages(html){
 
 function replaceArticleHero(html){
   return html.replace(
-    /<img src="[^"]*" alt="([^"]*)" style="width:100%;border-radius:14px;margin-bottom:28px">/g,
+    /<img src="[^"]*" alt="([^"]*)"[^>]*style="width:100%;border-radius:14px;margin-bottom:28px">/g,
     '<div class="blog-article-title-panel"><div class="blog-cover-title">$1</div></div>'
   );
 }

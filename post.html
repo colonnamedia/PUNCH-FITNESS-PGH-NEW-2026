@@ -50,6 +50,7 @@ const root = document.getElementById("post-root");
 const slug = new URLSearchParams(location.search).get("slug");
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const when = d => new Date(d).toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+const optimizedLocalImage = url => String(url||"").replace(/^(\/assets\/[^?#]+)\.(?:png|jpe?g)([?#].*)?$/i,"$1.webp$2");
 
 // Minimal, safe markdown: escape first, then apply a small set of patterns.
 function md(src){
@@ -90,7 +91,7 @@ async function load(sb){
     <div class="bpost-topic" style="margin-bottom:12px">${esc(data.topic)}</div>
     <h1 class="h2" style="font-size:clamp(34px,5vw,54px);margin-bottom:10px">${esc(data.title)}</h1>
     <div class="bpost-date" style="margin-bottom:26px">${when(data.created_at)}</div>
-    ${data.image_url ? `<img src="${esc(data.image_url)}" alt="${esc(data.title)}" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
+    ${data.image_url ? `<img src="${esc(optimizedLocalImage(data.image_url))}" alt="${esc(data.title)}" loading="lazy" decoding="async" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
     <div class="article">${md(data.body)}</div>`;
 
   const ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":data.title,
