@@ -37,6 +37,7 @@
 #boxing-page .bx-btn{display:inline-block;padding:16px 28px;border-radius:8px;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900}
 #boxing-page .bx-btn.red{background:#D92B2B;color:#fff}
 #boxing-page .bx-btn.ghost{border:1px solid rgba(255,255,255,.45);color:#fff;background:rgba(255,255,255,.08)}
+#boxing-page .bx-cta-note{margin:16px 0 0;font-size:12px;line-height:1.5;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72)}
 #boxing-page .bx-proof{display:grid;grid-template-columns:repeat(4,1fr);background:#D92B2B;color:#fff}
 #boxing-page .bx-proof div{padding:25px 18px;text-align:center;border-right:1px solid rgba(255,255,255,.2)}
 #boxing-page .bx-proof div:last-child{border-right:0}
@@ -60,6 +61,19 @@
 #boxing-page .bx-list{list-style:none;padding:0;margin:28px 0 0}
 #boxing-page .bx-list li{padding:15px 0 15px 36px;border-bottom:1px solid #d8d3ca;position:relative;font-weight:700;font-size:17px}
 #boxing-page .bx-list li:before{content:"✓";position:absolute;left:0;color:#D92B2B;font-weight:900}
+#boxing-page .bx-trials{background:#f4f1eb}
+#boxing-page .bx-trial-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:950px;margin:42px auto 0}
+#boxing-page .bx-trial-card{background:#fff;border:1px solid #ddd7cd;border-radius:18px;padding:36px;box-shadow:0 12px 34px rgba(0,0,0,.06);display:flex;flex-direction:column}
+#boxing-page .bx-trial-card.featured{border:3px solid #D92B2B;position:relative}
+#boxing-page .bx-popular{position:absolute;right:20px;top:18px;background:#D92B2B;color:#fff;border-radius:30px;padding:7px 12px;font:800 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase}
+#boxing-page .bx-trial-kicker{font:800 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#D92B2B}
+#boxing-page .bx-price{font:900 clamp(58px,7vw,90px)/.9 'Barlow Condensed',sans-serif;letter-spacing:-.03em;margin:18px 0 8px;text-transform:uppercase}
+#boxing-page .bx-trial-title{font:900 29px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin-bottom:20px}
+#boxing-page .bx-trial-list{list-style:none;padding:0;margin:0 0 28px;flex:1}
+#boxing-page .bx-trial-list li{padding:10px 0 10px 26px;border-bottom:1px solid #eee8de;position:relative;line-height:1.45}
+#boxing-page .bx-trial-list li:before{content:"✓";position:absolute;left:0;color:#D92B2B;font-weight:900}
+#boxing-page .bx-trial-btn{display:block;text-align:center;background:#D92B2B;color:#fff;text-decoration:none;border-radius:8px;padding:17px 18px;font:900 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.11em;text-transform:uppercase}
+#boxing-page .bx-trial-fine{text-align:center;font-size:12px;color:#777;margin:13px 0 0}
 #boxing-page .bx-formats{background:#111;color:#fff}
 #boxing-page .bx-formats h2{color:#fff}
 #boxing-page .bx-formats .bx-lead{color:#c9c7c2}
@@ -90,6 +104,8 @@
   #boxing-page .bx-proof div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}
   #boxing-page .bx-section{padding:68px 20px}
   #boxing-page .bx-card-grid,#boxing-page .bx-format-grid{grid-template-columns:1fr}
+  #boxing-page .bx-trial-grid{grid-template-columns:1fr}
+  #boxing-page .bx-trial-card{padding:30px 24px}
   #boxing-page .bx-split{grid-template-columns:1fr}
   #boxing-page .bx-split-media{min-height:440px}
   #boxing-page .bx-split-copy{padding:60px 22px}
@@ -109,9 +125,10 @@
       <h1>Your Cardio Just Got a Whole Lot Better.</h1>
       <p class="bx-hero-copy">We trade treadmills and stationary bikes for coached heavy-bag boxing—a more engaging, full-body way to build your conditioning, burn calories, and get stronger.</p>
       <div class="bx-btns">
-        <a class="bx-btn red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Try Your First Class Free →</a>
-        <a class="bx-btn ghost" href="#how-it-works">See How It Works</a>
+        <a class="bx-btn red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim First Class Free →</a>
+        <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40" target="_blank" rel="noopener">7 Days Unlimited — $19.99</a>
       </div>
+      <p class="bx-cta-note">Choose one trial offer · Local residents with valid ID · $19.99 trial does not auto-renew</p>
     </div>
   </section>
 
@@ -155,6 +172,45 @@
     </div>
   </section>
 
+  <section class="bx-section bx-trials" id="trial-options">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Two Easy Ways to Start</span>
+        <h2>Choose Your Boxing Trial.</h2>
+        <p class="bx-lead">Start with one class on us or give yourself a full week to experience Cardio Boxing, Boxing + Strength, and Circuit Training.</p>
+      </div>
+      <div class="bx-trial-grid">
+        <article class="bx-trial-card">
+          <span class="bx-trial-kicker">Try It Once</span>
+          <div class="bx-price">Free</div>
+          <div class="bx-trial-title">Your First Class</div>
+          <ul class="bx-trial-list">
+            <li>Choose the class that interests you most</li>
+            <li>Beginner introduction before class</li>
+            <li>Loaner gloves available for your first visit</li>
+            <li>No credit card or long-term commitment</li>
+          </ul>
+          <a class="bx-trial-btn" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim My Free Class →</a>
+          <p class="bx-trial-fine">Use within 7 days · Local residents with valid ID</p>
+        </article>
+        <article class="bx-trial-card featured">
+          <span class="bx-popular">More Time to Experience Punch</span>
+          <span class="bx-trial-kicker">Try the Full Week</span>
+          <div class="bx-price">$19.99</div>
+          <div class="bx-trial-title">7 Days Unlimited</div>
+          <ul class="bx-trial-list">
+            <li>Unlimited classes for seven consecutive days</li>
+            <li>Try Cardio Boxing and every class format</li>
+            <li>Train more than once before deciding</li>
+            <li>One-time payment with no auto-renew</li>
+          </ul>
+          <a class="bx-trial-btn" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40" target="_blank" rel="noopener">Start 7 Days Unlimited →</a>
+          <p class="bx-trial-fine">One-time payment · One trial offer per person</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="bx-section bx-formats">
     <div class="bx-inner">
       <div class="bx-center">
@@ -190,9 +246,10 @@
     <h2>Stop Watching the Clock. Start Throwing Punches.</h2>
     <p>Try the full-body cardio workout that makes the treadmill feel like the old way of training. No boxing experience and no contact required.</p>
     <div class="bx-btns" style="justify-content:center">
-      <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim My Free Class →</a>
-      <a class="bx-btn ghost" href="/schedule">View the Schedule</a>
+      <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b" target="_blank" rel="noopener">Claim First Class Free →</a>
+      <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40" target="_blank" rel="noopener">7 Days Unlimited — $19.99</a>
     </div>
+    <p class="bx-cta-note">Choose one trial offer · The $19.99 seven-day trial is a one-time payment with no auto-renew</p>
   </section>
 </main>
 <script src="/media.js" defer></script>
