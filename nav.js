@@ -41,7 +41,7 @@
     if (path === "/punch-ad-trials" || path === "/punch-ad-trials.html") {
       var adTitle = document.querySelector('#punch-trial-hero h1');
       var adSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(adTitle, adSub, '<span>Your New Favorite</span><span>Workout Starts Here.</span>');
+      setHeroMessage(adTitle, adSub, '<span>Results-Based</span><span>Workout.</span>');
     }
 
     if (path === "/free-trial" || path === "/free-trial.html") {
