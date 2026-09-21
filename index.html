@@ -77,6 +77,29 @@
 #plp .grain{opacity:.08}
 #plp .dark,#plp .exp-text.exp-dark,#plp .combo-text,#plp .prog-sec{background:#141416}
 #plp .h2,#plp .prog-name,#plp .hero-stmt-title,#plp .class-photo-name,#plp .challenge-title,#plp .final-title{letter-spacing:-.02em}
+
+/* ==== SEE WHAT A PUNCH CLASS LOOKS LIKE ==== */
+#plp .class-look{background:#141416;color:#fff;padding:64px 0 68px;overflow:hidden}
+#plp .class-look-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:28px}
+#plp .class-look-head .h2{color:#fff;margin-bottom:0}
+#plp .class-look-copy{max-width:480px;color:rgba(255,255,255,.7);font-size:16px;line-height:1.65;margin:0}
+#plp .class-look-grid{display:grid;grid-template-columns:1.16fr 1fr 1fr;gap:12px}
+#plp .class-look-card{position:relative;min-height:300px;overflow:hidden;border-radius:12px;background:#242428}
+#plp .class-look-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+#plp .class-look-card:hover img{transform:scale(1.035)}
+#plp .class-look-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,.04) 30%,rgba(10,10,12,.88) 100%)}
+#plp .class-look-label{position:absolute;z-index:2;left:22px;right:22px;bottom:20px}
+#plp .class-look-label strong{display:block;font-family:'Barlow Condensed',sans-serif;font-size:clamp(24px,2.4vw,36px);line-height:1;text-transform:uppercase;letter-spacing:-.01em}
+#plp .class-look-label span{display:block;margin-top:7px;color:rgba(255,255,255,.76);font-size:13px;line-height:1.4}
+#plp .class-look-cta{text-align:center;margin-top:26px}
+@media(max-width:760px){
+  #plp .class-look{padding:48px 0 52px}
+  #plp .class-look-head{display:block;margin-bottom:22px}
+  #plp .class-look-copy{margin-top:14px;font-size:15px}
+  #plp .class-look-grid{grid-auto-flow:column;grid-auto-columns:82%;grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 22px 10px;margin:0 -22px;scrollbar-width:none}
+  #plp .class-look-grid::-webkit-scrollbar{display:none}
+  #plp .class-look-card{min-height:360px;scroll-snap-align:center}
+}
 </style>
 
 </head>
@@ -197,6 +220,33 @@
     </div>
   </div>
 </div></div>
+
+<section class="class-look" data-section="class-look">
+  <div class="si">
+    <div class="class-look-head">
+      <div>
+        <span class="lbl">Inside a PUNCH Class</span>
+        <h2 class="h2">Results-Based<br><span>Training in Action.</span></h2>
+      </div>
+      <p class="class-look-copy">Every class has a purpose: help you lose weight, build strength, improve conditioning, and gain confidence. Boxing is part of the method &mdash; not the entire workout.</p>
+    </div>
+    <div class="class-look-grid">
+      <article class="class-look-card">
+        <img data-slot="home.class_look_strength" src="/assets/punch-pittsburgh-2.webp" srcset="/assets/punch-pittsburgh-2-mobile.webp 768w, /assets/punch-pittsburgh-2.webp 1600w" sizes="(max-width: 760px) 82vw, 38vw" alt="Member strength training with a barbell at PUNCH" loading="lazy" decoding="async" />
+        <div class="class-look-label"><strong>Build Strength</strong><span>Functional resistance training that shapes a stronger, more capable body.</span></div>
+      </article>
+      <article class="class-look-card">
+        <img data-slot="home.class_look_conditioning" src="/assets/punch-pittsburgh-53.webp" srcset="/assets/punch-pittsburgh-53-mobile.webp 768w, /assets/punch-pittsburgh-53.webp 1600w" sizes="(max-width: 760px) 82vw, 31vw" alt="PUNCH members encouraging each other during conditioning" loading="lazy" decoding="async" />
+        <div class="class-look-label"><strong>Improve Conditioning</strong><span>Full-body intervals that build endurance, energy, and confidence.</span></div>
+      </article>
+      <article class="class-look-card">
+        <img data-slot="home.class_look_boxing" src="/assets/punch-pittsburgh-11.webp" srcset="/assets/punch-pittsburgh-11-mobile.webp 768w, /assets/punch-pittsburgh-11.webp 1600w" sizes="(max-width: 760px) 82vw, 31vw" alt="Members training on heavy bags during a PUNCH cardio boxing class" loading="lazy" decoding="async" />
+        <div class="class-look-label"><strong>Boxing-Based Cardio</strong><span>An engaging way to burn calories without another treadmill workout.</span></div>
+      </article>
+    </div>
+    <div class="class-look-cta"><a href="#" onclick="return PunchOpenTrialPopup(event)" class="btn-red">Come Experience PUNCH &rarr;</a></div>
+  </div>
+</section>
 
 <div class="s off" id="landing-schedule" data-section="schedule">
  <div class="si" style="text-align:center;max-width:760px">
