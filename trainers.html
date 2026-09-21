@@ -70,6 +70,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const CFG = window.PUNCH_CONFIG || {};
 const root = document.getElementById("trainers-root");
 const esc = s => String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const VICTORIA = {
+  name:"Victoria",
+  image_url:"/assets/victoria-punch-pgh-1.webp",
+  image_srcset:"/assets/victoria-punch-pgh-1-mobile.webp 720w, /assets/victoria-punch-pgh-1.webp 1365w",
+  image_position:"center"
+};
 const FALLBACK = [
   { name:"Anthony" },
   { name:"Jocelyn" },
@@ -77,10 +83,17 @@ const FALLBACK = [
   { name:"Luc" },
   { name:"Chelsea" },
   { name:"Jess" },
+  VICTORIA,
 ];
+function ensureVictoria(list){
+  const isVictoria = t => String(t.name||"").trim().toLowerCase().startsWith("victoria");
+  return list.some(isVictoria)
+    ? list.map(t=>isVictoria(t) ? {...t,...VICTORIA,name:t.name} : t)
+    : [...list,VICTORIA];
+}
 function card(t){
   return '<figure class="tr-card">' +
-    (t.image_url ? '<img src="'+esc(t.image_url)+'" alt="'+esc(t.name)+'" loading="lazy" decoding="async" style="object-fit:'+(t.image_fit||"cover")+';object-position:'+(t.image_position||"center")+'" onerror="this.style.display=\'none\'">' : '<div class="tr-ph"></div>') +
+    (t.image_url ? '<img src="'+esc(t.image_url)+'"'+(t.image_srcset?' srcset="'+esc(t.image_srcset)+'" sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 33vw"':'')+' alt="'+esc(t.name)+'" loading="lazy" decoding="async" style="object-fit:'+(t.image_fit||"cover")+';object-position:'+(t.image_position||"center")+'" onerror="this.style.display=\'none\'">' : '<div class="tr-ph"></div>') +
     '<figcaption class="tr-name">'+esc(t.name)+'</figcaption>' +
   '</figure>';
 }
@@ -89,7 +102,7 @@ render(FALLBACK);
 if (CFG.SUPABASE_URL && CFG.SUPABASE_URL.indexOf("YOUR-PROJECT")===-1) {
   const sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
   sb.from("trainers").select("*").eq("active",true).order("sort",{ascending:true}).then(({data,error})=>{
-    if(!error && data && data.length) render(data);
+    if(!error && data && data.length) render(ensureVictoria(data));
   });
 }
 </script>
