@@ -11,6 +11,7 @@ services:
       - { type: redirect, source: /classes-1, destination: /classes }
       - { type: redirect, source: /pricing, destination: /membership-options }
       - { type: redirect, source: /blog, destination: /blog-events }
+      - { type: rewrite, source: /admin, destination: /admin.html }
       - { type: rewrite, source: /punch-ad-trials, destination: /punch-ad-trials.html }
       - { type: rewrite, source: /punch-ad-trials/thank-you, destination: /punch-ad-trials/thank-you.html }
       - { type: rewrite, source: /trial, destination: /trial.html }

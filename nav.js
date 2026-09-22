@@ -109,5 +109,20 @@
     var passes = 0; var timer = setInterval(function () { launchCleanup(); passes += 1; if (passes >= 10) clearInterval(timer); }, 500);
   }
 
-  var s = document.createElement("script"); s.src = "/nav-core.js"; s.async = false; s.onload = stabilizeLaunchCleanup; document.head.appendChild(s);
+  function loadCore(){
+    var s = document.createElement("script");
+    s.src = "/nav-core.js";
+    s.async = false;
+    s.onload = stabilizeLaunchCleanup;
+    document.head.appendChild(s);
+  }
+  if(window.PUNCH_CONFIG){
+    loadCore();
+  }else{
+    var cfg=document.createElement("script");
+    cfg.src="/config.js";
+    cfg.onload=loadCore;
+    cfg.onerror=loadCore;
+    document.head.appendChild(cfg);
+  }
 })();

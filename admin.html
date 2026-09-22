@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<link rel="icon" type="image/svg+xml" href="/assets/favicon.svg" />
+<link rel="icon" href="/assets/favicon.svg" />
+<link rel="apple-touch-icon" href="/assets/favicon.svg" />
+
+<meta name="robots" content="noindex, nofollow" />
+<title>Punch Admin Dashboard</title>
+<link rel="stylesheet" href="/admin.css" />
+<script src="/config.js"></script>
+</head>
+<body>
+
+<!-- ============================== LOGIN ============================== -->
+<div class="login" id="loginView">
+  <div class="login-card">
+    <div class="login-mark">PUN<span>CH</span></div>
+    <div class="login-sub">Admin Dashboard</div>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="username" placeholder="you@punchpgh.com" />
+    <label for="password">Password</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+    <button class="btn btn-red btn-block" id="loginBtn">Sign In</button>
+    <div id="mfaPrompt" class="hide">
+      <label for="loginCode">Authenticator Code</label>
+      <input id="loginCode" inputmode="numeric" maxlength="6" placeholder="123456" />
+      <button class="btn btn-red btn-block" id="loginVerify">Verify</button>
+    </div>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ============================== APP ============================== -->
+<div class="app hide" id="appView">
+  <aside class="side">
+    <div class="side-mark">PUN<span>CH</span></div>
+    <button class="btn btn-red btn-block" id="publishBtn" style="margin:0 14px 14px;width:calc(100% - 28px)">&#128640; Publish Changes</button>
+    <div class="drop-s" id="publishHint" style="margin:-8px 14px 14px;font-size:11px"></div>
+    <nav class="nav">
+      <a class="active" data-tab="apparel"><span class="i">&#9636;</span> Apparel</a>
+      <a data-tab="equipment"><span class="i">&#129354;</span> Equipment</a>
+      <a data-tab="blog"><span class="i">&#9998;</span> Blog</a>
+      <a data-tab="trainers"><span class="i">&#129354;</span> Trainers</a>
+      <a data-tab="terms"><span class="i">&#128196;</span> Terms</a>
+      <a data-tab="branding"><span class="i">&#127912;</span> Branding</a>
+      <a data-tab="popups"><span class="i">&#128276;</span> Popups</a>
+      <a data-tab="security"><span class="i">&#128274;</span> Security</a>
+      <a href="/punch-apparel" target="_blank"><span class="i">&#8599;</span> View Store</a>
+      <a href="/blog-events" target="_blank"><span class="i">&#8599;</span> View Blog</a>
+    </nav>
+    <div class="side-foot">
+      <div class="side-user" id="whoami"></div>
+      <a id="signout"><span class="i">⏻</span> Sign Out</a>
+    </div>
+  </aside>
+
+  <main class="main">
+    <!-- ============ APPAREL ============ -->
+    <section class="sect on" id="sect-apparel">
+      <div class="top">
+        <div><h1 class="mono-h">Apparel</h1><div class="sub">Products shown on the store page.</div></div>
+        <button class="btn btn-red" data-add="apparel">&#65291; Add Item</button>
+      </div>
+      <div class="stats" id="stats-apparel"></div>
+      <div class="panel"><div class="panel-h"><h2>All Apparel</h2></div><div id="list-apparel"></div></div>
+    </section>
+
+    <!-- ============ EQUIPMENT ============ -->
+    <section class="sect" id="sect-equipment">
+      <div class="top">
+        <div><h1 class="mono-h">Equipment</h1><div class="sub">Gear shown on the equipment page.</div></div>
+        <button class="btn btn-red" data-add="equipment">&#65291; Add Item</button>
+      </div>
+      <div class="stats" id="stats-equipment"></div>
+      <div class="panel"><div class="panel-h"><h2>All Equipment</h2></div><div id="list-equipment"></div></div>
+    </section>
+
+    <!-- ============ BLOG ============ -->
+    <section class="sect" id="sect-blog">
+      <div class="top">
+        <div><h1 class="mono-h">Blog</h1><div class="sub">Create, edit, publish, or hide posts. Published posts appear on /blog-events after you click Publish Changes.</div></div>
+        <button class="btn btn-red" id="addPost">&#65291; New Post</button>
+      </div>
+      <div class="panel" style="margin-bottom:18px">
+        <div class="panel-h"><h2>Automatic Posts</h2></div>
+        <div style="padding:20px 22px;display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <label style="margin:0 0 6px">Posts per week</label>
+            <select id="freq" style="max-width:220px">
+              <option value="1">1 per week</option>
+              <option value="2">2 per week</option>
+              <option value="3">3 per week</option>
+            </select>
+            <p class="hint">Topics rotate: Boxing for Fitness &rarr; Nutrition &rarr; Parkinson&#39;s Boxing Benefits. Posts run Mon/Wed/Fri and stop once the weekly limit is hit. Maximum 3.</p>
+          </div>
+          <button class="btn btn-red" id="saveFreq">Save</button>
+        </div>
+      </div>
+      <div class="stats" id="stats-blog"></div>
+      <div class="panel"><div class="panel-h"><h2>All Posts</h2></div><div id="list-blog"></div></div>
+    </section>
+
+    <!-- ============ PAGES / MEDIA ============ -->
+
+    <!-- ============ TRAINERS ============ -->
+    <section class="sect" id="sect-trainers">
+      <div class="top">
+        <div><h1 class="mono-h">Trainers</h1><div class="sub">Add a photo and name. They appear on the Trainers page with a black &amp; white filter.</div></div>
+        <button class="btn btn-red" id="addTrainer">&#65291; Add Trainer</button>
+      </div>
+      <div class="stats" id="stats-trainers"></div>
+      <div class="panel"><div class="panel-h"><h2>Roster</h2></div><div id="list-trainers"></div></div>
+    </section>
+
+    <!-- ============ TERMS ============ -->
+    <section class="sect" id="sect-terms">
+      <div class="top">
+        <div><h1 class="mono-h">Terms &amp; Conditions</h1><div class="sub">Paste your updated Terms &amp; Conditions here each year. It publishes to the /terms-conditions page instantly. Leave blank to use the built-in default text.</div></div>
+        <button class="btn btn-red" id="termsSave">Save Terms</button>
+      </div>
+      <div class="panel"><div class="panel-b" style="padding:18px">
+        <textarea id="termsText" placeholder="Paste the full Terms &amp; Conditions text here. Separate sections with a blank line; put section titles in ALL CAPS on their own line and they'll become headings automatically. You can also paste formatted HTML." style="width:100%;min-height:520px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--ink2);color:#fff;font-size:14px;line-height:1.6;font-family:inherit;resize:vertical"></textarea>
+        <div class="err" id="termsErr" style="margin-top:10px"></div>
+        <div class="sub" style="margin-top:10px">Tip: the live page shows this text. To go back to the built-in default, clear this box and save.</div>
+      </div></div>
+    </section>
+
+    <!-- ============ BRANDING ============ -->
+    <section class="sect" id="sect-branding">
+      <div class="top">
+        <div><h1 class="mono-h">Branding</h1><div class="sub">Change the header logo, favicon, and default share image. Logo &amp; favicon update live; the share image applies on your next site deploy.</div></div>
+        <button class="btn btn-red" id="brandSave">Save Branding</button>
+      </div>
+      <div class="panel"><div class="panel-b" style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
+        <div>
+          <label>Header Logo</label>
+          <div class="drop" id="logoDrop" style="background:#111">
+            <div class="drop-ic">&#128444;</div><div class="drop-t">Click or drag a logo</div>
+            <div class="drop-s">Wide/horizontal PNG with transparent background works best</div>
+            <input type="file" id="logoFile" accept="image/*" class="hide" />
+          </div>
+        </div>
+        <div>
+          <label>Favicon (browser tab icon)</label>
+          <div class="drop" id="favDrop">
+            <div class="drop-ic">&#11088;</div><div class="drop-t">Click or drag a favicon</div>
+            <div class="drop-s">Square image — 512&times;512 PNG or an SVG</div>
+            <input type="file" id="favFile" accept="image/*,.svg" class="hide" />
+          </div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <label>Default Share Image (link preview)</label>
+          <div class="drop" id="ogDrop" style="background:#111">
+            <div class="drop-ic">&#128247;</div><div class="drop-t">Click or drag a share image</div>
+            <div class="drop-s">Shown when your site link is shared (Facebook, iMessage, texts, etc.). Wide 1200&times;630 JPG/PNG works best. Applies on your next site deploy.</div>
+            <input type="file" id="ogFile" accept="image/*" class="hide" />
+          </div>
+        </div>
+        <div style="grid-column:1 / -1">
+          <label for="deployHookUrl">Publish Button &mdash; Render Deploy Hook URL</label>
+          <input type="text" id="deployHookUrl" placeholder="https://api.render.com/deploy/srv-...." />
+          <div class="drop-s" style="margin-top:6px">Powers the &ldquo;Publish Changes&rdquo; button in the sidebar. Find this in Render &rarr; your service &rarr; Settings &rarr; Deploy Hook &rarr; copy the URL, paste it here, Save. One-time setup.</div>
+          <button class="btn" type="button" id="saveDeployHook" style="margin-top:8px">Save</button>
+          <span class="pm-hint" id="deployHookHint" style="margin-left:8px"></span>
+        </div>
+      </div>
+      <div class="err" id="brandErr" style="margin:0 20px 18px"></div>
+      </div>
+    </section>
+
+    <!-- ============ POPUPS ============ -->
+    <section class="sect" id="sect-popups">
+      <div class="top">
+        <div><h1 class="mono-h">Popups</h1><div class="sub">Control the automatic trial popup and optional promotional or form popups. These settings never change page heroes, layouts, or regular page images.</div></div>
+        <button class="btn btn-red" id="addPopup">&#65291; Add Popup</button>
+      </div>
+      <div class="panel"><div class="panel-h"><h2>All Popups</h2></div><div id="list-popups"></div></div>
+    </section>
+
+    <!-- ============ SECURITY ============ -->
+    <section class="sect" id="sect-security">
+      <div class="top">
+        <div><h1 class="mono-h">Security</h1><div class="sub">Two-factor authentication for this admin account.</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-h"><h2>Two-Factor Authentication</h2><span id="mfaState" class="pill">Checking…</span></div>
+        <div style="padding:22px" id="mfaBody">
+          <p style="color:var(--mut2);font-size:15px;line-height:1.7;max-width:620px">
+            Adds a second step at login using an authenticator app (Google Authenticator, Authy, or 1Password).
+            Even if someone learns your password, they can&#39;t get in without the rotating code on your phone.
+          </p>
+          <div id="mfaEnroll" class="hide" style="margin-top:22px">
+            <div style="background:#fff;padding:16px;border-radius:12px;display:inline-block" id="qrWrap"></div>
+            <p class="hint" style="max-width:520px">Scan this with your authenticator app. Can&#39;t scan? Enter this key manually:
+              <code id="mfaSecret" style="display:block;margin-top:8px;background:var(--ink3);padding:10px;border-radius:8px;word-break:break-all;color:#fff"></code>
+            </p>
+            <label for="mfaCode">Enter the 6-digit code to confirm</label>
+            <input id="mfaCode" inputmode="numeric" maxlength="6" placeholder="123456" style="max-width:220px" />
+            <div style="margin-top:14px;display:flex;gap:10px">
+              <button class="btn btn-red" id="mfaVerify">Turn On 2FA</button>
+              <button class="btn btn-ghost" id="mfaCancel">Cancel</button>
+            </div>
+            <div class="err" id="mfaErr"></div>
+          </div>
+          <div style="margin-top:22px">
+            <button class="btn btn-red" id="mfaStart">Set Up Two-Factor</button>
+            <button class="btn btn-ghost hide" id="mfaOff">Turn Off 2FA</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ============================== FORM MODAL ============================== -->
+<div class="overlay hide" id="modal">
+  <div class="modal">
+    <div class="modal-h">
+      <h3 id="modalTitle">Add Item</h3>
+      <button class="x" id="modalClose">×</button>
+    </div>
+
+    <label>Product Photo</label>
+    <div class="drop" id="drop">
+      <div class="drop-ic">📷</div>
+      <div class="drop-t">Click or drag an image</div>
+      <div class="drop-s">JPG or PNG · square works best</div>
+      <input type="file" id="file" accept="image/*" class="hide" />
+    </div>
+
+    <label for="pName">Name</label>
+    <input id="pName" placeholder="Punch Fight Club Tee" />
+
+    <div class="grid2">
+      <div>
+        <label for="pPrice">Price (USD)</label>
+        <input id="pPrice" type="number" step="0.01" min="0" placeholder="24.50" />
+      </div>
+      <div>
+        <label for="pCat">Category</label>
+        <input id="pCat" list="cats" placeholder="Tops & Tanks" />
+        <datalist id="cats">
+          <option>Tops &amp; Tanks</option><option>Crops &amp; Sports Bras</option>
+          <option>Bottoms</option><option>Outerwear</option><option>Accessories</option>
+        </datalist>
+      </div>
+    </div>
+
+    <label for="pDesc">Description (optional)</label>
+    <textarea id="pDesc" placeholder="Soft cotton blend, studio-tested fit."></textarea>
+
+    <label for="pStripe">Stripe Payment Link (optional — enables the Buy button)</label>
+    <input id="pStripe" placeholder="https://buy.stripe.com/..." />
+
+    <label for="pAmazon">Amazon Link (optional)</label>
+    <input id="pAmazon" placeholder="https://www.amazon.com/dp/..." />
+    <p class="hint">Shows a “Buy on Amazon” button. You can use this instead of Stripe, or both together.</p>
+
+    <div class="grid2">
+      <div>
+        <label for="pPartner">Partner Link (optional)</label>
+        <input id="pPartner" placeholder="http://superareshop.com/EMPOWER20" />
+      </div>
+      <div>
+        <label for="pPartnerLabel">Partner Button Text</label>
+        <input id="pPartnerLabel" placeholder="Shop Superare" />
+      </div>
+    </div>
+    <label for="pPartnerNote">Partner Note (e.g. discount code)</label>
+    <input id="pPartnerNote" placeholder="Use code EMPOWER20 at checkout" />
+
+    <div class="grid2">
+      <div class="row-check"><input type="checkbox" id="pFrom" /><label for="pFrom">Show “from” price</label></div>
+      <div class="row-check"><input type="checkbox" id="pActive" checked /><label for="pActive">Visible in store</label></div>
+    </div>
+
+    <button class="btn btn-red btn-block" id="saveBtn">Save Product</button>
+    <div class="err" id="formErr"></div>
+  </div>
+</div>
+
+
+<!-- ============================== BLOG MODAL ============================== -->
+<div class="overlay hide" id="bmodal">
+  <div class="modal wide">
+    <div class="modal-h"><h3 id="bTitle">New Post</h3><button class="x" id="bClose">&times;</button></div>
+
+    <label>Header Image</label>
+    <div class="drop" id="bdrop">
+      <div class="drop-ic">&#128247;</div>
+      <div class="drop-t">Click or drag an image</div>
+      <div class="drop-s">Wide images look best (16:9)</div>
+      <input type="file" id="bfile" accept="image/*" class="hide" />
+    </div>
+
+    <label for="bName">Title</label>
+    <input id="bName" placeholder="Why Boxing Is a Great Full-Body Workout" />
+
+    <div class="grid2">
+      <div>
+        <label for="bTopic">Topic</label>
+        <input id="bTopic" list="topics" placeholder="Boxing for Fitness" />
+        <datalist id="topics">
+          <option>Boxing for Fitness</option><option>Nutrition</option>
+          <option>Parkinson&#39;s Boxing Benefits</option><option>Gym News</option>
+        </datalist>
+      </div>
+      <div>
+        <label for="bSlug">URL Slug</label>
+        <input id="bSlug" placeholder="auto-generated from title" />
+      </div>
+    </div>
+
+    <label for="bExcerpt">Excerpt</label>
+    <input id="bExcerpt" placeholder="One sentence shown on the blog card." />
+
+    <label for="bBody">Post (markdown)</label>
+    <textarea id="bBody" class="long" placeholder="## A subheading&#10;&#10;Your paragraph here.&#10;&#10;- a bullet&#10;- another bullet"></textarea>
+    <p class="hint">Use ## for subheadings, **bold**, and - for bullets.</p>
+
+    <div class="row-check"><input type="checkbox" id="bPub" checked /><label for="bPub">Published (visible on the site)</label></div>
+
+    <button class="btn btn-red btn-block" id="bSave">Save Post</button>
+    <div class="err" id="bErr"></div>
+  </div>
+</div>
+
+
+<!-- ============================== TRAINER MODAL ============================== -->
+<div class="overlay hide" id="tmodal">
+  <div class="modal">
+    <div class="modal-h"><h3 id="tTitle">Add Trainer</h3><button class="x" id="tClose">&times;</button></div>
+    <label>Photo</label>
+    <div class="drop" id="tdrop">
+      <div class="drop-ic">&#128247;</div><div class="drop-t">Click or drag a photo</div>
+      <div class="drop-s">Portrait (3:4) looks best</div>
+      <input type="file" id="tfile" accept="image/*" class="hide" />
+    </div>
+    <label for="tName">Name</label>
+    <input id="tName" placeholder="Anthony Colonna" />
+    <label for="tRole">Role / Title (optional)</label>
+    <input id="tRole" placeholder="Leave blank for name only" />
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+      <div style="flex:1;min-width:140px"><label>Image Fit</label>
+        <select id="tFit"><option value="cover">Cover (fill)</option><option value="contain">Contain (whole photo)</option></select></div>
+      <div style="flex:1;min-width:180px"><label>Position</label>
+        <div class="pm-slider"><label style="min-width:74px">Horizontal &#8596;</label><input type="range" id="tX" min="0" max="100" value="50"><input type="number" id="tXV" class="pm-num" min="0" max="100" step="1" value="50"><span class="pm-pct">%</span></div>
+        <div class="pm-slider" style="margin-top:6px"><label style="min-width:74px">Vertical &#8597;</label><input type="range" id="tY" min="0" max="100" value="50"><input type="number" id="tYV" class="pm-num" min="0" max="100" step="1" value="50"><span class="pm-pct">%</span></div>
+      </div>
+    </div>
+    <div class="row-check"><input type="checkbox" id="tActive" checked /><label for="tActive">Show on the Trainers page</label></div>
+    <button class="btn btn-red btn-block" id="tSave">Save Trainer</button>
+    <div class="err" id="tErr"></div>
+  </div>
+</div>
+
+<!-- ============================== POPUP MODAL ============================== -->
+<div class="overlay hide" id="pmodal">
+  <div class="modal">
+    <div class="modal-h"><h3 id="pTitle">Add Popup</h3><button class="x" id="pClose">&times;</button></div>
+
+    <div id="pTrialNote" class="hide" style="background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--mut2)">
+      This is the built-in trial/special popup (the two-plan offer card). You can&#39;t delete it or change its image &mdash; just turn it on/off and choose where it shows.
+    </div>
+
+    <div id="pTypeRow" class="hide">
+      <label for="pNewType">Popup Type</label>
+      <select id="pNewType">
+        <option value="custom">Image (flyer / promo graphic)</option>
+        <option value="form">Form / Embed (lead-capture form, e.g. a pasted embed code)</option>
+      </select>
+    </div>
+
+    <div id="pCustomFields">
+      <label>Popup Image (PNG or JPG)</label>
+      <div class="drop" id="pdrop">
+        <div class="drop-ic">&#128196;</div>
+        <div class="drop-t">Click or drag a flyer image</div>
+        <div class="drop-s">Portrait works best &mdash; this shows as-is, no cropping</div>
+        <input type="file" id="pfile" accept="image/*" class="hide" />
+      </div>
+      <label for="pLabel">Internal Label (for your reference only)</label>
+      <input id="pLabel" placeholder="August Flash Sale" />
+      <label for="pLink">Link (optional &mdash; where it goes when clicked)</label>
+      <input id="pLink" placeholder="https://punchpgh.pushpress.com/landing/plans/..." />
+    </div>
+
+    <div id="pFormFields" class="hide">
+      <label for="pFormLabel">Internal Label (for your reference only)</label>
+      <input id="pFormLabel" placeholder="F45-style lead form" />
+      <label for="pEmbed">Embed Code</label>
+      <textarea id="pEmbed" rows="8" placeholder="Paste the embed/iframe/script code here" style="width:100%;font-family:monospace;font-size:12.5px;background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--fg)"></textarea>
+      <div class="drop-s" style="margin-top:6px">Paste whatever embed code you're given (iframe, script, etc.). It renders inside the same popup window as your other popups. Where the submit button sends people is controlled by that embed itself, not by this site.</div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px">
+      <div class="row-check"><input type="checkbox" id="pPopActive" checked /><label for="pPopActive">Active</label></div>
+      <div class="row-check"><input type="checkbox" id="pDesktop" checked /><label for="pDesktop">Show on Desktop</label></div>
+      <div class="row-check"><input type="checkbox" id="pMobile" checked /><label for="pMobile">Show on Mobile</label></div>
+    </div>
+    <label for="pPages">Show On</label>
+    <select id="pPages">
+      <option value="all">All Pages</option>
+      <option value="landing">Landing Page Only</option>
+    </select>
+
+    <button class="btn btn-red btn-block" id="pSave">Save Popup</button>
+    <div class="err" id="pErr"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const CFG = window.PUNCH_CONFIG || {};
+const $ = (id) => document.getElementById(id);
+const esc = (v) => String(v==null?"":v).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const money = (p) => "$" + Number(p||0).toFixed(2);
+const when = (d) => new Date(d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+const slugify = (t) => String(t).toLowerCase().trim().replace(/['’]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,80);
+const posToXY = (pos) => {
+  const raw = String(pos || "center").trim().toLowerCase();
+  let x = 50, y = 50;
+  const pct = raw.match(/(-?\d+(?:\.\d+)?)%\s+(-?\d+(?:\.\d+)?)%/);
+  if (pct) {
+    x = Number(pct[1]); y = Number(pct[2]);
+  } else {
+    if (/\bleft\b/.test(raw)) x = 0;
+    else if (/\bright\b/.test(raw)) x = 100;
+    if (/\btop\b/.test(raw)) y = 0;
+    else if (/\bbottom\b/.test(raw)) y = 100;
+  }
+  x = Math.max(0, Math.min(100, isFinite(x) ? x : 50));
+  y = Math.max(0, Math.min(100, isFinite(y) ? y : 50));
+  return { x, y };
+};
+const toast = (m,bad=false)=>{const t=$("toast");t.textContent=m;t.className="toast show"+(bad?" bad":"");setTimeout(()=>t.className="toast",2600);};
+
+let sb, TAB="apparel";
+let pEdit=null, pFile=null, pImg=null;     // product modal state
+let bEdit=null, bFile=null, bImg=null;     // blog modal state
+
+if (!CFG.SUPABASE_URL || CFG.SUPABASE_URL.includes("YOUR-PROJECT")) {
+  $("loginErr").textContent = "Supabase keys missing in config.js.";
+} else {
+  sb = createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY);
+  sb.auth.getSession().then(({data:{session}}) => { if (session) enterApp(session); });
+  sb.auth.onAuthStateChange((_e,ss)=>{ if (ss) enterApp(ss); });
+}
+
+/* ---------------- AUTH ---------------- */
+$("loginBtn").addEventListener("click", login);
+$("password").addEventListener("keydown", e => { if (e.key==="Enter") login(); });
+async function login(){
+  const email=$("email").value.trim(), password=$("password").value;
+  if(!email||!password){ $("loginErr").textContent="Enter your email and password."; return; }
+  $("loginBtn").disabled=true; $("loginErr").textContent="";
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  $("loginBtn").disabled=false;
+  if (error) $("loginErr").textContent = error.message;
+}
+async function enterApp(session){
+  if (!(await mfaGate())) return;
+  $("loginView").classList.add("hide");
+  $("appView").classList.remove("hide");
+  $("whoami").textContent = session.user.email;
+  loadAll(); loadFreq(); refreshMfa();
+}
+$("signout").addEventListener("click", async ()=>{ await sb.auth.signOut(); location.reload(); });
+
+/* ---------------- TABS ---------------- */
+document.querySelectorAll("[data-tab]").forEach(a=>{
+  a.addEventListener("click", ()=>{
+    TAB = a.dataset.tab;
+    document.querySelectorAll("[data-tab]").forEach(x=>x.classList.toggle("active", x===a));
+    document.querySelectorAll(".sect").forEach(sec=>sec.classList.remove("on"));
+    $("sect-"+TAB).classList.add("on");
+    if(TAB==="trainers") loadTrainers();
+    if(TAB==="terms") loadTerms();
+    if(TAB==="branding") loadBrandingAdmin();
+    if(TAB==="popups") loadPopups();
+  });
+});
+
+/* ---------------- LOAD ---------------- */
+async function loadAll(){ await Promise.all([loadKind("apparel"), loadKind("equipment"), loadPosts()]); }
+
+async function loadKind(kind){
+  const { data, error } = await sb.from("products").select("*").eq("kind", kind)
+    .order("sort",{ascending:true}).order("created_at",{ascending:false});
+  if (error){ toast(error.message,true); return; }
+  const items = data || [];
+  $("stats-"+kind).innerHTML =
+    `<div class="stat"><b>${items.length}</b><span>Total Items</span></div>
+     <div class="stat"><b>${items.filter(i=>i.active).length}</b><span>Visible on Site</span></div>
+     <div class="stat"><b>${new Set(items.map(i=>i.category)).size}</b><span>Categories</span></div>`;
+  const list = $("list-"+kind);
+  if (!items.length){ list.innerHTML = `<div class="empty"><b>Nothing here yet</b>Click &ldquo;Add Item&rdquo; to create your first one.</div>`; return; }
+  list.innerHTML = items.map(p=>`
+    <div class="prow">
+      ${p.image_url ? `<img class="pthumb" src="${esc(p.image_url)}" alt="">` : `<div class="pthumb">P</div>`}
+      <div class="pname">${esc(p.name)}${p.active?"":`<span class="badge-off">Hidden</span>`}<small>${esc((p.description||"").slice(0,70))}</small></div>
+      <div class="pcat">${esc(p.category)}</div>
+      <div class="pprice">${Number(p.price)>0 ? (p.price_from?"<small>from</small> ":"")+money(p.price) : '<small>—</small>'}</div>
+      <div class="pacts">
+        <button class="icon-btn" data-pedit="${p.id}">&#9998;</button>
+        <button class="icon-btn del" data-pdel="${p.id}">&#128465;</button>
+      </div>
+    </div>`).join("");
+  list.querySelectorAll("[data-pedit]").forEach(b=>b.onclick=()=>openProduct(items.find(x=>x.id===b.dataset.pedit), kind));
+  list.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>delProduct(b.dataset.pdel, items.find(x=>x.id===b.dataset.pdel), kind));
+}
+
+async function loadPosts(){
+  const { data, error } = await sb.from("blog_posts").select("*").order("created_at",{ascending:false});
+  if (error){ toast(error.message,true); return; }
+  const posts = data || [];
+  $("stats-blog").innerHTML =
+    `<div class="stat"><b>${posts.length}</b><span>Total Posts</span></div>
+     <div class="stat"><b>${posts.filter(p=>p.published).length}</b><span>Published</span></div>
+     <div class="stat"><b>${new Set(posts.map(p=>p.topic)).size}</b><span>Topics</span></div>`;
+  const list = $("list-blog");
+  if (!posts.length){ list.innerHTML = `<div class="empty"><b>No posts yet</b>Click &ldquo;New Post&rdquo; to write one.</div>`; return; }
+  list.innerHTML = posts.map(p=>`
+    <div class="brow">
+      ${p.image_url ? `<img class="bthumb" src="${esc(p.image_url)}" alt="">` : `<div class="bthumb"></div>`}
+      <div class="pname">${esc(p.title)}
+        <small>${esc(p.topic)} &middot; ${when(p.created_at)}</small></div>
+      <div><span class="pill ${p.published?"live":"draft"}">${p.published?"Published":"Draft"}</span></div>
+      <div class="pacts">
+        <a class="icon-btn" href="/post.html?slug=${encodeURIComponent(p.slug)}" target="_blank" title="View">&#8599;</a>
+        <button class="icon-btn" data-bedit="${p.id}">&#9998;</button>
+        <button class="icon-btn del" data-bdel="${p.id}">&#128465;</button>
+      </div>
+    </div>`).join("");
+  list.querySelectorAll("[data-bedit]").forEach(b=>b.onclick=()=>openPost(posts.find(x=>x.id===b.dataset.bedit)));
+  list.querySelectorAll("[data-bdel]").forEach(b=>b.onclick=()=>delPost(b.dataset.bdel, posts.find(x=>x.id===b.dataset.bdel)));
+}
+
+/* ---------------- IMAGE UPLOAD ---------------- */
+async function upload(file){
+  const ext = (file.name.split(".").pop()||"jpg").toLowerCase();
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const bucket = CFG.IMAGE_BUCKET || "product-images";
+  const { error } = await sb.storage.from(bucket).upload(path, file, { cacheControl:"3600", upsert:false });
+  if (error) throw error;
+  return sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+function paint(dropEl, url){
+  dropEl.querySelectorAll("img,.change").forEach(n=>n.remove());
+  if(!url) return;
+  const img=document.createElement("img"); img.src=url;
+  const tag=document.createElement("div"); tag.className="change"; tag.textContent="Change";
+  dropEl.append(img, tag);
+}
+function wireDrop(dropId, fileId, onPick){
+  const drop=$(dropId), file=$(fileId);
+  drop.onclick=()=>file.click();
+  file.onchange=()=>{ if(file.files[0]) onPick(file.files[0]); };
+  ["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("drag");}));
+  ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("drag");}));
+  drop.addEventListener("drop",e=>{ const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith("image/")) onPick(f); });
+}
+wireDrop("drop","file",  f=>{ pFile=f; paint($("drop"), URL.createObjectURL(f)); });
+wireDrop("bdrop","bfile",f=>{ bFile=f; paint($("bdrop"), URL.createObjectURL(f)); });
+
+/* ---------------- PRODUCT / EQUIPMENT MODAL ---------------- */
+document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>openProduct(null, b.dataset.add));
+$("modalClose").onclick=()=>$("modal").classList.add("hide");
+$("modal").addEventListener("click",e=>{ if(e.target===$("modal")) $("modal").classList.add("hide"); });
+let pKind="apparel";
+function openProduct(p, kind){
+  pKind = kind || p?.kind || "apparel";
+  pEdit = p ? p.id : null; pFile=null; pImg = p ? p.image_url : null;
+  $("modalTitle").textContent = (p?"Edit ":"Add ") + (pKind==="equipment"?"Equipment":"Apparel");
+  $("pName").value=p?p.name:""; $("pPrice").value=p?p.price:""; $("pCat").value=p?p.category:"";
+  $("pDesc").value=p?(p.description||""):""; $("pStripe").value=p?(p.stripe_url||""):"";
+  $("pAmazon").value=p?(p.amazon_url||""):""; $("pPartner").value=p?(p.partner_url||""):"";
+  $("pPartnerLabel").value=p?(p.partner_label||""):""; $("pPartnerNote").value=p?(p.partner_note||""):"";
+  $("pFrom").checked=p?!!p.price_from:false; $("pActive").checked=p?!!p.active:true;
+  $("formErr").textContent=""; paint($("drop"), p?p.image_url:null);
+  $("modal").classList.remove("hide");
+}
+$("saveBtn").onclick=async ()=>{
+  const name=$("pName").value.trim();
+  const price=parseFloat($("pPrice").value||"0");
+  if(!name){ $("formErr").textContent="Needs a name."; return; }
+  $("saveBtn").disabled=true; $("saveBtn").textContent="Saving…"; $("formErr").textContent="";
+  try{
+    let image_url=pImg;
+    if(pFile) image_url = await upload(pFile);
+    const row={ name, price: isNaN(price)?0:price, category:$("pCat").value.trim()||"General",
+      description:$("pDesc").value.trim()||null, stripe_url:$("pStripe").value.trim()||null,
+      price_from:$("pFrom").checked, active:$("pActive").checked, image_url, kind:pKind,
+      amazon_url:$("pAmazon").value.trim()||null,
+      partner_url:$("pPartner").value.trim()||null,
+      partner_label:$("pPartnerLabel").value.trim()||null,
+      partner_note:$("pPartnerNote").value.trim()||null };
+    const { error } = pEdit
+      ? await sb.from("products").update(row).eq("id",pEdit)
+      : await sb.from("products").insert(row);
+    if(error) throw error;
+    $("modal").classList.add("hide"); toast(pEdit?"Item updated":"Item added"); loadKind(pKind);
+  }catch(err){ $("formErr").textContent = err.message || "Something went wrong."; }
+  finally{ $("saveBtn").disabled=false; $("saveBtn").textContent="Save Product"; }
+};
+async function delProduct(id,p,kind){
+  if(!confirm(`Delete “${p?.name||"this item"}”? This can't be undone.`)) return;
+  const { error } = await sb.from("products").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Deleted"); loadKind(kind);
+}
+
+/* ---------------- BLOG MODAL ---------------- */
+$("addPost").onclick=()=>openPost(null);
+$("bClose").onclick=()=>$("bmodal").classList.add("hide");
+$("bmodal").addEventListener("click",e=>{ if(e.target===$("bmodal")) $("bmodal").classList.add("hide"); });
+$("bName").addEventListener("blur",()=>{ if(!$("bSlug").value.trim()) $("bSlug").value = slugify($("bName").value); });
+function openPost(p){
+  bEdit = p ? p.id : null; bFile=null; bImg = p ? p.image_url : null;
+  $("bTitle").textContent = p ? "Edit Post" : "New Post";
+  $("bName").value=p?p.title:""; $("bSlug").value=p?p.slug:""; $("bTopic").value=p?p.topic:"";
+  $("bExcerpt").value=p?(p.excerpt||""):""; $("bBody").value=p?p.body:"";
+  $("bPub").checked=p?!!p.published:true; $("bErr").textContent="";
+  paint($("bdrop"), p?p.image_url:null);
+  $("bmodal").classList.remove("hide");
+}
+$("bSave").onclick=async ()=>{
+  const title=$("bName").value.trim(), body=$("bBody").value.trim();
+  if(!title){ $("bErr").textContent="Needs a title."; return; }
+  if(!body){ $("bErr").textContent="Needs some content."; return; }
+  $("bSave").disabled=true; $("bSave").textContent="Saving…"; $("bErr").textContent="";
+  try{
+    let image_url=bImg;
+    if(bFile) image_url = await upload(bFile);
+    const row={ title, slug: ($("bSlug").value.trim()||slugify(title)),
+      topic:$("bTopic").value.trim()||"Gym News",
+      excerpt:$("bExcerpt").value.trim()||null, body, image_url,
+      published:$("bPub").checked };
+    const { error } = bEdit
+      ? await sb.from("blog_posts").update(row).eq("id",bEdit)
+      : await sb.from("blog_posts").insert(row);
+    if(error) throw error;
+    $("bmodal").classList.add("hide"); toast(bEdit?"Post updated":"Post published"); loadPosts();
+  }catch(err){
+    $("bErr").textContent = /duplicate|unique/i.test(err.message||"")
+      ? "That URL slug is already used — try a different one."
+      : (err.message || "Something went wrong.");
+  }
+  finally{ $("bSave").disabled=false; $("bSave").textContent="Save Post"; }
+};
+async function delPost(id,p){
+  if(!confirm(`Delete “${p?.title||"this post"}”? This can't be undone.`)) return;
+  const { error } = await sb.from("blog_posts").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Post deleted"); loadPosts();
+}
+
+
+/* ---------------- TRAINERS ---------------- */
+let tEdit=null, tFile=null, tImg=null;
+wireDrop("tdrop","tfile", f=>{ tFile=f; paint($("tdrop"), URL.createObjectURL(f)); });
+$("addTrainer") && ($("addTrainer").onclick = ()=>openTrainer(null));
+$("tClose") && ($("tClose").onclick = ()=>$("tmodal").classList.add("hide"));
+$("tmodal") && $("tmodal").addEventListener("click",e=>{ if(e.target===$("tmodal")) $("tmodal").classList.add("hide"); });
+
+async function loadTrainers(){
+  const { data, error } = await sb.from("trainers").select("*").order("sort",{ascending:true}).order("created_at",{ascending:true});
+  if(error){ toast(error.message,true); return; }
+  const items = data||[];
+  $("stats-trainers").innerHTML =
+    `<div class="stat"><b>${items.length}</b><span>Total</span></div>
+     <div class="stat"><b>${items.filter(t=>t.active).length}</b><span>Shown</span></div>`;
+  const list=$("list-trainers");
+  if(!items.length){ list.innerHTML=`<div class="empty"><b>No trainers yet</b>Click &ldquo;Add Trainer&rdquo; to build your roster.</div>`; return; }
+  list.innerHTML = items.map(t=>`
+    <div class="prow">
+      ${t.image_url?`<img class="pthumb" src="${esc(t.image_url)}" alt="">`:`<div class="pthumb">${esc((t.name||"?").slice(0,1))}</div>`}
+      <div class="pname">${esc(t.name)}${t.active?"":`<span class="badge-off">Hidden</span>`}<small>${esc(t.role||"")}</small></div>
+      <div class="pcat"></div><div class="pprice"></div>
+      <div class="pacts">
+        <button class="icon-btn" data-tedit="${t.id}">&#9998;</button>
+        <button class="icon-btn del" data-tdel="${t.id}">&#128465;</button>
+      </div>
+    </div>`).join("");
+  list.querySelectorAll("[data-tedit]").forEach(b=>b.onclick=()=>openTrainer(items.find(x=>x.id===b.dataset.tedit)));
+  list.querySelectorAll("[data-tdel]").forEach(b=>b.onclick=()=>delTrainer(b.dataset.tdel, items.find(x=>x.id===b.dataset.tdel)));
+}
+function openTrainer(t){
+  tEdit=t?t.id:null; tFile=null; tImg=t?t.image_url:null;
+  $("tTitle").textContent=t?"Edit Trainer":"Add Trainer";
+  $("tName").value=t?t.name:""; $("tRole").value=t?(t.role||""):""; $("tActive").checked=t?!!t.active:true;
+  $("tFit").value=t?(t.image_fit||"cover"):"cover";
+  var _xy=posToXY(t?t.image_position:"center"); $("tX").value=_xy.x; $("tY").value=_xy.y; $("tXV").value=_xy.x; $("tYV").value=_xy.y;
+  function tClamp(v){ v=parseInt(v,10); if(isNaN(v))v=50; return Math.max(0,Math.min(100,v)); }
+  function tUpd(src){
+    if(src==="num"){ $("tXV").value=tClamp($("tXV").value); $("tYV").value=tClamp($("tYV").value); $("tX").value=$("tXV").value; $("tY").value=$("tYV").value; }
+    else { $("tXV").value=$("tX").value; $("tYV").value=$("tY").value; }
+    var im=$("tdrop").querySelector("img"); if(im) im.style.objectPosition=$("tX").value+"% "+$("tY").value+"%";
+  }
+  $("tX").oninput=function(){tUpd("slider")}; $("tY").oninput=function(){tUpd("slider")};
+  $("tXV").oninput=function(){tUpd("num")}; $("tYV").oninput=function(){tUpd("num")};
+  $("tErr").textContent=""; paint($("tdrop"), t?t.image_url:null);
+  $("tmodal").classList.remove("hide");
+}
+$("tSave") && ($("tSave").onclick=async ()=>{
+  const name=$("tName").value.trim();
+  if(!name){ $("tErr").textContent="Needs a name."; return; }
+  $("tSave").disabled=true; $("tSave").textContent="Saving…"; $("tErr").textContent="";
+  try{
+    let image_url=tImg; if(tFile) image_url=await upload(tFile);
+    const row={ name, role:$("tRole").value.trim()||null, active:$("tActive").checked, image_url, image_fit:$("tFit").value, image_position:$("tX").value+"% "+$("tY").value+"%" };
+    let { error } = tEdit ? await sb.from("trainers").update(row).eq("id",tEdit) : await sb.from("trainers").insert(row);
+    if(error && /image_fit|image_position|schema cache|column/i.test(error.message||"")){
+      const basic={ name:row.name, role:row.role, active:row.active, image_url:row.image_url };
+      ({ error } = tEdit ? await sb.from("trainers").update(basic).eq("id",tEdit) : await sb.from("trainers").insert(basic));
+    }
+    if(error) throw error;
+    $("tmodal").classList.add("hide"); toast(tEdit?"Trainer updated":"Trainer added"); loadTrainers();
+  }catch(e){ $("tErr").textContent=e.message||"Something went wrong."; }
+  finally{ $("tSave").disabled=false; $("tSave").textContent="Save Trainer"; }
+});
+async function delTrainer(id,t){
+  if(!confirm(`Remove ${t?.name||"this trainer"}?`)) return;
+  const { error } = await sb.from("trainers").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Removed"); loadTrainers();
+}
+
+/* ---------------- POPUPS ---------------- */
+let pEditId=null, pFileSel=null, pImgCur=null, pEditType="custom";
+wireDrop && wireDrop("pdrop","pfile", f=>{ pFileSel=f; paint($("pdrop"), URL.createObjectURL(f)); });
+$("addPopup") && ($("addPopup").onclick = ()=>openPopup(null));
+$("pClose") && ($("pClose").onclick = ()=>$("pmodal").classList.add("hide"));
+$("pmodal") && $("pmodal").addEventListener("click", e=>{ if(e.target===$("pmodal")) $("pmodal").classList.add("hide"); });
+
+async function loadPopups(){
+  const { data, error } = await sb.from("popups").select("*").order("type",{ascending:false}).order("sort",{ascending:true}).order("created_at",{ascending:true});
+  if(error){
+    $("list-popups").innerHTML = `<div class="empty"><b>Popups could not be loaded</b>The current site popup remains unchanged. Please reload or check the Supabase connection.</div>`;
+    return;
+  }
+  const items = data||[];
+  const list = $("list-popups");
+  if(!items.length){ list.innerHTML = `<div class="empty"><b>No popups yet</b>Click &ldquo;Add Popup&rdquo; to create one.</div>`; return; }
+  list.innerHTML = items.map(p=>{
+    const isTrial = p.type==="trial";
+    const isForm = p.type==="form";
+    const label = isTrial ? "Trial Offer Popup (built-in)" : (p.title || (isForm ? "Untitled form popup" : "Untitled popup"));
+    const where = p.pages==="landing" ? "Landing page only" : "All pages";
+    const devices = (p.show_desktop!==false?"Desktop":"") + (p.show_desktop!==false && p.show_mobile!==false ? " + " : "") + (p.show_mobile!==false?"Mobile":"") || "Hidden everywhere";
+    return `
+    <div class="prow">
+      ${(!isTrial && !isForm && p.image_url)?`<img class="pthumb" src="${esc(p.image_url)}" alt="">`:`<div class="pthumb">${isTrial?"&#127942;":(isForm?"&#128203;":"&#128196;")}</div>`}
+      <div class="pname">${esc(label)}${isForm?` <span class="badge-off" style="background:var(--ink2);color:var(--mut2)">Form</span>`:""}${p.active?"":`<span class="badge-off">Off</span>`}<small>${esc(where)} &middot; ${esc(devices)}</small></div>
+      <div class="pcat"></div><div class="pprice"></div>
+      <div class="pacts">
+        <button class="icon-btn" data-pedit="${p.id}">&#9998;</button>
+        ${isTrial?"":`<button class="icon-btn del" data-pdel="${p.id}">&#128465;</button>`}
+      </div>
+    </div>`;
+  }).join("");
+  list.querySelectorAll("[data-pedit]").forEach(b=>b.onclick=()=>openPopup(items.find(x=>x.id===b.dataset.pedit)));
+  list.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>delPopup(b.dataset.pdel, items.find(x=>x.id===b.dataset.pdel)));
+}
+
+function openPopup(p){
+  pEditId = p ? p.id : null;
+  pEditType = p ? p.type : "custom";
+  pFileSel = null; pImgCur = p ? p.image_url : null;
+  $("pTitle").textContent = p ? (pEditType==="trial" ? "Edit Trial Popup" : "Edit Popup") : "Add Popup";
+  $("pTrialNote").classList.toggle("hide", pEditType!=="trial");
+  $("pTypeRow").classList.toggle("hide", !!p);
+  $("pNewType").value = pEditType==="form" ? "form" : "custom";
+  $("pCustomFields").classList.toggle("hide", pEditType==="trial" || pEditType==="form");
+  $("pFormFields").classList.toggle("hide", pEditType!=="form");
+  $("pLabel").value = p ? (p.title||"") : "";
+  $("pFormLabel").value = p ? (p.title||"") : "";
+  $("pLink").value = p ? (p.link_url||"") : "";
+  $("pEmbed").value = p ? (p.embed_html||"") : "";
+  $("pPopActive").checked = p ? !!p.active : true;
+  $("pDesktop").checked = p ? p.show_desktop!==false : true;
+  $("pMobile").checked = p ? p.show_mobile!==false : true;
+  $("pPages").value = p ? (p.pages||"all") : "all";
+  $("pErr").textContent = "";
+  paint($("pdrop"), p?p.image_url:null);
+  $("pmodal").classList.remove("hide");
+}
+$("pNewType") && ($("pNewType").onchange = ()=>{
+  pEditType = $("pNewType").value;
+  $("pCustomFields").classList.toggle("hide", pEditType==="form");
+  $("pFormFields").classList.toggle("hide", pEditType!=="form");
+});
+
+$("pSave") && ($("pSave").onclick = async ()=>{
+  $("pSave").disabled=true; $("pSave").textContent="Saving…"; $("pErr").textContent="";
+  try{
+    const row = {
+      active: $("pPopActive").checked,
+      show_desktop: $("pDesktop").checked,
+      show_mobile: $("pMobile").checked,
+      pages: $("pPages").value
+    };
+    if(pEditType==="form"){
+      const embed_html = $("pEmbed").value.trim();
+      if(!embed_html){ $("pErr").textContent="Paste an embed code for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
+      row.title = $("pFormLabel").value.trim() || null;
+      row.embed_html = embed_html;
+      row.type = "form";
+    } else if(pEditType!=="trial"){
+      let image_url = pImgCur;
+      if(pFileSel) image_url = await upload(pFileSel);
+      if(!image_url){ $("pErr").textContent="Add an image for this popup."; $("pSave").disabled=false; $("pSave").textContent="Save Popup"; return; }
+      row.title = $("pLabel").value.trim() || null;
+      row.link_url = $("pLink").value.trim() || null;
+      row.image_url = image_url;
+      row.type = "custom";
+    }
+    const { error } = pEditId
+      ? await sb.from("popups").update(row).eq("id",pEditId)
+      : await sb.from("popups").insert(Object.assign({type:pEditType}, row));
+    if(error) throw error;
+    $("pmodal").classList.add("hide"); toast(pEditId?"Popup updated":"Popup added"); loadPopups();
+  }catch(err){ $("pErr").textContent = err.message || "Something went wrong."; }
+  finally{ $("pSave").disabled=false; $("pSave").textContent="Save Popup"; }
+});
+
+async function delPopup(id,p){
+  if(!confirm(`Delete "${p?.title||"this popup"}"? This can't be undone.`)) return;
+  const { error } = await sb.from("popups").delete().eq("id",id);
+  if(error){ toast(error.message,true); return; }
+  toast("Deleted"); loadPopups();
+}
+
+
+/* ---------------- BRANDING (logo + favicon + share image) ---------------- */
+let logoFileSel=null, favFileSel=null, ogFileSel=null, logoCur=null, favCur=null, ogCur=null;
+wireDrop && wireDrop("logoDrop","logoFile", f=>{ logoFileSel=f; paint($("logoDrop"), URL.createObjectURL(f)); });
+wireDrop && wireDrop("favDrop","favFile", f=>{ favFileSel=f; paint($("favDrop"), URL.createObjectURL(f)); });
+wireDrop && wireDrop("ogDrop","ogFile", f=>{ ogFileSel=f; paint($("ogDrop"), URL.createObjectURL(f)); });
+async function loadBrandingAdmin(){
+  try{
+    const { data } = await sb.from("site_settings").select("key,value").in("key",["logo_url","favicon_url","og_image_url","deploy_hook_url"]);
+    (data||[]).forEach(r=>{
+      if(r.key==="logo_url" && r.value && r.value.url){ logoCur=r.value.url; paint($("logoDrop"), r.value.url); }
+      if(r.key==="favicon_url" && r.value && r.value.url){ favCur=r.value.url; paint($("favDrop"), r.value.url); }
+      if(r.key==="og_image_url" && r.value && r.value.url){ ogCur=r.value.url; paint($("ogDrop"), r.value.url); }
+      if(r.key==="deploy_hook_url" && r.value && r.value.url){ $("deployHookUrl").value = r.value.url; }
+    });
+    if(!logoCur) paint($("logoDrop"), "/assets/punch-logo-1.png");
+    if(!favCur) paint($("favDrop"), "/assets/favicon.svg");
+  }catch(e){ $("brandErr").textContent=e.message||""; }
+}
+$("brandSave") && ($("brandSave").onclick = async ()=>{
+  $("brandSave").disabled=true; $("brandSave").textContent="Saving…"; $("brandErr").textContent="";
+  try{
+    let logo_url=logoCur, favicon_url=favCur, og_image_url=ogCur;
+    if(logoFileSel) logo_url=await upload(logoFileSel);
+    if(favFileSel)  favicon_url=await upload(favFileSel);
+    if(ogFileSel)   og_image_url=await upload(ogFileSel);
+    const rows=[];
+    if(logo_url) rows.push({ key:"logo_url", value:{ url:logo_url } });
+    if(favicon_url) rows.push({ key:"favicon_url", value:{ url:favicon_url } });
+    if(og_image_url) rows.push({ key:"og_image_url", value:{ url:og_image_url } });
+    if(rows.length){ const { error } = await sb.from("site_settings").upsert(rows, { onConflict:"key" }); if(error) throw error; }
+    toast("Branding saved. Logo & favicon are live; the share image applies on your next deploy.");
+  }catch(e){ $("brandErr").textContent=e.message||"Save failed."; }
+  finally{ $("brandSave").disabled=false; $("brandSave").textContent="Save Branding"; }
+});
+
+$("saveDeployHook") && ($("saveDeployHook").onclick = async ()=>{
+  const url = $("deployHookUrl").value.trim();
+  const hint = $("deployHookHint");
+  hint.style.color="var(--mut)"; hint.textContent="Saving…";
+  try{
+    const { error } = await sb.from("site_settings").upsert({ key:"deploy_hook_url", value:{ url } }, { onConflict:"key" });
+    if(error) throw error;
+    hint.style.color="#8fe3a0"; hint.textContent="Saved ✓";
+  }catch(e){ hint.style.color="#ff8a80"; hint.textContent = e.message||"Save failed."; }
+});
+
+/* ---------------- PUBLISH (Render Deploy Hook) ---------------- */
+$("publishBtn") && ($("publishBtn").onclick = async ()=>{
+  const hint = $("publishHint");
+  $("publishBtn").disabled = true;
+  const original = $("publishBtn").innerHTML;
+  $("publishBtn").innerHTML = "&#128640; Publishing…";
+  hint.style.color = "var(--mut)"; hint.textContent = "";
+  try{
+    const { data, error } = await sb.from("site_settings").select("value").eq("key","deploy_hook_url").maybeSingle();
+    if (error) throw error;
+    const url = data && data.value && data.value.url;
+    if (!url){
+      hint.style.color = "#ff8a80";
+      hint.textContent = "No deploy hook set yet — add one under Branding.";
+      return;
+    }
+    await fetch(url, { method: "POST", mode: "no-cors" });
+    hint.style.color = "#8fe3a0";
+    hint.textContent = "Publish requested — usually live in 2\u20133 min. Check Render for status.";
+  }catch(e){
+    hint.style.color = "#ff8a80";
+    hint.textContent = "Couldn't reach the hook. Trigger the deploy directly in Render instead.";
+  }finally{
+    $("publishBtn").disabled = false;
+    $("publishBtn").innerHTML = original;
+  }
+});
+
+/* ---------------- TERMS & CONDITIONS ---------------- */
+async function loadTerms(){
+  try{
+    const { data } = await sb.from("site_settings").select("value").eq("key","terms_html").maybeSingle();
+    let html = data && data.value && (data.value.html || data.value.text) || "";
+    if(!html){
+      const live = await fetch("/terms-conditions.html", { cache:"no-store" });
+      if(live.ok){
+        const doc = new DOMParser().parseFromString(await live.text(), "text/html");
+        const body = doc.getElementById("terms-body");
+        if(body) html = body.innerHTML.trim();
+      }
+    }
+    $("termsText").value = html;
+  }catch(e){ $("termsErr").textContent=e.message||"Could not load."; }
+}
+$("termsSave") && ($("termsSave").onclick = async ()=>{
+  $("termsSave").disabled=true; $("termsSave").textContent="Saving…"; $("termsErr").textContent="";
+  try{
+    const html = $("termsText").value;
+    const { error } = await sb.from("site_settings").upsert({ key:"terms_html", value:{ html } }, { onConflict:"key" });
+    if(error) throw error;
+    toast("Terms updated — live on the site");
+  }catch(e){ $("termsErr").textContent=e.message||"Save failed."; }
+  finally{ $("termsSave").disabled=false; $("termsSave").textContent="Save Terms"; }
+});
+
+async function loadFreq(){
+  const { data } = await sb.from("site_settings").select("value").eq("key","blog").maybeSingle();
+  const n = data && data.value && Number(data.value.posts_per_week) ? Number(data.value.posts_per_week) : 1;
+  $("freq").value = String(Math.min(3, Math.max(1, n)));
+}
+$("saveFreq").onclick = async () => {
+  const n = Math.min(3, Math.max(1, parseInt($("freq").value,10) || 1));
+  $("saveFreq").disabled = true;
+  const { error } = await sb.from("site_settings")
+    .upsert({ key:"blog", value:{ posts_per_week:n }, updated_at:new Date().toISOString() }, { onConflict:"key" });
+  $("saveFreq").disabled = false;
+  toast(error ? error.message : `Saved — ${n} post${n>1?"s":""} per week`, !!error);
+};
+
+/* ---------------- TWO-FACTOR (TOTP) ---------------- */
+let enrollId = null;
+async function refreshMfa(){
+  try{
+    const { data, error } = await sb.auth.mfa.listFactors();
+    if (error) throw error;
+    const verified = (data.totp || []).filter(f => f.status === "verified");
+    const on = verified.length > 0;
+    $("mfaState").textContent = on ? "Enabled" : "Not enabled";
+    $("mfaState").className = "pill " + (on ? "live" : "draft");
+    $("mfaStart").classList.toggle("hide", on);
+    $("mfaOff").classList.toggle("hide", !on);
+    $("mfaOff").dataset.factor = on ? verified[0].id : "";
+  }catch(e){
+    $("mfaState").textContent = "Unavailable";
+    $("mfaState").className = "pill";
+  }
+}
+$("mfaStart").onclick = async () => {
+  $("mfaErr").textContent = "";
+  const { data, error } = await sb.auth.mfa.enroll({ factorType:"totp", friendlyName:"Punch Admin " + Date.now() });
+  if (error){ toast(error.message, true); return; }
+  enrollId = data.id;
+  $("qrWrap").innerHTML = data.totp.qr_code
+    ? (data.totp.qr_code.startsWith("<svg") ? data.totp.qr_code : `<img src="${data.totp.qr_code}" alt="2FA QR code" style="width:190px;height:190px">`)
+    : "";
+  $("mfaSecret").textContent = data.totp.secret || "";
+  $("mfaEnroll").classList.remove("hide");
+  $("mfaStart").classList.add("hide");
+};
+$("mfaCancel").onclick = async () => {
+  if (enrollId) { try { await sb.auth.mfa.unenroll({ factorId: enrollId }); } catch(e){} }
+  enrollId = null; $("mfaEnroll").classList.add("hide"); refreshMfa();
+};
+$("mfaVerify").onclick = async () => {
+  const code = $("mfaCode").value.trim();
+  if (code.length !== 6){ $("mfaErr").textContent = "Enter the 6-digit code."; return; }
+  $("mfaVerify").disabled = true;
+  try{
+    const ch = await sb.auth.mfa.challenge({ factorId: enrollId });
+    if (ch.error) throw ch.error;
+    const v = await sb.auth.mfa.verify({ factorId: enrollId, challengeId: ch.data.id, code });
+    if (v.error) throw v.error;
+    enrollId = null; $("mfaEnroll").classList.add("hide"); $("mfaCode").value="";
+    toast("Two-factor is on"); refreshMfa();
+  }catch(e){ $("mfaErr").textContent = e.message || "That code didn't work."; }
+  finally{ $("mfaVerify").disabled = false; }
+};
+$("mfaOff").onclick = async () => {
+  const id = $("mfaOff").dataset.factor;
+  if (!id) return;
+  if (!confirm("Turn off two-factor authentication for this account?")) return;
+  const { error } = await sb.auth.mfa.unenroll({ factorId: id });
+  toast(error ? error.message : "Two-factor turned off", !!error);
+  refreshMfa();
+};
+
+async function mfaGate(){
+  try{
+    const { data, error } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (error) return true;
+    if (data.nextLevel === "aal2" && data.nextLevel !== data.currentLevel){
+      $("mfaPrompt").classList.remove("hide");
+      $("loginBtn").classList.add("hide");
+      $("loginErr").textContent = "Enter the code from your authenticator app.";
+      return false;
+    }
+  }catch(e){}
+  return true;
+}
+$("loginVerify").onclick = async () => {
+  const code = $("loginCode").value.trim();
+  if (code.length !== 6){ $("loginErr").textContent = "Enter the 6-digit code."; return; }
+  $("loginVerify").disabled = true;
+  try{
+    const { data: f } = await sb.auth.mfa.listFactors();
+    const factor = (f.totp || []).find(x => x.status === "verified");
+    const ch = await sb.auth.mfa.challenge({ factorId: factor.id });
+    if (ch.error) throw ch.error;
+    const v = await sb.auth.mfa.verify({ factorId: factor.id, challengeId: ch.data.id, code });
+    if (v.error) throw v.error;
+    const { data:{ session } } = await sb.auth.getSession();
+    $("mfaPrompt").classList.add("hide");
+    enterApp(session);
+  }catch(e){ $("loginErr").textContent = e.message || "That code didn't work."; }
+  finally{ $("loginVerify").disabled = false; }
+};
+
+</script>
+</body>
+</html>

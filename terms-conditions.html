@@ -11,6 +11,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <link rel="canonical" href="https://punchpgh.com/terms-conditions" />
 <link rel="stylesheet" href="/punch.css" />
+<script src="/config.js"></script>
 <script src="/nav.js" defer></script>
 <style>
 #plp #terms-body h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:34px;text-transform:uppercase;margin:0 0 18px;color:#1a1a1d}
@@ -199,6 +200,20 @@ Date___________________</p>
  </div>
 </div>
 </div>
+<script>
+(function(){
+  var cfg=window.PUNCH_CONFIG||{};
+  if(!cfg.SUPABASE_URL||!cfg.SUPABASE_ANON_KEY)return;
+  fetch(cfg.SUPABASE_URL+"/rest/v1/site_settings?key=eq.terms_html&select=value",{
+    headers:{apikey:cfg.SUPABASE_ANON_KEY,Authorization:"Bearer "+cfg.SUPABASE_ANON_KEY}
+  }).then(function(r){if(!r.ok)throw new Error("terms unavailable");return r.json();})
+    .then(function(rows){
+      var value=rows&&rows[0]&&rows[0].value;
+      var html=value&&(value.html||value.text);
+      if(html)document.getElementById("terms-body").innerHTML=html;
+    }).catch(function(){/* Keep the current code-owned terms as the fallback. */});
+})();
+</script>
 <script src="/media.js" defer></script>
 </body>
 </html>
