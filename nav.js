@@ -41,7 +41,11 @@
     if (path === "/punch-ad-trials" || path === "/punch-ad-trials.html") {
       var adTitle = document.querySelector('#punch-trial-hero h1');
       var adSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(adTitle, adSub, '<span class="hero-line-white">Results-Based</span><span class="hero-line-red">Workout.</span>', 'Lose Weight. Burn Calories. Build Real Strength.');
+      var adHero = document.querySelector('#punch-trial-hero');
+      /* The Google Ads landing-page hero is approved, code-owned content. */
+      if (!adHero || adHero.getAttribute('data-content-locked') !== 'true') {
+        setHeroMessage(adTitle, adSub, '<span class="hero-line-white">Your PUNCH Journey</span><span class="hero-line-red">Begins Here.</span>', 'Lose Weight. Burn Calories. Build Real Strength.');
+      }
     }
 
     if (path === "/free-trial" || path === "/free-trial.html") {
