@@ -35,19 +35,19 @@
     if (path === "/" || path === "/index.html") {
       var homeTitle = document.querySelector('.vhero-title[data-text="hero.headline"], .vhero-title');
       var homeSub = document.querySelector('.vhero-sub[data-text="hero.subtext"], .vhero-sub');
-      setHeroMessage(homeTitle, homeSub, 'Get In The Best<br>Shape Of Your Life.', 'Lose Weight. Build Strength. Gain Confidence.');
+      setHeroMessage(homeTitle, homeSub, '<span class="hero-line-white">Get In The Best</span><span class="hero-line-red">Shape Of Your Life.</span>', 'Lose Weight. Build Strength. Gain Confidence.');
     }
 
     if (path === "/punch-ad-trials" || path === "/punch-ad-trials.html") {
       var adTitle = document.querySelector('#punch-trial-hero h1');
       var adSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(adTitle, adSub, '<span>Results-Based</span><span>Workout.</span>', 'Lose Weight. Burn Calories. Build Real Strength.');
+      setHeroMessage(adTitle, adSub, '<span class="hero-line-white">Results-Based</span><span class="hero-line-red">Workout.</span>', 'Lose Weight. Burn Calories. Build Real Strength.');
     }
 
     if (path === "/free-trial" || path === "/free-trial.html") {
       var freeTitle = document.querySelector('#punch-trial-hero h1');
       var freeSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(freeTitle, freeSub, '<span>Get In The Best</span><span>Shape Of Your Life.</span>', 'Lose Weight. Build Strength. Gain Confidence.');
+      setHeroMessage(freeTitle, freeSub, '<span class="hero-line-white">Get In The Best</span><span class="hero-line-red">Shape Of Your Life.</span>', 'Lose Weight. Build Strength. Gain Confidence.');
     }
   }
 
