@@ -19,14 +19,14 @@
     var path = window.location.pathname.replace(/\/$/, "") || "/";
     var support = "Boxing for cardio. Strength training for results.";
 
-    function setHeroMessage(title, sub, headline){
+    function setHeroMessage(title, sub, headline, supportingText){
       if (title) {
         title.innerHTML = headline;
         title.classList.add("hero-one-color");
         title.removeAttribute("data-text");
       }
       if (sub) {
-        sub.textContent = support;
+        sub.textContent = supportingText || support;
         sub.classList.add("hero-support-title");
         sub.removeAttribute("data-text");
       }
@@ -35,19 +35,19 @@
     if (path === "/" || path === "/index.html") {
       var homeTitle = document.querySelector('.vhero-title[data-text="hero.headline"], .vhero-title');
       var homeSub = document.querySelector('.vhero-sub[data-text="hero.subtext"], .vhero-sub');
-      setHeroMessage(homeTitle, homeSub, 'A Better Way to<br>Work Out.');
+      setHeroMessage(homeTitle, homeSub, 'Get In The Best<br>Shape Of Your Life.', 'Lose Weight. Build Strength. Gain Confidence.');
     }
 
     if (path === "/punch-ad-trials" || path === "/punch-ad-trials.html") {
       var adTitle = document.querySelector('#punch-trial-hero h1');
       var adSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(adTitle, adSub, '<span>Results-Based</span><span>Workout.</span>');
+      setHeroMessage(adTitle, adSub, '<span>Results-Based</span><span>Workout.</span>', 'Lose Weight. Burn Calories. Build Real Strength.');
     }
 
     if (path === "/free-trial" || path === "/free-trial.html") {
       var freeTitle = document.querySelector('#punch-trial-hero h1');
       var freeSub = document.querySelector('#punch-trial-hero .pth-sub');
-      setHeroMessage(freeTitle, freeSub, '<span>Come Experience</span><span>PUNCH.</span>');
+      setHeroMessage(freeTitle, freeSub, '<span>Get In The Best</span><span>Shape Of Your Life.</span>', 'Lose Weight. Build Strength. Gain Confidence.');
     }
   }
 
