@@ -119,8 +119,8 @@
 
 
   // ---- Trial-offer popup -------------------------------------------------
-  var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b";
-  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40";
+  var FREE = "https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b/login";
+  var PACK = "https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40/login";
   var POP_KEY = "punch_popup_seen_v2";
   var POP_DELAY = 4000;
 
