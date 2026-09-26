@@ -123,28 +123,6 @@
     </div>
   </section>
 
-  <div class="s off ad-trials" id="trial-options" data-section="trialcta">
-    <div class="si" style="text-align:center;margin-bottom:8px">
-      <span class="lbl">Two Ways to Start</span>
-      <h2 class="h2">CHOOSE YOUR <span>TRIAL.</span></h2>
-      <p class="sub" style="margin:0 auto">Choose the experience that fits you, then complete the short form below. No experience required. No long-term commitment.</p>
-    </div>
-    <div class="trial-cta"><div class="trial-cards">
-      <div class="trial-card">
-        <div class="trial-lbl">First Workout</div><div class="trial-price">Free</div>
-        <div class="trial-desc">Local Residents w/ID · Use Within 7 Days</div><span class="trial-chip">Best for Your First Class</span><div class="trial-div"></div>
-        <ul class="trial-perks"><li><span class="trial-check">✓</span> Try One Full PUNCH Workout</li><li><span class="trial-check">✓</span> Choose Any Class Format</li><li><span class="trial-check">✓</span> Meet Your Coaches &amp; Experience the Gym</li><li><span class="trial-check">✓</span> No Credit Card Required</li></ul>
-        <a href="#lead-form" class="trial-btn">Grab My Free Trial →</a><p class="trial-note">Zero cost · zero commitment</p>
-      </div>
-      <div class="trial-card feat">
-        <div class="trial-best">⚡ Best PUNCH Experience</div><div class="trial-lbl">Seven Days Unlimited</div><div class="trial-price">$19.99</div>
-        <div class="trial-desc">Local Residents w/ID · One Time</div><span class="trial-chip">Unlimited Classes · 7 Days</span><div class="trial-div"></div>
-        <ul class="trial-perks"><li><span class="trial-check">✓</span> Seven Days of Unlimited Classes</li><li><span class="trial-check">✓</span> Experience Every Class Format</li><li><span class="trial-check">✓</span> Find the Classes That Fit Your Goals</li><li><span class="trial-check">✓</span> One-Time Payment · No Auto-Renew</li></ul>
-        <a href="#lead-form" class="trial-btn">Grab My Unlimited Trial →</a><p class="trial-note">One-time payment · no auto-renew</p>
-      </div>
-    </div></div>
-  </div>
-
   <div class="s off ad-lead" id="lead-form" data-section="lead-form">
     <div class="si ad-lead-intro" style="text-align:center;max-width:700px">
       <span class="lbl">Takes Less Than 30 Seconds</span>
@@ -195,6 +173,28 @@
         <div class="workout-body"><div class="workout-tag">HIIT Circuit · 45–55 Min</div><div class="workout-name">Circuit Training</div><p class="workout-desc">Air bikes, rowers, circuits, boxing stations, and full-body intervals that keep you moving.</p><div class="workout-stat"><span>High Intensity</span> <b>Full Body</b></div></div>
       </div>
     </div>
+  </div>
+
+  <div class="s off ad-trials" id="trial-options" data-section="trialcta">
+    <div class="si" style="text-align:center;margin-bottom:8px">
+      <span class="lbl">Ready to Start?</span>
+      <h2 class="h2">CHOOSE YOUR <span>TRIAL.</span></h2>
+      <p class="sub" style="margin:0 auto">Start with one workout completely free—or experience every PUNCH class format with seven unlimited days for $19.99.</p>
+    </div>
+    <div class="trial-cta"><div class="trial-cards">
+      <div class="trial-card">
+        <div class="trial-lbl">First Workout</div><div class="trial-price">Free</div>
+        <div class="trial-desc">Local Residents w/ID · Use Within 7 Days</div><span class="trial-chip">Best for Your First Class</span><div class="trial-div"></div>
+        <ul class="trial-perks"><li><span class="trial-check">✓</span> Try One Full PUNCH Workout</li><li><span class="trial-check">✓</span> Choose Any Class Format</li><li><span class="trial-check">✓</span> Meet Your Coaches &amp; Experience the Gym</li><li><span class="trial-check">✓</span> No Credit Card Required</li></ul>
+        <a href="#lead-form" class="trial-btn">Grab My Free Trial →</a><p class="trial-note">Zero cost · zero commitment</p>
+      </div>
+      <div class="trial-card feat">
+        <div class="trial-best">⚡ Best PUNCH Experience</div><div class="trial-lbl">Seven Days Unlimited</div><div class="trial-price">$19.99</div>
+        <div class="trial-desc">Local Residents w/ID · One Time</div><span class="trial-chip">Unlimited Classes · 7 Days</span><div class="trial-div"></div>
+        <ul class="trial-perks"><li><span class="trial-check">✓</span> Seven Days of Unlimited Classes</li><li><span class="trial-check">✓</span> Experience Every Class Format</li><li><span class="trial-check">✓</span> Find the Classes That Fit Your Goals</li><li><span class="trial-check">✓</span> One-Time Payment · No Auto-Renew</li></ul>
+        <a href="#lead-form" class="trial-btn">Grab My Unlimited Trial →</a><p class="trial-note">One-time payment · no auto-renew</p>
+      </div>
+    </div></div>
   </div>
 
 
@@ -260,8 +260,12 @@
     var feel=document.querySelector('#plp [data-section="class-feel"]');
     var steps=document.querySelector('#plp [data-section="trial-steps"]');
     var form=document.querySelector('#plp [data-section="lead-form"]');
+    var training=document.querySelector('#plp [data-section="threeclasses"]');
+    var trials=document.querySelector('#plp [data-section="trialcta"]');
     if(proof&&feel&&proof.nextElementSibling!==feel)proof.insertAdjacentElement('afterend',feel);
+    if(feel&&form&&feel.nextElementSibling!==form)feel.insertAdjacentElement('afterend',form);
     if(steps&&form&&steps.previousElementSibling!==form)form.insertAdjacentElement('afterend',steps);
+    if(training&&trials&&training.nextElementSibling!==trials)training.insertAdjacentElement('afterend',trials);
   }
   function lockAdPage(){lockAdTraining();lockApprovedAdContent();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',lockAdPage,{once:true});else lockAdPage();
