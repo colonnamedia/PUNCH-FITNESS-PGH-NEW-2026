@@ -350,12 +350,16 @@ window.PUNCH_CONFIG = {
     var community = plp.querySelector('[data-section="combined-header"]');
     var heroStmt = plp.querySelector('[data-section="hero-stmt"]');
     var trainingSection = plp.querySelector('[data-section="fight-train-sweat"]');
+    var classPreview = plp.querySelector('[data-section="class-look"]');
+    var programs = plp.querySelector('[data-section="programs"]');
 
     var cursor = hero;
     if (cursor && stats) cursor = moveAfter(stats, cursor);
     if (cursor && community) cursor = moveAfter(community, cursor);
     if (cursor && heroStmt) cursor = moveAfter(heroStmt, cursor);
     if (cursor && trainingSection) cursor = moveAfter(trainingSection, cursor);
+    if (cursor && classPreview) cursor = moveAfter(classPreview, cursor);
+    if (cursor && programs) cursor = moveAfter(programs, cursor);
 
     var slots = plp.querySelector(".training-top-slots");
     if (slots) {
@@ -405,7 +409,6 @@ window.PUNCH_CONFIG = {
       "hear it from them",
       "what people are saying after their first week",
       "what makes us different",
-      "more ways to train",
       "a workout you'll actually look forward to"
     ].forEach(function (phrase) {
       var section = topLevelByText(plp, phrase);
