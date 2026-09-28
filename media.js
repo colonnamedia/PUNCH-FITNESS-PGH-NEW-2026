@@ -30,8 +30,8 @@
       var sub = intro.querySelector(".sub");
       var cta = document.createElement("a");
       cta.className = "ad-reels-cta";
-      cta.href = "#lead-form";
-      cta.textContent = "Try Your First Punch Class →";
+      cta.href = (path === "/free-trial" || path === "/free-trial.html") ? "#trial-options" : "#lead-form";
+      cta.textContent = (path === "/free-trial" || path === "/free-trial.html") ? "Choose Your Trial →" : "Try Your First Punch Class →";
       if (sub) sub.insertAdjacentElement("afterend", cta);
       else intro.appendChild(cta);
     }
