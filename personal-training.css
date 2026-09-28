@@ -1,0 +1,194 @@
+#personal-training-page{--red:#d92b2b;--red-dark:#b82020;--ink:#111;--muted:#686868;font-family:'Barlow',Arial,sans-serif;color:var(--ink);background:#fff;overflow:hidden}
+#personal-training-page *{box-sizing:border-box}
+#personal-training-page h1,#personal-training-page h2,#personal-training-page h3,#personal-training-page p,#personal-training-page blockquote{margin:0}
+#personal-training-page .pt-wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
+#personal-training-page .pt-centered{text-align:center}
+#personal-training-page .pt-label{margin-bottom:12px;color:var(--red);font-size:12px;font-weight:800;letter-spacing:.28em;text-transform:uppercase}
+#personal-training-page h2{font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(42px,6vw,72px);font-weight:900;letter-spacing:-.02em;line-height:.94;text-transform:uppercase}
+#personal-training-page h2 span{color:var(--red)}
+#personal-training-page .pt-lead{max-width:760px;margin:22px auto 0;color:var(--muted);font-size:18px;line-height:1.65}
+#personal-training-page .pt-section{padding:104px 0}
+#personal-training-page .pt-actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
+#personal-training-page .pt-btn{display:inline-flex;min-height:54px;align-items:center;justify-content:center;padding:0 28px;border:0;border-radius:8px;font:800 13px 'Barlow',Arial,sans-serif;letter-spacing:.12em;text-align:center;text-decoration:none;text-transform:uppercase;transition:transform .2s,background .2s,border-color .2s}
+#personal-training-page .pt-btn:hover{transform:translateY(-2px)}
+#personal-training-page .pt-btn-red{background:var(--red);color:#fff}
+#personal-training-page .pt-btn-red:hover{background:var(--red-dark)}
+#personal-training-page .pt-btn-dark{background:#111;color:#fff}
+#personal-training-page .pt-btn-white{background:#fff;color:#111}
+#personal-training-page .pt-btn-ghost{border:2px solid rgba(255,255,255,.5);background:transparent;color:#fff}
+
+#personal-training-page .pt-hero{position:relative;min-height:calc(100svh - 90px);display:flex;align-items:center;background:#050505;isolation:isolate}
+#personal-training-page .pt-hero-image{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:center}
+#personal-training-page .pt-hero-shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(0,0,0,.97) 0%,rgba(0,0,0,.87) 36%,rgba(0,0,0,.26) 74%,rgba(0,0,0,.12) 100%),linear-gradient(0deg,rgba(0,0,0,.7),transparent 45%)}
+#personal-training-page .pt-hero-content{width:min(1180px,calc(100% - 96px));margin:0 auto;padding:96px 0 76px;color:#fff}
+#personal-training-page .pt-kicker{margin-bottom:18px;color:#ff4a4a;font-size:13px;font-weight:800;letter-spacing:.3em;text-transform:uppercase}
+#personal-training-page .pt-hero h1{max-width:820px;font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(58px,7.7vw,112px);font-weight:900;letter-spacing:-.025em;line-height:.86;text-transform:uppercase;text-wrap:balance}
+#personal-training-page .pt-hero h1 span{color:var(--red)}
+#personal-training-page .pt-hero-support{margin-top:28px;font-family:'Barlow Condensed',Arial,sans-serif;font-size:clamp(27px,3vw,42px);font-weight:800;line-height:1.05;text-transform:uppercase}
+#personal-training-page .pt-hero-copy{max-width:620px;margin-top:16px;color:rgba(255,255,255,.72);font-size:17px;font-weight:500;line-height:1.55}
+#personal-training-page .pt-band{display:grid;grid-template-columns:repeat(4,1fr);background:var(--red);color:#fff}
+#personal-training-page .pt-band div{padding:25px 18px;border-right:1px solid rgba(255,255,255,.2);text-align:center}
+#personal-training-page .pt-band div:last-child{border-right:0}
+#personal-training-page .pt-band b{display:block;font:900 34px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-band span{display:block;margin-top:6px;color:rgba(255,255,255,.75);font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+
+#personal-training-page .pt-consult{padding:92px 0;background:#f4f2ef}
+#personal-training-page .pt-consult-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(520px,1.15fr);gap:58px;align-items:start}
+#personal-training-page .pt-consult-copy{position:sticky;top:120px;padding-top:20px}
+#personal-training-page .pt-consult-copy h2{font-size:clamp(43px,5.1vw,68px)}
+#personal-training-page .pt-consult-copy .pt-lead{margin-left:0;font-size:17px}
+#personal-training-page .pt-checks{margin:30px 0 0;padding:0;list-style:none}
+#personal-training-page .pt-checks li{position:relative;padding:14px 0 14px 30px;border-bottom:1px solid #d7d3ce;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+#personal-training-page .pt-checks li::before{content:'✓';position:absolute;left:0;color:var(--red);font-size:19px;font-weight:900}
+#personal-training-page .pt-direct{margin-top:25px;color:#666;font-size:14px}
+#personal-training-page .pt-direct a{color:var(--red);font-weight:800}
+#personal-training-page .pt-form-card{padding:28px;border:1px solid #dedbd6;border-radius:18px;background:#fff;box-shadow:0 22px 55px rgba(0,0,0,.07)}
+#personal-training-page .pt-form-head{padding:10px 8px 26px;border-bottom:1px solid #eee}
+#personal-training-page .pt-form-head span{color:var(--red);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+#personal-training-page .pt-form-head strong{display:block;margin-top:8px;font:900 37px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-form-head p{margin-top:9px;color:#777;font-size:14px;line-height:1.5}
+#personal-training-page .pt-form-note{margin-top:14px;color:#777;font-size:12px;text-align:center}
+#personal-training-page .pt-form-note a{color:var(--red);font-weight:800}
+
+#personal-training-page .pt-paths{background:#fff}
+#personal-training-page .pt-path-grid{display:grid;grid-template-columns:1.35fr 1fr 1fr;grid-template-rows:repeat(2,minmax(210px,auto));gap:18px;margin-top:56px;text-align:left}
+#personal-training-page .pt-path-grid article{position:relative;display:flex;min-width:0;flex-direction:column;justify-content:flex-end;padding:30px;border:1px solid #292929;border-radius:14px;background:#141414;color:#fff;overflow:hidden}
+#personal-training-page .pt-path-grid article>span{position:absolute;top:20px;right:22px;color:rgba(255,255,255,.09);font:900 66px/1 'Barlow Condensed',Arial,sans-serif}
+#personal-training-page .pt-path-grid h3{position:relative;max-width:290px;font:900 29px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-path-grid article>p{position:relative;margin-top:10px;color:rgba(255,255,255,.62);font-size:14px;line-height:1.5}
+#personal-training-page .pt-path-grid .pt-path-light{border-color:#ddd;background:#f4f2ef;color:#111}
+#personal-training-page .pt-path-grid .pt-path-light>span{color:rgba(0,0,0,.08)}
+#personal-training-page .pt-path-grid .pt-path-light>p{color:#666}
+#personal-training-page .pt-path-grid .pt-path-featured{grid-row:1/3;justify-content:flex-start;padding:40px;border-color:var(--red);background:var(--red)}
+#personal-training-page .pt-path-featured>span{top:24px;right:28px;color:rgba(0,0,0,.12);font-size:96px}
+#personal-training-page .pt-path-featured>p{margin-top:76px;color:rgba(255,255,255,.72);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+#personal-training-page .pt-path-featured h3{max-width:430px;margin-top:10px;font-size:clamp(42px,4.2vw,61px)}
+#personal-training-page .pt-path-featured blockquote{margin-top:24px;padding:18px 0;border-top:1px solid rgba(255,255,255,.32);border-bottom:1px solid rgba(255,255,255,.32);font:800 clamp(19px,2vw,26px)/1.25 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-path-featured ul{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0;padding:0;list-style:none}
+#personal-training-page .pt-path-featured li{padding:8px 11px;border:1px solid rgba(255,255,255,.4);border-radius:999px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+
+#personal-training-page .pt-split{display:grid;grid-template-columns:1fr 1fr;min-height:720px}
+#personal-training-page .pt-split-image{min-width:0;overflow:hidden}
+#personal-training-page .pt-split-image img{display:block;width:100%;height:100%;object-fit:cover}
+#personal-training-page .pt-split-copy{display:flex;flex-direction:column;justify-content:center;padding:84px clamp(38px,6vw,96px)}
+#personal-training-page .pt-split-copy>p:not(.pt-label){max-width:590px;margin-top:22px;font-size:17px;line-height:1.65}
+#personal-training-page .pt-split-copy ul{margin:30px 0 34px;padding:0;list-style:none}
+#personal-training-page .pt-split-copy li{position:relative;padding:13px 0 13px 30px;border-bottom:1px solid;font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+#personal-training-page .pt-split-copy li::before{content:'✓';position:absolute;left:0;color:var(--red);font-size:19px;font-weight:900}
+#personal-training-page .pt-split-dark{background:#111;color:#fff}
+#personal-training-page .pt-split-dark .pt-split-copy>p:not(.pt-label){color:rgba(255,255,255,.62)}
+#personal-training-page .pt-split-dark li{border-color:rgba(255,255,255,.09);color:rgba(255,255,255,.82)}
+
+#personal-training-page .pt-process{padding:104px 0;background:#111;color:#fff}
+#personal-training-page .pt-process h2{color:#fff}
+#personal-training-page .pt-process .pt-lead{color:rgba(255,255,255,.58)}
+#personal-training-page .pt-step-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:58px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.12)}
+#personal-training-page .pt-step-grid article{padding:38px 28px;background:#111;text-align:left}
+#personal-training-page .pt-step-grid i{display:flex;width:42px;height:42px;align-items:center;justify-content:center;border-radius:50%;background:var(--red);color:#fff;font:normal 900 22px 'Barlow Condensed',Arial,sans-serif}
+#personal-training-page .pt-step-grid h3{margin-top:24px;font:900 29px 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-step-grid p{margin-top:12px;color:rgba(255,255,255,.56);font-size:14px;line-height:1.65}
+
+#personal-training-page .pt-results{background:#f6f6f4}
+#personal-training-page .pt-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:52px;text-align:left}
+#personal-training-page .pt-result-grid article{position:relative;min-height:230px;padding:34px;border:1px solid #ddd;border-radius:14px;background:#fff;overflow:hidden}
+#personal-training-page .pt-result-grid b{position:absolute;top:18px;right:22px;color:rgba(0,0,0,.06);font:900 70px/1 'Barlow Condensed',Arial,sans-serif}
+#personal-training-page .pt-result-grid h3{position:relative;margin-top:72px;font:900 32px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-result-grid p{position:relative;margin-top:12px;color:#666;font-size:14px;line-height:1.6}
+
+#personal-training-page .pt-proof-split{display:grid;grid-template-columns:1fr 1fr;min-height:780px;background:#fff5f5}
+#personal-training-page .pt-proof-copy{display:flex;flex-direction:column;justify-content:center;padding:82px clamp(36px,6vw,92px)}
+#personal-training-page .pt-proof-copy>p:not(.pt-label){max-width:600px;margin-top:22px;color:#666;font-size:17px;line-height:1.65}
+#personal-training-page .pt-proof-image{min-width:0;overflow:hidden}
+#personal-training-page .pt-proof-image img{display:block;width:100%;height:100%;object-fit:cover}
+#personal-training-page .pt-proof-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:34px}
+#personal-training-page .pt-proof-stats article{padding:22px 14px;border:1px solid #eadada;border-radius:10px;background:#fff;text-align:center}
+#personal-training-page .pt-proof-stats strong{display:block;color:var(--red);font:900 34px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-proof-stats span{display:block;margin-top:8px;color:#777;font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+#personal-training-page .pt-proof-copy blockquote{margin-top:28px;padding:22px;border-left:5px solid var(--red);background:#fff;font:800 24px/1.25 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+
+#personal-training-page .pt-options{background:#fff}
+#personal-training-page .pt-option-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px;text-align:left}
+#personal-training-page .pt-option-grid article{display:flex;min-height:360px;flex-direction:column;padding:36px 30px;border:1px solid #ddd;border-radius:14px;background:#fff}
+#personal-training-page .pt-option-grid .pt-option-featured{border:2px solid var(--red);background:#fff8f8;box-shadow:0 18px 48px rgba(217,43,43,.1)}
+#personal-training-page .pt-option-grid article>p:first-child{color:var(--red);font-size:11px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+#personal-training-page .pt-option-grid h3{margin-top:12px;font:900 34px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-option-grid article>p:not(:first-child){margin-top:14px;color:#666;font-size:15px;line-height:1.6}
+#personal-training-page .pt-option-grid a{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:auto;padding-top:28px;color:#111;font-size:12px;font-weight:900;letter-spacing:.08em;text-decoration:none;text-transform:uppercase}
+#personal-training-page .pt-option-grid a span{color:var(--red);font-size:22px}
+
+#personal-training-page .pt-team{padding:82px 0;background:var(--red);color:#fff}
+#personal-training-page .pt-team .pt-label{color:rgba(255,255,255,.68)}
+#personal-training-page .pt-team h2 span{color:#111}
+#personal-training-page .pt-team-inner{display:flex;align-items:center;justify-content:space-between;gap:50px}
+#personal-training-page .pt-team-inner>div>p:not(.pt-label){max-width:680px;margin-top:20px;color:rgba(255,255,255,.76);font-size:17px;line-height:1.6}
+
+#personal-training-page .pt-faq{background:#f6f6f4}
+#personal-training-page .pt-faq-wrap{max-width:900px}
+#personal-training-page .pt-faq details{border-bottom:1px solid #d8d8d8}
+#personal-training-page .pt-faq summary{position:relative;padding:24px 46px 24px 0;font:900 22px/1.15 'Barlow Condensed',Arial,sans-serif;list-style:none;text-transform:uppercase;cursor:pointer}
+#personal-training-page .pt-faq summary::-webkit-details-marker{display:none}
+#personal-training-page .pt-faq summary::after{content:'+';position:absolute;right:8px;color:var(--red);font-size:28px;font-weight:900}
+#personal-training-page .pt-faq details[open] summary::after{content:'−'}
+#personal-training-page .pt-faq details p{padding:0 50px 24px 0;color:#666;font-size:15px;line-height:1.65}
+
+#personal-training-page .pt-final{padding:104px 0;background:#111;color:#fff}
+#personal-training-page .pt-final h2{color:#fff}
+#personal-training-page .pt-final>div>p:not(.pt-label){max-width:650px;margin:20px auto 0;color:rgba(255,255,255,.66);font-size:18px;line-height:1.6}
+#personal-training-page .pt-final .pt-actions{justify-content:center}
+
+@media(max-width:960px){
+  #personal-training-page .pt-consult-grid{grid-template-columns:1fr;gap:38px}
+  #personal-training-page .pt-consult-copy{position:static}
+  #personal-training-page .pt-path-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto}
+  #personal-training-page .pt-path-grid .pt-path-featured{grid-row:auto;grid-column:1/-1;min-height:440px}
+  #personal-training-page .pt-step-grid{grid-template-columns:repeat(2,1fr)}
+  #personal-training-page .pt-proof-stats{grid-template-columns:1fr}
+  #personal-training-page .pt-option-grid{grid-template-columns:1fr}
+  #personal-training-page .pt-option-grid article{min-height:280px}
+}
+
+@media(max-width:760px){
+  #personal-training-page .pt-wrap{width:min(100% - 30px,1180px)}
+  #personal-training-page .pt-section{padding:72px 0}
+  #personal-training-page .pt-hero{min-height:720px;align-items:flex-end}
+  #personal-training-page .pt-hero-image{object-position:62% center}
+  #personal-training-page .pt-hero-shade{background:linear-gradient(0deg,rgba(0,0,0,.98) 0%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.25) 100%)}
+  #personal-training-page .pt-hero-content{width:calc(100% - 34px);padding:100px 0 54px}
+  #personal-training-page .pt-hero h1{font-size:clamp(52px,16vw,74px);line-height:.88}
+  #personal-training-page .pt-kicker{font-size:10px;letter-spacing:.2em}
+  #personal-training-page .pt-hero-support{font-size:27px}
+  #personal-training-page .pt-hero-copy{font-size:15px}
+  #personal-training-page .pt-actions{flex-direction:column}
+  #personal-training-page .pt-btn{width:100%}
+  #personal-training-page .pt-band{grid-template-columns:repeat(2,1fr)}
+  #personal-training-page .pt-band div:nth-child(2){border-right:0}
+  #personal-training-page .pt-band div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}
+  #personal-training-page .pt-band b{font-size:29px}
+  #personal-training-page .pt-consult{padding:66px 0}
+  #personal-training-page .pt-form-card{padding:15px 8px;border-radius:13px}
+  #personal-training-page .pt-form-head{padding:12px 12px 22px}
+  #personal-training-page .pt-form-head strong{font-size:32px}
+  #personal-training-page .pt-path-grid{grid-template-columns:1fr}
+  #personal-training-page .pt-path-grid .pt-path-featured{grid-column:auto;min-height:490px;padding:30px}
+  #personal-training-page .pt-split,#personal-training-page .pt-proof-split{grid-template-columns:1fr}
+  #personal-training-page .pt-split-image,#personal-training-page .pt-proof-image{min-height:460px}
+  #personal-training-page .pt-split-copy,#personal-training-page .pt-proof-copy{padding:66px 24px}
+  #personal-training-page .pt-process{padding:72px 0}
+  #personal-training-page .pt-step-grid{grid-template-columns:1fr}
+  #personal-training-page .pt-result-grid{grid-template-columns:1fr}
+  #personal-training-page .pt-result-grid article{min-height:210px}
+  #personal-training-page .pt-proof-copy{order:2}
+  #personal-training-page .pt-proof-image{order:1}
+  #personal-training-page .pt-proof-stats{grid-template-columns:repeat(3,1fr)}
+  #personal-training-page .pt-proof-stats article{padding:18px 8px}
+  #personal-training-page .pt-proof-stats strong{font-size:26px}
+  #personal-training-page .pt-team-inner{flex-direction:column;align-items:flex-start}
+  #personal-training-page .pt-faq summary{font-size:20px}
+  #personal-training-page .pt-final{padding:78px 0}
+}
+
+@media(max-width:420px){
+  #personal-training-page .pt-proof-stats{grid-template-columns:1fr}
+  #personal-training-page .pt-proof-stats article{display:flex;align-items:center;justify-content:space-between;text-align:left}
+  #personal-training-page .pt-proof-stats span{max-width:150px;margin:0;text-align:right}
+}
