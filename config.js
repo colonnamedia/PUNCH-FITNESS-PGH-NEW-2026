@@ -356,10 +356,10 @@ window.PUNCH_CONFIG = {
     var cursor = hero;
     if (cursor && stats) cursor = moveAfter(stats, cursor);
     if (cursor && community) cursor = moveAfter(community, cursor);
+    if (cursor && programs) cursor = moveAfter(programs, cursor);
     if (cursor && heroStmt) cursor = moveAfter(heroStmt, cursor);
     if (cursor && trainingSection) cursor = moveAfter(trainingSection, cursor);
     if (cursor && classPreview) cursor = moveAfter(classPreview, cursor);
-    if (cursor && programs) cursor = moveAfter(programs, cursor);
 
     var slots = plp.querySelector(".training-top-slots");
     if (slots) {
