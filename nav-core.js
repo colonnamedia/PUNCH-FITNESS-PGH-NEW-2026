@@ -43,8 +43,10 @@
           '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
           '<div class="pn-menu-div"></div>' +
           '<a href="/trainers">Meet the Trainers</a></div></div>' +
-      '<a class="pn-link" href="/personal-training">Personal Training</a>' +
-      '<a class="pn-link" href="/nutrition-coaching">Nutrition Coaching</a>' +
+      '<div class="pn-item"><button class="pn-link">Personal Training<span class="pn-caret">&#9660;</span></button>' +
+        '<div class="pn-menu">' +
+          '<a href="/personal-training">One-on-One Training</a>' +
+          '<a href="/nutrition-coaching">Nutrition Coaching</a></div></div>' +
       '<a class="pn-link" href="/schedule">Schedule</a>' +
       '<div class="pn-item"><button class="pn-link">Pricing &amp; Plans<span class="pn-caret">&#9660;</span></button>' +
         '<div class="pn-menu">' +
@@ -64,8 +66,9 @@
       '<a href="/senior-fitness-and-boxing-pittsburgh">Senior &amp; Parkinson\'s</a>' +
       '<div class="pn-menu-div"></div>' +
       '<a href="/trainers">Meet the Trainers</a></details>' +
-    '<a href="/personal-training">Personal Training</a>' +
-    '<a href="/nutrition-coaching">Nutrition Coaching</a>' +
+    '<details><summary>Personal Training</summary>' +
+      '<a href="/personal-training">One-on-One Training</a>' +
+      '<a href="/nutrition-coaching">Nutrition Coaching</a></details>' +
     '<a href="/schedule">Schedule</a>' +
     '<details><summary>Pricing &amp; Plans</summary>' +
       '<a href="/membership-options">Membership Options</a>' +
