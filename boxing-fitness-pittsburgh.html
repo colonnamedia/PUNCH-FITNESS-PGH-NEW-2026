@@ -51,10 +51,12 @@
 #boxing-page .bx-lead{font-size:clamp(17px,1.5vw,20px);line-height:1.7;color:#5f5f63;margin:0}
 #boxing-page .bx-steps{background:#f4f1eb}
 #boxing-page .bx-step-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:42px}
-#boxing-page .bx-step{background:#fff;border:1px solid #e4ded5;border-radius:16px;padding:32px}
-#boxing-page .bx-step-num{font:900 52px/1 'Barlow Condensed',sans-serif;color:#D92B2B}
-#boxing-page .bx-step h3{font:900 29px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:20px 0 12px}
-#boxing-page .bx-step p{font-size:16px;line-height:1.6;color:#555;margin:0}
+#boxing-page .bx-step{background:#151517;color:#fff;border-radius:16px;overflow:hidden;min-width:0;box-shadow:0 12px 32px rgba(0,0,0,.12)}
+#boxing-page .bx-step img{display:block;width:100%;height:240px;object-fit:cover}
+#boxing-page .bx-step-body{padding:25px 28px 30px}
+#boxing-page .bx-step-num{font:900 18px/1 'Barlow Condensed',sans-serif;color:#ff5b55;letter-spacing:.16em}
+#boxing-page .bx-step h3{font:900 31px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:13px 0 10px}
+#boxing-page .bx-step p{font-size:16px;line-height:1.55;color:#d1cfca;margin:0}
 #boxing-page .bx-lead-section{background:#fff}
 #boxing-page .bx-lead-card{max-width:760px;margin:36px auto 0;padding:22px;background:#f4f1eb;border:1px solid #e1dbd0;border-radius:18px;box-shadow:0 12px 34px rgba(0,0,0,.06)}
 #boxing-page .bx-lead-step{display:block;background:#D92B2B;color:#fff;border-radius:9px;padding:12px 18px;text-align:center;font:800 15px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase}
@@ -118,7 +120,11 @@
   #boxing-page .bx-proof div:nth-child(2){border-right:0}
   #boxing-page .bx-proof div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}
   #boxing-page .bx-section{padding:68px 20px}
-  #boxing-page .bx-card-grid,#boxing-page .bx-format-grid,#boxing-page .bx-step-grid{grid-template-columns:1fr}
+  #boxing-page .bx-card-grid,#boxing-page .bx-format-grid{grid-template-columns:1fr}
+  #boxing-page .bx-step-grid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:20px;padding-bottom:12px;scrollbar-width:thin}
+  #boxing-page .bx-step{flex:0 0 min(82vw,330px);scroll-snap-align:start}
+  #boxing-page .bx-step img{height:210px}
+  #boxing-page .bx-step-body{padding:20px 22px 24px}
   #boxing-page .bx-story-grid{grid-template-columns:repeat(3,minmax(210px,1fr));overflow-x:auto;scroll-snap-type:x mandatory}
   #boxing-page .bx-story{scroll-snap-align:start}
   #boxing-page .bx-lead-card{padding:12px}
@@ -161,13 +167,22 @@
     <div class="bx-inner">
       <div class="bx-center">
         <span class="bx-label">Your First Boxing Class</span>
-        <h2>Three Simple Steps. Then Just Show Up.</h2>
-        <p class="bx-lead">You do not need boxing experience or your own gloves to start.</p>
+        <h2>See What Your First Class Feels Like.</h2>
+        <p class="bx-lead">A real coach, a heavy bag, and a full-body workout you can make your own. No boxing experience needed.</p>
       </div>
       <div class="bx-step-grid">
-        <article class="bx-step"><span class="bx-step-num">01</span><h3>Send Your Information</h3><p>Fill out the short form once. Then see both trial choices and pick the one that fits you.</p></article>
-        <article class="bx-step"><span class="bx-step-num">02</span><h3>Choose and Schedule</h3><p>Activate your free class or seven unlimited days, then choose a Cardio Boxing class on the schedule.</p></article>
-        <article class="bx-step"><span class="bx-step-num">03</span><h3>Meet Your Coach</h3><p>Arrive 10 minutes early. We will introduce your stance, punches, and the heavy bag before class.</p></article>
+        <article class="bx-step">
+          <img src="/assets/punch-pittsburgh-11.webp" srcset="/assets/punch-pittsburgh-11-mobile.webp 768w, /assets/punch-pittsburgh-11.webp 1600w" sizes="(max-width: 800px) 82vw, 31vw" alt="PUNCH members learning coached boxing combinations on heavy bags" loading="lazy" decoding="async" />
+          <div class="bx-step-body"><span class="bx-step-num">01 · Meet</span><h3>Meet Your Coach</h3><p>Arrive 10 minutes early. Your coach shows you the space, answers questions, and gets you ready for your first round.</p></div>
+        </article>
+        <article class="bx-step">
+          <img src="/assets/punch-pittsburgh-6.webp" srcset="/assets/punch-pittsburgh-6-mobile.webp 768w, /assets/punch-pittsburgh-6.webp 1600w" sizes="(max-width: 800px) 82vw, 31vw" alt="Member working through a cardio boxing class at PUNCH" loading="lazy" decoding="async" />
+          <div class="bx-step-body"><span class="bx-step-num">02 · Learn</span><h3>Learn the Basics</h3><p>Start with stance, punches, and bag combinations. The coach guides every round, and you work at your level.</p></div>
+        </article>
+        <article class="bx-step">
+          <img src="/assets/punch-pittsburgh-53.webp" srcset="/assets/punch-pittsburgh-53-mobile.webp 768w, /assets/punch-pittsburgh-53.webp 1600w" sizes="(max-width: 800px) 82vw, 31vw" alt="PUNCH coach and member celebrating after a workout" loading="lazy" decoding="async" />
+          <div class="bx-step-body"><span class="bx-step-num">03 · Finish</span><h3>Feel the Difference</h3><p>Finish a coached full-body session feeling challenged, accomplished, and ready to come back.</p></div>
+        </article>
       </div>
     </div>
   </section>
@@ -187,21 +202,6 @@
     </div>
   </section>
 
-  <section class="bx-section" id="how-it-works">
-    <div class="bx-inner">
-      <div class="bx-center">
-        <span class="bx-label">Cardio Without the Cardio Machines</span>
-        <h2>Trade the Treadmill for the Heavy Bag.</h2>
-        <p class="bx-lead">Running and cycling train you to repeat one movement. Heavy-bag boxing keeps your whole body working. You punch, rotate, move your feet, brace your core, and recover between coached rounds. Your heart rate climbs—but your mind stays locked into the combinations instead of watching the clock.</p>
-      </div>
-      <div class="bx-card-grid">
-        <article class="bx-card"><span class="bx-card-num">01</span><h3>Full-Body Cardio</h3><p>Every punch begins at the floor and travels through your legs, hips, core, shoulders, and arms. The result is cardio that asks more from your entire body.</p></article>
-        <article class="bx-card"><span class="bx-card-num">02</span><h3>Intervals That Move</h3><p>Work through bag rounds, combinations, footwork, and active recovery. The pace changes throughout class so the workout stays challenging and engaging.</p></article>
-        <article class="bx-card"><span class="bx-card-num">03</span><h3>A Skill You Build</h3><p>You are not just collecting minutes on a machine. You are learning real boxing fundamentals, improving coordination, and gaining confidence with every class.</p></article>
-      </div>
-    </div>
-  </section>
-
   <section class="bx-split">
     <div class="bx-split-media">
       <img src="/assets/pittsburgh-punch-boxing-and-fitness-IMG_0698.webp" srcset="/assets/pittsburgh-punch-boxing-and-fitness-IMG_0698-mobile.webp 768w, /assets/pittsburgh-punch-boxing-and-fitness-IMG_0698.webp 1600w" sizes="(max-width: 800px) 100vw, 52vw" alt="Coach guiding a member through a heavy-bag boxing round at Punch Pittsburgh" loading="lazy" decoding="async" />
@@ -217,6 +217,21 @@
         <li>No sparring and no person-to-person contact</li>
         <li>Modifications for your experience and fitness level</li>
       </ul>
+    </div>
+  </section>
+
+  <section class="bx-section" id="how-it-works">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Cardio Without the Cardio Machines</span>
+        <h2>Trade the Treadmill for the Heavy Bag.</h2>
+        <p class="bx-lead">Running and cycling train you to repeat one movement. Heavy-bag boxing keeps your whole body working. You punch, rotate, move your feet, brace your core, and recover between coached rounds. Your heart rate climbs—but your mind stays locked into the combinations instead of watching the clock.</p>
+      </div>
+      <div class="bx-card-grid">
+        <article class="bx-card"><span class="bx-card-num">01</span><h3>Full-Body Cardio</h3><p>Every punch begins at the floor and travels through your legs, hips, core, shoulders, and arms. The result is cardio that asks more from your entire body.</p></article>
+        <article class="bx-card"><span class="bx-card-num">02</span><h3>Intervals That Move</h3><p>Work through bag rounds, combinations, footwork, and active recovery. The pace changes throughout class so the workout stays challenging and engaging.</p></article>
+        <article class="bx-card"><span class="bx-card-num">03</span><h3>A Skill You Build</h3><p>You are not just collecting minutes on a machine. You are learning real boxing fundamentals, improving coordination, and gaining confidence with every class.</p></article>
+      </div>
     </div>
   </section>
 
