@@ -49,6 +49,21 @@
 #boxing-page .bx-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:#D92B2B}
 #boxing-page h2{font-family:'Barlow Condensed',sans-serif;font-size:clamp(44px,6vw,80px);line-height:.92;letter-spacing:-.02em;text-transform:uppercase;margin:14px 0 22px;font-weight:900}
 #boxing-page .bx-lead{font-size:clamp(17px,1.5vw,20px);line-height:1.7;color:#5f5f63;margin:0}
+#boxing-page .bx-steps{background:#f4f1eb}
+#boxing-page .bx-step-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:42px}
+#boxing-page .bx-step{background:#fff;border:1px solid #e4ded5;border-radius:16px;padding:32px}
+#boxing-page .bx-step-num{font:900 52px/1 'Barlow Condensed',sans-serif;color:#D92B2B}
+#boxing-page .bx-step h3{font:900 29px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;margin:20px 0 12px}
+#boxing-page .bx-step p{font-size:16px;line-height:1.6;color:#555;margin:0}
+#boxing-page .bx-lead-section{background:#fff}
+#boxing-page .bx-lead-card{max-width:760px;margin:36px auto 0;padding:22px;background:#f4f1eb;border:1px solid #e1dbd0;border-radius:18px;box-shadow:0 12px 34px rgba(0,0,0,.06)}
+#boxing-page .bx-lead-step{display:block;background:#D92B2B;color:#fff;border-radius:9px;padding:12px 18px;text-align:center;font:800 15px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+#boxing-page .bx-lead-card iframe{width:100%;min-height:640px;border:0;border-radius:8px;display:block}
+#boxing-page .bx-stories{background:#fff}
+#boxing-page .bx-story-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;max-width:950px;margin:42px auto 0}
+#boxing-page .bx-story{background:#17171a;border-radius:14px;overflow:hidden;color:#fff}
+#boxing-page .bx-story video{display:block;width:100%;aspect-ratio:9/16;max-height:500px;object-fit:cover;background:#111}
+#boxing-page .bx-story span{display:block;padding:15px 20px;font:800 18px/1.2 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.08em}
 #boxing-page .bx-card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
 #boxing-page .bx-card{background:#151517;color:#fff;border-radius:16px;padding:34px;min-height:250px}
 #boxing-page .bx-card-num{font:900 54px/1 'Barlow Condensed',sans-serif;color:#D92B2B}
@@ -103,7 +118,10 @@
   #boxing-page .bx-proof div:nth-child(2){border-right:0}
   #boxing-page .bx-proof div:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.2)}
   #boxing-page .bx-section{padding:68px 20px}
-  #boxing-page .bx-card-grid,#boxing-page .bx-format-grid{grid-template-columns:1fr}
+  #boxing-page .bx-card-grid,#boxing-page .bx-format-grid,#boxing-page .bx-step-grid{grid-template-columns:1fr}
+  #boxing-page .bx-story-grid{grid-template-columns:repeat(3,minmax(210px,1fr));overflow-x:auto;scroll-snap-type:x mandatory}
+  #boxing-page .bx-story{scroll-snap-align:start}
+  #boxing-page .bx-lead-card{padding:12px}
   #boxing-page .bx-trial-grid{grid-template-columns:1fr}
   #boxing-page .bx-trial-card{padding:30px 24px}
   #boxing-page .bx-split{grid-template-columns:1fr}
@@ -125,10 +143,10 @@
       <h1>Your Cardio Just Got a Whole Lot Better.</h1>
       <p class="bx-hero-copy">We trade treadmills and stationary bikes for coached heavy-bag boxing—a more engaging, full-body way to build your conditioning, burn calories, and get stronger.</p>
       <div class="bx-btns">
-        <a class="bx-btn red" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b/login" target="_blank" rel="noopener">Claim First Class Free →</a>
-        <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40/login" target="_blank" rel="noopener">7 Days Unlimited — $19.99</a>
+        <a class="bx-btn red" href="#lead-form">Send Me My Boxing Trial Options →</a>
+        <a class="bx-btn ghost" href="#how-to-start">See How to Get Started ↓</a>
       </div>
-      <p class="bx-cta-note">Choose one trial offer · Local residents with valid ID · $19.99 trial does not auto-renew</p>
+      <p class="bx-cta-note">One short form, then choose your free class or $19.99 week · Local residents with valid ID</p>
     </div>
   </section>
 
@@ -137,6 +155,36 @@
     <div><strong>No Contact</strong><span>Fitness Boxing</span></div>
     <div><strong>Full Body</strong><span>Cardio Training</span></div>
     <div><strong>Real Coaches</strong><span>Every Class</span></div>
+  </section>
+
+  <section class="bx-section bx-steps" id="how-to-start">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Your First Boxing Class</span>
+        <h2>Three Simple Steps. Then Just Show Up.</h2>
+        <p class="bx-lead">You do not need boxing experience or your own gloves to start.</p>
+      </div>
+      <div class="bx-step-grid">
+        <article class="bx-step"><span class="bx-step-num">01</span><h3>Send Your Information</h3><p>Fill out the short form once. Then see both trial choices and pick the one that fits you.</p></article>
+        <article class="bx-step"><span class="bx-step-num">02</span><h3>Choose and Schedule</h3><p>Activate your free class or seven unlimited days, then choose a Cardio Boxing class on the schedule.</p></article>
+        <article class="bx-step"><span class="bx-step-num">03</span><h3>Meet Your Coach</h3><p>Arrive 10 minutes early. We will introduce your stance, punches, and the heavy bag before class.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-lead-section" id="lead-form">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Step 1 · Takes Less Than 30 Seconds</span>
+        <h2>Send Me My Boxing Trial Options.</h2>
+        <p class="bx-lead">Enter your contact information once. We will take you to the free class and $19.99 seven-day trial options so you can choose and schedule your first visit.</p>
+      </div>
+      <div class="bx-lead-card">
+        <span class="bx-lead-step">First Name · Mobile · Email</span>
+        <iframe src="https://api.grow.pushpress.com/widget/form/ImN6zXT4qKiHOZHPOvXz" id="inline-ImN6zXT4qKiHOZHPOvXz" data-layout="{'id':'INLINE'}" data-trigger-type="alwaysShow" data-activation-type="alwaysActivated" data-deactivation-type="neverDeactivate" data-form-name="WEBSITE - AD LEAD FORM - Connect to Prospect and Trial Workflow - High-Touch Lead Capture v1.0" data-form-id="ImN6zXT4qKiHOZHPOvXz" title="Punch Boxing Trial Lead Form"></iframe>
+        <script src="https://api.grow.pushpress.com/js/form_embed.js"></script>
+      </div>
+    </div>
   </section>
 
   <section class="bx-section" id="how-it-works">
@@ -172,12 +220,42 @@
     </div>
   </section>
 
+  <section class="bx-section bx-formats">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Choose How You Train</span>
+        <h2>Boxing Is the Cardio. Strength Completes It.</h2>
+        <p class="bx-lead">When you want a full cardio workout, choose Cardio Boxing. When you want boxing plus resistance training, Boxing + Strength and Circuit Training build on that conditioning with strength-focused work.</p>
+      </div>
+      <div class="bx-format-grid">
+        <article class="bx-format primary"><small>Full Boxing Cardio</small><h3>Cardio Boxing</h3><p>Heavy-bag combinations, footwork, bodyweight movement, and coached rounds from beginning to end.</p></article>
+        <article class="bx-format"><small>Boxing + Resistance</small><h3>Boxing + Strength</h3><p>Boxing intervals paired with dumbbells, barbells, and functional strength training.</p></article>
+        <article class="bx-format"><small>Conditioning Mix</small><h3>Circuit Training</h3><p>Boxing stations combined with faster-paced strength and conditioning intervals.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="bx-section bx-stories" aria-labelledby="boxing-stories-title">
+    <div class="bx-inner">
+      <div class="bx-center">
+        <span class="bx-label">Real Members · Real Stories</span>
+        <h2 id="boxing-stories-title">Hear It From Them.</h2>
+        <p class="bx-lead">See what PUNCH members say about showing up, trying a class, and finding their rhythm.</p>
+      </div>
+      <div class="bx-story-grid">
+        <div class="bx-story"><video controls playsinline preload="metadata" aria-label="Nicole's PUNCH member story"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/NICOLE%20WAS%20HERE%20-%20PUNCH.mp4#t=0.1" type="video/mp4"></video><span>Nicole · Member Story</span></div>
+        <div class="bx-story"><video controls playsinline preload="metadata" aria-label="PUNCH member testimonial"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/TESTIMONIAL%202.mp4#t=0.1" type="video/mp4"></video><span>Real Member Results</span></div>
+        <div class="bx-story"><video controls playsinline preload="metadata" aria-label="Suzie's PUNCH member story"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/SUZIE%20COOL%20REEL.mp4#t=0.1" type="video/mp4"></video><span>Suzie · Member Story</span></div>
+      </div>
+    </div>
+  </section>
+
   <section class="bx-section bx-trials" id="trial-options">
     <div class="bx-inner">
       <div class="bx-center">
         <span class="bx-label">Two Easy Ways to Start</span>
         <h2>Choose Your Boxing Trial.</h2>
-        <p class="bx-lead">Start with one class on us or give yourself a full week to experience Cardio Boxing, Boxing + Strength, and Circuit Training.</p>
+        <p class="bx-lead">After the short form, choose one free class or seven unlimited days to experience Cardio Boxing and the other PUNCH class formats.</p>
       </div>
       <div class="bx-trial-grid">
         <article class="bx-trial-card">
@@ -190,7 +268,7 @@
             <li>Loaner gloves available for your first visit</li>
             <li>No credit card or long-term commitment</li>
           </ul>
-          <a class="bx-trial-btn" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b/login" target="_blank" rel="noopener">Claim My Free Class →</a>
+          <a class="bx-trial-btn" href="#lead-form">Send Me My Trial Options →</a>
           <p class="bx-trial-fine">Use within 7 days · Local residents with valid ID</p>
         </article>
         <article class="bx-trial-card featured">
@@ -204,24 +282,9 @@
             <li>Train more than once before deciding</li>
             <li>One-time payment with no auto-renew</li>
           </ul>
-          <a class="bx-trial-btn" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40/login" target="_blank" rel="noopener">Start 7 Days Unlimited →</a>
+          <a class="bx-trial-btn" href="#lead-form">Send Me My Trial Options →</a>
           <p class="bx-trial-fine">One-time payment · One trial offer per person</p>
         </article>
-      </div>
-    </div>
-  </section>
-
-  <section class="bx-section bx-formats">
-    <div class="bx-inner">
-      <div class="bx-center">
-        <span class="bx-label">Choose How You Train</span>
-        <h2>Boxing Is the Cardio. Strength Completes It.</h2>
-        <p class="bx-lead">When you want a full cardio workout, choose Cardio Boxing. When you want boxing plus resistance training, Boxing + Strength and Circuit Training build on that conditioning with strength-focused work.</p>
-      </div>
-      <div class="bx-format-grid">
-        <article class="bx-format primary"><small>Full Boxing Cardio</small><h3>Cardio Boxing</h3><p>Heavy-bag combinations, footwork, bodyweight movement, and coached rounds from beginning to end.</p></article>
-        <article class="bx-format"><small>Boxing + Resistance</small><h3>Boxing + Strength</h3><p>Boxing intervals paired with dumbbells, barbells, and functional strength training.</p></article>
-        <article class="bx-format"><small>Conditioning Mix</small><h3>Circuit Training</h3><p>Boxing stations combined with faster-paced strength and conditioning intervals.</p></article>
       </div>
     </div>
   </section>
@@ -246,8 +309,7 @@
     <h2>Stop Watching the Clock. Start Throwing Punches.</h2>
     <p>Try the full-body cardio workout that makes the treadmill feel like the old way of training. No boxing experience and no contact required.</p>
     <div class="bx-btns" style="justify-content:center">
-      <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b/login" target="_blank" rel="noopener">Claim First Class Free →</a>
-      <a class="bx-btn ghost" href="https://punchpgh.pushpress.com/landing/plans/plan_514ed15d56fc40/login" target="_blank" rel="noopener">7 Days Unlimited — $19.99</a>
+      <a class="bx-btn ghost" href="#lead-form">Send Me My Boxing Trial Options →</a>
     </div>
     <p class="bx-cta-note">Choose one trial offer · The $19.99 seven-day trial is a one-time payment with no auto-renew</p>
   </section>
