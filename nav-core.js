@@ -194,7 +194,7 @@
     // three dedicated trial pages — someone already on their chosen page's
     // registration flow shouldn't be immediately asked to reselect. The
     // popup itself stays available on all of these via window.PunchOpenTrialPopup.
-    if (/\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b/.test(location.pathname)) return false;
+    if (/\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b|\/boxing-fitness-pittsburgh\b/.test(location.pathname)) return false;
     var ov = renderPopup();
     setTimeout(function () { ov.classList.add("on"); }, POP_DELAY);
     return true;
@@ -362,7 +362,7 @@
   }
 
   function initPopups() {
-    var skipAuto = /\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b/.test(location.pathname);
+    var skipAuto = /\/admin|\/24-hour-special|\/trial\b|\/free-trial\b|\/punch-ad-trials\b|\/boxing-fitness-pittsburgh\b/.test(location.pathname);
     if (skipAuto) return;
     var cfg = window.PUNCH_CONFIG || {};
     if (!cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY || cfg.SUPABASE_URL.indexOf("YOUR-PROJECT") !== -1) {
