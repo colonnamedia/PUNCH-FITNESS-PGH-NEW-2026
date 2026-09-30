@@ -350,6 +350,7 @@ window.PUNCH_CONFIG = {
     var community = plp.querySelector('[data-section="combined-header"]');
     var heroStmt = plp.querySelector('[data-section="hero-stmt"]');
     var trainingSection = plp.querySelector('[data-section="fight-train-sweat"]');
+    var boxingPace = plp.querySelector('[data-section="boxing-pace"]');
     var classPreview = plp.querySelector('[data-section="class-look"]');
     var programs = plp.querySelector('[data-section="programs"]');
 
@@ -359,6 +360,7 @@ window.PUNCH_CONFIG = {
     if (cursor && programs) cursor = moveAfter(programs, cursor);
     if (cursor && heroStmt) cursor = moveAfter(heroStmt, cursor);
     if (cursor && trainingSection) cursor = moveAfter(trainingSection, cursor);
+    if (cursor && boxingPace) cursor = moveAfter(boxingPace, cursor);
     if (cursor && classPreview) cursor = moveAfter(classPreview, cursor);
 
     var slots = plp.querySelector(".training-top-slots");
