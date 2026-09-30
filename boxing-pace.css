@@ -1,6 +1,6 @@
 /* ==== HOW PUNCH USES BOXING ==== */
 :is(#plp,#boxing-page) .boxing-pace{background:#f5f3ee;padding:76px clamp(22px,4vw,58px)}
-:is(#plp,#boxing-page) .boxing-pace-shell{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"image copy";border:3px solid #17171a;background:#fff;box-shadow:12px 12px 0 #d92b2b;overflow:hidden}
+:is(#plp,#boxing-page) .boxing-pace-shell{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"image copy";border:3px solid #17171a;border-radius:16px;background:#fff;box-shadow:12px 12px 0 #d92b2b;overflow:hidden}
 :is(#plp,#boxing-page) .boxing-pace-heading .lbl{display:inline-flex;align-items:center;gap:12px;font:800 13px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.28em;text-transform:uppercase;color:#d92b2b}
 :is(#plp,#boxing-page) .boxing-pace-heading .lbl::before{content:"";width:36px;height:2px;background:#d92b2b}
 :is(#plp,#boxing-page) .boxing-pace-copy .h2 span{color:#d92b2b}
@@ -12,7 +12,7 @@
 :is(#plp,#boxing-page) .boxing-pace-copy .h2{font-size:clamp(46px,5vw,76px);line-height:.92;margin:0 0 22px}
 :is(#plp,#boxing-page) .boxing-pace-intro{font-size:17px;line-height:1.65;color:#555;margin:0 0 28px;max-width:720px}
 :is(#plp,#boxing-page) .boxing-pace-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-:is(#plp,#boxing-page) .boxing-pace-card{border:2px solid #17171a;padding:17px 18px;background:#fff;min-height:130px}
+:is(#plp,#boxing-page) .boxing-pace-card{border:2px solid #17171a;border-radius:14px;padding:17px 18px;background:#fff;min-height:130px}
 :is(#plp,#boxing-page) .boxing-pace-card:nth-child(4){background:#d92b2b;border-color:#d92b2b;color:#fff}
 :is(#plp,#boxing-page) .boxing-pace-card h3{font-family:'Barlow Condensed',sans-serif;font-size:27px;line-height:1;text-transform:uppercase;margin:0 0 8px;font-weight:900;color:#d92b2b}
 :is(#plp,#boxing-page) .boxing-pace-card:nth-child(4) h3{color:#fff}
