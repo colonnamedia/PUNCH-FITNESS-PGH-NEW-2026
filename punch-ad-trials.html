@@ -15,6 +15,7 @@
 <meta property="og:description" content="One free class or One Week Unlimited for $19.99. No boxing experience needed." />
 <meta property="og:image" content="https://punchpgh.com/assets/pittsburgh-punch-boxing-and-fitness-IMG_0698.webp" />
 <link rel="stylesheet" href="/punch.css" />
+<link rel="stylesheet" href="/boxing-pace.css?v=1" />
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
@@ -175,6 +176,31 @@
     </div>
   </div>
 
+  <section id="ad-boxing-pace" class="boxing-pace" data-section="boxing-pace">
+  <div class="boxing-pace-shell">
+    <div class="boxing-pace-image">
+      <img src="/assets/boxing-cardio-pace.webp" srcset="/assets/boxing-cardio-pace-mobile.webp 720w, /assets/boxing-cardio-pace.webp 1122w" sizes="(max-width: 800px) calc(100vw - 42px), 45vw" alt="Woman using her full body to punch a white heavy bag, with arrows showing forward motion and rotation" loading="lazy" decoding="async" />
+    </div>
+    <div class="boxing-pace-copy">
+      <div class="boxing-pace-heading">
+        <span class="lbl">How PUNCH Uses Boxing</span>
+        <h2 class="h2">Boxing Is Our<br><span>Full-Body Cardio.</span></h2>
+        <p class="boxing-pace-intro">We coach the boxing portion of class like changing your pace during a run. You begin with controlled movement, build into a steady rhythm, add more speed and body rotation, and work through short full-body bursts before recovering.</p>
+      </div>
+      <div class="boxing-pace-details">
+        <div class="boxing-pace-grid">
+          <article class="boxing-pace-card"><h3>Walk</h3><p>Practice your stance, punches and rhythm at a comfortable pace.</p></article>
+          <article class="boxing-pace-card"><h3>Jog</h3><p>Settle into steady, flowing combinations you can maintain.</p></article>
+          <article class="boxing-pace-card"><h3>Run</h3><p>Increase your punching pace while adding leg drive and hip rotation.</p></article>
+          <article class="boxing-pace-card"><h3>Sprint</h3><p>Use your legs, hips and core for short, powerful full-body bursts.</p></article>
+        </div>
+        <p class="boxing-pace-close">Your coach changes the pace. You control your effort.</p>
+        <a class="btn-red boxing-pace-link" href="#lead-form">Send Me My Trial Options &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
   <div class="s off ad-trials" id="trial-options" data-section="trialcta">
     <div class="si" style="text-align:center;margin-bottom:8px">
       <span class="lbl">Ready to Start?</span>
@@ -261,11 +287,13 @@
     var steps=document.querySelector('#plp [data-section="trial-steps"]');
     var form=document.querySelector('#plp [data-section="lead-form"]');
     var training=document.querySelector('#plp [data-section="threeclasses"]');
+    var boxingPace=document.querySelector('#plp [data-section="boxing-pace"]');
     var trials=document.querySelector('#plp [data-section="trialcta"]');
     if(proof&&feel&&proof.nextElementSibling!==feel)proof.insertAdjacentElement('afterend',feel);
     if(feel&&form&&feel.nextElementSibling!==form)feel.insertAdjacentElement('afterend',form);
     if(steps&&form&&steps.previousElementSibling!==form)form.insertAdjacentElement('afterend',steps);
-    if(training&&trials&&training.nextElementSibling!==trials)training.insertAdjacentElement('afterend',trials);
+    if(training&&boxingPace&&training.nextElementSibling!==boxingPace)training.insertAdjacentElement('afterend',boxingPace);
+    if(boxingPace&&trials&&boxingPace.nextElementSibling!==trials)boxingPace.insertAdjacentElement('afterend',trials);
   }
   function lockAdPage(){lockAdTraining();lockApprovedAdContent();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',lockAdPage,{once:true});else lockAdPage();
