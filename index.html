@@ -100,6 +100,38 @@
   #plp .class-look-grid::-webkit-scrollbar{display:none}
   #plp .class-look-card{min-height:360px;scroll-snap-align:center}
 }
+
+/* ==== HOW PUNCH USES BOXING ==== */
+#plp .boxing-pace{background:#f5f3ee;padding:76px clamp(22px,4vw,58px)}
+#plp .boxing-pace-shell{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"image copy";border:3px solid #17171a;background:#fff;box-shadow:12px 12px 0 #d92b2b;overflow:hidden}
+#plp .boxing-pace-image{grid-area:image;min-height:680px;border-right:3px solid #17171a;background:#f1f1f1}
+#plp .boxing-pace-image img{width:100%;height:100%;display:block;object-fit:cover;object-position:center center}
+#plp .boxing-pace-copy{grid-area:copy;padding:clamp(34px,4vw,60px);display:flex;flex-direction:column;justify-content:center}
+#plp .boxing-pace-copy .lbl{margin-bottom:12px}
+#plp .boxing-pace-copy .h2{font-size:clamp(46px,5vw,76px);line-height:.92;margin:0 0 22px}
+#plp .boxing-pace-intro{font-size:17px;line-height:1.65;color:#555;margin:0 0 28px;max-width:720px}
+#plp .boxing-pace-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+#plp .boxing-pace-card{border:2px solid #17171a;padding:17px 18px;background:#fff;min-height:130px}
+#plp .boxing-pace-card:nth-child(4){background:#d92b2b;border-color:#d92b2b;color:#fff}
+#plp .boxing-pace-card h3{font-family:'Barlow Condensed',sans-serif;font-size:27px;line-height:1;text-transform:uppercase;margin:0 0 8px;font-weight:900;color:#d92b2b}
+#plp .boxing-pace-card:nth-child(4) h3{color:#fff}
+#plp .boxing-pace-card p{font-size:14px;line-height:1.45;margin:0;color:#555}
+#plp .boxing-pace-card:nth-child(4) p{color:rgba(255,255,255,.9)}
+#plp .boxing-pace-close{font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:800;line-height:1.25;margin:0 0 22px;color:#17171a}
+#plp .boxing-pace-link{align-self:flex-start}
+@media(max-width:800px){
+  #plp .boxing-pace{padding:52px 18px 58px}
+  #plp .boxing-pace-shell{grid-template-columns:1fr;grid-template-areas:"copy" "image";box-shadow:7px 7px 0 #d92b2b}
+  #plp .boxing-pace-copy{display:contents}
+  #plp .boxing-pace-heading{grid-area:copy;padding:34px 26px 26px}
+  #plp .boxing-pace-copy .h2{font-size:clamp(42px,13vw,62px)}
+  #plp .boxing-pace-intro{margin-bottom:0;font-size:16px}
+  #plp .boxing-pace-image{min-height:0;border-right:0;border-top:3px solid #17171a;border-bottom:3px solid #17171a}
+  #plp .boxing-pace-image img{height:auto;aspect-ratio:720/900;object-fit:cover}
+  #plp .boxing-pace-details{padding:24px 26px 34px}
+  #plp .boxing-pace-grid{grid-template-columns:1fr}
+  #plp .boxing-pace-card{min-height:0}
+}
 </style>
 
 </head>
@@ -247,6 +279,32 @@
     </div>
   </div>
 </div></div>
+
+
+<section class="boxing-pace" data-section="boxing-pace">
+  <div class="boxing-pace-shell">
+    <div class="boxing-pace-image">
+      <img src="/assets/boxing-cardio-pace.webp" srcset="/assets/boxing-cardio-pace-mobile.webp 720w, /assets/boxing-cardio-pace.webp 1122w" sizes="(max-width: 800px) calc(100vw - 42px), 45vw" alt="Woman using her full body to punch a white heavy bag, with arrows showing forward motion and rotation" loading="lazy" decoding="async" />
+    </div>
+    <div class="boxing-pace-copy">
+      <div class="boxing-pace-heading">
+        <span class="lbl">How PUNCH Uses Boxing</span>
+        <h2 class="h2">Boxing Is Our<br><span>Full-Body Cardio.</span></h2>
+        <p class="boxing-pace-intro">We coach the boxing portion of class like changing your pace during a run. You begin with controlled movement, build into a steady rhythm, add more speed and body rotation, and work through short full-body bursts before recovering.</p>
+      </div>
+      <div class="boxing-pace-details">
+        <div class="boxing-pace-grid">
+          <article class="boxing-pace-card"><h3>Walk</h3><p>Practice your stance, punches and rhythm at a comfortable pace.</p></article>
+          <article class="boxing-pace-card"><h3>Jog</h3><p>Settle into steady, flowing combinations you can maintain.</p></article>
+          <article class="boxing-pace-card"><h3>Run</h3><p>Increase your punching pace while adding leg drive and hip rotation.</p></article>
+          <article class="boxing-pace-card"><h3>Sprint</h3><p>Use your legs, hips and core for short, powerful full-body bursts.</p></article>
+        </div>
+        <p class="boxing-pace-close">Your coach changes the pace. You control your effort.</p>
+        <a class="btn-red boxing-pace-link" href="/boxing-fitness-pittsburgh">Explore Boxing Fitness &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="class-look" data-section="class-look">
   <div class="si">
