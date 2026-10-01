@@ -97,9 +97,15 @@ window.PUNCH_CONFIG = {
     var headline = section.querySelector(".h2");
     var sub = section.querySelector(".sub");
 
-    setText(label, "The Punch Training System");
-    setHTML(headline, 'BOXING IS THE CARDIO.<br>STRENGTH COMPLETES IT.<br><span>THREE CLASS FORMATS.<br>ALL INCLUDED.</span>');
-    setText(sub, scheduleCopy || "Your membership includes all three Punch class formats. Train your way, every day — no restrictions.");
+    if ((path === "/" || path === "/index.html") && section.matches('[data-section="fight-train-sweat"]')) {
+      setText(label, "The Workouts");
+      setHTML(headline, 'THREE WAYS TO TRAIN.<br><span>ONE STRONGER YOU.</span>');
+      setText(sub, "Build strength, improve your stamina, and keep your routine fresh. All three class formats are included in your membership.");
+    } else {
+      setText(label, "The Punch Training System");
+      setHTML(headline, 'BOXING IS THE CARDIO.<br>STRENGTH COMPLETES IT.<br><span>THREE CLASS FORMATS.<br>ALL INCLUDED.</span>');
+      setText(sub, scheduleCopy || "Your membership includes all three Punch class formats. Train your way, every day — no restrictions.");
+    }
 
     if (variant === "top") addBenefits(section);
   }
@@ -294,7 +300,7 @@ window.PUNCH_CONFIG = {
       '<div class="home-step-grid">' +
         '<div class="home-step-card"><span class="home-step-num">01</span><h3>Choose Your Trial</h3><p>Pick one free class or One Week Unlimited for $19.99. Fill out the form below and we’ll help you choose the right class to start.</p></div>' +
         '<div class="home-step-card"><span class="home-step-num">02</span><h3>Arrive 10 Minutes Early</h3><p>Your coach gives you a quick private intro before class — stance, basic punches, and how to use the heavy bag.</p></div>' +
-        '<div class="home-step-card"><span class="home-step-num">03</span><h3>Learn. Punch. Feel Amazing.</h3><p>No boxing experience needed. Learn the punches, get a full-body workout, and walk out feeling like you actually did something.</p></div>' +
+        '<div class="home-step-card"><span class="home-step-num">03</span><h3>Move. Train. Feel Good.</h3><p>Start at your level, follow your coach, and finish your first workout feeling accomplished.</p></div>' +
       '</div>' +
     '</div>';
     return section;
@@ -306,8 +312,8 @@ window.PUNCH_CONFIG = {
     section.className = "s home-lead-form";
     section.innerHTML = '<div class="si" style="text-align:center;max-width:640px">' +
       '<span class="lbl">Get Started</span>' +
-      '<h2 class="h2">READY TO TRY BOXING <span>FOR FITNESS?</span></h2>' +
-      '<p class="sub" style="margin:0 auto 6px">Drop your info and a coach will reach out to get you booked for your first class.</p>' +
+      '<h2 class="h2">READY TO FEEL <span>STRONGER?</span></h2>' +
+      '<p class="sub" style="margin:0 auto 6px">Share your details to see your trial options and choose how you want to begin.</p>' +
       '</div>' +
       '<div class="si" style="max-width:600px">' +
       '<iframe src="https://api.grow.pushpress.com/widget/form/ImN6zXT4qKiHOZHPOvXz" style="width:100%;min-height:640px;border:none;border-radius:8px;display:block" id="inline-home-ImN6zXT4qKiHOZHPOvXz" data-layout="{\'id\':\'INLINE\'}" data-trigger-type="alwaysShow" data-activation-type="alwaysActivated" data-deactivation-type="neverDeactivate" data-form-name="WEBSITE - AD LEAD FORM - Connect to Prospect and Trial Workflow - High-Touch Lead Capture v1.0" data-form-id="ImN6zXT4qKiHOZHPOvXz" title="Punch Boxing & Fitness Trial Lead Form"></iframe>' +
@@ -407,21 +413,10 @@ window.PUNCH_CONFIG = {
       document.body.appendChild(formScript);
     }
 
-    [
-      "hear it from them",
-      "what people are saying after their first week",
-      "what makes us different",
-      "a workout you'll actually look forward to"
-    ].forEach(function (phrase) {
-      var section = topLevelByText(plp, phrase);
-      if (section && section !== cursor) cursor = moveAfter(section, cursor);
-    });
+    // Later sections already follow the schedule, reviews, videos, experience,
+    // differences, and final CTA order in index.html. Keep that order independent
+    // of editable headline text.
 
-    var schedule = plp.querySelector('[data-section="schedule"]');
-    if (schedule && schedule !== cursor) cursor = moveAfter(schedule, cursor);
-
-    var finalStep = topLevelByText(plp, "your first step");
-    if (finalStep && finalStep !== cursor) moveAfter(finalStep, cursor);
   }
 
   if (document.readyState === "loading") {
