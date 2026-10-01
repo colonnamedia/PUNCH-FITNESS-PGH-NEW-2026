@@ -31,7 +31,7 @@
       var cta = document.createElement("a");
       cta.className = "ad-reels-cta";
       cta.href = (path === "/free-trial" || path === "/free-trial.html") ? "#trial-options" : "#lead-form";
-      cta.textContent = (path === "/free-trial" || path === "/free-trial.html") ? "Choose Your Trial →" : "Try Your First Punch Class →";
+      cta.textContent = (path === "/free-trial" || path === "/free-trial.html") ? "Choose Your Trial →" : "Send Me My Trial Options →";
       if (sub) sub.insertAdjacentElement("afterend", cta);
       else intro.appendChild(cta);
     }
