@@ -130,9 +130,18 @@
       var label = (a.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
       var genericTrial = /^(start your trial|start your trial now|start trial|start trial now|start now)(\s*[→›»]|\s*)?$/.test(label);
       if (!genericTrial) return;
-      a.href = TRIAL_CHOOSER;
-      a.target = "_blank";
-      a.rel = "noopener";
+      var landingPath = window.location.pathname.replace(/\/$/, "");
+      var isAdTrialLanding = /^(\/punch-ad-trials|\/boxing-fitness-pittsburgh)(\.html)?$/.test(landingPath);
+      if (isAdTrialLanding && document.getElementById("lead-form")) {
+        // Capture the prospect and ad attribution before the Core plan handoff.
+        a.setAttribute("href", "#lead-form");
+        a.removeAttribute("target");
+        a.removeAttribute("rel");
+      } else {
+        a.href = TRIAL_CHOOSER;
+        a.target = "_blank";
+        a.rel = "noopener";
+      }
       a.removeAttribute("onclick");
     });
     applyHeroMessaging();
