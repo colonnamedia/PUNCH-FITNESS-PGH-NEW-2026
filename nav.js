@@ -1,3 +1,73 @@
+/* Preserve real ad-click attribution through the PUNCH trial handoff.
+ * This transfers identifiers only; it never reports a click as a conversion. */
+(function () {
+  if (window.__PUNCH_AD_ATTRIBUTION_LOADED__) return;
+  window.__PUNCH_AD_ATTRIBUTION_LOADED__ = true;
+  var key = "punch_google_trial_attribution_v1";
+  var ttl = 24 * 60 * 60 * 1000;
+  var clickKeys = ["gclid", "gbraid", "wbraid"];
+  var marketingKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+  var keys = clickKeys.concat(marketingKeys);
+  var incoming = new URLSearchParams(window.location.search);
+  var values = {};
+  var now = Date.now();
+  var hasClick = clickKeys.some(function (name) { return !!incoming.get(name); });
+  var explicitOtherSource = incoming.get("utm_source") &&
+    !/^(google|adwords)$/i.test(incoming.get("utm_source")) && !hasClick;
+  try {
+    var saved = JSON.parse(window.sessionStorage.getItem(key) || "null");
+    if (saved && saved.expires > now && !explicitOtherSource) values = saved.values || {};
+    if (explicitOtherSource) window.sessionStorage.removeItem(key);
+  } catch (_) {}
+  if (hasClick) {
+    values = {};
+    keys.forEach(function (name) {
+      var value = incoming.get(name);
+      if (value && value.length <= 2048) values[name] = value;
+    });
+    try { window.sessionStorage.setItem(key, JSON.stringify({values:values, expires:now + ttl})); } catch (_) {}
+  }
+  if (!clickKeys.some(function (name) { return !!values[name]; })) return;
+
+  function allowed(url, iframe) {
+    if (url.protocol !== "https:" && url.protocol !== "http:") return false;
+    if (iframe) return url.hostname === "api.grow.pushpress.com" && /^\/widget\/form\//.test(url.pathname);
+    return url.origin === window.location.origin ||
+      (/^(www\.)?punchpgh\.com$/.test(url.hostname)) ||
+      (url.hostname === "punchpgh.pushpress.com" && /^\/landing\//.test(url.pathname));
+  }
+  function decorate(el, attribute, iframe) {
+    var raw = el.getAttribute(attribute);
+    if (!raw || raw.charAt(0) === "#") return;
+    try {
+      var url = new URL(raw, window.location.href);
+      if (!allowed(url, iframe)) return;
+      // An explicit campaign already on a destination takes precedence.
+      if (clickKeys.some(function (name) { return url.searchParams.has(name); })) return;
+      if (url.searchParams.has("utm_source") &&
+          url.searchParams.get("utm_source") !== values.utm_source) return;
+      keys.forEach(function (name) {
+        if (values[name] && !url.searchParams.has(name)) url.searchParams.set(name, values[name]);
+      });
+      var updated = url.toString();
+      if (updated !== raw) el.setAttribute(attribute, updated);
+    } catch (_) {}
+  }
+  function apply() {
+    document.querySelectorAll("a[href]").forEach(function (el) { decorate(el, "href", false); });
+    document.querySelectorAll("iframe[src]").forEach(function (el) { decorate(el, "src", true); });
+  }
+  var queued = false;
+  function schedule() {
+    if (queued) return;
+    queued = true;
+    window.setTimeout(function () { queued = false; apply(); }, 0);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", apply, {once:true});
+  else apply();
+  new MutationObserver(schedule).observe(document.documentElement, {childList:true, subtree:true, attributes:true, attributeFilter:["href","src"]});
+})();
+
 /* Punch shared nav loader + final launch cleanup layer. */
 (function () {
   if (window.__PUNCH_NAV_WRAPPER_LOADED__) return;
