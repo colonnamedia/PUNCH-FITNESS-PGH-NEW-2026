@@ -24,8 +24,26 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');
 // Conversion signal — this page only loads after the ad lead form is submitted.
 // Point Google/Facebook Ads conversion tracking at this page (or this event).
-gtag('event','generate_lead',{'event_category':'Ad Trials','event_label':'Lead Form Submitted'});
-window.dataLayer.push({event:'punch_ad_trials_thank_you'});</script>
+window.addEventListener('DOMContentLoaded',function(){
+  var attribution={};
+  try{
+    var saved=JSON.parse(localStorage.getItem('punch_trial_attribution_v2')||'null');
+    if(saved&&saved.expires>Date.now())attribution=saved.values||{};
+  }catch(_){}
+  var leadData={
+    event_category:'Ad Trials',
+    event_label:'Lead Form Submitted',
+    lead_source:attribution.utm_source||'direct',
+    lead_medium:attribution.utm_medium||'none',
+    lead_campaign:attribution.utm_campaign||'(not set)',
+    lead_term:attribution.utm_term||'(not set)',
+    lead_content:attribution.utm_content||'(not set)',
+    lead_landing_page:attribution.landing_page||document.referrer||'(not set)',
+    google_click_id_present:Boolean(attribution.gclid||attribution.gbraid||attribution.wbraid)
+  };
+  gtag('event','generate_lead',leadData);
+  window.dataLayer.push(Object.assign({event:'punch_ad_trials_thank_you'},leadData));
+});</script>
 <script src="/nav.js" defer></script>
 </head>
 <body>
