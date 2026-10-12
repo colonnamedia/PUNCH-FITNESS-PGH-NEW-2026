@@ -1,10 +1,11 @@
-/* Preserve real ad-click attribution through the PUNCH trial handoff.
- * This transfers identifiers only; it never reports a click as a conversion. */
+/* Preserve marketing attribution through the PUNCH trial handoff.
+ * Keep the latest identifiable campaign/referral so a later lead can be
+ * attributed even when the visitor navigates between PUNCH and PushPress. */
 (function () {
   if (window.__PUNCH_AD_ATTRIBUTION_LOADED__) return;
   window.__PUNCH_AD_ATTRIBUTION_LOADED__ = true;
-  var key = "punch_google_trial_attribution_v1";
-  var ttl = 24 * 60 * 60 * 1000;
+  var key = "punch_trial_attribution_v2";
+  var ttl = 90 * 24 * 60 * 60 * 1000;
   var clickKeys = ["gclid", "gbraid", "wbraid"];
   var marketingKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
   var keys = clickKeys.concat(marketingKeys);
@@ -12,22 +13,44 @@
   var values = {};
   var now = Date.now();
   var hasClick = clickKeys.some(function (name) { return !!incoming.get(name); });
-  var explicitOtherSource = incoming.get("utm_source") &&
-    !/^(google|adwords)$/i.test(incoming.get("utm_source")) && !hasClick;
+  var hasCampaign = marketingKeys.some(function (name) { return !!incoming.get(name); });
   try {
-    var saved = JSON.parse(window.sessionStorage.getItem(key) || "null");
-    if (saved && saved.expires > now && !explicitOtherSource) values = saved.values || {};
-    if (explicitOtherSource) window.sessionStorage.removeItem(key);
+    var saved = JSON.parse(window.localStorage.getItem(key) || "null");
+    if (saved && saved.expires > now) values = saved.values || {};
+    else if (saved) window.localStorage.removeItem(key);
   } catch (_) {}
-  if (hasClick) {
+
+  // A new tagged visit becomes the latest known marketing source. Direct
+  // visits never erase a previously identified source within the lookback.
+  if (hasClick || hasCampaign) {
     values = {};
     keys.forEach(function (name) {
       var value = incoming.get(name);
       if (value && value.length <= 2048) values[name] = value;
     });
-    try { window.sessionStorage.setItem(key, JSON.stringify({values:values, expires:now + ttl})); } catch (_) {}
+    values.landing_page = window.location.pathname;
+    values.captured_at = new Date(now).toISOString();
+    if (hasClick && !values.utm_source) values.utm_source = "google";
+    if (hasClick && !values.utm_medium) values.utm_medium = "cpc";
+    try { window.localStorage.setItem(key, JSON.stringify({values:values, expires:now + ttl})); } catch (_) {}
+  } else if (!Object.keys(values).length && document.referrer) {
+    try {
+      var referrer = new URL(document.referrer);
+      if (referrer.origin !== window.location.origin) {
+        values = {
+          utm_source: referrer.hostname.replace(/^www\./, ""),
+          utm_medium: "referral",
+          landing_page: window.location.pathname,
+          captured_at: new Date(now).toISOString()
+        };
+        window.localStorage.setItem(key, JSON.stringify({values:values, expires:now + ttl}));
+      }
+    } catch (_) {}
   }
-  if (!clickKeys.some(function (name) { return !!values[name]; })) return;
+
+  window.PUNCH_ATTRIBUTION = Object.assign({}, values);
+  window.PUNCH_ATTRIBUTION_STORAGE_KEY = key;
+  if (!Object.keys(values).length) return;
 
   function allowed(url, iframe) {
     if (url.protocol !== "https:" && url.protocol !== "http:") return false;
@@ -44,8 +67,7 @@
       if (!allowed(url, iframe)) return;
       // An explicit campaign already on a destination takes precedence.
       if (clickKeys.some(function (name) { return url.searchParams.has(name); })) return;
-      if (url.searchParams.has("utm_source") &&
-          url.searchParams.get("utm_source") !== values.utm_source) return;
+      if (url.searchParams.has("utm_source") && url.searchParams.get("utm_source") !== values.utm_source) return;
       keys.forEach(function (name) {
         if (values[name] && !url.searchParams.has(name)) url.searchParams.set(name, values[name]);
       });
