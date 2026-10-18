@@ -39,6 +39,8 @@
 #punch-trial-hero h1.hero-results-title .hero-line-red{color:#D92B2B}
 #punch-trial-hero .pth-sub{font-family:'Barlow',sans-serif;font-size:clamp(16px,1.6vw,20px);line-height:1.6;max-width:620px;color:rgba(255,255,255,.9);margin:0 0 26px}
 #punch-trial-hero .pth-sub.hero-support-title{margin-bottom:10px;color:#fff}
+body.ad-badge-design #punch-trial-hero h1.hero-results-title{line-height:1.06;letter-spacing:-.025em}
+body.ad-badge-design #punch-trial-hero .pth-sub.hero-support-title{line-height:1.27;letter-spacing:.025em}
 #punch-trial-hero .pth-desc{font-family:'Barlow',sans-serif;font-size:clamp(14px,1.2vw,17px);line-height:1.5;max-width:620px;color:rgba(255,255,255,.82);margin:0 0 26px}
 #punch-trial-hero .pth-btns{display:flex;gap:12px;flex-wrap:wrap}
 #punch-trial-hero .pth-btn-primary,#punch-trial-hero .pth-btn-ghost{display:inline-block;text-decoration:none;text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:13px;border-radius:8px;padding:16px 28px}
@@ -92,7 +94,7 @@
     <div class="pth-content">
       <div class="pth-eyebrow">South Hills Pittsburgh · Boxing + Strength</div>
       <h1 class="hero-results-title"><span class="hero-line-white">Change Your Body.</span><span class="hero-line-red">Change How You Feel.</span></h1>
-      <p class="pth-sub hero-support-title">Lose weight. Build strength. Feel more confident in your clothes.</p>
+      <p class="pth-sub hero-support-title">Burn calories. Build strength. Feel powerful.</p>
       <div class="pth-btns">
         <a href="#lead-form" class="pth-btn-primary">Send Me My Trial Options →</a>
       </div>
@@ -287,7 +289,7 @@
       var support=hero.querySelector('.pth-sub');
       var approvedTitle='<span class="hero-line-white">Change Your Body.</span><span class="hero-line-red">Change How You Feel.</span>';
       if(title&&title.innerHTML!==approvedTitle)title.innerHTML=approvedTitle;
-      if(support&&support.textContent!=='Lose weight. Build strength. Feel more confident in your clothes.')support.textContent='Lose weight. Build strength. Feel more confident in your clothes.';
+      if(support&&support.textContent!=='Burn calories. Build strength. Feel powerful.')support.textContent='Burn calories. Build strength. Feel powerful.';
     }
     var proof=document.querySelector('#plp [data-section="ad-proof"]');
     var feel=document.querySelector('#plp [data-section="class-feel"]');
