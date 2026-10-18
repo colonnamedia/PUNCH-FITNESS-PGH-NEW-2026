@@ -99,3 +99,6 @@ body.site-badge-design #pnHeader .pn-menu{background:var(--home-black);border-co
 body.site-badge-design #pnHeader .pn-menu a{color:var(--home-cream)}
 body.site-badge-design #pnHeader .pn-menu a:hover{background:#191d22;color:var(--home-red);border-left-color:var(--home-red)}
 body.site-badge-design #pnHeader .pn-sub-desc{color:#c8c2b4}
+
+/* Slightly open the large page headlines without changing supporting copy. */
+body.site-badge-design h1{letter-spacing:-.015em!important}
