@@ -102,3 +102,6 @@ body.site-badge-design #pnHeader .pn-sub-desc{color:#c8c2b4}
 
 /* Slightly open the large page headlines without changing supporting copy. */
 body.site-badge-design h1{letter-spacing:-.015em!important}
+
+/* Solid white support copy across dark hero layouts. */
+body.site-badge-design :is(.ph-wrap .ph-sub,.pm-hero-v2__sub,.pm-hero-v2__copy,.pt-hero-copy,.nc-hero-copy){color:#fff!important}

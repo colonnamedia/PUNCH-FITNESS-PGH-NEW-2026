@@ -215,7 +215,7 @@
     if (!document.querySelector('link[href^="/home-badge.css"]')) {
       var badgeStyles = document.createElement("link");
       badgeStyles.rel = "stylesheet";
-      badgeStyles.href = "/home-badge.css?v=20261018-white-heroes";
+      badgeStyles.href = "/home-badge.css?v=20261018-white-heroes-all";
       document.head.appendChild(badgeStyles);
     }
     var s = document.createElement("script");
