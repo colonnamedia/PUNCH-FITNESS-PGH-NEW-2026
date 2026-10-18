@@ -16,9 +16,9 @@ body.home-badge-design #plp .vhero-ov{inset:0!important;height:auto!important;ba
 body.home-badge-design #plp .vhero .vhero-in{width:100%;max-width:1440px!important;margin:0 auto;padding:170px clamp(24px,5vw,72px) 36px!important;background:transparent!important}
 body.home-badge-design #plp .vhero-eyebrow,body.home-badge-design #plp .vhero-note{display:none}
 body.home-badge-design #plp .vhero-title{font-size:clamp(58px,6.7vw,106px);line-height:.96;letter-spacing:-.025em;text-transform:none;margin:0 0 13px;font-weight:900;text-shadow:0 3px 26px rgba(0,0,0,.4)}
-body.home-badge-design #plp .vhero-title .hero-line-white{color:var(--home-cream);white-space:normal}
+body.home-badge-design #plp .vhero-title .hero-line-white{color:#fff;white-space:normal}
 body.home-badge-design #plp .vhero-title .hero-line-red{color:var(--home-red);white-space:normal}
-body.home-badge-design #plp .vhero-sub.hero-support-title{color:var(--home-cream);font-family:'Barlow',sans-serif;font-weight:500;font-size:clamp(19px,2.2vw,30px);line-height:1.3;text-transform:none;letter-spacing:0;max-width:none;margin:0 0 22px}
+body.home-badge-design #plp .vhero-sub.hero-support-title{color:#fff;font-family:'Barlow',sans-serif;font-weight:500;font-size:clamp(19px,2.2vw,30px);line-height:1.3;text-transform:none;letter-spacing:0;max-width:none;margin:0 0 22px}
 body.home-badge-design #plp .home-trial-button{display:inline-flex;align-items:center;justify-content:center;gap:25px;padding:12px 30px;border:4px solid var(--home-red);border-radius:17px;background:rgba(8,11,14,.4);color:var(--home-red);font:900 27px/1.2 'Barlow Condensed',sans-serif;letter-spacing:.055em;text-transform:uppercase;box-shadow:none;text-decoration:none}
 body.home-badge-design #plp .home-trial-button span{font:500 42px/.7 'Barlow',sans-serif}
 body.home-badge-design #plp .home-trial-button:hover{background:var(--home-red);color:var(--home-black);transform:none}
@@ -80,9 +80,9 @@ body.ad-badge-design :is(#punch-trial-hero .pth-video,#boxing-page .bx-hero vide
 body.ad-badge-design :is(#punch-trial-hero .pth-overlay,#boxing-page .bx-hero-overlay){inset:0;height:auto;background:linear-gradient(0deg,rgba(8,11,14,.96),rgba(8,11,14,.38) 55%,rgba(8,11,14,.08)),linear-gradient(90deg,rgba(8,11,14,.45),transparent 80%)}
 body.ad-badge-design :is(#punch-trial-hero .pth-content,#boxing-page .bx-hero-content){box-sizing:border-box;width:100%;max-width:1440px!important;margin:auto auto 0;padding:120px clamp(24px,5vw,72px) 36px!important;background:transparent}
 body.ad-badge-design :is(#punch-trial-hero h1,#boxing-page h1){font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:clamp(58px,6.7vw,106px);line-height:.96;text-transform:none;letter-spacing:-.035em;transform:skewX(-7deg);transform-origin:left bottom;margin:0 0 15px;text-shadow:0 3px 26px rgba(0,0,0,.4)}
-body.ad-badge-design :is(#punch-trial-hero h1,#boxing-page h1) span:first-child{color:var(--home-cream)!important}
+body.ad-badge-design :is(#punch-trial-hero h1,#boxing-page h1) span:first-child{color:#fff!important}
 body.ad-badge-design :is(#punch-trial-hero h1,#boxing-page h1) span:last-child{color:var(--home-red)!important}
-body.ad-badge-design :is(#punch-trial-hero .pth-sub,#boxing-page .bx-hero-copy){font:italic 800 clamp(22px,2.35vw,32px)/1.15 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.015em;color:var(--home-cream);max-width:900px;margin:0 0 18px}
+body.ad-badge-design :is(#punch-trial-hero .pth-sub,#boxing-page .bx-hero-copy){font:italic 800 clamp(22px,2.35vw,32px)/1.15 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.015em;color:#fff;max-width:900px;margin:0 0 18px}
 body.ad-badge-design :is(#punch-trial-hero .pth-eyebrow,#boxing-page .bx-eyebrow){color:var(--home-red)}
 body.ad-badge-design :is(#punch-trial-hero .pth-btn-primary,#boxing-page .bx-hero .bx-btn.red){box-sizing:border-box;border:3px solid var(--home-red);border-radius:14px;background:rgba(8,11,14,.4);color:var(--home-red);font:900 23px/1.15 'Barlow Condensed',sans-serif;letter-spacing:.04em;padding:14px 25px}
 body.ad-badge-design :is(#punch-trial-hero .pth-btn-primary,#boxing-page .bx-hero .bx-btn.red):hover{background:var(--home-red);color:var(--home-black)}
