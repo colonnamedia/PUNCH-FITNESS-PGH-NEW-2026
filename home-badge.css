@@ -54,3 +54,22 @@ body.home-badge-design #plp .home-benefit p{font:400 15px/1.4 'Barlow',sans-seri
  body.home-badge-design #plp .home-benefit svg{width:64px;height:68px;flex-basis:64px}
  body.home-badge-design #plp .home-benefit h2{font-size:24px}
 }
+
+/* Compact mobile badge overlap and athletic hero lettering. */
+body.home-badge-design #pnHeader .pn-drawer{background:var(--home-black);border-top:1px solid #272b30}
+body.home-badge-design #pnHeader .pn-drawer a,
+body.home-badge-design #pnHeader .pn-drawer summary{color:var(--home-cream);border-bottom-color:#272b30}
+body.home-badge-design #pnHeader .pn-drawer details a{color:#ded7c6}
+body.home-badge-design #pnHeader .pn-drawer summary::after{color:var(--home-red)}
+body.home-badge-design #pnHeader .pn-drawer .pn-menu-div{background:#272b30}
+body.home-badge-design #pnHeader .pn-drawer .pn-dcta{background:var(--home-red);color:var(--home-black)!important}
+body.home-badge-design #plp .vhero-title{transform:skewX(-7deg);transform-origin:left bottom;letter-spacing:-.035em}
+body.home-badge-design #plp .vhero-sub.hero-support-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-style:italic;text-transform:uppercase;letter-spacing:.015em;font-size:clamp(22px,2.35vw,32px)}
+@media(max-width:760px){
+ body.home-badge-design #pnHeader .pn-bar{position:relative;box-sizing:border-box;height:64px!important;padding:8px 22px!important}
+ body.home-badge-design #pnHeader .pn-logo{position:absolute;top:8px;left:22px;margin:0;flex:none!important}
+ body.home-badge-design #pnHeader .pn-logo img{width:84px!important}
+ body.home-badge-design #pnHeader .pn-burger{margin-left:auto;padding:10px 0 10px 12px}
+ body.home-badge-design #pnHeader .pn-drawer{padding:32px 22px 24px;max-height:calc(100dvh - 64px);overflow-y:auto;box-sizing:border-box}
+ body.home-badge-design #plp .vhero-sub.hero-support-title{font-size:clamp(20px,5.5vw,26px);font-weight:800;line-height:1.15}
+}
