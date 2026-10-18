@@ -212,7 +212,7 @@
 
   function loadCore(){
     var s = document.createElement("script");
-    s.src = "/nav-core.js?v=training-menu-20260929";
+    s.src = "/nav-core.js?v=home-badge-20261018";
     s.async = false;
     s.onload = stabilizeLaunchCleanup;
     document.head.appendChild(s);
