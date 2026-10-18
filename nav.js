@@ -211,8 +211,15 @@
   }
 
   function loadCore(){
+    document.body.classList.add("site-badge-design");
+    if (!document.querySelector('link[href^="/home-badge.css"]')) {
+      var badgeStyles = document.createElement("link");
+      badgeStyles.rel = "stylesheet";
+      badgeStyles.href = "/home-badge.css?v=20261018-sitewide3";
+      document.head.appendChild(badgeStyles);
+    }
     var s = document.createElement("script");
-    s.src = "/nav-core.js?v=home-badge-20261018";
+    s.src = "/nav-core.js?v=sitewide-badge-20261018";
     s.async = false;
     s.onload = stabilizeLaunchCleanup;
     document.head.appendChild(s);
