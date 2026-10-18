@@ -79,6 +79,14 @@
     '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
   '</div></header>';
 
+  var badgeDesign = true;
+  document.body.classList.add("site-badge-design");
+  if (badgeDesign) {
+    header = header.replace(/<img id="pnLogoImg"[\s\S]*?<b>PUNCH<\/b><span>Boxing &amp; Fitness<\/span>/,
+      '<picture><source media="(max-width:760px)" srcset="/assets/punch-badge-square.svg"><img id="pnLogoImg" src="/assets/punch-badge-wide.svg" width="1366" height="558" alt="PUNCH Boxing &amp; Fitness"></picture>');
+    header = header.replace(/>Start Now<\/a>/g, '>Try a Free Class</a>');
+  }
+
   var year = new Date().getFullYear();
   var footer =
   '<footer class="pf"><div class="pf-grid">' +
@@ -402,11 +410,11 @@
       (rows || []).forEach(function (row) {
         var url = row.value && row.value.url;
         if (!url) return;
-        if (row.key === "logo_url") {
+        if (row.key === "logo_url" && !badgeDesign) {
           var logo = document.getElementById("pnLogoImg");
           if (logo) logo.src = url;
         }
-        if (row.key === "favicon_url") {
+        if (row.key === "favicon_url" && !badgeDesign) {
           document.querySelectorAll('link[rel="icon"],link[rel="shortcut icon"],link[rel="apple-touch-icon"]').forEach(function (link) { link.href = url; });
         }
       });
