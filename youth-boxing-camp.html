@@ -20,6 +20,23 @@
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://images.squarespace-cdn.com" />
 <link rel="stylesheet" href="/punch.css" />
+<style>
+/* Youth memberships side by side, with the flexible pack below. */
+#plp .youth-pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:900px;margin:30px auto 0}
+#plp .youth-pricing-grid .trial-card{max-width:none;width:100%;display:flex;flex-direction:column}
+#plp .youth-pricing-grid .trial-btn{margin-top:auto}
+#plp .youth-pricing-grid .youth-pack{grid-column:1/-1}
+#plp .youth-pack-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:30px;align-items:center}
+#plp .youth-pack-details{display:flex;flex-direction:column;min-width:0}
+#plp .youth-pack-details .trial-div{margin-top:0}
+#plp .youth-pack-details .trial-btn{margin-top:16px}
+@media(max-width:760px){
+ #plp .youth-pricing-grid{grid-template-columns:1fr;max-width:520px}
+ #plp .youth-pricing-grid .youth-pack{grid-column:auto}
+ #plp .youth-pack-layout{grid-template-columns:1fr;gap:0}
+ #plp .youth-pack-details .trial-div{margin-top:18px}
+}
+</style>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-DPFH9GHL6N');</script>
@@ -76,58 +93,62 @@
   <p class="sub" style="margin:0 auto">Choose the schedule that fits your family. Every plan includes coach-led technique work, gloves provided, and a program designed for ages 7&ndash;13.</p>
  </div>
  <div class="si">
-  <div class="trial-cards" style="margin-top:30px;grid-template-columns:repeat(3,1fr)">
+  <div class="trial-cards youth-pricing-grid">
+   <div class="trial-card">
+    <div class="trial-icon">&#128260;</div>
+    <div class="trial-lbl">2 Classes / Month</div>
+    <div class="trial-price"><sup>$</sup>69.99<span style="font-size:.30em;font-weight:700">/mo</span></div>
+    <div class="trial-desc">Discounted Auto-Renew Membership</div>
+    <span class="trial-chip">Monthly Member Rate</span>
+    <div class="trial-div"></div>
+    <ul class="trial-perks">
+     <li><span class="trial-check">&#10003;</span> 2 youth classes every month</li>
+     <li><span class="trial-check">&#10003;</span> Coach-led boxing for ages 7&ndash;13</li>
+     <li><span class="trial-check">&#10003;</span> Discounted rate with auto-renewal</li>
+    </ul>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_df379c41e21e4a/login" class="trial-btn" target="_blank" rel="noopener">Enroll Monthly &rarr;</a>
+    <p class="trial-commit">Auto-renews monthly</p>
+   </div>
    <div class="trial-card feat">
-    <div class="trial-best">&#9889; Best Value</div>
+    <div class="trial-best">&#9889; More Classes Each Month</div>
     <div class="trial-icon">&#128260;</div>
     <div class="trial-lbl">4 Classes / Month</div>
     <div class="trial-price"><sup>$</sup>119.99<span style="font-size:.30em;font-weight:700">/mo</span></div>
-    <div class="trial-desc">Auto-Renew Membership</div>
-    <span class="trial-chip">Ongoing Coach-Led Training</span>
+    <div class="trial-desc">Discounted Auto-Renew Membership</div>
+    <span class="trial-chip">Monthly Member Rate</span>
     <div class="trial-div"></div>
     <ul class="trial-perks">
      <li><span class="trial-check">&#10003;</span> 4 youth classes every month</li>
-     <li><span class="trial-check">&#10003;</span> Grouped by age &amp; skill (7&ndash;13)</li>
-     <li><span class="trial-check">&#10003;</span> Confidence, discipline &amp; fitness</li>
-     <li><span class="trial-check">&#10003;</span> Recurring &mdash; cancel anytime per terms</li>
+     <li><span class="trial-check">&#10003;</span> Coach-led boxing for ages 7&ndash;13</li>
+     <li><span class="trial-check">&#10003;</span> Discounted rate with auto-renewal</li>
     </ul>
-    <a href="https://punchpgh.pushpress.com/landing/plans?category=plcat_2ay4f04d7re368" class="trial-btn" target="_blank" rel="noopener">Enroll Monthly &rarr;</a>
+    <a href="https://punchpgh.pushpress.com/landing/plans/plan_4b95261767d046/participant?category=plcat_2ay4f04d7re368" class="trial-btn" target="_blank" rel="noopener">Enroll Monthly &rarr;</a>
     <p class="trial-commit">Auto-renews monthly</p>
    </div>
-   <div class="trial-card">
-    <div class="trial-icon">&#127993;</div>
-    <div class="trial-lbl">5-Session Pack</div>
-    <div class="trial-price"><sup>$</sup>169.99</div>
-    <div class="trial-desc">5 Youth Sessions</div>
-    <span class="trial-chip">3-Month Expiration</span>
-    <div class="trial-div"></div>
-    <ul class="trial-perks">
-     <li><span class="trial-check">&#10003;</span> 5 coach-led youth sessions</li>
-     <li><span class="trial-check">&#10003;</span> Use within 3 months</li>
-     <li><span class="trial-check">&#10003;</span> Grouped by age &amp; skill (7&ndash;13)</li>
-     <li><span class="trial-check">&#10003;</span> No auto-renew</li>
-    </ul>
-    <a href="https://punchpgh.pushpress.com/landing/plans?category=plcat_2ay4f04d7re368" class="trial-btn" target="_blank" rel="noopener">Buy 5-Pack &rarr;</a>
-    <p class="trial-commit">$34.00 per session</p>
-   </div>
-   <div class="trial-card">
-    <div class="trial-icon">&#129354;</div>
-    <div class="trial-lbl">3-Session Pack</div>
-    <div class="trial-price"><sup>$</sup>105.99</div>
-    <div class="trial-desc">3 Youth Sessions</div>
-    <span class="trial-chip">1-Month Expiration</span>
-    <div class="trial-div"></div>
-    <ul class="trial-perks">
-     <li><span class="trial-check">&#10003;</span> 3 coach-led youth sessions</li>
-     <li><span class="trial-check">&#10003;</span> Use within 1 month</li>
-     <li><span class="trial-check">&#10003;</span> Great way to get started</li>
-     <li><span class="trial-check">&#10003;</span> No auto-renew</li>
-    </ul>
-    <a href="https://punchpgh.pushpress.com/landing/plans?category=plcat_2ay4f04d7re368" class="trial-btn" target="_blank" rel="noopener">Buy 3-Pack &rarr;</a>
-    <p class="trial-commit">Register in-person w/ parent</p>
+   <div class="trial-card youth-pack">
+    <div class="youth-pack-layout">
+     <div>
+      <div class="trial-icon">&#127993;</div>
+      <div class="trial-lbl">5-Session Punch Card</div>
+      <div class="trial-price"><sup>$</sup>169.99</div>
+      <div class="trial-desc">One-Time Youth Package</div>
+      <span class="trial-chip">6-Week Expiration</span>
+     </div>
+     <div class="youth-pack-details">
+      <div class="trial-div"></div>
+      <ul class="trial-perks">
+       <li><span class="trial-check">&#10003;</span> 5 coach-led youth sessions</li>
+       <li><span class="trial-check">&#10003;</span> Use within 6 weeks</li>
+       <li><span class="trial-check">&#10003;</span> Grouped by age &amp; skill (7&ndash;13)</li>
+       <li><span class="trial-check">&#10003;</span> No auto-renew</li>
+      </ul>
+      <a href="https://punchpgh.pushpress.com/landing/plans/plan_27b2d12b78064b/participant?category=plcat_2ay4f04d7re368" class="trial-btn" target="_blank" rel="noopener">Buy 5-Pack &rarr;</a>
+      <p class="trial-commit">$34.00 per session</p>
+     </div>
+    </div>
    </div>
   </div>
-  <div class="diff-grid" style="margin-top:26px">
+    <div class="diff-grid" style="margin-top:26px">
    <div class="diff-card"><span class="diff-icon">&#129354;</span><div class="diff-title">Gloves Provided</div><p class="diff-desc">We supply gloves for their first class. Just bring athletic clothes, sneakers, and water.</p></div>
    <div class="diff-card"><span class="diff-icon">&#128101;</span><div class="diff-title">Grouped by Age &amp; Level</div><p class="diff-desc">Kids train with peers at a similar age and skill level so nobody gets lost or held back.</p></div>
    <div class="diff-card"><span class="diff-icon">&#127942;</span><div class="diff-title">Non-Contact</div><p class="diff-desc">Technique, footwork, and bag work &mdash; a safe, structured, confidence-building program.</p></div>
