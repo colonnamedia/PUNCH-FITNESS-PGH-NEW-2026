@@ -55,8 +55,8 @@ test('does not authenticate without required values; rejects untrusted image/lin
 
 test('distinguishes a rejected credential from product API eligibility without exposing Amazon error text', async () => {
   const client = createCatalogClient({env,items,fetchImpl:async()=>({ok:false,status:400,json:async()=>({error:'invalid_client',error_description:env.AMAZON_CREATORS_CREDENTIAL_SECRET})})});
-  await assert.rejects(client.getCatalog(),{message:'amazon_credentials_rejected'});
-  assert.equal(client.status().lastError,'amazon_credentials_rejected');
+  await assert.rejects(client.getCatalog(),{message:'amazon_auth_invalid_client'});
+  assert.equal(client.status().lastError,'amazon_auth_invalid_client');
   assert.equal(JSON.stringify(client.status()).includes(env.AMAZON_CREATORS_CREDENTIAL_SECRET),false);
 });
 

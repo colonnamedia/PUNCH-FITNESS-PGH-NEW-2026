@@ -26,6 +26,14 @@ function errorCode(status, body) {
   return 'amazon_unavailable';
 }
 
+function authErrorCode(status, body) {
+  // Only expose known OAuth codes. Never return Amazon's free-form descriptions.
+  const known = new Set(['invalid_client', 'invalid_scope', 'unauthorized_client', 'invalid_request']);
+  const reason = typeof body?.error === 'string' ? body.error : '';
+  if (known.has(reason)) return `amazon_auth_${reason}`;
+  return [400, 401, 403].includes(status) ? 'amazon_credentials_rejected' : errorCode(status, body);
+}
+
 function publicItem(item, category, tag) {
   try {
     const image = item?.images?.primary?.large;
@@ -65,8 +73,7 @@ export function createCatalogClient({ env = process.env, items, fetchImpl = fetc
       json = await response.json();
     } catch { throw new CatalogError('amazon_unavailable'); }
     if (!response.ok) {
-      const code = stage === 'auth' && [400, 401, 403].includes(response.status)
-        ? 'amazon_credentials_rejected' : errorCode(response.status, json);
+      const code = stage === 'auth' ? authErrorCode(response.status, json) : errorCode(response.status, json);
       throw new CatalogError(code);
     }
     return json;
