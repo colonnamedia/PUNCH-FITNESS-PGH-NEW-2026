@@ -55,7 +55,7 @@ export function createCatalogClient({ env = process.env, items, fetchImpl = fetc
   if (!unique.length || unique.length > 50 || unique.some(i => !/^[A-Z0-9]{10}$/.test(i.asin))) throw new Error('Invalid catalog ASIN configuration');
   let token, tokenExpiresAt = 0, tokenPending, cached, expiryTimer, pending, lastCode = null, retryAt = 0;
 
-  async function post(url, body, headers = {}) {
+  async function post(url, body, headers = {}, stage = 'catalog') {
     let response, json;
     try {
       response = await fetchImpl(url, {
@@ -64,7 +64,11 @@ export function createCatalogClient({ env = process.env, items, fetchImpl = fetc
       });
       json = await response.json();
     } catch { throw new CatalogError('amazon_unavailable'); }
-    if (!response.ok) throw new CatalogError(errorCode(response.status, json));
+    if (!response.ok) {
+      const code = stage === 'auth' && [400, 401, 403].includes(response.status)
+        ? 'amazon_credentials_rejected' : errorCode(response.status, json);
+      throw new CatalogError(code);
+    }
     return json;
   }
 
@@ -77,7 +81,7 @@ export function createCatalogClient({ env = process.env, items, fetchImpl = fetc
         client_id: config.AMAZON_CREATORS_CREDENTIAL_ID,
         client_secret: config.AMAZON_CREATORS_CREDENTIAL_SECRET,
         scope: 'creatorsapi::default'
-      });
+      }, {}, 'auth');
       const lifetime = Math.min(Number(body.expires_in) || 0, 3600);
       if (typeof body.access_token !== 'string' || lifetime <= 60) throw new CatalogError('amazon_access_denied');
       token = body.access_token;

@@ -20,7 +20,7 @@ test('coalesces calls, preserves attribution, caches URLs only, removes expired 
   let time = 1_000_000, calls = [], fail = false;
   const fetchImpl = async (url, options) => {
     calls.push({ url, options });
-    if (fail) return { ok: false, status: 403, json: async () => ({ reason: 'AssociateNotEligible', message: env.AMAZON_CREATORS_CREDENTIAL_SECRET }) };
+    if (fail && !url.includes('/auth/')) return { ok: false, status: 403, json: async () => ({ reason: 'AssociateNotEligible', message: env.AMAZON_CREATORS_CREDENTIAL_SECRET }) };
     return url.includes('/auth/') ? ok({ access_token: 'test-bearer-never-public', expires_in: 3600 }) : ok({ itemsResult: { items: [record] } });
   };
   const client = createCatalogClient({ env, items, now: () => time, fetchImpl });
@@ -51,6 +51,13 @@ test('does not authenticate without required values; rejects untrusted image/lin
     const client = createCatalogClient({env,items,fetchImpl:async url=>url.includes('/auth/')?ok({access_token:'test',expires_in:3600}):ok({itemsResult:{items:[poisoned]}})});
     await assert.rejects(client.getCatalog(), {message:'amazon_no_items'});
   }
+});
+
+test('distinguishes a rejected credential from product API eligibility without exposing Amazon error text', async () => {
+  const client = createCatalogClient({env,items,fetchImpl:async()=>({ok:false,status:400,json:async()=>({error:'invalid_client',error_description:env.AMAZON_CREATORS_CREDENTIAL_SECRET})})});
+  await assert.rejects(client.getCatalog(),{message:'amazon_credentials_rejected'});
+  assert.equal(client.status().lastError,'amazon_credentials_rejected');
+  assert.equal(JSON.stringify(client.status()).includes(env.AMAZON_CREATORS_CREDENTIAL_SECRET),false);
 });
 
 test('HTTP endpoint uses no-store, restricts origins, and exposes no credentials', async t => {
