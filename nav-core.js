@@ -52,8 +52,8 @@
         '<div class="pn-menu">' +
           '<a href="/membership-options">Membership Options</a>' +
           '<a href="/free-trial">Free Trial Class</a>' +
-          '<a href="/boxing-gloves-for-fitness-classes">Boxing Gloves</a>' +
-          '<a href="/punch-apparel">Apparel</a></div></div>' +
+          '<a href="/boxing-gloves-for-fitness-classes">Workout Gear</a>' +
+          '<a href="/punch-apparel">Punch Apparel</a></div></div>' +
       '<a class="pn-link" href="/contact">Contact</a>' +
     '</nav>' +
     '<a class="pn-cta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
@@ -73,8 +73,8 @@
     '<details><summary>Pricing &amp; Plans</summary>' +
       '<a href="/membership-options">Membership Options</a>' +
       '<a href="/free-trial">Free Trial Class</a>' +
-      '<a href="/boxing-gloves-for-fitness-classes">Boxing Gloves</a>' +
-      '<a href="/punch-apparel">Apparel</a></details>' +
+      '<a href="/boxing-gloves-for-fitness-classes">Workout Gear</a>' +
+      '<a href="/punch-apparel">Punch Apparel</a></details>' +
     '<a href="/contact">Contact Us</a>' +
     '<a class="pn-dcta" href="' + TRIAL + '" target="_blank" rel="noopener">Start Now</a>' +
   '</div></header>';
