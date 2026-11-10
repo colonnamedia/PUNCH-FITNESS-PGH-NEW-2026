@@ -39,7 +39,10 @@ async function getDefaultOgImage(){
 }
 async function getPublishedPosts(){
   const j = await sbGet("/rest/v1/blog_posts?published=eq.true&select=slug,title,topic,excerpt,body,image_url,created_at&order=created_at.desc&limit=200");
-  return Array.isArray(j) ? j.filter(p => p && p.slug) : [];
+  // Do not deploy an empty blog because the data API was temporarily unavailable.
+  // Failing the build preserves the previous live deployment and its indexed posts.
+  if (!Array.isArray(j)) throw new Error("Published blog posts could not be loaded; stopping build to protect article pages.");
+  return j.filter(p => p && p.slug && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(p.slug)));
 }
 
 /* ---- render helpers (ported to match post.html exactly) ---- */
@@ -259,10 +262,16 @@ function blogPageHtml(p, ogFallback){
     let sm = fs.readFileSync(smPath, "utf8");
     const today = new Date().toISOString().slice(0,10);
     const entries = posts.filter(p => blogSlugs.includes(p.slug)).map(p => {
-      const lm = (p.created_at ? new Date(p.created_at).toISOString().slice(0,10) : today);
+      const parsed = p.created_at ? new Date(p.created_at) : null;
+      const lm = (parsed && !Number.isNaN(parsed.getTime())) ? parsed.toISOString().slice(0,10) : today;
       return `  <url><loc>https://punchpgh.com/blog/${encodeURIComponent(p.slug)}</loc><lastmod>${lm}</lastmod></url>`;
     }).join("\n");
     if (sm.includes("</urlset>")){
+      // The listing changes whenever a new published post appears.
+      const latest = posts[0] && posts[0].created_at && !Number.isNaN(new Date(posts[0].created_at).getTime())
+        ? new Date(posts[0].created_at).toISOString().slice(0,10) : today;
+      sm = sm.replace(/(<loc>https:\/\/punchpgh\.com\/blog-events<\/loc><lastmod>)[^<]+(<\/lastmod>)/,
+        (_all, prefix, suffix) => prefix + latest + suffix);
       sm = sm.replace("</urlset>", entries + "\n</urlset>");
       fs.writeFileSync(smPath, sm);
       console.log("Added", blogSlugs.length, "blog URLs to sitemap.xml");
