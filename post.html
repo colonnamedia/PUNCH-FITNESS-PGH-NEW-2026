@@ -57,6 +57,11 @@ function md(src){
   let t = esc(src);
   t = t.replace(/^### (.*)$/gm,"<h3>$1</h3>").replace(/^## (.*)$/gm,"<h2>$1</h2>");
   t = t.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");
+  // Render human-reviewed source citations as actual, safe outbound links.
+  // Text was HTML-escaped above; only HTTP(S) URLs can become anchors.
+  t = t.replace(/\\[([^\\]\\n]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, (_all, label, url) =>
+    '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>'
+  );
   const lines = t.split(/\n/); let out=[], inList=false, para=[];
   const flush=()=>{ if(para.length){ out.push("<p>"+para.join(" ")+"</p>"); para=[]; } };
   for (const ln of lines){
