@@ -196,7 +196,27 @@ Respond with ONLY a JSON object, no markdown fence, no preamble:
       return res.status(500).json({ error: "Supabase insert failed", detail: detail.slice(0, 400) });
     }
 
-    return res.status(200).json({ ok: true, topic, title: post.title, slug });
+    // A published blog post needs a new static site build so its /blog/<slug>
+    // page, canonical metadata and XML sitemap entry are available to crawlers.
+    // Set BLOG_DEPLOY_HOOK_URL in Vercel as a secret deployment-hook URL; never
+    // expose it in client JS or log the URL. A missing hook does not block writing.
+    let indexingRefresh = "not_configured";
+    const deployHook = process.env.BLOG_DEPLOY_HOOK_URL;
+    if (deployHook) {
+      try {
+        const hookUrl = new URL(deployHook);
+        if (hookUrl.protocol !== "https:" || !hookUrl.hostname.endsWith(".vercel.com")) {
+          indexingRefresh = "invalid_hook_configuration";
+        } else {
+          const hookResponse = await fetch(hookUrl.toString(), { method: "POST", signal: AbortSignal.timeout(8000) });
+          indexingRefresh = hookResponse.ok ? "rebuild_requested" : "hook_failed";
+        }
+      } catch (_) {
+        indexingRefresh = "hook_failed";
+      }
+    }
+
+    return res.status(200).json({ ok: true, topic, title: post.title, slug, indexingRefresh });
   } catch (err) {
     return res.status(500).json({ error: String((err && err.message) || err) });
   }
