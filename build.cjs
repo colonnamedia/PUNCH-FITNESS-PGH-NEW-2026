@@ -104,7 +104,16 @@ function prerenderBlogIndex(html, posts){
   return html
     .replace(/<div id="blog-root">[\s\S]*?<\/div><\/div>\s*<\/div>/,
       `<div id="blog-root">${cards}</div></div>\n  </div>`)
-    .replace("</head>", `<script type="application/ld+json">${JSON.stringify(ld)}</script>\n</head>`);
+    .replace("</head>", `<script type="application/ld+json">${JSON.stringify(ld)}</script>
+<script type="application/ld+json">${JSON.stringify(breadcrumb)}</script>\n</head>`);
+}
+
+/* One relevant internal service link gives articles a useful path back to PUNCH. */
+function blogRelatedService(topic){
+  if (/nutrition/i.test(topic||"")) return { href:"/nutrition-coaching", label:"Explore nutrition coaching at PUNCH" };
+  if (/parkinson|senior/i.test(topic||"")) return { href:"/senior-fitness-and-boxing-pittsburgh", label:"Explore senior fitness and Parkinson's boxing" };
+  if (/comparison|vs /i.test(topic||"")) return { href:"/classes", label:"Explore our boxing and strength classes" };
+  return { href:"/boxing-fitness-pittsburgh", label:"Learn about non-contact boxing fitness at PUNCH" };
 }
 
 /* full static page for a single blog post */
@@ -114,6 +123,13 @@ function blogPageHtml(p, ogFallback){
   const url = "https://punchpgh.com/blog/" + encodeURIComponent(p.slug);
   const img = optimizedLocalImage(p.image_url || ogFallback || OG_FALLBACK);
   const imgEsc = esc(img);
+  const related = blogRelatedService(p.topic);
+  const breadcrumb = {"@context":"https://schema.org","@type":"BreadcrumbList",
+    "itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://punchpgh.com/"},
+      {"@type":"ListItem","position":2,"name":"Blog","item":"https://punchpgh.com/blog-events"},
+      {"@type":"ListItem","position":3,"name":p.title,"item":url}
+    ]};
   const ld = {"@context":"https://schema.org","@type":"BlogPosting","headline":p.title,
     "datePublished":p.created_at,"description":p.excerpt||"","image":img,"url":url,
     "mainEntityOfPage":url,"author":{"@type":"Organization","name":"Punch Boxing & Fitness"},
@@ -157,6 +173,10 @@ function blogPageHtml(p, ogFallback){
         <div class="bpost-date" style="margin-bottom:26px">${when(p.created_at)}</div>
         ${p.image_url ? `<img src="${esc(optimizedLocalImage(p.image_url))}" alt="${esc(p.title)}" loading="lazy" decoding="async" style="width:100%;border-radius:14px;margin-bottom:28px">` : ""}
         <div class="article">${md(p.body)}</div>
+        <p class="bpost-related" style="margin-top:30px;padding:18px 22px;background:#f5f5f5;border-left:4px solid #D92B2B;border-radius:8px">
+          <strong>Train with PUNCH in Pittsburgh's South Hills:</strong>
+          <a href="${related.href}">${esc(related.label)} &rarr;</a>
+        </p>
       </div>
       <div style="max-width:760px;margin:44px auto 0;text-align:center">
         <a href="/blog-events" class="btn-dark">&larr; All Posts</a>
