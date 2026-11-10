@@ -90,18 +90,22 @@ export default async function handler(req, res) {
     }
 
     const lastRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/blog_posts?select=topic,slug&order=created_at.desc&limit=1`,
+      `${SUPABASE_URL}/rest/v1/blog_posts?select=topic,slug,title&order=created_at.desc&limit=12`,
       { headers: sbHeaders }
     );
     const last = await lastRes.json();
     const lastTopic = Array.isArray(last) && last[0] ? last[0].topic : null;
     const lastIdx = TOPICS.indexOf(lastTopic);
     const topic = TOPICS[(lastIdx + 1) % TOPICS.length];
+    const recentTitles = Array.isArray(last) ? last.map(p => p.title).filter(Boolean).slice(0, 12) : [];
 
     const prompt = `You are curating a blog post for Punch Boxing & Fitness, a boxing-based fitness gym in Pittsburgh's South Hills (Greentree, 15220).
 
 TOPIC: ${topic}
 FOCUS: ${GUIDE[topic]}
+RECENT PUBLISHED TITLES TO DIFFERENTIATE FROM: ${JSON.stringify(recentTitles)}
+
+IMPORTANT ORIGINALITY REQUIREMENT: Choose a specific new reader question or practical coaching angle not already addressed by these recent titles. Avoid generic repeated titles like "Why Boxing Is the Best Workout" or another broad introduction to boxing fitness. A useful local training guide, nuanced comparison, first-class preparation, technique explainer, or evidence-aware FAQ is better than rephrasing a previous article. Include actionable detail and only mention Green Tree/Pittsburgh when contextually useful.
 
 STEP 1 — Use web search to find ONE recent, reputable article (ideally within the last 90 days) related to this topic. For comparison posts, research the official websites of any named fitness brands plus reputable independent fitness/health sources so descriptions of their formats are accurate.
 
