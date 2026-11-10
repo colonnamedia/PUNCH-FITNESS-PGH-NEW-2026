@@ -118,11 +118,12 @@
       '<a class="pf-mail" href="' + LOGIN + '" target="_blank" rel="noopener">Member Login &rarr;</a>' +
       '<div class="pf-soc"><a href="https://instagram.com/punchpgh" target="_blank" rel="noopener">Instagram</a>' +
       '<a href="https://facebook.com/punchpgh" target="_blank" rel="noopener">Facebook</a>' +
-      '<a href="https://www.youtube.com/@punchpgh" target="_blank" rel="noopener">YouTube</a>' +
+      '<a href="https://youtube.com/@pittsburghpunch?si=6xC1ToGw28lR_mI2" target="_blank" rel="noopener">YouTube</a>' +
       '<a href="https://www.tiktok.com/@punchpgh" target="_blank" rel="noopener">TikTok</a></div>' +
       '<div class="pf-h" style="margin-top:22px">Shop</div>' +
       '<a href="/punch-apparel">Apparel</a>' +
       '<a href="/boxing-gloves-for-fitness-classes">Equipment</a>' +
+      '<a href="/gift-cards">Gift Cards</a>' +
       '<a href="/superare">Superare</a></div>' +
   '</div>' +
   '<div class="pf-legal"><span>&copy; ' + year + ' <span data-text="footer.copyright_text">Pittsburgh Punch LLC. All rights reserved.</span></span>' +
