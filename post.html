@@ -59,7 +59,7 @@ function md(src){
   t = t.replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>").replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");
   // Render human-reviewed source citations as actual, safe outbound links.
   // Text was HTML-escaped above; only HTTP(S) URLs can become anchors.
-  t = t.replace(/\\[([^\\]\\n]+)\\]\\((https?:\\/\\/[^\\s)]+)\\)/g, (_all, label, url) =>
+  t = t.replace(/\[([^\]\n]+)\]\((https?:\/\/[^\s)]+)\)/g, (_all, label, url) =>
     '<a href="' + url + '" target="_blank" rel="noopener noreferrer">' + label + '</a>'
   );
   const lines = t.split(/\n/); let out=[], inList=false, para=[];
