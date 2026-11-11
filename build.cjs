@@ -277,7 +277,23 @@ function blogPageHtml(p, ogFallback){
   }
   console.log("Pre-rendered blog posts:", blogSlugs.length);
 
-  // 7) add blog posts to sitemap.xml (if present)
+  // 7) Load the single reusable tour/newsletter component on every HTML page.
+  // Inject after article prerendering so individual /blog/<slug> pages get it too.
+  // The component itself inserts immediately above the footer and prevents duplicates.
+  (function addSitewideTour(dir){
+    for(const entry of fs.readdirSync(dir,{withFileTypes:true})){
+      const file=path.join(dir,entry.name);
+      if(entry.isDirectory()){addSitewideTour(file);continue;}
+      if(!entry.name.endsWith(".html"))continue;
+      let html=fs.readFileSync(file,"utf8");
+      if(!html.includes('src="/tour-newsletter.js"') && html.includes("</body>")){
+        html=html.replace("</body>",'<script src="/tour-newsletter.js" defer></script>\n</body>');
+        fs.writeFileSync(file,html);
+      }
+    }
+  })("dist");
+
+  // 8) add blog posts to sitemap.xml (if present)
   const smPath = "dist/sitemap.xml";
   if (blogSlugs.length && fs.existsSync(smPath)){
     let sm = fs.readFileSync(smPath, "utf8");
