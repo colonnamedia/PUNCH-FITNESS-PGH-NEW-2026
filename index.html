@@ -350,12 +350,36 @@
   <p class="sub" data-text="reels.subtext" style="margin:0 auto">Real members sharing their PUNCH experience in their own words.</p>
  </div>
  <div class="si"><div class="reels-strip">
-   <div><video class="reel-v" controls playsinline preload="metadata"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/NICOLE%20WAS%20HERE%20-%20PUNCH.mp4#t=0.1" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap1">Nicole</div></div>
-   <div><video class="reel-v" controls playsinline preload="metadata"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/TESTIMONIAL%202.mp4#t=0.1" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap2">Jocelyn</div></div>
+   <div><video class="reel-v" controls playsinline preload="auto" data-punch-preview-seek="1.2"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/NICOLE%20WAS%20HERE%20-%20PUNCH.mp4" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap1">Nicole</div></div>
+   <div><video class="reel-v" controls playsinline preload="auto" data-punch-preview-seek="1.2"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/TESTIMONIAL%202.mp4" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap2">Jocelyn</div></div>
    <div><video class="reel-v" controls playsinline preload="metadata"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/SUZIE%20COOL%20REEL.mp4#t=0.1" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap3">Suzie</div></div>
    <div><video class="reel-v" controls playsinline preload="metadata"><source src="https://pub-321135bbe93a42faa7a2b9bcfd5b1a71.r2.dev/jasmine-testimonial-2026.mp4#t=0.1" type="video/mp4"></video><div class="reel-cap" data-text="reels.cap4">Jasmine</div></div>
  </div></div>
 </div>
+<script>
+/* Load a visible preview frame from the ACTUAL Cloudflare video.
+   This does not use stock photos or unrelated generated imagery.
+   For a guaranteed thumbnail on all devices, replace with a static
+   poster image extracted from the original video when one is available. */
+(function(){
+  var clips=document.querySelectorAll('[data-section="reels"] video[data-punch-preview-seek]');
+  clips.forEach(function(video){
+    var target=Number(video.dataset.punchPreviewSeek)||1.2;
+    var requested=false;
+    function showVideoFrame(){
+      if(requested||!video.videoWidth||!video.duration) return;
+      requested=true;
+      var time=Math.min(target,Math.max(.1,video.duration-.1));
+      try{video.currentTime=time;}catch(_){}
+    }
+    video.addEventListener("loadedmetadata",showVideoFrame);
+    video.addEventListener("loadeddata",showVideoFrame);
+    video.addEventListener("seeked",function(){video.pause();});
+    video.addEventListener("error",function(){video.dataset.previewFailed="true";});
+    if(video.readyState>=1)showVideoFrame();
+  });
+})();
+</script>
 
 <div class="exp-split" data-section="punch-experience">
   <div class="exp-img-wrap"><img data-slot="home.exp1" src="/assets/punch-pittsburgh-6.webp" alt="The Punch Experience" class="exp-img" srcset="/assets/punch-pittsburgh-6-mobile.webp 768w, /assets/punch-pittsburgh-6.webp 1600w" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" decoding="async" /></div>
