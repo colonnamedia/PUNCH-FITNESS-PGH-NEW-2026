@@ -36,6 +36,14 @@
  #plp .youth-pack-layout{grid-template-columns:1fr;gap:0}
  #plp .youth-pack-details .trial-div{margin-top:18px}
 }
+
+/* Youth class photo: full bleed on desktop and mobile, with room after testimonial. */
+#plp .youth-wide-photo{padding:54px 0 70px;background:#fff}
+#plp .youth-wide-photo-image{width:100%;overflow:hidden}
+#plp .youth-wide-photo-image img{display:block;width:100%;height:clamp(340px,48vw,680px);object-fit:cover;object-position:center}
+#plp .youth-wide-photo-action{text-align:center;padding:28px 20px 0}
+#plp .youth-wide-photo-action a{display:inline-flex;align-items:center;justify-content:center;min-height:54px;padding:15px 32px;border-radius:8px;background:#d92b2b;color:#fff;font-weight:800;text-transform:uppercase;letter-spacing:.07em;text-decoration:none}
+@media(max-width:760px){#plp .youth-wide-photo{padding:42px 0 58px}#plp .youth-wide-photo-image img{height:340px;object-position:center}#plp .youth-wide-photo-action a{width:100%;max-width:420px}}
 </style>
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K4PVZXT');</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPFH9GHL6N"></script>
@@ -65,12 +73,9 @@
   <p class="sub" style="margin:0 auto">Boxing gives kids something rare: a skill that rewards patience, a room that expects effort, and coaches who notice when they improve.</p>
  </div>
  <div class="si"><div class="diff-grid">
-  <div class="diff-card"><span class="diff-icon">&#129354;</span><div class="diff-title">Real Technique</div><p class="diff-desc">Footwork, combinations, and defense taught properly &mdash; the same fundamentals we teach adults, scaled for kids.</p></div>
-  <div class="diff-card"><span class="diff-icon">&#127942;</span><div class="diff-title">Confidence That Sticks</div><p class="diff-desc">Kids leave standing a little taller. Learning something hard changes how they carry themselves.</p></div>
-  <div class="diff-card"><span class="diff-icon">&#128170;</span><div class="diff-title">Discipline &amp; Focus</div><p class="diff-desc">Structure, repetition, and respect for the room. Parents tell us they see it at home and at school.</p></div>
-  <div class="diff-card"><span class="diff-icon">&#128101;</span><div class="diff-title">Coaches Who Get Kids</div><p class="diff-desc">Patient, encouraging, and firm where it counts. Every kid gets attention, not just the naturals.</p></div>
-  <div class="diff-card"><span class="diff-icon">&#128293;</span><div class="diff-title">Energy Burned Well</div><p class="diff-desc">A full-body workout that leaves them tired in the best way &mdash; and off the screen for an hour.</p></div>
-  <div class="diff-card"><span class="diff-icon">&#10084;&#65039;</span><div class="diff-title">A Team Feeling</div><p class="diff-desc">Kids train alongside each other, cheer each other on, and build friendships outside their usual circle.</p></div>
+  <div class="diff-card"><span class="diff-icon">&#129354;</span><div class="diff-title">Real Boxing Skills</div><p class="diff-desc">Patient, encouraging coaches teach footwork, combinations, focus, and technique at every level.</p></div>
+  <div class="diff-card"><span class="diff-icon">&#128170;</span><div class="diff-title">Fitness &amp; Confidence</div><p class="diff-desc">A fun, full-body workout that builds strength, coordination, discipline, and confidence.</p></div>
+  <div class="diff-card"><span class="diff-icon">&#128101;</span><div class="diff-title">A Team Feeling</div><p class="diff-desc">Kids encourage one another, build friendships, and learn to work hard together.</p></div>
  </div></div>
 </div>
 <div class="big-quote"><div class="big-quote-inner">
@@ -78,13 +83,12 @@
  <p class="big-quote-text">My son loves youth boxing. The coaches are amazing with the kids &mdash; patient, encouraging, and he has learned so much discipline.</p>
  <div class="big-quote-who">Jennifer K. &middot; Youth Boxing Parent</div>
 </div></div>
-<div class="s off" style="padding-top:0">
- <div class="si" style="max-width:1100px">
-  <div style="border-radius:16px;overflow:hidden;border:1px solid #ececec;aspect-ratio:16/8;position:relative">
-   <img data-slot="youth.secondary" src="/assets/punch-youth-2.webp" alt="Youth boxing class at Punch Pittsburgh" style="width:100%;height:100%;object-fit:cover" srcset="/assets/punch-youth-2-mobile.webp 768w, /assets/punch-youth-2.webp 1600w" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" decoding="async">
-  </div>
+<section class="youth-wide-photo" aria-label="Youth boxing class at PUNCH">
+ <div class="youth-wide-photo-image">
+  <img data-slot="youth.secondary" src="/assets/punch-youth-2.webp" alt="Youth boxing class at Punch Pittsburgh" srcset="/assets/punch-youth-2-mobile.webp 768w, /assets/punch-youth-2.webp 1600w" sizes="100vw" loading="lazy" decoding="async">
  </div>
-</div>
+ <div class="youth-wide-photo-action"><a href="https://punchpgh.pushpress.com/landing/plans/plan_c63218daed254b/login" target="_blank" rel="noopener">Try a Free Youth Class &rarr;</a></div>
+</section>
 
 <div class="s off">
  <div class="si" style="text-align:center;margin-bottom:8px">
