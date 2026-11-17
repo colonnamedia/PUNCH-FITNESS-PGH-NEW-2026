@@ -192,3 +192,16 @@
   #personal-training-page .pt-proof-stats article{display:flex;align-items:center;justify-content:space-between;text-align:left}
   #personal-training-page .pt-proof-stats span{max-width:150px;margin:0;text-align:right}
 }
+
+/* Personal training team cards */
+#personal-training-page .pt-team{background:#f6f6f4;color:#111}
+#personal-training-page .pt-team .pt-label{color:var(--red)}
+#personal-training-page .pt-team h2 span{color:var(--red)}
+#personal-training-page .pt-team-intro{max-width:630px;margin:18px auto 0;color:#666;font-size:16px;line-height:1.6}
+#personal-training-page .pt-trainers-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;max-width:900px;margin:36px auto 0}
+#personal-training-page .pt-trainer-card{padding:34px;border:2px solid var(--red);border-radius:16px;background:#fff}
+#personal-training-page .pt-trainer-role{color:var(--red);font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase}
+#personal-training-page .pt-trainer-card h3{margin-top:12px;font:900 38px/1 'Barlow Condensed',Arial,sans-serif;text-transform:uppercase}
+#personal-training-page .pt-trainer-card>p:last-child{margin-top:14px;color:#555;font-size:15px;line-height:1.6}
+#personal-training-page .pt-team-contact{text-align:center;margin-top:30px}
+@media(max-width:760px){#personal-training-page .pt-trainers-grid{grid-template-columns:1fr;gap:14px}#personal-training-page .pt-trainer-card{padding:26px}}
