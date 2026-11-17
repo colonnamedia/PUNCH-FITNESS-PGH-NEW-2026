@@ -185,8 +185,8 @@ if (cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
   const db = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
   db.from("trainers").select("name,image_url,image_position,image_fit").eq("active",true).then(({data,error}) => {
     if (error || !data) return;
-    for (const [key,match] of [["anthony",/^anthony(?:\\b|\\s)/i],["luc",/^luc(?:\\b|\\s)/i]]) {
-      const person = data.find(t => match.test((t.name || "").trim()));
+    for (const [key,prefix] of [["anthony","anthony"],["luc","luc"]]) {
+      const person = data.find(t => (t.name || "").trim().toLowerCase().startsWith(prefix));
       if (!person || !person.image_url) continue;
       const slot = document.querySelector('[data-pt-trainer="'+key+'"] .pt-trainer-photo');
       if (!slot) continue;
