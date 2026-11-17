@@ -151,7 +151,7 @@
   #personal-training-page .pt-wrap{width:min(100% - 30px,1180px)}
   #personal-training-page .pt-section{padding:72px 0}
   #personal-training-page .pt-hero{min-height:720px;align-items:flex-end}
-  #personal-training-page .pt-hero-image{object-position:62% center}
+  #personal-training-page .pt-hero-image{object-position:82% center}
   #personal-training-page .pt-hero-shade{background:linear-gradient(0deg,rgba(0,0,0,.98) 0%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.25) 100%)}
   #personal-training-page .pt-hero-content{width:calc(100% - 34px);padding:100px 0 54px}
   #personal-training-page .pt-hero h1{font-size:clamp(52px,16vw,74px);line-height:.88}
