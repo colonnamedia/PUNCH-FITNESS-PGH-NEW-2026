@@ -142,8 +142,8 @@
   <div class="pt-wrap">
     <div class="pt-centered"><p class="pt-label">Personal Training at PUNCH</p><h2 id="pt-trainers-title">Meet Our <span>Trainers.</span></h2><p class="pt-team-intro">One-on-one coaching with people who care about your progress. More trainers coming soon.</p></div>
     <div class="pt-trainers-grid">
-      <article class="pt-trainer-card"><p class="pt-trainer-role">Personal Trainer</p><h3>Anthony C</h3><p>Boxing fitness, strength, and conditioning coaching tailored to your experience, goals, and pace.</p></article>
-      <article class="pt-trainer-card"><p class="pt-trainer-role">Personal Trainer</p><h3>Luc F</h3><p>Personalized one-on-one sessions built around your goals, with coaching and support along the way.</p></article>
+      <article class="pt-trainer-card" data-pt-trainer="anthony"><div class="pt-trainer-photo" aria-label="Anthony C photo"></div><p class="pt-trainer-role">Personal Trainer</p><h3>Anthony C</h3><p>Boxing fitness, strength, and conditioning coaching tailored to your experience, goals, and pace.</p></article>
+      <article class="pt-trainer-card" data-pt-trainer="luc"><div class="pt-trainer-photo" aria-label="Luc F photo"></div><p class="pt-trainer-role">Personal Trainer</p><h3>Luc F</h3><p>Personalized one-on-one sessions built around your goals, with coaching and support along the way.</p></article>
     </div>
     <div class="pt-team-contact"><a class="pt-btn pt-btn-dark" href="#consult">Ask About Personal Training</a></div>
   </div>
@@ -175,5 +175,33 @@
 </section>
 
 </main>
+
+<script type="module">
+// Reuse the photos already maintained on the Meet the Trainers page.
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import "/config.js";
+const cfg = window.PUNCH_CONFIG || {};
+if (cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
+  const db = createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+  db.from("trainers").select("name,image_url,image_position,image_fit").eq("active",true).then(({data,error}) => {
+    if (error || !data) return;
+    for (const [key,match] of [["anthony",/^anthony(?:\\b|\\s)/i],["luc",/^luc(?:\\b|\\s)/i]]) {
+      const person = data.find(t => match.test((t.name || "").trim()));
+      if (!person || !person.image_url) continue;
+      const slot = document.querySelector('[data-pt-trainer="'+key+'"] .pt-trainer-photo');
+      if (!slot) continue;
+      const img = document.createElement("img");
+      img.src = person.image_url;
+      img.alt = key === "anthony" ? "Anthony C, PUNCH personal trainer" : "Luc F, PUNCH personal trainer";
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.style.objectFit = person.image_fit || "cover";
+      img.style.objectPosition = person.image_position || "center";
+      img.onerror = () => img.remove();
+      slot.appendChild(img);
+    }
+  });
+}
+</script>
 </body>
 </html>
